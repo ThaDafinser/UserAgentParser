@@ -1,0 +1,31 @@
+{
+    "name": "thadafinser/user-agent-comparison",
+    "description": "Compser UserAgent parser solutions",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ThaDafinser",
+            "email": "martin.keckeis1@gmail.com"
+        }
+    ],
+    
+    "autoload": {
+        "psr-4": {
+            "UserAgentParser\\":  "src"
+        }
+    },
+    
+    "require": {
+        "piwik/device-detector": "^3.4",
+        "donatj/phpuseragentparser": "^0.5.0",
+        "ua-parser/uap-php": "^3.4",
+        "browscap/browscap-php": "^2.0",
+        "woothee/woothee": "^1.2",
+        
+        "yzalis/ua-parser": "^0.2",
+        "sail/useragent": "^1.0.0-alpha2",
+        "whichbrowser/whichbrowser": "^1.0",
+        
+        "doctrine/cache": "^1.5"
+    }
+}

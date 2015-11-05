@@ -6,7 +6,6 @@ use UserAgentParser\Provider\Chain;
 
 class GetMatrix
 {
-
     private $provider;
 
     private $userAgents = [];
@@ -196,16 +195,68 @@ class GetMatrix
     {
         if (! isset($this->statistics[$result['provider']])) {
             $this->statistics[$result['provider']] = [
+                
                 'parseTime' => 0,
-                'resultsFound' => 0
+                
+                'resultsFound' => 0,
+                
+                'browser' => [
+                    'family' => 0,
+                    'version' => 0
+                ],
+                
+                'operatingSystem' => [
+                    'family' => 0,
+                    'version' => 0,
+                    'platform' => 0
+                ],
+                
+                'device' => [
+                    'brand' => 0,
+                    'model' => 0,
+                    'type' => 0,
+                    
+                    'isMobile' => 0
+                ],
+                
+                'bot' => [
+                    'isBot' => 0,
+                    
+                    'name' => 0,
+                    'type' => 0
+                ]
             ];
         }
         
         $this->statistics[$result['provider']]['parseTime'] += $result['parseTime'];
         
-        if ($this->hasResult($result)) {
-            $this->statistics[$result['provider']]['resultsFound'] += 1;
+        /*
+         * No result?
+         */
+        if (! $this->hasResult($result)) {
+            return;
         }
+        
+        $this->statistics[$result['provider']]['resultsFound'] += 1;
+        
+        $this->addCountDetail($result, 'browser');
+        $this->addCountDetail($result, 'operatingSystem');
+        $this->addCountDetail($result, 'device');
+        $this->addCountDetail($result, 'bot');
+    }
+
+    private function addCountDetail(array $result, $partType = 'browser')
+    {
+        $currentResult = $this->statistics[$result['provider']][$partType];
+        
+        $resultPart = $result[$partType];
+        foreach ($resultPart as $key => $part) {
+            if ($part !== null) {
+                $currentResult[$key] += 1;
+            }
+        }
+        
+        $this->statistics[$result['provider']][$partType] = $currentResult;
     }
 
     public function toHtml()
@@ -224,26 +275,154 @@ class GetMatrix
         
         $table .= '</tr>';
         
+        $sum = count($this->getUserAgents());
+        
+        $tableRows = '';
+        
+        $i = 1;
         foreach ($this->getUserAgents() as $userAgent) {
-            
-            $table .= '<tr>';
-            $table .= '<td>' . $userAgent . '</td>';
+            $tableRows .= '<tr>';
+            $tableRows .= '<td>' . $userAgent . '</td>';
             
             foreach ($this->getProvider()->parse($userAgent) as $result) {
                 $this->addStatistics($result);
                 
-                $table .= '<td>' . $this->getTdResult($result) . '</td>';
+                $tableRows .= '<td>' . $this->getTdResult($result) . '</td>';
             }
             
-            $table .= '</tr>';
+            $tableRows .= '</tr>';
+            
+            echo $i . '/' . $sum . PHP_EOL;
+            
+            $i ++;
         }
         
         $table .= '<tr>';
-        $table .= '<td>Summary</td>';
+        $table .= '<td><strong>Summary</strong></td>';
         foreach ($this->statistics as $key => $values) {
-            $table .= '<td>' . $values['parseTime'] . ' | ' . $values['resultsFound'] . '/' . count($this->getUserAgents()) . '</td>';
+            $str = '<td>';
+            
+            $str .= '<table class="table table-condensed">';
+            
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">Results found</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['resultsFound'] . '/' . count($this->getUserAgents());
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            /*
+             * Browser
+             */
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">Browser family</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['browser']['family'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">Browser version</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['browser']['version'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            /*
+             * OS
+             */
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">OS family</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['operatingSystem']['family'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">OS version</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['operatingSystem']['version'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">OS platform</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['operatingSystem']['platform'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            /*
+             * Device
+             */
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">Device brand</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['device']['brand'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">Device model</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['device']['model'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">Device type</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['device']['type'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">Is mobile</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['device']['isMobile'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            /*
+             * Bots
+             */
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">Is bot</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['bot']['isBot'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">Bot name</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['bot']['name'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">Bot type</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= $values['bot']['type'];
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            
+            $str .= '<tr>';
+            $str .= '<td style="white-space: nowrap;">parseTime</td>';
+            $str .= '<td style="white-space: nowrap;">';
+            $str .= '<i class="glyphicon glyphicon-time"></i> ' . round($values['parseTime'], 5);
+            $str .= '</td>';
+            $str .= '</tr>';
+            
+            $str .= '</table>';
+            $str .= '</td>';
+            
+            $table .= $str;
         }
         $table .= '</tr>';
+        
+        $table .= $tableRows;
         
         $table .= '</table>';
         

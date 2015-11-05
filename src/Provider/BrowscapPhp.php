@@ -1,25 +1,36 @@
 <?php
 namespace UserAgentParser\Provider;
 
-use phpbrowscap\Browscap;
+use BrowscapPHP\Browscap;
+use BrowscapPHP\Cache\BrowscapCache;
+use WurflCache\Adapter\File;
 
-class PhpBrowscap extends AbstractProvider
+class BrowscapPhp extends AbstractProvider
 {
     private $parser;
 
     public function getName()
     {
-        return 'PhpBrowscap';
+        return 'BrowscapPhp';
     }
     
+    /**
+     * 
+     * @return \BrowscapPHP\Browscap
+     */
     private function getParser()
     {
-        if($this->parser !== null){
+        if ($this->parser !== null) {
             return $this->parser;
         }
         
-        $parser = new Browscap('.tmp');
-        $parser->localFile = 'data/php_browscap.ini';
+        $cacheAdapter = new File(array(
+            File::DIR => '.tmp/browscap'
+        ));
+        $cache = new BrowscapCache($cacheAdapter);
+        
+        $parser = new Browscap();
+        $parser->setCache($cache);
         
         $this->parser = $parser;
         
@@ -30,40 +41,41 @@ class PhpBrowscap extends AbstractProvider
     {
         $parser = $this->getParser();
         
-        $result = $parser->getBrowser($userAgent, true);
+        /* @var $raw \stdClass */
+        $raw = $parser->getBrowser($userAgent);
+
+        unset($raw->browser_name);
+        unset($raw->browser_name_regex);
+        unset($raw->browser_name_pattern);
         
-        $raw = $result;
-        unset($raw['browser_name']);
-        unset($raw['browser_name_regex']);
-        unset($raw['browser_name_pattern']);
         
         /*
          * browser
          */
-        $browserFamily = $result['Browser'];
-        if ($browserFamily = 'unknown') {
+        $browserFamily = $raw->browser;
+        if ($browserFamily == 'unknown' || $browserFamily == 'Default Browser') {
             $browserFamily = null;
         }
         
         /*
          * os
          */
-        $osFamily = $result['Platform'];
+        $osFamily = $raw->platform;
         if ($osFamily = 'unknown') {
             $osFamily = null;
         }
         
         $osPlatform = null;
-        if ($result['Win32'] === true) {
+        if ($raw->win32 === true) {
             $osPlatform = 'x86';
-        } elseif ($result['Win64'] === true) {
+        } elseif ($raw->win64 === true) {
             $osPlatform = 'x64';
         }
         
         /*
          * device
          */
-        $deviceType = $result['Device_Type'];
+        $deviceType = $raw->device_type;
         if ($deviceType == 'unknown') {
             $deviceType = null;
         }
@@ -72,7 +84,7 @@ class PhpBrowscap extends AbstractProvider
             
             'browser' => [
                 'family' => $browserFamily,
-                'version' => $result['Version']
+                'version' => $raw->version
             ],
             
             'operatingSystem' => [
@@ -86,7 +98,7 @@ class PhpBrowscap extends AbstractProvider
                 'model' => null,
                 'type' => $deviceType,
                 
-                'isMobile' => $result['isMobileDevice']
+                'isMobile' => $raw->ismobiledevice
             ],
             
             'raw' => $raw

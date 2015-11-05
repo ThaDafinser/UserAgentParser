@@ -3,7 +3,6 @@ namespace UserAgentParser\Provider;
 
 abstract class AbstractProvider
 {
-
     private $userAgent;
 
     abstract public function parse($userAgent);

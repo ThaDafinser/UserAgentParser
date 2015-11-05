@@ -5,7 +5,6 @@ use UAParser\Parser;
 
 class UAParser extends AbstractProvider
 {
-
     public function getName()
     {
         return 'UAParser';
@@ -67,7 +66,7 @@ class UAParser extends AbstractProvider
             }
         }
         
-        if($result->device->family == 'Spider'){
+        if ($result->device->family == 'Spider') {
             return $this->returnResult([
             
                 'browser' => [
@@ -88,7 +87,7 @@ class UAParser extends AbstractProvider
         
         // device -> family is not useable currently i think...
         // because it contains often the device model
-        
+
         return $this->returnResult([
             
             'browser' => [

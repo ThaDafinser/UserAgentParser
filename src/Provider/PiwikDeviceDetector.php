@@ -1,30 +1,29 @@
 <?php
 namespace UserAgentParser\Provider;
 
-use DeviceDetector\DeviceDetector as PiwikDeviceDetector;
-use DeviceDetector\Parser\Device\DeviceParserAbstract as PiwikDeviceParserAbstract;
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
 use Doctrine\Common\Cache;
 
-class DeviceDetector extends AbstractProvider
+class PiwikDeviceDetector extends AbstractProvider
 {
-
     private $parser;
     
     public function getName()
     {
-        return 'DeviceDetector';
+        return 'PiwikDeviceDetector';
     }
 
     private function getParser()
     {
-        if($this->parser !== null){
+        if ($this->parser !== null) {
             return $this->parser;
         }
     
-        PiwikDeviceParserAbstract::setVersionTruncation(PiwikDeviceParserAbstract::VERSION_TRUNCATION_NONE);
+        DeviceParserAbstract::setVersionTruncation(DeviceParserAbstract::VERSION_TRUNCATION_NONE);
         
-        $dd = new PiwikDeviceDetector();
-        $dd->setCache(new Cache\PhpFileCache('.tmp/'));
+        $dd = new DeviceDetector();
+        $dd->setCache(new Cache\PhpFileCache('.tmp/piwik'));
         
         $this->parser = $dd;
     
@@ -88,14 +87,15 @@ class DeviceDetector extends AbstractProvider
             $bot = $dd->getBot();
             
             $category = null;
-            if(isset($bot['category'])){
+            if (isset($bot['category'])) {
                 $category = $bot['category'];
             }
             
             return $this->returnResult([
+                
                 'browser' => [
                     'family' => $bot['name'],
-                    'version' => null,    
+                    'version' => null,
                 ],
                 
                 'bot' => [
@@ -111,28 +111,28 @@ class DeviceDetector extends AbstractProvider
         
         // browser
         $browserFamily = $dd->getClient('name');
-        if ($browserFamily == PiwikDeviceDetector::UNKNOWN || $browserFamily == '') {
+        if ($browserFamily == DeviceDetector::UNKNOWN || $browserFamily == '') {
             $browserFamily = null;
         }
         
         $browserVersion = $dd->getClient('version');
-        if ($browserVersion == PiwikDeviceDetector::UNKNOWN || $browserVersion == '') {
+        if ($browserVersion == DeviceDetector::UNKNOWN || $browserVersion == '') {
             $browserVersion = null;
         }
         
         // operatingSystem
         $osName = $dd->getOs('name');
-        if ($osName == PiwikDeviceDetector::UNKNOWN || $osName == '') {
+        if ($osName == DeviceDetector::UNKNOWN || $osName == '') {
             $osName = null;
         }
         
         $osVersion = $dd->getOs('version');
-        if ($osVersion == PiwikDeviceDetector::UNKNOWN || $osVersion == '') {
+        if ($osVersion == DeviceDetector::UNKNOWN || $osVersion == '') {
             $osVersion = null;
         }
         
         $osPlatform = $dd->getOs('platform');
-        if ($osPlatform == PiwikDeviceDetector::UNKNOWN || $osPlatform == '') {
+        if ($osPlatform == DeviceDetector::UNKNOWN || $osPlatform == '') {
             $osPlatform = null;
         }
         

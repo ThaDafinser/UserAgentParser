@@ -3,7 +3,6 @@ namespace UserAgentParser\Provider;
 
 class Chain extends AbstractProvider
 {
-
     /**
      *
      * @var AbstractProvider[]

@@ -3,12 +3,11 @@ namespace UserAgentParser\Provider;
 
 use UAParser\Parser;
 
-class PhpUserAgent extends AbstractProvider
+class DonatjUAParser extends AbstractProvider
 {
-
     public function getName()
     {
-        return 'PhpUserAgent';
+        return 'DonatjUAParser';
     }
 
     public function parse($userAgent)
@@ -17,7 +16,7 @@ class PhpUserAgent extends AbstractProvider
         
         // platform is not useable currently...because it's mixed
         // maybe an idea to split it into OS and model?
-        
+
         return $this->returnResult([
             'browser' => [
                 'family' => $result['browser'],

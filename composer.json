@@ -1,6 +1,6 @@
 {
-    "name": "thadafinser/user-agent-comparison",
-    "description": "Compser UserAgent parser solutions",
+    "name": "thadafinser/user-agent-parser",
+    "description": "UserAgentParser with different providers + matrix",
     "license": "MIT",
     "authors": [
         {

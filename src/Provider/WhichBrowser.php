@@ -17,24 +17,9 @@ class WhichBrowser extends AbstractProvider
      *
      * @return \WhichBrowser
      */
-    private function getParser()
-    {
-        if ($this->parser !== null) {
-            return $this->parser;
-        }
-        
-        $parser = new \WhichBrowser([]);
-        
-        $this->parser = $parser;
-        
-        return $this->parser;
-    }
-
     public function parse($userAgent)
     {
-        $parser = $this->getParser();
-        $parser->analyseUserAgent($userAgent);
-        
+        $parser = new \WhichBrowser(array('headers' => array('User-Agent' => $userAgent)));
         $raw = $parser->toArray();
         
         /*

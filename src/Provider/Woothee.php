@@ -1,8 +1,6 @@
 <?php
 namespace UserAgentParser\Provider;
 
-use DeviceDetector\DeviceDetector as PiwikDeviceDetector;
-use DeviceDetector\Parser\Device\DeviceParserAbstract as PiwikDeviceParserAbstract;
 use Doctrine\Common\Cache;
 use Woothee\Classifier;
 

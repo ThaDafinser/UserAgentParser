@@ -10,5 +10,8 @@ Different UA parse provider + comparison
 
 `php bin\generateMatrixAll.php`
 
-# Results
-Check in `data/results`
+# get the comparison results
+Download the html files from `data/results` and just open it in a browser
+
+## Notes about the comparison
+The different vendor adapters are not completed yet and may have failures or missing things, so the result is not 100% correct!

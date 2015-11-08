@@ -1,7 +1,6 @@
 <?php
 namespace UserAgentParser\Provider;
 
-// include 'vendor/whichbrowser/whichbrowser/libraries/whichbrowser.php';
 include 'vendor/whichbrowser/whichbrowser/libraries/whichbrowser.php';
 
 use UserAgentParser\Exception;
@@ -135,6 +134,9 @@ class WhichBrowser extends AbstractProvider
         if (! isset($resultRaw['device']['type'])) {
             return false;
         }
+        if (isset($raw['os']['alias'])) {
+            $osFamily = $raw['os']['alias'];
+        }
         
         // @todo i'm not sure currently..e.g feature phone?
         // if ($resultRaw['device']['type'] === TYPE_MOBILE) {
@@ -249,8 +251,6 @@ class WhichBrowser extends AbstractProvider
         if ($this->isTouch($resultRaw) === true) {
             $device->setIsTouch(true);
         }
-        
-        var_dump($resultRaw);
         
         return $result;
     }

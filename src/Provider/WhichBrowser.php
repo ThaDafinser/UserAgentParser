@@ -9,28 +9,9 @@ use UserAgentParser\Model;
 class WhichBrowser extends AbstractProvider
 {
 
-    private $parser;
-
     public function getName()
     {
         return 'WhichBrowser';
-    }
-
-    /**
-     *
-     * @return \WhichBrowser
-     */
-    private function getParser()
-    {
-        if ($this->parser !== null) {
-            return $this->parser;
-        }
-        
-        $parser = new \WhichBrowser([]);
-        
-        $this->parser = $parser;
-        
-        return $this->parser;
     }
 
     /**
@@ -154,10 +135,37 @@ class WhichBrowser extends AbstractProvider
         return false;
     }
 
+    /**
+     * 
+     * @param unknown $versionPart
+     * @return string
+     */
+    private function getVersion($versionPart)
+    {
+        if (! is_array($versionPart)) {
+            return $versionPart;
+        }
+        
+        if (isset($versionPart['alias'])) {
+            $version = $versionPart['alias'];
+        } else {
+            $version = $versionPart['value'];
+        }
+        
+        if (isset($versionPart['nickname'])) {
+            $version .= ' ' . $versionPart['nickname'];
+        }
+        
+        return $version;
+    }
+
     public function parse($userAgent)
     {
-        $parser = $this->getParser();
-        $parser->analyseUserAgent($userAgent);
+        $parser = new \WhichBrowser([
+            'headers' => [
+                'User-Agent' => $userAgent
+            ]
+        ]);
         
         $resultRaw = $parser->toArray();
         
@@ -193,12 +201,14 @@ class WhichBrowser extends AbstractProvider
          */
         $browser = $result->getBrowser();
         
-        if (isset($resultRaw['browser']['name']) && $this->isRealResult($resultRaw['browser']['name']) === true) {
+        if (isset($resultRaw['browser']['alias']) && $this->isRealResult($resultRaw['browser']['alias']) === true) {
+            $browser->setName($resultRaw['browser']['name']);
+        } elseif (isset($resultRaw['browser']['name']) && $this->isRealResult($resultRaw['browser']['name']) === true) {
             $browser->setName($resultRaw['browser']['name']);
         }
         
         if (isset($resultRaw['browser']['version']) && $this->isRealResult($resultRaw['browser']['version']) === true) {
-            $browser->getVersion()->setComplete($resultRaw['browser']['version']);
+            $browser->getVersion()->setComplete($this->getVersion($resultRaw['browser']['version']));
         }
         
         /*
@@ -224,7 +234,7 @@ class WhichBrowser extends AbstractProvider
         }
         
         if (isset($resultRaw['os']['version']) && $this->isRealResult($resultRaw['os']['version']) === true) {
-            $operatingSystem->getVersion()->setComplete($resultRaw['os']['version']);
+            $operatingSystem->getVersion()->setComplete($this->getVersion($resultRaw['os']['version']));
         }
         
         /*
@@ -233,7 +243,13 @@ class WhichBrowser extends AbstractProvider
         $device = $result->getDevice();
         
         if (isset($resultRaw['device']['model']) && $this->isRealResult($resultRaw['device']['model']) === true) {
-            $device->setModel($resultRaw['device']['model']);
+            $model = $resultRaw['device']['model'];
+            
+            if (isset($resultRaw['device']['series']) && $this->isRealResult($resultRaw['device']['series']) === true) {
+                $model .= ' ' . $resultRaw['device']['series'];
+            }
+            
+            $device->setModel($model);
         }
         
         if (isset($resultRaw['device']['manufacturer']) && $this->isRealResult($resultRaw['device']['manufacturer']) === true) {

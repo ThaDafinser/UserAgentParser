@@ -1,10 +1,20 @@
 <?php
 namespace UserAgentParser\Provider;
 
+use UserAgentParser\Exception;
+use UAParser\Result;
+
 abstract class AbstractProvider
 {
+
     private $userAgent;
 
+    /**
+     *
+     * @param string $userAgent            
+     * @throws Exception\NoResultFoundException
+     * @return Result\UserAgent
+     */
     abstract public function parse($userAgent);
 
     abstract public function getName();

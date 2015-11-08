@@ -2,114 +2,181 @@
 namespace UserAgentParser\Provider;
 
 use UAParser\Parser;
+use UserAgentParser\Exception;
+use UserAgentParser\Model;
 
 class UAParser extends AbstractProvider
 {
+
+    private $parser;
+
     public function getName()
     {
         return 'UAParser';
     }
 
+    /**
+     *
+     * @return Parser
+     */
+    private function getParser()
+    {
+        if ($this->parser !== null) {
+            return $this->parser;
+        }
+        
+        $this->parser = Parser::create();
+        
+        return $this->parser;
+    }
+
+    /**
+     *
+     * @param \UAParser\Result\Client $resultRaw            
+     * @return boolean
+     */
+    private function hasResult(\UAParser\Result\Client $resultRaw)
+    {
+        if ($this->isRealResult($resultRaw->ua->family)) {
+            return true;
+        }
+        
+        if ($this->isRealResult($resultRaw->os->family)) {
+            return true;
+        }
+        
+        if ($this->isRealResult($resultRaw->device->family)) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     *
+     * @param mixed $value            
+     * @return boolean
+     */
+    private function isRealResult($value)
+    {
+        if ($value === '' || $value === null) {
+            return false;
+        }
+        
+        if ($value === 'Other') {
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     *
+     * @param \UAParser\Result\Client $resultRaw            
+     * @return boolean
+     */
+    private function isBot(\UAParser\Result\Client $resultRaw)
+    {
+        if ($resultRaw->device->family === 'Spider') {
+            return true;
+        }
+        
+        return false;
+    }
+
     public function parse($userAgent)
     {
-        $parser = Parser::create();
+        $parser = $this->getParser();
         
-        /* @var $result \UAParser\Result\Client */
-        $result = $parser->parse($userAgent);
+        /* @var $resultRaw \UAParser\Result\Client */
+        $resultRaw = $parser->parse($userAgent);
         
-        $raw = [
-            'browser' => $result->ua,
-            'operatingSystem' => $result->os,
-            'device' => $result->device
-        ];
+        /*
+         * No result found?
+         */
+        if ($this->hasResult($resultRaw) !== true) {
+            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+        }
+        
+        /*
+         * Hydrate the model
+         */
+        $result = new Model\UserAgent();
+        $result->setProviderResultRaw($resultRaw);
+        
+        /*
+         * Bot detection
+         */
+        if ($this->isBot($resultRaw) === true) {
+            $bot = $result->getBot();
+            $bot->setIsBot(true);
+            
+            if ($this->isRealResult($resultRaw->ua->family) === true) {
+                $bot->setName($resultRaw->ua->family);
+            }
+            
+            return $result;
+        }
         
         /*
          * Browser
          */
-        $browserFamily = $result->ua->family;
-        if ($browserFamily == 'Other') {
-            $browserFamily = null;
+        $browser = $result->getBrowser();
+        
+        if ($this->isRealResult($resultRaw->ua->family) === true) {
+            $browser->setName($resultRaw->ua->family);
         }
         
-        $browserVersion = null;
-        if ($result->ua->major != '') {
-            $browserVersion = $result->ua->major;
-            
-            if ($result->ua->minor != '') {
-                $browserVersion .= '.' . $result->ua->minor;
-                
-                if ($result->ua->patch != '') {
-                    $browserVersion .= '.' . $result->ua->patch;
-                }
-            }
+        if ($this->isRealResult($resultRaw->ua->major) === true) {
+            $browser->getVersion()->setMajor($resultRaw->ua->major);
         }
         
-        $osFamily = $result->os->family;
-        if ($osFamily == 'Other') {
-            $osFamily = null;
+        if ($this->isRealResult($resultRaw->ua->minor) === true) {
+            $browser->getVersion()->setMinor($resultRaw->ua->minor);
         }
         
-        $osVersion = null;
-        if ($result->os->major != '') {
-            $osVersion = $result->os->major;
-            
-            if ($result->os->minor != '') {
-                $osVersion .= '.' . $result->os->minor;
-                
-                if ($result->os->patch != '') {
-                    $osVersion .= '.' . $result->os->patch;
-                    
-                    if ($result->os->patchMinor != '') {
-                        $browserVersion .= '.' . $result->os->patchMinor;
-                    }
-                }
-            }
+        if ($this->isRealResult($resultRaw->ua->patch) === true) {
+            $browser->getVersion()->setPatch($resultRaw->ua->patch);
         }
         
-        if ($result->device->family == 'Spider') {
-            return $this->returnResult([
-            
-                'browser' => [
-                    'family' => $browserFamily,
-                    'version' => $browserVersion,
-                ],
-                
-                'bot' => [
-                    'isBot' => true,
-                
-                    'name' => $browserFamily,
-                    'type' => null
-                ],
-                
-                'raw' => $raw
-            ]);
+        /*
+         * renderingEngine - is currently not possible!
+         */
+        
+        /*
+         * operatingSystem
+         */
+        $operatingSystem = $result->getOperatingSystem();
+        
+        if ($this->isRealResult($resultRaw->os->family) === true) {
+            $operatingSystem->setName($resultRaw->os->family);
         }
         
-        // device -> family is not useable currently i think...
-        // because it contains often the device model
-
-        return $this->returnResult([
-            
-            'browser' => [
-                'family' => $browserFamily,
-                'version' => $browserVersion,
-            ],
-            
-            'operatingSystem' => [
-                'family' => $osFamily,
-                'version' => $osVersion,
-                'platform' => null
-            ],
-            
-            'device' => [
-                'brand' => $result->device->brand,
-                'model' => $result->device->model,
-                'type' => null,
-                
-                'isMobile' => null,
-            ],
-            
-            'raw' => $raw
-        ]);
+        if ($this->isRealResult($resultRaw->os->major) === true) {
+            $operatingSystem->getVersion()->setMajor($resultRaw->os->major);
+        }
+        
+        if ($this->isRealResult($resultRaw->os->minor) === true) {
+            $operatingSystem->getVersion()->setMinor($resultRaw->os->minor);
+        }
+        
+        if ($this->isRealResult($resultRaw->os->patch) === true) {
+            $operatingSystem->getVersion()->setPatch($resultRaw->os->patch);
+        }
+        
+        /*
+         * device
+         */
+        $device = $result->getDevice();
+        
+        if ($this->isRealResult($resultRaw->device->brand) === true) {
+            $device->setBrand($resultRaw->device->brand);
+        }
+        
+        if ($this->isRealResult($resultRaw->device->model) === true) {
+            $device->setModel($resultRaw->device->model);
+        }
+        
+        return $result;
     }
 }

@@ -42,8 +42,12 @@ use UserAgentParser\GetMatrix;
 /*
  * Providers
  */
+$browscapLite = new Provider\BrowscapPhp();
+$browscapFull = new Provider\BrowscapPhp();
+$browscapFull->setCachePath('.tmp/browscap_full');
+
 $chain = new Provider\Chain([
-    new Provider\BrowscapPhp(),
+    $browscapFull,
     new Provider\DonatjUAParser(),
     new Provider\PiwikDeviceDetector(),
     new Provider\UAParser(),

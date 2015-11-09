@@ -1,0 +1,22 @@
+language: php
+
+php:
+  - 5.6
+  - 7
+  - hhvm
+  
+# faster builds on new travis setup not using sudo
+sudo: false
+
+cache:
+  directories:
+    - vendor
+    
+before_script:
+ - composer self-update
+ - composer update --prefer-dist
+ 
+script:
+ - vendor/bin/php-cs-fixer fix src --level=psr2 --dry-run -vv
+ - mkdir -p .tmp/phpunit-coverage
+ - ./vendor/bin/phpunit -c travis.phpunit.xml --coverage-clover .tmp/phpunit-coverage/clover.xml

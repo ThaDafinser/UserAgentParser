@@ -3,15 +3,6 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 
-| Provider | Browser | RenderingEngine | Operating system | Device | Bot | Only PHP | Comment |
-| --- | --- | --- | --- | --- | --- | --- |
-| [BrowscapPhp](https://github.com/browscap/browscap-php) | yes | yes | yes | yes | yes | no | lite and full version available |
-| [DonatjUAParser](https://github.com/donatj/PhpUserAgent) | yes | jiein | no | jiein | no | yes | |
-| [PiwikDeviceDetector](https://github.com/piwik/device-detector) | yes | yes | yes | yes | yes | yes | |
-| [UAParser](https://github.com/ua-parser/uap-php) | yes | no | yes | yes | yes | no | |
-| [WhichBrowser](https://github.com/WhichBrowser/WhichBrowser) | yes | yes | yes | yes | yes | no | |
-| [Woothee](https://github.com/woothee/woothee-php) | yes | no | jiein | jiein | yes | no | |
-| [YzalisUAParser](https://github.com/yzalis/UAParser) | yes | yes | yes | yes | no | yes | |
 Different UA parse provider
 
 ## Installation

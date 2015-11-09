@@ -5,6 +5,11 @@
 
 Different UA parse provider
 
+## Installation
+```
+composer require thadafinser/user-agent-parser
+```
+
 ## Example
 ```php
 require 'vendor/autoload.php';
@@ -19,6 +24,20 @@ $dd = new Provider\YzalisUAParser();
 $result = $dd->parse($userAgent);
 var_dump($result->toArray());
 ```
+
+## Providers
+
+### Overview
+
+| Provider | Browser | RenderingEngine | Operating system | Device | Bot |
+| --- | --- | --- | --- | --- | --- |
+| [BrowscapPhp](https://github.com/browscap/browscap-php) | yes | yes | yes | yes | yes |
+| [DonatjUAParser](https://github.com/donatj/PhpUserAgent) | yes | jiein | no | jiein | no |
+| [PiwikDeviceDetector](https://github.com/piwik/device-detector) | yes | yes | yes | yes | yes |
+| [UAParser](https://github.com/ua-parser/uap-php) | yes | no | yes | yes | yes |
+| [WhichBrowser](https://github.com/WhichBrowser/WhichBrowser) | yes | yes | yes | yes | yes |
+| [Woothee](https://github.com/woothee/woothee-php) | yes | no | jiein | jiein | yes |
+| [YzalisUAParser](https://github.com/yzalis/UAParser) | yes | yes | yes | yes | no |
 
 ## How to build
 `composer install -o`

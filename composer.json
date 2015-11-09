@@ -22,7 +22,8 @@
     },
     
     "require": {
-    
+        "php": ">=5.6",
+        
         "browscap/browscap-php": "dev-master",
         "browscap/browscap": "6009",
         

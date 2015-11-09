@@ -3,7 +3,6 @@ namespace UserAgentParser\Model;
 
 final class Device
 {
-
     private $model;
 
     private $brand;
@@ -67,11 +66,11 @@ final class Device
     public function toArray()
     {
         return [
-            'model' => $this->getModel(),
-            'brand' => $this->getBrand(),
-            'type' => $this->getType(),
+            'model'    => $this->getModel(),
+            'brand'    => $this->getBrand(),
+            'type'     => $this->getType(),
             'isMobile' => $this->getIsMobile(),
-            'isTouch' => $this->getIsTouch()
+            'isTouch'  => $this->getIsTouch(),
         ];
     }
 }

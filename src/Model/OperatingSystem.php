@@ -3,15 +3,12 @@ namespace UserAgentParser\Model;
 
 final class OperatingSystem
 {
-
     /**
-     *
      * @var string
      */
     private $name;
 
     /**
-     *
      * @var Version
      */
     private $version;
@@ -32,8 +29,7 @@ final class OperatingSystem
     }
 
     /**
-     *
-     * @param Version $version            
+     * @param Version $version
      */
     public function setVersion(Version $version)
     {
@@ -41,7 +37,6 @@ final class OperatingSystem
     }
 
     /**
-     *
      * @return Version
      */
     public function getVersion()
@@ -50,14 +45,13 @@ final class OperatingSystem
     }
 
     /**
-     *
      * @return array
      */
     public function toArray()
     {
         return [
-            'name' => $this->getName(),
-            'version' => $this->getVersion()->toArray()
+            'name'    => $this->getName(),
+            'version' => $this->getVersion()->toArray(),
         ];
     }
 }

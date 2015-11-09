@@ -3,7 +3,6 @@ namespace UserAgentParser\Model;
 
 final class Version
 {
-
     private $major;
 
     private $minor;
@@ -43,14 +42,14 @@ final class Version
     }
 
     /**
-     * Set from the complete version string
+     * Set from the complete version string.
      *
-     * @param string $string            
+     * @param string $string
      */
     public function setComplete($complete)
     {
         $this->complete = $complete;
-        
+
         $this->hydrateVersionParts($complete);
     }
 
@@ -59,36 +58,35 @@ final class Version
         if ($this->complete === null) {
             $this->complete = $this->combineParts();
         }
-        
+
         return $this->complete;
     }
 
     /**
-     *
-     * @param string $completeVersion            
+     * @param string $completeVersion
      */
     private function hydrateVersionParts($completeVersion)
     {
         $parts = $this->getParts($completeVersion);
-        
+
         $this->setMajor($parts['major']);
         $this->setMinor($parts['minor']);
         $this->setPatch($parts['patch']);
     }
 
     /**
+     * @param unknown $version
      *
-     * @param unknown $version            
      * @return array
      */
     private function getParts($version)
     {
         $parts = explode('.', $version);
-        
+
         $versionParts = [
             'major' => null,
             'minor' => null,
-            'patch' => null
+            'patch' => null,
         ];
         if (isset($parts[0]) && $parts[0] != '') {
             $versionParts['major'] = (int) $parts[0];
@@ -99,30 +97,29 @@ final class Version
         if (isset($parts[2]) && $parts[2] != '') {
             $versionParts['patch'] = (int) $parts[2];
         }
-        
+
         return $versionParts;
     }
 
     /**
-     *
      * @return string
      */
     private function combineParts()
     {
         if ($this->getMajor() === null) {
-            return null;
+            return;
         }
-        
+
         $version = $this->getMajor();
-        
+
         if ($this->getMinor() !== null) {
             $version .= '.' . $this->getMinor();
         }
-        
+
         if ($this->getPatch() !== null) {
             $version .= '.' . $this->getPatch();
         }
-        
+
         return $version;
     }
 
@@ -132,8 +129,8 @@ final class Version
             'major' => $this->getMajor(),
             'minor' => $this->getMinor(),
             'patch' => $this->getPatch(),
-            
-            'complete' => $this->getComplete()
+
+            'complete' => $this->getComplete(),
         ];
     }
 }

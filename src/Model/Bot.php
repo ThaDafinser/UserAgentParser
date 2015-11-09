@@ -3,7 +3,6 @@ namespace UserAgentParser\Model;
 
 class Bot
 {
-
     private $isBot = false;
 
     private $name;
@@ -44,8 +43,8 @@ class Bot
     {
         return [
             'isBot' => $this->getIsBot(),
-            'name' => $this->getName(),
-            'type' => $this->getType()
+            'name'  => $this->getName(),
+            'type'  => $this->getType(),
         ];
     }
 }

@@ -3,55 +3,47 @@ namespace UserAgentParser\Model;
 
 final class UserAgent
 {
-
     /**
-     *
      * @var Browser
      */
     private $browser;
 
     /**
-     *
      * @var RenderingEngine
      */
     private $renderingEngine;
 
     /**
-     *
      * @var OperatingSystem
      */
     private $operatingSystem;
 
     /**
-     *
      * @var Device
      */
     private $device;
 
     /**
-     *
      * @var Bot
      */
     private $bot;
 
     /**
-     *
      * @var mixed
      */
     private $providerResultRaw;
 
     public function __construct()
     {
-        $this->browser = new Browser();
+        $this->browser         = new Browser();
         $this->renderingEngine = new RenderingEngine();
         $this->operatingSystem = new OperatingSystem();
-        $this->device = new Device();
-        $this->bot = new Bot();
+        $this->device          = new Device();
+        $this->bot             = new Bot();
     }
 
     /**
-     *
-     * @param Browser $browser            
+     * @param Browser $browser
      */
     public function setBrowser(Browser $browser)
     {
@@ -59,7 +51,6 @@ final class UserAgent
     }
 
     /**
-     *
      * @return Browser
      */
     public function getBrowser()
@@ -68,8 +59,7 @@ final class UserAgent
     }
 
     /**
-     *
-     * @param RenderingEngine $renderingEngine            
+     * @param RenderingEngine $renderingEngine
      */
     public function setRenderingEngine(RenderingEngine $renderingEngine)
     {
@@ -77,7 +67,6 @@ final class UserAgent
     }
 
     /**
-     *
      * @return RenderingEngine
      */
     public function getRenderingEngine()
@@ -86,8 +75,7 @@ final class UserAgent
     }
 
     /**
-     *
-     * @param OperatingSystem $operatingSystem            
+     * @param OperatingSystem $operatingSystem
      */
     public function setOperatingSystem(OperatingSystem $operatingSystem)
     {
@@ -95,7 +83,6 @@ final class UserAgent
     }
 
     /**
-     *
      * @return OperatingSystem
      */
     public function getOperatingSystem()
@@ -104,8 +91,7 @@ final class UserAgent
     }
 
     /**
-     *
-     * @param Device $device            
+     * @param Device $device
      */
     public function setDevice(Device $device)
     {
@@ -113,7 +99,6 @@ final class UserAgent
     }
 
     /**
-     *
      * @return Device
      */
     public function getDevice()
@@ -122,8 +107,7 @@ final class UserAgent
     }
 
     /**
-     *
-     * @param Bot $bot            
+     * @param Bot $bot
      */
     public function setBot(Bot $bot)
     {
@@ -131,7 +115,6 @@ final class UserAgent
     }
 
     /**
-     *
      * @return Bot
      */
     public function getBot()
@@ -141,22 +124,21 @@ final class UserAgent
 
     /**
      * Special function to detect if it's a bot
-     * If it's a bot only getBot() part has values in UserAgent
+     * If it's a bot only getBot() part has values in UserAgent.
      *
-     * @return boolean
+     * @return bool
      */
     public function isBot()
     {
         if ($this->getBot()->getName() !== null || $this->getBot()->getType() !== null) {
             return true;
         }
-        
+
         return false;
     }
 
     /**
-     *
-     * @param mixed $providerResultRaw            
+     * @param mixed $providerResultRaw
      */
     public function setProviderResultRaw($providerResultRaw)
     {
@@ -164,7 +146,6 @@ final class UserAgent
     }
 
     /**
-     *
      * @return mixed
      */
     public function getProviderResultRaw()
@@ -173,24 +154,23 @@ final class UserAgent
     }
 
     /**
-     *
      * @return array
      */
     public function toArray($includeResultRaw = false)
     {
         $data = [
-            'browser' => $this->getBrowser()->toArray(),
+            'browser'          => $this->getBrowser()->toArray(),
             'renderingEnginge' => $this->getRenderingEngine()->toArray(),
-            'operatingSystem' => $this->getOperatingSystem()->toArray(),
-            'device' => $this->getDevice()->toArray(),
-            'bot' => $this->getBot()->toArray()
+            'operatingSystem'  => $this->getOperatingSystem()->toArray(),
+            'device'           => $this->getDevice()->toArray(),
+            'bot'              => $this->getBot()->toArray(),
         ];
-        
+
         // should be only used for debug
         if ($includeResultRaw === true) {
             $data['providerResultRaw'] = $this->getProviderResultRaw();
         }
-        
+
         return $data;
     }
 }

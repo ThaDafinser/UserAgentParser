@@ -1,6 +1,6 @@
 {
     "name": "thadafinser/user-agent-parser",
-    "description": "UserAgentParser with different providers + matrix",
+    "description": "UserAgentParser abstraction for different parse providers",
     "license": "MIT",
     "authors": [
         {
@@ -12,6 +12,12 @@
     "autoload": {
         "psr-4": {
             "UserAgentParser\\":  "src"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "UserAgentParserTest\\":  "tests/unit"
         }
     },
     
@@ -33,5 +39,10 @@
         
         "yzalis/ua-parser": "^0.2"
         
+    },
+    
+    "require-dev": {
+        "phpunit/PHPUnit": "^5.0",
+        "fabpot/php-cs-fixer": "^1.10.0"
     }
 }

@@ -1,18 +1,18 @@
 <?php
 namespace UserAgentParser\Provider;
 
-use UserAgentParser\Exception;
 use UAParser\Result;
+use UserAgentParser\Exception;
 
 abstract class AbstractProvider
 {
-
     private $userAgent;
 
     /**
+     * @param string $userAgent
      *
-     * @param string $userAgent            
      * @throws Exception\NoResultFoundException
+     *
      * @return Result\UserAgent
      */
     abstract public function parse($userAgent);
@@ -28,30 +28,30 @@ abstract class AbstractProvider
     {
         return [
             'browser' => [
-                'family' => null,
-                'version' => null
-            ],
-            
-            'operatingSystem' => [
-                'family' => null,
+                'family'  => null,
                 'version' => null,
-                'platform' => null
             ],
-            
+
+            'operatingSystem' => [
+                'family'   => null,
+                'version'  => null,
+                'platform' => null,
+            ],
+
             'device' => [
                 'brand' => null,
                 'model' => null,
-                'type' => null,
-                
-                'isMobile' => null
+                'type'  => null,
+
+                'isMobile' => null,
             ],
-            
+
             'bot' => [
                 'isBot' => null,
-                
+
                 'name' => null,
-                'type' => null
-            ]
+                'type' => null,
+            ],
         ];
     }
 }

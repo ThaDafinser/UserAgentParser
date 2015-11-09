@@ -47,3 +47,4 @@ Temporary Items
 .buildpath
 .project
 .tmp
+composer.lock

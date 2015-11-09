@@ -1,14 +1,17 @@
 <phpunit 
-	bootstrap="./tests/bootstrap.php" 
+	bootstrap="vendor/bootstrap.php" 
 	colors="false"
-	stopOnError="false"
-	stopOnFailure="false"
 	convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true" 
+    convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
+    verbose="true"
+    stopOnFailure="false"
+    processIsolation="false"
+    backupGlobals="false"
+    syntaxCheck="true"
 >   
     <testsuites>
-        <testsuite name="UserAgentParser test Suite">
+        <testsuite name="UserAgentParser tests">
             <directory suffix="Test.php">tests/unit</directory>
         </testsuite>
     </testsuites>

@@ -47,6 +47,12 @@ Here is a comparison matrix, with many analyzed UserAgent strings, to help you d
 To run this provider you need to generate the cache first.
 You can also choose between the `lite` and `full` version. Of course the lite version is faster, but does not contain all informations
 
+#### Generate the .ini files
+You should grad the latest release of [browscap](https://github.com/browscap/browscap/releases) first and then change the version number at the end `6009` accordingly
+```
+php vendor\browscap\browscap\bin\browscap build 6009
+```
+
 #### Lite version
 ```php
 require 'vendor/autoload.php';

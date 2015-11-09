@@ -2,6 +2,8 @@
 namespace UserAgentParser\Provider;
 
 use UAParser\Result\Result as UAParserResult;
+use UserAgentParser\Exception;
+use UserAgentParser\Model;
 
 class YzalisUAParser extends AbstractProvider
 {
@@ -13,6 +15,7 @@ class YzalisUAParser extends AbstractProvider
     }
 
     /**
+     *
      * @return \UAParser\UAParser
      */
     private function getParser()
@@ -27,7 +30,7 @@ class YzalisUAParser extends AbstractProvider
 
         return $this->parser;
     }
-    
+
     /**
      *
      * @param UAParserResult $resultRaw
@@ -36,11 +39,98 @@ class YzalisUAParser extends AbstractProvider
      */
     private function hasResult(UAParserResult $resultRaw)
     {
-        if($resultRaw->browser){
-            
+        /* @var $browserRaw \UAParser\Result\BrowserResult */
+        $browserRaw = $resultRaw->getBrowser();
+
+        if ($browserRaw->getFamily() !== 'Other') {
+            return true;
         }
-        
+
+        /* @var $osRaw \UAParser\Result\OperatingSystemResult */
+        $osRaw = $resultRaw->getOperatingSystem();
+
+        if ($osRaw->getFamily() !== 'Other') {
+            return true;
+        }
+
+        /* @var $deviceRaw \UAParser\Result\DeviceResult */
+        $deviceRaw = $resultRaw->getDevice();
+
+        if ($deviceRaw->getConstructor() !== 'Other') {
+            return true;
+        }
+
+        /* @var $emailRaw \UAParser\Result\EmailClientResult */
+        $emailRaw = $resultRaw->getEmailClient();
+
+        if ($emailRaw->getFamily() !== 'Other') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    private function isRealResult($value)
+    {
+        if ($value === '') {
+            return false;
+        }
+
+        if ($value === 'Other') {
+            return false;
+        }
+
         return true;
+    }
+
+    /**
+     *
+     * @param UAParserResult $resultRaw
+     *
+     * @return bool
+     */
+    private function isMobile(UAParserResult $resultRaw)
+    {
+        /* @var $deviceRaw \UAParser\Result\DeviceResult */
+        $deviceRaw = $resultRaw->getDevice();
+
+        if ($deviceRaw->getType() === 'mobile') {
+            return true;
+        }
+
+        if ($deviceRaw->getType() === 'tablet') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param UAParserResult $resultRaw
+     *
+     * @return bool
+     */
+    private function isTouch(UAParserResult $resultRaw)
+    {
+        /* @var $deviceRaw \UAParser\Result\DeviceResult */
+        $deviceRaw = $resultRaw->getDevice();
+
+        if ($deviceRaw->getType() === 'mobile') {
+            return true;
+        }
+
+        if ($deviceRaw->getType() === 'tablet') {
+            return true;
+        }
+
+        return false;
     }
 
     public function parse($userAgent)
@@ -56,85 +146,104 @@ class YzalisUAParser extends AbstractProvider
         if ($this->hasResult($resultRaw) !== true) {
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
-        
-        var_dump($resultRaw);
-        exit();
-        
-        /* @var $browser \UAParser\Result\BrowserResult */
+
+        /* @var $browserRaw \UAParser\Result\BrowserResult */
+        $browserRaw = $resultRaw->getBrowser();
+
+        /* @var $renderingEngineRaw \UAParser\Result\RenderingEngineResult */
+        $renderingEngineRaw = $resultRaw->getRenderingEngine();
+
+        /* @var $osRaw \UAParser\Result\OperatingSystemResult */
+        $osRaw = $resultRaw->getOperatingSystem();
+
+        /* @var $deviceRaw \UAParser\Result\DeviceResult */
+        $deviceRaw = $resultRaw->getDevice();
+
+        /* @var $emailRaw \UAParser\Result\EmailClientResult */
+        $emailRaw = $resultRaw->getEmailClient();
+
+        /*
+         * Hydrate the model
+         */
+        $result = new Model\UserAgent();
+        $result->setProviderResultRaw($resultRaw);
+
+        /*
+         * Bot detection
+         */
+        // @todo i think this is currently not possible
+
+        /*
+         * Browser
+         */
         $browser = $result->getBrowser();
 
-        $browserFamily  = null;
-        $browserVersion = null;
-        if ($browser->getFamily() != 'Other') {
-            $browserFamily = $browser->getFamily();
+        if ($this->isRealResult($browserRaw->getFamily()) === true) {
+            $browser->setName($browserRaw->getFamily());
+        }
 
-            if ($browser->getVersionString() != 'Other') {
-                $browserVersion = $browser->getVersionString();
+        if ($this->isRealResult($browserRaw->getVersionString()) === true) {
+            $browser->getVersion()->setComplete($browserRaw->getVersionString());
+        }
+
+        /*
+         * renderingEngine
+         */
+        $renderingEngine = $result->getRenderingEngine();
+
+        if ($this->isRealResult($renderingEngineRaw->getFamily()) === true) {
+            $renderingEngine->setName($renderingEngineRaw->getFamily());
+        }
+
+        if ($this->isRealResult($renderingEngineRaw->getVersion()) === true) {
+            $renderingEngine->getVersion()->setComplete($renderingEngineRaw->getVersion());
+        }
+
+        /*
+         * operatingSystem
+         */
+        $operatingSystem = $result->getOperatingSystem();
+
+        if ($this->isRealResult($osRaw->getFamily()) === true) {
+            $operatingSystem->setName($osRaw->getFamily());
+        }
+
+        if ($this->isRealResult($osRaw->getMajor()) === true) {
+            $operatingSystem->getVersion()->setMajor($osRaw->getMajor());
+
+            if ($this->isRealResult($osRaw->getMinor()) === true) {
+                $operatingSystem->getVersion()->setMinor($osRaw->getMinor());
+            }
+
+            if ($this->isRealResult($osRaw->getPatch()) === true) {
+                $operatingSystem->getVersion()->setPatch($osRaw->getPatch());
             }
         }
 
-        /* @var $os \UAParser\Result\OperatingSystemResult */
-        $os = $result->getOperatingSystem();
-
-        $osName    = null;
-        $osVersion = null;
-        if ($os->getFamily() != 'Other') {
-            $osName = $os->getFamily();
-
-            if ($os->getMajor() != '') {
-                $osVersion = $os->getMajor();
-            }
-        }
-
-        /* @var $device \UAParser\Result\DeviceResult */
+        /*
+         * device
+         */
         $device = $result->getDevice();
 
-        $deviceBrand = null;
-        if ($device->getConstructor() != 'Other' && $device->getConstructor() != '') {
-            $deviceBrand = $device->getConstructor();
+        if ($this->isRealResult($deviceRaw->getModel()) === true) {
+            $device->setModel($deviceRaw->getModel());
         }
 
-        $deviceModel = null;
-        if ($device->getModel() != 'Other' && $device->getModel() != '') {
-            $deviceModel = $device->getModel();
+        if ($this->isRealResult($deviceRaw->getConstructor()) === true) {
+            $device->setBrand($deviceRaw->getConstructor());
         }
 
-        $deviceType = null;
-        if ($device->getType() != 'desktop' && $device->getType() != '') {
-            $deviceType = $device->getType();
+        if ($this->isRealResult($deviceRaw->getType()) === true) {
+            $device->setType($deviceRaw->getType());
         }
 
-        /* @var $email \UAParser\Result\EmailClientResult */
-        $email = $result->getEmailClient();
-        if ($email->getFamily() != 'Other' && $browser->getFamily() == 'Other') {
-            $browserFamily = $email->getFamily();
-            if ($email->getMajor() != 'Other') {
-                $browserVersion = $email->getMajor();
-            }
+        if ($this->isMobile($resultRaw) === true) {
+            $device->setIsMobile(true);
+        }
+        if ($this->isTouch($resultRaw) === true) {
+            $device->setIsTouch(true);
         }
 
-        return $this->returnResult([
-
-            'browser' => [
-                'family'  => $browserFamily,
-                'version' => $browserVersion,
-            ],
-
-            'device' => [
-                'brand' => $deviceBrand,
-                'model' => $deviceModel,
-                'type'  => $deviceType,
-
-                'isMobile' => null,
-            ],
-
-            'operatingSystem' => [
-                'family'   => $osName,
-                'version'  => $osVersion,
-                'platform' => null,
-            ],
-
-            'raw' => $result,
-        ]);
+        return $result;
     }
 }

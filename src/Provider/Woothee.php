@@ -96,7 +96,6 @@ class Woothee extends AbstractProvider
          * const DATASET_CATEGORY_APPLIANCE = 'appliance';
          * const DATASET_CATEGORY_MISC = 'misc';
          */
-
         if ($resultRaw['category'] === DataSet::DATASET_CATEGORY_SMARTPHONE) {
             return true;
         }
@@ -194,8 +193,13 @@ class Woothee extends AbstractProvider
         // @todo ... filled OS is mixed! Examples: iPod, iPhone, Android...
         // @todo vendor is filled with device and/or browser
 
-        $device->setIsMobile($this->isMobile($resultRaw));
-        $device->setIsTouch($this->isTouch($resultRaw));
+        if ($this->isMobile($resultRaw) === true) {
+            $device->setIsMobile(true);
+        }
+
+        if ($this->isTouch($resultRaw) === true) {
+            $device->setIsTouch(true);
+        }
 
         return $result;
     }

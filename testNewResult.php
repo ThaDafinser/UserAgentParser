@@ -19,7 +19,7 @@ $userAgents = [
     'RssBandit/1.9.0.1002 (.NET CLR 2.0.50727.7512; WinNT 6.2.9200.0; http://www.rssbandit.org)'
 ];
 
-$userAgent = $userAgents[0];
+$userAgent = $userAgents[3];
 
 // /*
 // * BrowscapPhp

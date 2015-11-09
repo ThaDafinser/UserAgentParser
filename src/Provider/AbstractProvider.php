@@ -11,7 +11,7 @@ abstract class AbstractProvider
      * @return string
      */
     abstract public function getName();
-    
+
     /**
      * @param string $userAgent
      *

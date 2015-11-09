@@ -8,10 +8,10 @@ php:
 before_script:
   - composer self-update
   - composer update --prefer-source
- 
+  - if [ $TRAVIS_PHP_VERSION = '5.6' ]; then PHPUNIT_FLAGS="--coverage-clover coverage.clover"; else PHPUNIT_FLAGS=""; fi
 script:
   - vendor/bin/php-cs-fixer fix src --level=psr2 --dry-run -vv
-  - vendor/bin/phpunit --coverage-clover coverage.clover
+  - vendor/bin/phpunit $PHPUNIT_FLAGS
 
 after_script:
   - if [ $TRAVIS_PHP_VERSION = '5.6' ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi

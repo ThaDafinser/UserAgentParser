@@ -5,6 +5,8 @@ use UserAgentParser\Provider;
 
 $userAgents = [
     '',
+    'Mozilla/5 (X11; Linux x86_64) AppleWebKit/537.4 (KHTML like Gecko) Arch Linux Firefox/23.0 Xfce',
+    
     'Mozilla/5.0 (compatible; Genieo/1.0 http://www.genieo.com/webfilter.html)',
     'Mozilla/5.0 (Linux; U; Android 4.0.4; en-gb; GT-I9300 Build/IMM76D) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
     'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5',
@@ -17,7 +19,7 @@ $userAgents = [
     'RssBandit/1.9.0.1002 (.NET CLR 2.0.50727.7512; WinNT 6.2.9200.0; http://www.rssbandit.org)'
 ];
 
-$userAgent = $userAgents[4];
+$userAgent = $userAgents[0];
 
 // /*
 // * BrowscapPhp
@@ -50,11 +52,23 @@ $userAgent = $userAgents[4];
 // $result = $dd->parse($userAgent);
 // var_dump($result->toArray());
 
+// /*
+//  * WhichBrowser
+//  */
+// $dd = new Provider\WhichBrowser();
+// $result = $dd->parse($userAgent);
+// var_dump($result->toArray());
+
 /*
- * WhichBrowser
+ * Woothee
  */
-$dd = new Provider\WhichBrowser();
+$dd = new Provider\Woothee();
 $result = $dd->parse($userAgent);
 var_dump($result->toArray());
 
-
+/*
+ * YzalisUAParser
+ */
+$dd = new Provider\YzalisUAParser();
+$result = $dd->parse($userAgent);
+var_dump($result->toArray());

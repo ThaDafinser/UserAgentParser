@@ -10,6 +10,7 @@ before_script:
   - composer update --prefer-source
   - composer dump-autoload
   - if [ $TRAVIS_PHP_VERSION = '5.6' ]; then PHPUNIT_FLAGS="--coverage-clover coverage.clover"; else PHPUNIT_FLAGS=""; fi
+
 script:
   - vendor/bin/php-cs-fixer fix src --level=psr2 --dry-run -vv
   - vendor/bin/phpunit $PHPUNIT_FLAGS

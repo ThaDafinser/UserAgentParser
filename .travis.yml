@@ -6,13 +6,13 @@ php:
   - hhvm
   
 before_script:
- - composer self-update
- - composer update --prefer-source
+  - composer self-update
+  - composer update --prefer-source
  
 script:
- - vendor/bin/php-cs-fixer fix src --level=psr2 --dry-run -vv
- - vendor/bin/phpunit --coverage-clover=coverage.clover
+  - vendor/bin/php-cs-fixer fix src --level=psr2 --dry-run -vv
+  - vendor/bin/phpunit --coverage-clover=coverage.clover
 
- after_script:
+after_script:
   - if [[ $TRAVIS_PHP_VERSION == '5.6' ]]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
  

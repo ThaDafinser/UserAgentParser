@@ -1,4 +1,6 @@
 # UserAgentParser
+[![Build Status](https://travis-ci.org/ThaDafinser/UserAgentParser.svg)](https://travis-ci.org/ThaDafinser/UserAgentParser)
+
 Different UA parse provider + comparison
 
 # How to build

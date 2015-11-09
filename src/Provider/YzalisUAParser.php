@@ -1,6 +1,8 @@
 <?php
 namespace UserAgentParser\Provider;
 
+use UAParser\Result\Result as UAParserResult;
+
 class YzalisUAParser extends AbstractProvider
 {
     private $parser;
@@ -25,14 +27,39 @@ class YzalisUAParser extends AbstractProvider
 
         return $this->parser;
     }
+    
+    /**
+     *
+     * @param UAParserResult $resultRaw
+     *
+     * @return bool
+     */
+    private function hasResult(UAParserResult $resultRaw)
+    {
+        if($resultRaw->browser){
+            
+        }
+        
+        return true;
+    }
 
     public function parse($userAgent)
     {
         $parser = $this->getParser();
 
-        /* @var $result \UAParser\Result\Result */
-        $result = $parser->parse($userAgent);
+        /* @var $resultRaw \UAParser\Result\Result */
+        $resultRaw = $parser->parse($userAgent);
 
+        /*
+         * No result found?
+         */
+        if ($this->hasResult($resultRaw) !== true) {
+            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+        }
+        
+        var_dump($resultRaw);
+        exit();
+        
         /* @var $browser \UAParser\Result\BrowserResult */
         $browser = $result->getBrowser();
 

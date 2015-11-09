@@ -59,12 +59,12 @@ $userAgent = $userAgents[0];
 // $result = $dd->parse($userAgent);
 // var_dump($result->toArray());
 
-/*
- * Woothee
- */
-$dd = new Provider\Woothee();
-$result = $dd->parse($userAgent);
-var_dump($result->toArray());
+// /*
+//  * Woothee
+//  */
+// $dd = new Provider\Woothee();
+// $result = $dd->parse($userAgent);
+// var_dump($result->toArray());
 
 /*
  * YzalisUAParser

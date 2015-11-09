@@ -3,9 +3,24 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 
-Different UA parse provider + comparison
+Different UA parse provider
 
-# How to build
+## Example
+```php
+require 'vendor/autoload.php';
+
+use UserAgentParser\Provider;
+
+$userAgent = 'Mozilla/5 (X11; Linux x86_64) AppleWebKit/537.4 (KHTML like Gecko) Arch Linux Firefox/23.0 Xfce';
+
+$dd = new Provider\YzalisUAParser();
+
+/* @var $result \UserAgentParser\Model\UserAgent */
+$result = $dd->parse($userAgent);
+var_dump($result->toArray());
+```
+
+## How to build
 `composer install -o`
 
 `php vendor\browscap\browscap\bin\browscap build 6009`
@@ -13,9 +28,3 @@ Different UA parse provider + comparison
 `php bin\initCache.php`
 
 `php bin\generateMatrixAll.php`
-
-# get the comparison results
-Download the html files from `data/results` and just open it in a browser
-
-## Notes about the comparison
-The different vendor adapters are not completed yet and may have failures or missing things, so the result is not 100% correct!

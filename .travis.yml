@@ -1,5 +1,14 @@
 language: php
 
+## Run on container environment
+sudo: false
+
+## Cache composer bits
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+    
 php:
   - 5.6
   - 7
@@ -9,11 +18,10 @@ before_script:
   - composer self-update
   - composer update --prefer-source
   - composer dump-autoload
-  - if [ $TRAVIS_PHP_VERSION = '5.6' ]; then PHPUNIT_FLAGS="--coverage-clover coverage.clover"; else PHPUNIT_FLAGS=""; fi
 
 script:
   - ./vendor/bin/php-cs-fixer fix src --level=psr2 --dry-run -vv
-  - ./vendor/bin/phpunit $PHPUNIT_FLAGS
+  - ./vendor/bin/phpunit --coverage-clover coverage.clover
 
 after_script:
   - if [ $TRAVIS_PHP_VERSION = '5.6' ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi

@@ -20,9 +20,11 @@ before_script:
   - composer dump-autoload
 
 script:
-  - ./vendor/bin/php-cs-fixer fix src --level=psr2 --dry-run -vv
-  - ./vendor/bin/phpunit --coverage-clover coverage.clover
+  - vendor/bin/php-cs-fixer fix src --level=psr2 --dry-run -vv
+  - vendor/bin/phpunit --coverage-clover coverage.clover
 
 after_script:
-  - if [ $TRAVIS_PHP_VERSION = '5.6' ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  
  

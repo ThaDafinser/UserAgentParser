@@ -1,6 +1,8 @@
 <?php
 namespace UserAgentParser\Provider;
 
+use UserAgentParser\Exception;
+
 class Chain extends AbstractProvider
 {
     /**
@@ -58,9 +60,7 @@ class Chain extends AbstractProvider
                 if ($this->executeAll !== true) {
                     break;
                 }
-            } catch (\Exception $ex) {
-                var_dump($ex);
-                exit();
+            } catch (Exception\NoResultFoundException $ex) {
             }
         }
 

@@ -2,6 +2,7 @@
 namespace UserAgentParser\Provider;
 
 use UserAgentParser\Exception;
+use UserAgentParser\Result;
 
 abstract class AbstractProvider
 {

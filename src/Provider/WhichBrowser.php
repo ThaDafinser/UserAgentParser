@@ -14,6 +14,7 @@ class WhichBrowser extends AbstractProvider
     }
 
     /**
+     *
      * @param array $resultRaw
      *
      * @return bool
@@ -28,6 +29,7 @@ class WhichBrowser extends AbstractProvider
     }
 
     /**
+     *
      * @param mixed $value
      *
      * @return bool
@@ -47,13 +49,14 @@ class WhichBrowser extends AbstractProvider
     }
 
     /**
+     *
      * @param array $resultRaw
      *
      * @return bool
      */
     private function isMobile(array $resultRaw)
     {
-        if (!isset($resultRaw['device']['type'])) {
+        if (! isset($resultRaw['device']['type'])) {
             return false;
         }
 
@@ -105,13 +108,14 @@ class WhichBrowser extends AbstractProvider
     }
 
     /**
+     *
      * @param array $resultRaw
      *
      * @return bool
      */
     private function isTouch(array $resultRaw)
     {
-        if (!isset($resultRaw['device']['type'])) {
+        if (! isset($resultRaw['device']['type'])) {
             return false;
         }
         if (isset($raw['os']['alias'])) {
@@ -135,19 +139,22 @@ class WhichBrowser extends AbstractProvider
     }
 
     /**
+     *
      * @param unknown $versionPart
      *
      * @return string
      */
     private function getVersion($versionPart)
     {
-        if (!is_array($versionPart)) {
+        if (! is_array($versionPart)) {
             return $versionPart;
         }
 
+        $version = null;
+
         if (isset($versionPart['alias'])) {
             $version = $versionPart['alias'];
-        } else {
+        } elseif (isset($versionPart['value'])) {
             $version = $versionPart['value'];
         }
 

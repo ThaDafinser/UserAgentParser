@@ -89,14 +89,6 @@ class BrowscapPhp extends AbstractProvider
             return true;
         }
 
-        // if ($resultRaw->browser_type === 'Application') {
-        // return true;
-        // }
-
-        // if ($resultRaw->browser_type === 'Bot/Crawler') {
-        // return true;
-        // }
-
         return false;
     }
 
@@ -222,8 +214,8 @@ class BrowscapPhp extends AbstractProvider
             $device->setType($resultRaw->device_type);
         }
 
-        if (isset($resultRaw->ismobiledevice) && $this->isRealResult($resultRaw->ismobiledevice) === true) {
-            $device->setIsMobile($resultRaw->ismobiledevice);
+        if (isset($resultRaw->ismobiledevice) && $this->isRealResult($resultRaw->ismobiledevice) === true && $resultRaw->ismobiledevice === true) {
+            $device->setIsMobile(true);
         }
 
         if (isset($resultRaw->device_pointing_method) && $resultRaw->device_pointing_method == 'touchscreen') {

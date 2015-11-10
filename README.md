@@ -3,7 +3,15 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 
-Different UA parse provider
+`User agent` parsing is, was and will always be a painful thing, since it will never work 100% (since User agents are faked very often)!
+
+The target of this package is to make it at least a bit less painful, by providing an abstract layer over many UserAgent parser around
+
+So you can
+- try out or switch between different parsers fast, without changing your code
+- use multiple providers at the same time with the `Chain` provider
+- compare the result of the different parsers [UserAgentParserMatrix](https://github.com/ThaDafinser/UserAgentParserMatrix)
+- get always the same result model, regardless of which parser you use currently
 
 ## Installation
 ```
@@ -72,7 +80,6 @@ $cache = new BrowscapCache($cacheAdapter);
 $parser = new Browscap();
 $parser->setCache($cache);
 $parser->convertFile('vendor/browscap/browscap/build/php_browscap.ini');
-//$parser->convertFile('vendor/browscap/browscap/build/full_php_browscap.ini');
 ```
 
 #### Full version
@@ -94,12 +101,3 @@ $parser = new Browscap();
 $parser->setCache($cache);
 $parser->convertFile('vendor/browscap/browscap/build/full_php_browscap.ini');
 ```
-
-## How to build
-`composer install -o`
-
-`php vendor\browscap\browscap\bin\browscap build 6009`
-
-`php bin\initCache.php`
-
-`php bin\generateMatrixAll.php`

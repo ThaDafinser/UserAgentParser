@@ -169,10 +169,10 @@ class PiwikDeviceDetector extends AbstractProvider
             $bot->setIsBot(true);
 
             $botRaw = $dd->getBot();
-            if ($botRaw['name'] !== '' && $botRaw['name'] !== DeviceDetector::UNKNOWN) {
+            if (isset($botRaw['name']) && $botRaw['name'] !== '' && $botRaw['name'] !== DeviceDetector::UNKNOWN) {
                 $bot->setName($botRaw['name']);
             }
-            if ($botRaw['category'] !== '' && $botRaw['category'] !== DeviceDetector::UNKNOWN) {
+            if (isset($botRaw['category']) && $botRaw['category'] !== '' && $botRaw['category'] !== DeviceDetector::UNKNOWN) {
                 $bot->setType($botRaw['category']);
             }
 
@@ -231,8 +231,13 @@ class PiwikDeviceDetector extends AbstractProvider
             $device->setType($dd->getDeviceName());
         }
 
-        $device->setIsMobile($dd->isMobile());
-        $device->setIsTouch($dd->isTouchEnabled());
+        if ($dd->isMobile() === true) {
+            $device->setIsMobile(true);
+        }
+
+        if ($dd->isTouchEnabled() === true) {
+            $device->setIsTouch(true);
+        }
 
         return $result;
     }

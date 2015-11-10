@@ -6,13 +6,13 @@ use UserAgentParser\Exception;
 class Chain extends AbstractProvider
 {
     /**
+     *
      * @var AbstractProvider[]
      */
     private $providers = [];
 
-    private $executeAll = false;
-
     /**
+     *
      * @param AbstractProvider[] $providers
      */
     public function __construct(array $providers = [])
@@ -26,6 +26,7 @@ class Chain extends AbstractProvider
     }
 
     /**
+     *
      * @return AbstractProvider[]
      */
     public function getProviders()
@@ -33,37 +34,17 @@ class Chain extends AbstractProvider
         return $this->providers;
     }
 
-    public function setExecuteAll($bool = true)
-    {
-        $this->executeAll = $bool;
-    }
-
     public function parse($userAgent)
     {
-        $result = [];
-
         foreach ($this->getProviders() as $provider) {
             /* @var $provider \UserAgentParser\Provider\AbstractProvider */
 
             try {
-                $start = microtime(true);
-                $row   = $provider->parse($userAgent);
-                $end   = microtime(true);
-
-                $row = array_merge([
-                    'provider'  => $provider->getName(),
-                    'parseTime' => $end - $start,
-                ], $row);
-
-                $result[] = $row;
-
-                if ($this->executeAll !== true) {
-                    break;
-                }
+                return $provider->parse($userAgent);
             } catch (Exception\NoResultFoundException $ex) {
             }
         }
 
-        return $result;
+        throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
     }
 }

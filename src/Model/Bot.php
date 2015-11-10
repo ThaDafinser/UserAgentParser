@@ -3,7 +3,7 @@ namespace UserAgentParser\Model;
 
 class Bot
 {
-    private $isBot = false;
+    private $isBot;
 
     private $name;
 

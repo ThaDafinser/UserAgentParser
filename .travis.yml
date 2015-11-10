@@ -25,5 +25,5 @@ script:
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --access-token="your-token" --format=php-clover coverage.clover
+  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] php ocular.phar code-coverage:upload --access-token="your-token" --format=php-clover coverage.clover fi;
   

@@ -1,7 +1,7 @@
 <?php
 namespace UserAgentParser\Model;
 
-final class Version
+class Version
 {
     private $major;
 
@@ -13,7 +13,13 @@ final class Version
 
     public function setMajor($major)
     {
-        $this->major = (int) $major;
+        if ($major !== null) {
+            $major = (int) $major;
+        }
+
+        $this->major = $major;
+
+        $this->calculateComplete();
     }
 
     public function getMajor()
@@ -23,7 +29,13 @@ final class Version
 
     public function setMinor($minor)
     {
-        $this->minor = (int) $minor;
+        if ($minor !== null) {
+            $minor = (int) $minor;
+        }
+
+        $this->minor = $minor;
+
+        $this->calculateComplete();
     }
 
     public function getMinor()
@@ -33,7 +45,13 @@ final class Version
 
     public function setPatch($patch)
     {
-        $this->patch = (int) $patch;
+        if ($patch !== null) {
+            $patch = (int) $patch;
+        }
+
+        $this->patch = $patch;
+
+        $this->calculateComplete();
     }
 
     public function getPatch()
@@ -56,13 +74,14 @@ final class Version
     public function getComplete()
     {
         if ($this->complete === null) {
-            $this->complete = $this->combineParts();
+            $this->calculateComplete();
         }
 
         return $this->complete;
     }
 
     /**
+     *
      * @param string $completeVersion
      */
     private function hydrateVersionParts($completeVersion)
@@ -75,6 +94,7 @@ final class Version
     }
 
     /**
+     *
      * @param unknown $version
      *
      * @return array
@@ -102,9 +122,10 @@ final class Version
     }
 
     /**
+     *
      * @return string
      */
-    private function combineParts()
+    private function calculateComplete()
     {
         if ($this->getMajor() === null) {
             return;
@@ -120,7 +141,7 @@ final class Version
             $version .= '.' . $this->getPatch();
         }
 
-        return $version;
+        $this->complete = $version;
     }
 
     public function toArray()

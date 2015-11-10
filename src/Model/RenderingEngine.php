@@ -1,7 +1,7 @@
 <?php
 namespace UserAgentParser\Model;
 
-final class RenderingEngine
+class RenderingEngine
 {
     /**
      * @var string

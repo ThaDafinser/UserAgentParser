@@ -1,7 +1,7 @@
 <?php
 namespace UserAgentParser\Model;
 
-final class UserAgent
+class UserAgent
 {
     /**
      * @var Browser
@@ -47,7 +47,7 @@ final class UserAgent
      */
     public function setBrowser(Browser $browser)
     {
-        $this->browser;
+        $this->browser = $browser;
     }
 
     /**
@@ -63,7 +63,7 @@ final class UserAgent
      */
     public function setRenderingEngine(RenderingEngine $renderingEngine)
     {
-        $this->renderingEngine;
+        $this->renderingEngine = $renderingEngine;
     }
 
     /**
@@ -120,21 +120,6 @@ final class UserAgent
     public function getBot()
     {
         return $this->bot;
-    }
-
-    /**
-     * Special function to detect if it's a bot
-     * If it's a bot only getBot() part has values in UserAgent.
-     *
-     * @return bool
-     */
-    public function isBot()
-    {
-        if ($this->getBot()->getName() !== null || $this->getBot()->getType() !== null) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

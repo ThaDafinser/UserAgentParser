@@ -1,7 +1,7 @@
 <?php
 namespace UserAgentParser\Model;
 
-final class Device
+class Device
 {
     private $model;
 

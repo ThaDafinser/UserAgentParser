@@ -1,7 +1,7 @@
 <?php
 namespace UserAgentParser\Model;
 
-final class OperatingSystem
+class OperatingSystem
 {
     /**
      * @var string

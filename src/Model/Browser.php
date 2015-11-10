@@ -1,7 +1,7 @@
 <?php
 namespace UserAgentParser\Model;
 
-final class Browser
+class Browser
 {
     /**
      * @var string

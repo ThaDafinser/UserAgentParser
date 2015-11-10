@@ -24,5 +24,7 @@ script:
   - vendor/bin/phpunit --coverage-clover coverage.clover
 
 after_script:
-  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' && $TRAVIS_PHP_VERSION != '7.0' ]]; then php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover; fi
+  - phpunit --coverage-clover=coverage.clover
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --access-token="your-token" --format=php-clover coverage.clover
   

@@ -45,6 +45,7 @@ Temporary Items
 /vendor/
 .settings
 .buildpath
+build
 .project
 .tmp
 composer.lock

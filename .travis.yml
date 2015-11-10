@@ -15,7 +15,7 @@ before_script:
 
 script:
   - vendor/bin/php-cs-fixer fix src --level=psr2 --dry-run -vv
-  - vendor/bin/phpunit --coverage-clover coverage.clover
+  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_script:
   - php vendor/bin/coveralls -v

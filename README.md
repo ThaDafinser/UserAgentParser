@@ -69,10 +69,15 @@ $chain = new Provider\Chain([
 /* @var $result \UserAgentParser\Model\UserAgent */
 $result = $dd->parse($userAgent);
 
-$browserName = $result->getBrowser()->getName();
-$deviceBrand = $result->getDevice()->getBrand();
+$result->getBrowser()->getName(); // Mobile Safari
 
-var_dump($result->toArray());
+$result->getOperatingSystem()->getName(); // iOS
+
+$result->getDevice()->getBrand(); // iPod Touch
+$result->getDevice()->getBrand(); // Apple
+$result->getDevice()->getType(); // portable media player
+
+$resultArray = $result->toArray();
 ```
 
 ## Providers

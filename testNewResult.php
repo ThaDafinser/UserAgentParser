@@ -19,7 +19,7 @@ $userAgents = [
     'RssBandit/1.9.0.1002 (.NET CLR 2.0.50727.7512; WinNT 6.2.9200.0; http://www.rssbandit.org)'
 ];
 
-$userAgent = $userAgents[3];
+$userAgent = $userAgents[5];
 
 // /*
 // * BrowscapPhp
@@ -38,12 +38,12 @@ $userAgent = $userAgents[3];
 // $result = $dd->parse($userAgent);
 // var_dump($result->toArray());
 
-// /*
-//  * PiwikDeviceDetector
-//  */
-// $dd = new Provider\PiwikDeviceDetector();
-// $result = $dd->parse($userAgent);
-// var_dump($result->toArray());
+/*
+ * PiwikDeviceDetector
+ */
+$dd = new Provider\PiwikDeviceDetector();
+$result = $dd->parse($userAgent);
+var_dump($result->toArray());
 
 // /*
 //  * UAParser
@@ -69,6 +69,8 @@ $userAgent = $userAgents[3];
 /*
  * YzalisUAParser
  */
-$dd = new Provider\YzalisUAParser();
-$result = $dd->parse($userAgent);
-var_dump($result->toArray());
+// $dd = new Provider\YzalisUAParser();
+// $result = $dd->parse($userAgent);
+// var_dump($result->toArray());
+
+

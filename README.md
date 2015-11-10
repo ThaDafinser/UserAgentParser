@@ -19,17 +19,59 @@ composer require thadafinser/user-agent-parser
 ```
 
 ## Example
+
+### Single provider
+
 ```php
 require 'vendor/autoload.php';
 
 use UserAgentParser\Provider;
 
-$userAgent = 'Mozilla/5 (X11; Linux x86_64) AppleWebKit/537.4 (KHTML like Gecko) Arch Linux Firefox/23.0 Xfce';
+$userAgent = 'Mozilla/5.0 (iPod; U; CPU iPhone OS 4_3_5 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5';
 
-$dd = new Provider\YzalisUAParser();
+$dd = new Provider\PiwikDeviceDetector();
 
 /* @var $result \UserAgentParser\Model\UserAgent */
 $result = $dd->parse($userAgent);
+
+$result->getBrowser()->getName(); // Mobile Safari
+
+$result->getOperatingSystem()->getName(); // iOS
+
+$result->getDevice()->getBrand(); // iPod Touch
+$result->getDevice()->getBrand(); // Apple
+$result->getDevice()->getType(); // portable media player
+
+$resultArray = $result->toArray();
+```
+
+### Chain provider
+```php
+require 'vendor/autoload.php';
+
+use UserAgentParser\Provider;
+
+$userAgent = 'Mozilla/5.0 (iPod; U; CPU iPhone OS 4_3_5 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5';
+
+$browscapFull = new Provider\BrowscapPhp();
+$browscapFull->setCachePath('.tmp/browscap_full');
+
+$chain = new Provider\Chain([
+    $browscapFull,
+    new Provider\DonatjUAParser(),
+    new Provider\PiwikDeviceDetector(),
+    new Provider\UAParser(),
+    new Provider\WhichBrowser(),
+    new Provider\Woothee(),
+    new Provider\YzalisUAParser()
+]);
+
+/* @var $result \UserAgentParser\Model\UserAgent */
+$result = $dd->parse($userAgent);
+
+$browserName = $result->getBrowser()->getName();
+$deviceBrand = $result->getDevice()->getBrand();
+
 var_dump($result->toArray());
 ```
 

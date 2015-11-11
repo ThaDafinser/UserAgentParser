@@ -3,6 +3,11 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 
+[![Latest Stable Version](https://poser.pugx.org/thadafinser/user-agent-parser/v/stable)](https://packagist.org/packages/thadafinser/user-agent-parser)
+[![Latest Unstable Version](https://poser.pugx.org/thadafinser/user-agent-parser/v/unstable)](https://packagist.org/packages/thadafinser/user-agent-parser) 
+[![License](https://poser.pugx.org/thadafinser/user-agent-parser/license)](https://packagist.org/packages/thadafinser/user-agent-parser)
+[![Total Downloads](https://poser.pugx.org/thadafinser/user-agent-parser/downloads)](https://packagist.org/packages/thadafinser/user-agent-parser) 
+
 `User agent` parsing is, was and will always be a painful thing, since it will never work correctly (since User agents are faked very often)!
 
 The target of this package is to make it at least a bit less painful, by providing an abstract layer over many UserAgent parser. Inspired by the [Geocoder](https://github.com/geocoder-php/Geocoder) library, which does an excellent job.

@@ -62,7 +62,6 @@ class DonatjUAParser extends AbstractProvider
          * @todo $resultRaw['platform'] has sometimes informations about the OS or the device
          * ... maybe split it or how do that?
          */
-        $operatingSystem = $result->getOperatingSystem();
 
         if ($resultRaw['platform'] !== null) {
             //$operatingSystem->setName($resultRaw['platform']);

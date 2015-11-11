@@ -155,13 +155,13 @@ class Woothee extends AbstractProvider
 
         /*
          * renderingEngine
+         * Currently not supported
          */
-        $renderingEngine = $result->getRenderingEngine();
 
         /*
          * operatingSystem
+         * currently not supported
          */
-        $operatingSystem = $result->getOperatingSystem();
 
         // @todo ... filled OS is mixed! Examples: iPod, iPhone, Android...
         // split it by hand for device/OS?

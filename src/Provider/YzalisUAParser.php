@@ -138,7 +138,7 @@ class YzalisUAParser extends AbstractProvider
         $deviceRaw = $resultRaw->getDevice();
 
         /* @var $emailRaw \UAParser\Result\EmailClientResult */
-        $emailRaw = $resultRaw->getEmailClient();
+        // currently not used...any idea to implement it?
 
         /*
          * Hydrate the model

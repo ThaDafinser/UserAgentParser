@@ -50,21 +50,21 @@ class WhichBrowser extends AbstractProvider
         /*
          * Available types...
          *
-         * define ('TYPE_DESKTOP', 'desktop');
-         * define ('TYPE_MOBILE', 'mobile'); <--
-         * define ('TYPE_DECT', 'dect');
-         * define ('TYPE_TABLET', 'tablet'); <--
-         * define ('TYPE_GAMING', 'gaming');
-         * define ('TYPE_EREADER', 'ereader'); <--
-         * define ('TYPE_MEDIA', 'media'); <-- e.g. iPod
-         * define ('TYPE_HEADSET', 'headset');
-         * define ('TYPE_WATCH', 'watch'); <--
-         * define ('TYPE_EMULATOR', 'emulator');
-         * define ('TYPE_TELEVISION', 'television');
-         * define ('TYPE_MONITOR', 'monitor');
-         * define ('TYPE_CAMERA', 'camera'); <--
-         * define ('TYPE_SIGNAGE', 'signage');
-         * define ('TYPE_WHITEBOARD', 'whiteboard');
+         * TYPE_DESKTOP
+         * TYPE_MOBILE
+         * TYPE_DECT
+         * TYPE_TABLET
+         * TYPE_GAMING
+         * TYPE_EREADER
+         * TYPE_MEDIA
+         * TYPE_HEADSET
+         * TYPE_WATCH
+         * TYPE_EMULATOR
+         * TYPE_TELEVISION
+         * TYPE_MONITOR
+         * TYPE_CAMERA
+         * TYPE_SIGNAGE
+         * TYPE_WHITEBOARD
          */
 
         if ($resultRaw['device']['type'] === TYPE_MOBILE) {

@@ -1,6 +1,6 @@
 # UserAgentParser
 [![Build Status](https://travis-ci.org/ThaDafinser/UserAgentParser.svg)](https://travis-ci.org/ThaDafinser/UserAgentParser)
-[![Coverage Status](https://coveralls.io/repos/ThaDafinser/UserAgentParser/badge.svg?branch=master&service=github)](https://coveralls.io/github/ThaDafinser/UserAgentParser?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 
 `User agent` parsing is, was and will always be a painful thing, since it will never work correctly (since User agents are faked very often)!

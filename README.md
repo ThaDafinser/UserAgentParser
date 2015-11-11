@@ -34,6 +34,9 @@ $dd = new Provider\PiwikDeviceDetector();
 /* @var $result \UserAgentParser\Model\UserAgent */
 $result = $dd->parse($userAgent);
 
+// optional add all headers, to improve the result further (used currently only by WhichBrowser)
+$result = $dd->parse($userAgent, getallheaders());
+
 $result->getBrowser()->getName(); // Mobile Safari
 
 $result->getOperatingSystem()->getName(); // iOS
@@ -69,6 +72,8 @@ $chain = new Provider\Chain([
 /* @var $result \UserAgentParser\Model\UserAgent */
 $result = $dd->parse($userAgent);
 
+// optional add all headers, to improve the result further (used currently only by WhichBrowser)
+$result = $dd->parse($userAgent, getallheaders());
 $result->getBrowser()->getName(); // Mobile Safari
 
 $result->getOperatingSystem()->getName(); // iOS

@@ -224,7 +224,7 @@ class PiwikDeviceDetector extends AbstractProvider
         }
 
         if ($this->isRealResult($dd->getClient('version')) === true) {
-            $browser->getVersion()->setComplete($dd->getClient('version'));
+            $browser->getVersion()->setComplete($dd->getClient()['version']);
         }
 
         /*
@@ -246,7 +246,7 @@ class PiwikDeviceDetector extends AbstractProvider
         }
 
         if ($this->isRealResult($dd->getOs('version')) === true) {
-            $operatingSystem->getVersion()->setComplete($dd->getOs('version'));
+            $operatingSystem->getVersion()->setComplete($dd->getOs()['version']);
         }
 
         /*

@@ -7,7 +7,7 @@ $finder->in([
 ]);
 
 $config = Symfony\CS\Config\Config::create();
-$config->setUsingCache(false);
+$config->setUsingCache(true);
 $config->setUsingLinter(false);
 $config->finder($finder);
 $config->level(Symfony\CS\FixerInterface::PSR2_LEVEL);

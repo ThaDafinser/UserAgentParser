@@ -95,7 +95,7 @@ class Version
 
     /**
      *
-     * @param unknown $version
+     * @param string $version
      *
      * @return array
      */

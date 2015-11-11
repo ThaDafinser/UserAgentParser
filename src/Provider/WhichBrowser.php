@@ -26,17 +26,6 @@ class WhichBrowser extends AbstractProvider
         return true;
     }
 
-    /**
-     *
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isRealResult($value)
-    {
-        return true;
-    }
-
     private function isBot(array $resultRaw)
     {
         if (isset($resultRaw['device']['type']) && $resultRaw['device']['type'] === 'bot') {
@@ -162,7 +151,7 @@ class WhichBrowser extends AbstractProvider
             $bot = $result->getBot();
             $bot->setIsBot(true);
 
-            if (isset($resultRaw['browser']['name']) && $this->isRealResult($resultRaw['browser']['name']) === true) {
+            if (isset($resultRaw['browser']['name'])) {
                 $bot->setName($resultRaw['browser']['name']);
             }
 
@@ -174,13 +163,13 @@ class WhichBrowser extends AbstractProvider
          */
         $browser = $result->getBrowser();
 
-        if (isset($resultRaw['browser']['alias']) && $this->isRealResult($resultRaw['browser']['alias']) === true) {
+        if (isset($resultRaw['browser']['alias'])) {
             $browser->setName($resultRaw['browser']['name']);
-        } elseif (isset($resultRaw['browser']['name']) && $this->isRealResult($resultRaw['browser']['name']) === true) {
+        } elseif (isset($resultRaw['browser']['name'])) {
             $browser->setName($resultRaw['browser']['name']);
         }
 
-        if (isset($resultRaw['browser']['version']) && $this->isRealResult($resultRaw['browser']['version']) === true) {
+        if (isset($resultRaw['browser']['version'])) {
             $browser->getVersion()->setComplete($this->getVersion($resultRaw['browser']['version']));
         }
 
@@ -189,11 +178,11 @@ class WhichBrowser extends AbstractProvider
          */
         $renderingEngine = $result->getRenderingEngine();
 
-        if (isset($resultRaw['engine']['name']) && $this->isRealResult($resultRaw['engine']['name']) === true) {
+        if (isset($resultRaw['engine']['name'])) {
             $renderingEngine->setName($resultRaw['engine']['name']);
         }
 
-        if (isset($resultRaw['engine']['version']) && $this->isRealResult($resultRaw['engine']['version']) === true) {
+        if (isset($resultRaw['engine']['version'])) {
             $renderingEngine->getVersion()->setComplete($resultRaw['engine']['version']);
         }
 
@@ -202,11 +191,11 @@ class WhichBrowser extends AbstractProvider
          */
         $operatingSystem = $result->getOperatingSystem();
 
-        if (isset($resultRaw['os']['name']) && $this->isRealResult($resultRaw['os']['name']) === true) {
+        if (isset($resultRaw['os']['name'])) {
             $operatingSystem->setName($resultRaw['os']['name']);
         }
 
-        if (isset($resultRaw['os']['version']) && $this->isRealResult($resultRaw['os']['version']) === true) {
+        if (isset($resultRaw['os']['version'])) {
             $operatingSystem->getVersion()->setComplete($this->getVersion($resultRaw['os']['version']));
         }
 
@@ -215,21 +204,21 @@ class WhichBrowser extends AbstractProvider
          */
         $device = $result->getDevice();
 
-        if (isset($resultRaw['device']['model']) && $this->isRealResult($resultRaw['device']['model']) === true) {
+        if (isset($resultRaw['device']['model'])) {
             $model = $resultRaw['device']['model'];
 
-            if (isset($resultRaw['device']['series']) && $this->isRealResult($resultRaw['device']['series']) === true) {
+            if (isset($resultRaw['device']['series'])) {
                 $model .= ' ' . $resultRaw['device']['series'];
             }
 
             $device->setModel($model);
         }
 
-        if (isset($resultRaw['device']['manufacturer']) && $this->isRealResult($resultRaw['device']['manufacturer']) === true) {
+        if (isset($resultRaw['device']['manufacturer'])) {
             $device->setBrand($resultRaw['device']['manufacturer']);
         }
 
-        if (isset($resultRaw['device']['type']) && $this->isRealResult($resultRaw['device']['type']) === true) {
+        if (isset($resultRaw['device']['type'])) {
             $device->setType($resultRaw['device']['type']);
         }
 

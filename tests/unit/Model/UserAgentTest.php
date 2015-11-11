@@ -82,7 +82,7 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals([
             'browser'          => $ua->getBrowser()->toArray(),
-            'renderingEnginge' => $ua->getRenderingEngine()->toArray(),
+            'renderingEngine'  => $ua->getRenderingEngine()->toArray(),
             'operatingSystem'  => $ua->getOperatingSystem()->toArray(),
             'device'           => $ua->getDevice()->toArray(),
             'bot'              => $ua->getBot()->toArray(),
@@ -90,7 +90,7 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals([
             'browser'           => $ua->getBrowser()->toArray(),
-            'renderingEnginge'  => $ua->getRenderingEngine()->toArray(),
+            'renderingEngine'   => $ua->getRenderingEngine()->toArray(),
             'operatingSystem'   => $ua->getOperatingSystem()->toArray(),
             'device'            => $ua->getDevice()->toArray(),
             'bot'               => $ua->getBot()->toArray(),

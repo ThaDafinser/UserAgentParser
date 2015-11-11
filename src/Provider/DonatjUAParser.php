@@ -25,7 +25,7 @@ class DonatjUAParser extends AbstractProvider
         return true;
     }
 
-    public function parse($userAgent)
+    public function parse($userAgent, array $headers = [])
     {
         $resultRaw = parse_user_agent($userAgent);
 

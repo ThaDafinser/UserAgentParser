@@ -109,37 +109,6 @@ class WhichBrowser extends AbstractProvider
 
     /**
      *
-     * @param array $resultRaw
-     *
-     * @return bool
-     */
-    private function isTouch(array $resultRaw)
-    {
-        if (! isset($resultRaw['device']['type'])) {
-            return false;
-        }
-        if (isset($raw['os']['alias'])) {
-            $osFamily = $raw['os']['alias'];
-        }
-
-        // @todo i'm not sure currently..e.g feature phone?
-        // if ($resultRaw['device']['type'] === TYPE_MOBILE) {
-        // return true;
-        // }
-
-        if ($resultRaw['device']['type'] === TYPE_TABLET) {
-            return true;
-        }
-
-        if ($resultRaw['device']['type'] === TYPE_EREADER) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     *
      * @param unknown $versionPart
      *
      * @return string
@@ -165,12 +134,12 @@ class WhichBrowser extends AbstractProvider
         return $version;
     }
 
-    public function parse($userAgent)
+    public function parse($userAgent, array $headers = [])
     {
+        $headers['User-Agent'] = $userAgent;
+
         $parser = new \WhichBrowser([
-            'headers' => [
-                'User-Agent' => $userAgent,
-            ],
+            'headers' => $headers,
         ]);
 
         $resultRaw = $parser->toArray();
@@ -268,10 +237,6 @@ class WhichBrowser extends AbstractProvider
 
         if ($this->isMobile($resultRaw) === true) {
             $device->setIsMobile(true);
-        }
-
-        if ($this->isTouch($resultRaw) === true) {
-            $device->setIsTouch(true);
         }
 
         return $result;

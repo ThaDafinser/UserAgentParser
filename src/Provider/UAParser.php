@@ -82,7 +82,7 @@ class UAParser extends AbstractProvider
         return false;
     }
 
-    public function parse($userAgent)
+    public function parse($userAgent, array $headers = [])
     {
         $parser = $this->getParser();
 

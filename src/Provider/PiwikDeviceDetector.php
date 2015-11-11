@@ -4,11 +4,22 @@ namespace UserAgentParser\Provider;
 use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 use Doctrine\Common\Cache;
+use Doctrine\Common\Cache\CacheProvider;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
 class PiwikDeviceDetector extends AbstractProvider
 {
+    /**
+     *
+     * @var CacheProvider
+     */
+    private $cache;
+
+    /**
+     *
+     * @var DeviceDetector
+     */
     private $parser;
 
     public function getName()
@@ -17,6 +28,25 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
+     *
+     * @param CacheProvider $cache
+     */
+    public function setCache(CacheProvider $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
+     *
+     * @return CacheProvider
+     */
+    public function getCache()
+    {
+        return $this->cache;
+    }
+
+    /**
+     *
      * @return DeviceDetector
      */
     private function getParser()
@@ -28,7 +58,9 @@ class PiwikDeviceDetector extends AbstractProvider
         DeviceParserAbstract::setVersionTruncation(DeviceParserAbstract::VERSION_TRUNCATION_NONE);
 
         $dd = new DeviceDetector();
-        $dd->setCache(new Cache\PhpFileCache('.tmp/piwik'));
+        if ($this->getCache() !== null) {
+            $dd->setCache($this->getCache());
+        }
 
         $this->parser = $dd;
 
@@ -36,7 +68,8 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
-     * @param DeviceDetector $resultRaw
+     *
+     * @param DeviceDetector $dd
      *
      * @return bool
      */
@@ -68,6 +101,7 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
+     *
      * @param DeviceDetector $dd
      *
      * @return array
@@ -124,6 +158,7 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
+     *
      * @param mixed $value
      *
      * @return bool
@@ -141,7 +176,7 @@ class PiwikDeviceDetector extends AbstractProvider
         return true;
     }
 
-    public function parse($userAgent)
+    public function parse($userAgent, array $headers = [])
     {
         $dd = $this->getParser();
 
@@ -169,10 +204,10 @@ class PiwikDeviceDetector extends AbstractProvider
             $bot->setIsBot(true);
 
             $botRaw = $dd->getBot();
-            if (isset($botRaw['name']) && $botRaw['name'] !== '' && $botRaw['name'] !== DeviceDetector::UNKNOWN) {
+            if (isset($botRaw['name']) && $this->isRealResult($botRaw['name'])) {
                 $bot->setName($botRaw['name']);
             }
-            if (isset($botRaw['category']) && $botRaw['category'] !== '' && $botRaw['category'] !== DeviceDetector::UNKNOWN) {
+            if (isset($botRaw['category']) && $this->isRealResult($botRaw['category'])) {
                 $bot->setType($botRaw['category']);
             }
 

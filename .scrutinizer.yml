@@ -18,4 +18,5 @@ checks:
         fix_doc_comments: true
 
 tools:
-    external_code_coverage: true
+    external_code_coverage:
+        timeout: 600    # Timeout in seconds.

@@ -6,13 +6,17 @@ use BrowscapPHP\Cache\BrowscapCache;
 use stdClass;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
-use WurflCache\Adapter\File;
+use WurflCache\Adapter\AdapterInterface;
 
 class BrowscapPhp extends AbstractProvider
 {
-    private $parser;
+    /**
+     *
+     * @var AdapterInterface
+     */
+    private $cache;
 
-    private $cachePath = '.tmp/browscap_lite';
+    private $parser;
 
     public function getName()
     {
@@ -20,22 +24,25 @@ class BrowscapPhp extends AbstractProvider
     }
 
     /**
-     * @param string $path
+     *
+     * @param AdapterInterface $cache
      */
-    public function setCachePath($path)
+    public function setCache(AdapterInterface $cache)
     {
-        $this->cachePath = $path;
+        $this->cache = $cache;
     }
 
     /**
-     * @return string
+     *
+     * @return AdapterInterface
      */
-    public function getCachePath()
+    public function getCache()
     {
-        return $this->cachePath;
+        return $this->cache;
     }
 
     /**
+     *
      * @return \BrowscapPHP\Browscap
      */
     private function getParser()
@@ -44,13 +51,12 @@ class BrowscapPhp extends AbstractProvider
             return $this->parser;
         }
 
-        $cacheAdapter = new File([
-            File::DIR => $this->getCachePath(),
-        ]);
-        $cache = new BrowscapCache($cacheAdapter);
-
         $parser = new Browscap();
-        $parser->setCache($cache);
+
+        if ($this->getCache() !== null) {
+            $cache = new BrowscapCache($this->getCache());
+            $parser->setCache($cache);
+        }
 
         $this->parser = $parser;
 
@@ -58,6 +64,7 @@ class BrowscapPhp extends AbstractProvider
     }
 
     /**
+     *
      * @param mixed $value
      *
      * @return bool
@@ -81,7 +88,7 @@ class BrowscapPhp extends AbstractProvider
 
     private function isBot(stdClass $resultRaw)
     {
-        if (!isset($resultRaw->crawler)) {
+        if (! isset($resultRaw->crawler)) {
             return false;
         }
 
@@ -93,13 +100,14 @@ class BrowscapPhp extends AbstractProvider
     }
 
     /**
+     *
      * @param stdClass $resultRaw
      *
      * @return bool
      */
     private function hasResult(stdClass $resultRaw)
     {
-        if (!isset($resultRaw->browser)) {
+        if (! isset($resultRaw->browser)) {
             return false;
         }
 
@@ -110,7 +118,7 @@ class BrowscapPhp extends AbstractProvider
         return true;
     }
 
-    public function parse($userAgent)
+    public function parse($userAgent, array $headers = [])
     {
         $parser = $this->getParser();
 

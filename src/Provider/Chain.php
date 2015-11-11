@@ -34,13 +34,13 @@ class Chain extends AbstractProvider
         return $this->providers;
     }
 
-    public function parse($userAgent)
+    public function parse($userAgent, array $headers = [])
     {
         foreach ($this->getProviders() as $provider) {
             /* @var $provider \UserAgentParser\Provider\AbstractProvider */
 
             try {
-                return $provider->parse($userAgent);
+                return $provider->parse($userAgent, $headers);
             } catch (Exception\NoResultFoundException $ex) {
             }
         }

@@ -62,7 +62,7 @@ class Version
     /**
      * Set from the complete version string.
      *
-     * @param string $string
+     * @param string $complete
      */
     public function setComplete($complete)
     {

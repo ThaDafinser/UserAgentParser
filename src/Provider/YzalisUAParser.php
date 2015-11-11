@@ -111,29 +111,7 @@ class YzalisUAParser extends AbstractProvider
         return false;
     }
 
-    /**
-     *
-     * @param UAParserResult $resultRaw
-     *
-     * @return bool
-     */
-    private function isTouch(UAParserResult $resultRaw)
-    {
-        /* @var $deviceRaw \UAParser\Result\DeviceResult */
-        $deviceRaw = $resultRaw->getDevice();
-
-        if ($deviceRaw->getType() === 'mobile') {
-            return true;
-        }
-
-        if ($deviceRaw->getType() === 'tablet') {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function parse($userAgent)
+    public function parse($userAgent, array $headers = [])
     {
         $parser = $this->getParser();
 
@@ -239,9 +217,6 @@ class YzalisUAParser extends AbstractProvider
 
         if ($this->isMobile($resultRaw) === true) {
             $device->setIsMobile(true);
-        }
-        if ($this->isTouch($resultRaw) === true) {
-            $device->setIsTouch(true);
         }
 
         return $result;

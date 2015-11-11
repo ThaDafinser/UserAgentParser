@@ -145,7 +145,7 @@ class UserAgent
     {
         $data = [
             'browser'          => $this->getBrowser()->toArray(),
-            'renderingEnginge' => $this->getRenderingEngine()->toArray(),
+            'renderingEngine'  => $this->getRenderingEngine()->toArray(),
             'operatingSystem'  => $this->getOperatingSystem()->toArray(),
             'device'           => $this->getDevice()->toArray(),
             'bot'              => $this->getBot()->toArray(),

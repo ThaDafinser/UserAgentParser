@@ -63,7 +63,6 @@
         "woothee/woothee": "^1.2",
         
         "yzalis/ua-parser": "^0.2"
-        
     },
     
     "require-dev": {

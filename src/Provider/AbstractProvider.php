@@ -15,10 +15,11 @@ abstract class AbstractProvider
 
     /**
      * @param string $userAgent
+     * @param array  $headers
      *
      * @throws Exception\NoResultFoundException
      *
      * @return Result\UserAgent
      */
-    abstract public function parse($userAgent);
+    abstract public function parse($userAgent, array $headers = []);
 }

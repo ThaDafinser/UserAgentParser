@@ -63,10 +63,6 @@ class DonatjUAParser extends AbstractProvider
          * ... maybe split it or how do that?
          */
 
-        if ($resultRaw['platform'] !== null) {
-            //$operatingSystem->setName($resultRaw['platform']);
-        }
-
         return $result;
     }
 }

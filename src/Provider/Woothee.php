@@ -162,9 +162,11 @@ class Woothee extends AbstractProvider
          * operatingSystem
          * currently not supported
          */
+        $operatingSystem = $result->getOperatingSystem();
 
         // @todo ... filled OS is mixed! Examples: iPod, iPhone, Android...
         // split it by hand for device/OS?
+        // include only version?
 
         if ($this->isRealResult($resultRaw['os_version']) === true) {
             $operatingSystem->getVersion()->setComplete($resultRaw['os_version']);

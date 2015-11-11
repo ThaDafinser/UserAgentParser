@@ -48,3 +48,4 @@ Temporary Items
 build
 .project
 .tmp
+.php_cs.cache

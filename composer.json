@@ -36,7 +36,11 @@
     "autoload": {
         "psr-4": {
             "UserAgentParser\\":  "src"
-        }
+        },
+        
+        "classmap": [
+            "vendor/whichbrowser/whichbrowser/libraries/whichbrowser.php"
+        ]
     },
 
     "autoload-dev": {

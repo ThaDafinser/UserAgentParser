@@ -1,8 +1,6 @@
 <?php
 namespace UserAgentParser\Provider;
 
-include 'vendor/whichbrowser/whichbrowser/libraries/whichbrowser.php';
-
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
 

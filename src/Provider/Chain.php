@@ -42,6 +42,7 @@ class Chain extends AbstractProvider
             try {
                 return $provider->parse($userAgent, $headers);
             } catch (Exception\NoResultFoundException $ex) {
+                // just catch this and continue to the next provider
             }
         }
 

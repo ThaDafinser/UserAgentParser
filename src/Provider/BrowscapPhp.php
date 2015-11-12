@@ -145,7 +145,7 @@ class BrowscapPhp extends AbstractProvider
             $bot = $result->getBot();
             $bot->setIsBot(true);
 
-            if (isset($resultRaw->version) && $this->isRealResult($resultRaw->version) === true) {
+            if (isset($resultRaw->browser) && $this->isRealResult($resultRaw->browser) === true) {
                 $bot->setName($resultRaw->browser);
             }
 

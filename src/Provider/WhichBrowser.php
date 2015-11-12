@@ -3,6 +3,7 @@ namespace UserAgentParser\Provider;
 
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
+use WhichBrowser\Parser as WhichBrowserParser;
 
 class WhichBrowser extends AbstractProvider
 {
@@ -125,7 +126,7 @@ class WhichBrowser extends AbstractProvider
     {
         $headers['User-Agent'] = $userAgent;
 
-        $parser = new \WhichBrowser([
+        $parser = new WhichBrowserParser([
             'headers' => $headers,
         ]);
 

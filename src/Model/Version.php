@@ -66,6 +66,12 @@ class Version
      */
     public function setComplete($complete)
     {
+        // check if the version is all 0 -> so wrong result
+        $left = preg_replace('/[0.]/', '', $complete);
+        if ($left === '') {
+            $complete = null;
+        }
+
         $this->complete = $complete;
 
         $this->hydrateVersionParts($complete);
@@ -108,6 +114,7 @@ class Version
             'minor' => null,
             'patch' => null,
         ];
+
         if (isset($parts[0]) && $parts[0] != '') {
             $versionParts['major'] = (int) $parts[0];
         }

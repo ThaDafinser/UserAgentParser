@@ -25,9 +25,7 @@ class Woothee extends AbstractProvider
             return $this->parser;
         }
 
-        $parser = new Classifier();
-
-        $this->parser = $parser;
+        $this->parser = new Classifier();
 
         return $this->parser;
     }

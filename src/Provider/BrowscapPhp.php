@@ -42,6 +42,15 @@ class BrowscapPhp extends AbstractProvider
     }
 
     /**
+     * 
+     * @param Browscap $parser
+     */
+    public function setParser(Browscap $parser)
+    {
+        $this->parser = $parser;
+    }
+
+    /**
      *
      * @return \BrowscapPHP\Browscap
      */
@@ -76,6 +85,10 @@ class BrowscapPhp extends AbstractProvider
         }
 
         if ($value === 'unknown') {
+            return false;
+        }
+
+        if ($value === 'DefaultProperties') {
             return false;
         }
 
@@ -149,14 +162,14 @@ class BrowscapPhp extends AbstractProvider
                 $bot->setName($resultRaw->browser);
             }
 
-            $rssString = '';
-            if ($resultRaw->issyndicationreader === true) {
-                $rssString .= ' (is RSS)';
-            }
-
             // @todo convert to a common set of types (over all vendors)
-            // @note $resultRaw->issyndicationreader is also useable for the detection
-            $bot->setType($resultRaw->browser_type . $rssString);
+            if (isset($resultRaw->issyndicationreader) && $resultRaw->issyndicationreader === true) {
+                $bot->setType('RSS');
+            } elseif (isset($resultRaw->browser_type) && $resultRaw->browser_type === 'Bot/Crawler') {
+                $bot->setType('Crawler');
+            } elseif (isset($resultRaw->browser_type) && $this->isRealResult($resultRaw->browser_type) === true) {
+                $bot->setType($resultRaw->browser_type);
+            }
 
             return $result;
         }
@@ -171,11 +184,7 @@ class BrowscapPhp extends AbstractProvider
         }
 
         if (isset($resultRaw->version) && $this->isRealResult($resultRaw->version) === true) {
-            // do not apply empty version strings
-            $left = preg_replace('/[0.]/', '', $resultRaw->version);
-            if ($left !== '') {
-                $browser->getVersion()->setComplete($resultRaw->version);
-            }
+            $browser->getVersion()->setComplete($resultRaw->version);
         }
 
         /*
@@ -188,7 +197,7 @@ class BrowscapPhp extends AbstractProvider
         }
 
         if (isset($resultRaw->renderingengine_version) && $this->isRealResult($resultRaw->renderingengine_version) === true) {
-            $renderingEngine->setName($resultRaw->renderingengine_version);
+            $renderingEngine->getVersion()->setComplete($resultRaw->renderingengine_version);
         }
 
         /*

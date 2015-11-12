@@ -23,6 +23,18 @@ So you can
 composer require thadafinser/user-agent-parser
 ```
 
+### Minimum stability currently
+Since the `BrowscapPhp` has no release for the `3.x` series, you need to include those lines in your `composer.json` as well, to be able to install this package for now
+```
+{
+    "name": "your/package...",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    
+    ...
+}
+```
+
 ## Example
 
 ### Single provider

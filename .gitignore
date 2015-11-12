@@ -49,3 +49,4 @@ build
 .project
 .tmp
 .php_cs.cache
+composer.lock

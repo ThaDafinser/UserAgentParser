@@ -15,8 +15,13 @@ The target of this package is to make it at least a bit less painful, by providi
 So you can
 - try out or switch between different parsers fast, without changing your code
 - use multiple providers at the same time with the `Chain` provider
-- compare the result of the different parsers [UserAgentParserMatrix](https://github.com/ThaDafinser/UserAgentParserMatrix)
+- compare the result of the different parsers [see results](http://thadafinser.github.io/UserAgentParserComparison/)
 - get always the same result model, regardless of which parser you use currently
+
+## Try it yourself
+[Test your browser](http://useragent.mkf.solutions/)
+
+[See a comparison result](http://thadafinser.github.io/UserAgentParserComparison/)
 
 ## Installation
 ```

@@ -14,6 +14,21 @@ class UAParser extends AbstractProvider
         return 'UAParser';
     }
 
+    public function getComposerPackageName()
+    {
+        return 'ua-parser/uap-php';
+    }
+
+    /**
+     * Initial needed for uniTest mocking
+     *
+     * @param Parser $parser
+     */
+    public function setParser(Parser $parser)
+    {
+        $this->parser = $parser;
+    }
+
     /**
      * @return Parser
      */

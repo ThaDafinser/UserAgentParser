@@ -15,6 +15,20 @@ class DonatjUAParserTest extends AbstractProviderTestCase
         $this->assertEquals('DonatjUAParser', $provider->getName());
     }
 
+    public function testGetComposerPackageName()
+    {
+        $provider = new DonatjUAParser();
+
+        $this->assertEquals('donatj/phpuseragentparser', $provider->getComposerPackageName());
+    }
+
+    public function testVersion()
+    {
+        $provider = new DonatjUAParser();
+
+        $this->assertInternalType('string', $provider->getVersion());
+    }
+
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */

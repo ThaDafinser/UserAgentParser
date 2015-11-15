@@ -14,6 +14,11 @@ class YzalisUAParser extends AbstractProvider
         return 'YzalisUAParser';
     }
 
+    public function getComposerPackageName()
+    {
+        return 'yzalis/ua-parser';
+    }
+
     /**
      *
      * @return \UAParser\UAParser

@@ -53,6 +53,20 @@ class ChainTest extends AbstractProviderTestCase
         $this->assertEquals('Chain', $chain->getName());
     }
 
+    public function testGetComposerPackageName()
+    {
+        $provider = new Chain();
+
+        $this->assertNull($provider->getComposerPackageName());
+    }
+
+    public function testVersion()
+    {
+        $provider = new Chain();
+
+        $this->assertNull($provider->getVersion());
+    }
+
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */

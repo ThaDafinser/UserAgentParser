@@ -27,6 +27,11 @@ class PiwikDeviceDetector extends AbstractProvider
         return 'PiwikDeviceDetector';
     }
 
+    public function getComposerPackageName()
+    {
+        return 'piwik/device-detector';
+    }
+
     /**
      *
      * @param CacheProvider $cache
@@ -43,6 +48,16 @@ class PiwikDeviceDetector extends AbstractProvider
     public function getCache()
     {
         return $this->cache;
+    }
+
+    /**
+     * Initial needed for uniTest mocking
+     *
+     * @param DeviceDetector $parser
+     */
+    public function setParser(DeviceDetector $parser)
+    {
+        $this->parser = $parser;
     }
 
     /**
@@ -78,18 +93,20 @@ class PiwikDeviceDetector extends AbstractProvider
         if ($dd->isBot() === true) {
             $bot = $dd->getBot();
 
-            if ($bot['name'] === DeviceDetector::UNKNOWN) {
+            if ($bot['name'] === null || $bot['name'] === DeviceDetector::UNKNOWN) {
                 return false;
             }
 
             return true;
         }
 
-        if ($dd->getClient('name') !== DeviceDetector::UNKNOWN) {
+        $client = $dd->getClient();
+        if (isset($client['name']) && $this->isRealResult($client['name'])) {
             return true;
         }
 
-        if ($dd->getOs('name') !== DeviceDetector::UNKNOWN) {
+        $os = $dd->getOs();
+        if (isset($os['name']) && $this->isRealResult($os['name'])) {
             return true;
         }
 
@@ -98,6 +115,25 @@ class PiwikDeviceDetector extends AbstractProvider
         }
 
         return false;
+    }
+
+    /**
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    private function isRealResult($value)
+    {
+        if ($value === '' || $value === null) {
+            return false;
+        }
+
+        if ($value === DeviceDetector::UNKNOWN) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -157,25 +193,6 @@ class PiwikDeviceDetector extends AbstractProvider
         return $raw;
     }
 
-    /**
-     *
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isRealResult($value)
-    {
-        if ($value === '') {
-            return false;
-        }
-
-        if ($value === DeviceDetector::UNKNOWN) {
-            return false;
-        }
-
-        return true;
-    }
-
     public function parse($userAgent, array $headers = [])
     {
         $dd = $this->getParser();
@@ -219,12 +236,13 @@ class PiwikDeviceDetector extends AbstractProvider
          */
         $browser = $result->getBrowser();
 
-        if ($this->isRealResult($dd->getClient('name')) === true) {
-            $browser->setName($dd->getClient('name'));
+        $ddClient = $dd->getClient();
+        if (isset($ddClient['name']) && $this->isRealResult($ddClient['name']) === true) {
+            $browser->setName($ddClient['name']);
         }
 
-        if ($this->isRealResult($dd->getClient('version')) === true) {
-            $browser->getVersion()->setComplete($dd->getClient()['version']);
+        if (isset($ddClient['version']) && $this->isRealResult($ddClient['version']) === true) {
+            $browser->getVersion()->setComplete($ddClient['version']);
         }
 
         /*
@@ -232,8 +250,8 @@ class PiwikDeviceDetector extends AbstractProvider
          */
         $renderingEngine = $result->getRenderingEngine();
 
-        if ($this->isRealResult($dd->getClient('engine')) === true) {
-            $renderingEngine->setName($dd->getClient('engine'));
+        if (isset($ddClient['engine']) && $this->isRealResult($ddClient['engine']) === true) {
+            $renderingEngine->setName($ddClient['engine']);
         }
 
         /*
@@ -241,12 +259,13 @@ class PiwikDeviceDetector extends AbstractProvider
          */
         $operatingSystem = $result->getOperatingSystem();
 
-        if ($this->isRealResult($dd->getOs('name')) === true) {
-            $operatingSystem->setName($dd->getOs('name'));
+        $ddOs = $dd->getOs();
+        if (isset($ddOs['name']) && $this->isRealResult($ddOs['name']) === true) {
+            $operatingSystem->setName($ddOs['name']);
         }
 
-        if ($this->isRealResult($dd->getOs('version')) === true) {
-            $operatingSystem->getVersion()->setComplete($dd->getOs()['version']);
+        if (isset($ddOs['version']) && $this->isRealResult($ddOs['version']) === true) {
+            $operatingSystem->getVersion()->setComplete($ddOs['version']);
         }
 
         /*

@@ -11,6 +11,11 @@ class DonatjUAParser extends AbstractProvider
         return 'DonatjUAParser';
     }
 
+    public function getComposerPackageName()
+    {
+        return 'donatj/phpuseragentparser';
+    }
+
     /**
      * @param array $resultRaw
      *

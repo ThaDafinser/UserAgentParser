@@ -23,6 +23,16 @@ class BrowscapPhp extends AbstractProvider
         return 'BrowscapPhp';
     }
 
+    public function getComposerPackageName()
+    {
+        return 'browscap/browscap-php';
+    }
+
+    public function getVersion()
+    {
+        return $this->getParser()->getCache()->getVersion();
+    }
+
     /**
      *
      * @param AdapterInterface $cache
@@ -42,6 +52,7 @@ class BrowscapPhp extends AbstractProvider
     }
 
     /**
+     * Initial needed for uniTest mocking
      * 
      * @param Browscap $parser
      */

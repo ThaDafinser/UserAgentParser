@@ -25,6 +25,11 @@ class Chain extends AbstractProvider
         return 'Chain';
     }
 
+    public function getComposerPackageName()
+    {
+        return;
+    }
+
     /**
      *
      * @return AbstractProvider[]

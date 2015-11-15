@@ -1,6 +1,7 @@
 <?php
 namespace UserAgentParserTest\Provider;
 
+use DeviceDetector\DeviceDetector;
 use UserAgentParser\Provider\PiwikDeviceDetector;
 
 /**
@@ -8,11 +9,47 @@ use UserAgentParser\Provider\PiwikDeviceDetector;
  */
 class PiwikDeviceDetectorTest extends AbstractProviderTestCase
 {
+    /**
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser()
+    {
+        $parser = $this->getMock('DeviceDetector\DeviceDetector');
+
+        return $parser;
+    }
+
     public function testName()
     {
         $provider = new PiwikDeviceDetector();
 
         $this->assertEquals('PiwikDeviceDetector', $provider->getName());
+    }
+
+    public function testGetComposerPackageName()
+    {
+        $provider = new PiwikDeviceDetector();
+
+        $this->assertEquals('piwik/device-detector', $provider->getComposerPackageName());
+    }
+
+    public function testVersion()
+    {
+        $provider = new PiwikDeviceDetector();
+
+        $this->assertInternalType('string', $provider->getVersion());
+    }
+
+    public function testCache()
+    {
+        $provider = new PiwikDeviceDetector();
+
+        $this->assertNull($provider->getCache());
+
+        $cache = $this->getMock('Doctrine\Common\Cache\CacheProvider');
+        $provider->setCache($cache);
+        $this->assertSame($cache, $provider->getCache());
     }
 
     /**
@@ -22,121 +59,187 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
     {
         $userAgent = 'not valid';
 
+        $parser = $this->getParser();
+
         $provider = new PiwikDeviceDetector();
-        $provider->parse($userAgent);
-    }
+        $provider->setParser($parser);
 
-    public function dataProvider()
-    {
-        return [
-            [
-                'userAgent' => 'Aboundex/0.3 (http://www.aboundex.com/crawler/)',
-                'result'    => [
-                    'bot' => [
-                        'isBot' => true,
-                        'name'  => 'Aboundexbot',
-                        'type'  => 'Search bot',
-                    ],
-                ],
-            ],
-
-            [
-                'userAgent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A405 Safari/8536.25',
-                'result'    => [
-                    'browser' => [
-                        'name'    => 'Mobile Safari',
-                        'version' => [
-                            'major'    => 6,
-                            'minor'    => 0,
-                            'patch'    => null,
-                            'complete' => '6.0',
-                        ],
-                    ],
-
-                    'renderingEngine' => [
-                        'name'    => 'WebKit',
-                        'version' => [
-                            'major'    => null,
-                            'minor'    => null,
-                            'patch'    => null,
-                            'complete' => null,
-                        ],
-                    ],
-
-                    'operatingSystem' => [
-                        'name'    => 'iOS',
-                        'version' => [
-                            'major'    => 6,
-                            'minor'    => 0,
-                            'patch'    => null,
-                            'complete' => '6.0',
-                        ],
-                    ],
-
-                    'device' => [
-                        'model' => 'iPhone',
-                        'brand' => 'Apple',
-                        'type'  => 'smartphone',
-
-                        'isMobile' => true,
-                        'isTouch'  => null,
-                    ],
-                ],
-            ],
-
-            [
-                'userAgent' => 'Mozilla/5.0 (iPad; U; CPU iPhone OS 5_1_1 like Mac OS X; en-us)',
-                'result'    => [
-                    'browser' => [
-                        'name'    => 'Mobile Safari',
-                        'version' => [
-                            'major'    => null,
-                            'minor'    => null,
-                            'patch'    => null,
-                            'complete' => null,
-                        ],
-                    ],
-
-                    'renderingEngine' => [
-                        'name'    => 'WebKit',
-                        'version' => [
-                            'major'    => null,
-                            'minor'    => null,
-                            'patch'    => null,
-                            'complete' => null,
-                        ],
-                    ],
-
-                    'operatingSystem' => [
-                        'name'    => 'iOS',
-                        'version' => [
-                            'major'    => 5,
-                            'minor'    => 1,
-                            'patch'    => 1,
-                            'complete' => '5.1.1',
-                        ],
-                    ],
-
-                    'device' => [
-                        'model' => 'iPad',
-                        'brand' => 'Apple',
-                        'type'  => 'tablet',
-
-                        'isMobile' => true,
-                        'isTouch'  => null,
-                    ],
-                ],
-            ],
-        ];
+        $result = $provider->parse($userAgent);
     }
 
     /**
-     * @dataProvider dataProvider
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testAllParseResults($userAgent, $expectedResult)
+    public function testNoResultFoundExceptionBot()
     {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isBot')
+            ->will($this->returnValue(true));
+
         $provider = new PiwikDeviceDetector();
-        $result   = $provider->parse($userAgent);
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * Bot
+     */
+    public function testParseBot()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isBot')
+            ->will($this->returnValue(true));
+        $parser->expects($this->any())
+            ->method('getBot')
+            ->will($this->returnValue([
+            'name'     => 'Hatena RSS',
+            'category' => 'something',
+        ]));
+
+        $provider = new PiwikDeviceDetector();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => 'Hatena RSS',
+                'type'  => 'something',
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Browser small
+     */
+    public function testParseBrowser()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('getClient')
+            ->will($this->returnValue([
+            'name'    => 'Firefox',
+            'version' => '3.0',
+            'engine'  => 'WebKit',
+        ]));
+
+        $provider = new PiwikDeviceDetector();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'browser' => [
+                'name'    => 'Firefox',
+                'version' => [
+                    'major'    => 3,
+                    'minor'    => 0,
+                    'patch'    => null,
+                    'complete' => '3.0',
+                ],
+            ],
+
+            'renderingEngine' => [
+                'name'    => 'WebKit',
+                'version' => [
+                    'major'    => null,
+                    'minor'    => null,
+                    'patch'    => null,
+                    'complete' => null,
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * OS only
+     */
+    public function testParseOperatingSystem()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+        ->method('getClient')
+        ->will($this->returnValue([
+            'engine' => DeviceDetector::UNKNOWN,
+        ]));
+        $parser->expects($this->any())
+            ->method('getOs')
+            ->will($this->returnValue([
+            'name'    => 'Windows',
+            'version' => '7.0',
+        ]));
+
+        $provider = new PiwikDeviceDetector();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'operatingSystem' => [
+                'name'    => 'Windows',
+                'version' => [
+                    'major'    => 7,
+                    'minor'    => 0,
+                    'patch'    => null,
+                    'complete' => '7.0',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only
+     */
+    public function testParseDevice()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('getDevice')
+            ->will($this->returnValue(1));
+
+        $parser->expects($this->any())
+            ->method('getModel')
+            ->will($this->returnValue('iPhone'));
+        $parser->expects($this->any())
+            ->method('getBrandName')
+            ->will($this->returnValue('Apple'));
+        $parser->expects($this->any())
+            ->method('getDeviceName')
+            ->will($this->returnValue('smartphone'));
+
+        $parser->expects($this->any())
+            ->method('isMobile')
+            ->will($this->returnValue(true));
+
+        $parser->expects($this->any())
+            ->method('isTouchEnabled')
+            ->will($this->returnValue(true));
+
+        $provider = new PiwikDeviceDetector();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => 'iPhone',
+                'brand' => 'Apple',
+                'type'  => 'smartphone',
+
+                'isMobile' => true,
+                'isTouch'  => true,
+            ],
+        ];
 
         $this->assertProviderResult($result, $expectedResult);
     }

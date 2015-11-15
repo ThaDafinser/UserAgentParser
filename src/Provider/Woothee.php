@@ -15,6 +15,11 @@ class Woothee extends AbstractProvider
         return 'Woothee';
     }
 
+    public function getComposerPackageName()
+    {
+        return 'woothee/woothee';
+    }
+
     /**
      *
      * @return \Woothee\Classifier

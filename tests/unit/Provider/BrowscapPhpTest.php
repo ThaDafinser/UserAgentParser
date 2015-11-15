@@ -29,6 +29,20 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $this->assertEquals('BrowscapPhp', $provider->getName());
     }
 
+    public function testGetComposerPackageName()
+    {
+        $provider = new BrowscapPhp();
+
+        $this->assertEquals('browscap/browscap-php', $provider->getComposerPackageName());
+    }
+
+    public function testVersion()
+    {
+        $provider = new BrowscapPhp();
+
+        $this->assertNull($provider->getVersion());
+    }
+
     public function testCache()
     {
         $provider = new BrowscapPhp();
@@ -264,10 +278,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
     }
 
     /**
-     * Browser with all (engine, OS, device, .
-     *
-     *
-     * ..)
+     * Browser with all)
      */
     public function testParseDevice1()
     {

@@ -36,6 +36,10 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $version->setComplete(null);
         $this->assertNull($version->getComplete());
 
+        // 0.0 gets filtered
+        $version->setComplete('0.0');
+        $this->assertNull($version->getComplete());
+
         $version->setComplete('2.0.1');
         $this->assertEquals('2.0.1', $version->getComplete());
         $this->assertEquals(2, $version->getMajor());

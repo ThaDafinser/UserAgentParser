@@ -15,6 +15,20 @@ class YzalisUAParserTest extends AbstractProviderTestCase
         $this->assertEquals('YzalisUAParser', $provider->getName());
     }
 
+    public function testGetComposerPackageName()
+    {
+        $provider = new YzalisUAParser();
+
+        $this->assertEquals('yzalis/ua-parser', $provider->getComposerPackageName());
+    }
+
+    public function testVersion()
+    {
+        $provider = new YzalisUAParser();
+
+        $this->assertInternalType('string', $provider->getVersion());
+    }
+
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */

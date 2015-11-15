@@ -1,6 +1,7 @@
 <?php
 namespace UserAgentParserTest\Provider;
 
+use UAParser\Result;
 use UserAgentParser\Provider\UAParser;
 
 /**
@@ -8,6 +9,34 @@ use UserAgentParser\Provider\UAParser;
  */
 class UAParserTest extends AbstractProviderTestCase
 {
+    private function getResultMock()
+    {
+        $ua     = new Result\UserAgent();
+        $os     = new Result\OperatingSystem();
+        $device = new Result\Device();
+
+        $client         = new Result\Client('');
+        $client->ua     = $ua;
+        $client->os     = $os;
+        $client->device = $device;
+
+        return $client;
+    }
+
+    /**
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser($returnValue)
+    {
+        $parser = $this->getMock('UAParser\Parser', [], [], '', false);
+        $parser->expects($this->any())
+            ->method('parse')
+            ->will($this->returnValue($returnValue));
+
+        return $parser;
+    }
+
     public function testName()
     {
         $provider = new UAParser();
@@ -15,16 +44,34 @@ class UAParserTest extends AbstractProviderTestCase
         $this->assertEquals('UAParser', $provider->getName());
     }
 
-    /**
-     * @expectedException \UserAgentParser\Exception\NoResultFoundException
-     */
-    public function testNoResultFoundException()
+    public function testGetComposerPackageName()
     {
-        $userAgent = 'nothing';
-
         $provider = new UAParser();
-        $provider->parse($userAgent);
+
+        $this->assertEquals('ua-parser/uap-php', $provider->getComposerPackageName());
     }
+
+    public function testVersion()
+    {
+        $provider = new UAParser();
+
+        $this->assertInternalType('string', $provider->getVersion());
+    }
+
+//     /**
+//      * @expectedException \UserAgentParser\Exception\NoResultFoundException
+//      */
+//     public function testNoResultFoundException()
+//     {
+//         $returnValue = $this->getMock('UAParser\Result\Client', [], [], '', false);
+
+//         $parser = $this->getParser($returnValue);
+
+//         $provider = new UAParser();
+//         $provider->setParser($parser);
+
+//         $result = $provider->parse('A real user agent...');
+//     }
 
     public function dataProvider()
     {

@@ -15,6 +15,20 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $this->assertEquals('WhichBrowser', $provider->getName());
     }
 
+    public function testGetComposerPackageName()
+    {
+        $provider = new WhichBrowser();
+
+        $this->assertEquals('whichbrowser/whichbrowser', $provider->getComposerPackageName());
+    }
+
+    public function testVersion()
+    {
+        $provider = new WhichBrowser();
+
+        $this->assertInternalType('string', $provider->getVersion());
+    }
+
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */

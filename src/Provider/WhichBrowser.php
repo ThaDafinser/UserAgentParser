@@ -12,6 +12,11 @@ class WhichBrowser extends AbstractProvider
         return 'WhichBrowser';
     }
 
+    public function getComposerPackageName()
+    {
+        return 'whichbrowser/whichbrowser';
+    }
+
     /**
      *
      * @param array $resultRaw
@@ -101,7 +106,7 @@ class WhichBrowser extends AbstractProvider
      *
      * @return string
      */
-    private function getVersion($versionPart)
+    private function getVersionString($versionPart)
     {
         if (! is_array($versionPart)) {
             return $versionPart;
@@ -171,7 +176,7 @@ class WhichBrowser extends AbstractProvider
         }
 
         if (isset($resultRaw['browser']['version'])) {
-            $browser->getVersion()->setComplete($this->getVersion($resultRaw['browser']['version']));
+            $browser->getVersion()->setComplete($this->getVersionString($resultRaw['browser']['version']));
         }
 
         /*
@@ -197,7 +202,7 @@ class WhichBrowser extends AbstractProvider
         }
 
         if (isset($resultRaw['os']['version'])) {
-            $operatingSystem->getVersion()->setComplete($this->getVersion($resultRaw['os']['version']));
+            $operatingSystem->getVersion()->setComplete($this->getVersionString($resultRaw['os']['version']));
         }
 
         /*

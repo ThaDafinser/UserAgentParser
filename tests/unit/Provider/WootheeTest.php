@@ -15,6 +15,20 @@ class WootheeTest extends AbstractProviderTestCase
         $this->assertEquals('Woothee', $provider->getName());
     }
 
+    public function testGetComposerPackageName()
+    {
+        $provider = new Woothee();
+
+        $this->assertEquals('woothee/woothee', $provider->getComposerPackageName());
+    }
+
+    public function testVersion()
+    {
+        $provider = new Woothee();
+
+        $this->assertInternalType('string', $provider->getVersion());
+    }
+
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */

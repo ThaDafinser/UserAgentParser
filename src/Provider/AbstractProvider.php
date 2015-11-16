@@ -60,10 +60,10 @@ abstract class AbstractProvider
         }
 
         $content = file_get_contents('composer.lock');
-        if ($content === false) {
+        if ($content === false || $content === '') {
             return;
         }
-
+        
         $content = json_decode($content);
 
         return $content->packages;

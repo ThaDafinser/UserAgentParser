@@ -95,10 +95,6 @@ class Wurfl extends AbstractProvider
         $result = new Model\UserAgent();
         $result->setProviderResultRaw($deviceRaw->getAllVirtualCapabilities());
 
-        var_dump($deviceRaw->getAllVirtualCapabilities());
-        var_dump($deviceRaw->getAllCapabilities());
-        exit();
-
         /*
          * Bot detection
          */

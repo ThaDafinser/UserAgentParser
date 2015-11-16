@@ -7,6 +7,8 @@ use Wurfl\CustomDevice;
 
 class Wurfl extends AbstractProvider
 {
+    private $config;
+
     public function getName()
     {
         return 'Wurfl';
@@ -23,45 +25,21 @@ class Wurfl extends AbstractProvider
     }
 
     /**
-     *
-     * @return \Wurfl\Configuration\InMemoryConfig
+     * 
+     * @param \Wurfl\Configuration\Config $config
      */
-    private function getConfig()
+    public function setConfig(\Wurfl\Configuration\Config $config)
     {
-        $resourcesDir = '.tmp/wurfl';
+        $this->config = $config;
+    }
 
-        $persistenceDir = $resourcesDir . '/storage/persistence';
-        $cacheDir       = $resourcesDir . '/storage/cache';
-
-        // Create WURFL Configuration
-        $wurflConfig = new \Wurfl\Configuration\InMemoryConfig();
-
-        // Set location of the WURFL File
-        $wurflConfig->wurflFile('.tmp/wurfl.xml');
-
-        /*
-         * Set the match mode for the API
-         *
-         * It is recommended to use the defined class constants instead of their
-         * string values:
-         *
-         * \Wurfl\Configuration\Config::MATCH_MODE_PERFORMANCE
-         * \Wurfl\Configuration\Config::MATCH_MODE_ACCURACY
-         */
-        $wurflConfig->matchMode(\Wurfl\Configuration\Config::MATCH_MODE_ACCURACY);
-
-        // Setup WURFL Persistence
-        $wurflConfig->persistence('file', [
-            \Wurfl\Configuration\Config::DIR => $persistenceDir,
-        ]);
-
-        // Setup Caching
-        $wurflConfig->cache('file', [
-            \Wurfl\Configuration\Config::DIR        => $cacheDir,
-            \Wurfl\Configuration\Config::EXPIRATION => 36000,
-        ]);
-
-        return $wurflConfig;
+    /**
+     * 
+     * @return \Wurfl\Configuration\Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     /**

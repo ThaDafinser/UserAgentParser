@@ -25,6 +25,17 @@ class AbstractProviderTest extends AbstractProviderTestCase
         $this->assertNull($provider->getVersion());
         chdir($cwdir);
 
+        // locked file
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+        $provider->expects($this->any())
+            ->method('getComposerPackageName')
+            ->will($this->returnValue('something/other'));
+
+        $fp = fopen('composer.lock', 'r');
+        flock($fp, LOCK_EX);
+        $this->assertNull($provider->getVersion());
+        flock($fp, LOCK_UN);
+
         // no package match
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
         $provider->expects($this->any())

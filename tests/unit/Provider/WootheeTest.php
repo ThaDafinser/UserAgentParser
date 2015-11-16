@@ -8,6 +8,20 @@ use UserAgentParser\Provider\Woothee;
  */
 class WootheeTest extends AbstractProviderTestCase
 {
+    /**
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser(array $returnValue = [])
+    {
+        $parser = $this->getMock('Woothee\Classifier', [], [], '', false);
+        $parser->expects($this->any())
+            ->method('parse')
+            ->will($this->returnValue($returnValue));
+
+        return $parser;
+    }
+
     public function testName()
     {
         $provider = new Woothee();
@@ -34,77 +48,133 @@ class WootheeTest extends AbstractProviderTestCase
      */
     public function testNoResultFoundException()
     {
+        $parser = $this->getParser();
+
         $provider = new Woothee();
-        $provider->parse('A real user agent...');
-    }
+        $provider->setParser($parser);
 
-    public function dataProvider()
-    {
-        return [
-            [
-                'userAgent' => 'Googlebot/2.1 (http://www.googlebot.com/bot.html)',
-                'result'    => [
-                    'bot' => [
-                        'isBot' => true,
-                        'name'  => 'misc crawler',
-                        'type'  => null,
-                    ],
-                ],
-            ],
-
-            [
-                'userAgent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A405 Safari/8536.25',
-                'result'    => [
-                    'browser' => [
-                        'name'    => 'Safari',
-                        'version' => [
-                            'major'    => 6,
-                            'minor'    => 0,
-                            'patch'    => null,
-                            'complete' => '6.0',
-                        ],
-                    ],
-
-                    'renderingEngine' => [
-                        'name'    => null,
-                        'version' => [
-                            'major'    => null,
-                            'minor'    => null,
-                            'patch'    => null,
-                            'complete' => null,
-                        ],
-                    ],
-
-                    'operatingSystem' => [
-                        'name'    => null,
-                        'version' => [
-                            'major'    => 6,
-                            'minor'    => 0,
-                            'patch'    => null,
-                            'complete' => '6.0',
-                        ],
-                    ],
-
-                    'device' => [
-                        'model' => null,
-                        'brand' => null,
-                        'type'  => null,
-
-                        'isMobile' => true,
-                        'isTouch'  => null,
-                    ],
-                ],
-            ],
-        ];
+        $result = $provider->parse('A real user agent...');
     }
 
     /**
-     * @dataProvider dataProvider
+     * Bot
      */
-    public function testAllParseResults($userAgent, $expectedResult)
+    public function testParseBot()
     {
+        $parser = $this->getParser([
+            'category' => \Woothee\DataSet::DATASET_CATEGORY_CRAWLER,
+            'name'     => 'Googlebot',
+        ]);
+
         $provider = new Woothee();
-        $result   = $provider->parse($userAgent);
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => 'Googlebot',
+                'type'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Browser only
+     */
+    public function testParseBrowser()
+    {
+        $parser = $this->getParser([
+            'name'    => 'Firefox',
+            'version' => '3.0.1',
+        ]);
+
+        $provider = new Woothee();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'browser' => [
+                'name'    => 'Firefox',
+                'version' => [
+                    'major'    => 3,
+                    'minor'    => 0,
+                    'patch'    => 1,
+                    'complete' => '3.0.1',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only
+     */
+    public function testParseDevice()
+    {
+        $parser = $this->getParser([
+            'category' => \Woothee\DataSet::DATASET_CATEGORY_SMARTPHONE,
+        ]);
+
+        $provider = new Woothee();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => null,
+
+                'isMobile' => true,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only
+     */
+    public function testParseDeviceMobilephone()
+    {
+        $parser = $this->getParser([
+            'category' => \Woothee\DataSet::DATASET_CATEGORY_MOBILEPHONE,
+            'name'     => \Woothee\DataSet::VALUE_UNKNOWN,
+        ]);
+
+        $provider = new Woothee();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'browser' => [
+                'name'    => null,
+                'version' => [
+                    'major'    => null,
+                    'minor'    => null,
+                    'patch'    => null,
+                    'complete' => null,
+                ],
+            ],
+
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => null,
+
+                'isMobile' => true,
+                'isTouch'  => null,
+            ],
+        ];
 
         $this->assertProviderResult($result, $expectedResult);
     }

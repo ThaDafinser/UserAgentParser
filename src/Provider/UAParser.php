@@ -58,7 +58,7 @@ class UAParser extends AbstractProvider
             return true;
         }
 
-        if ($this->isRealResult($resultRaw->device->family)) {
+        if ($this->isRealResult($resultRaw->device->model)) {
             return true;
         }
 
@@ -182,12 +182,12 @@ class UAParser extends AbstractProvider
          */
         $device = $result->getDevice();
 
-        if ($this->isRealResult($resultRaw->device->brand) === true) {
-            $device->setBrand($resultRaw->device->brand);
-        }
-
         if ($this->isRealResult($resultRaw->device->model) === true) {
             $device->setModel($resultRaw->device->model);
+        }
+
+        if ($this->isRealResult($resultRaw->device->brand) === true) {
+            $device->setBrand($resultRaw->device->brand);
         }
 
         return $result;

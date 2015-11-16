@@ -9,6 +9,10 @@ use UserAgentParser\Provider\UAParser;
  */
 class UAParserTest extends AbstractProviderTestCase
 {
+    /**
+     *
+     * @return \UAParser\Result\Client
+     */
     private function getResultMock()
     {
         $ua     = new Result\UserAgent();
@@ -58,88 +62,138 @@ class UAParserTest extends AbstractProviderTestCase
         $this->assertInternalType('string', $provider->getVersion());
     }
 
-//     /**
-//      * @expectedException \UserAgentParser\Exception\NoResultFoundException
-//      */
-//     public function testNoResultFoundException()
-//     {
-//         $returnValue = $this->getMock('UAParser\Result\Client', [], [], '', false);
-
-//         $parser = $this->getParser($returnValue);
-
-//         $provider = new UAParser();
-//         $provider->setParser($parser);
-
-//         $result = $provider->parse('A real user agent...');
-//     }
-
-    public function dataProvider()
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundException()
     {
-        return [
-            [
-                'userAgent' => 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.19; aggregator:Spinn3r (Spinn3r 3.1); http://spinn3r.com/robot) Gecko/2010040121 Firefox/3.0.19',
-                'result'    => [
-                    'bot' => [
-                        'isBot' => true,
-                        'name'  => 'robot',
-                        'type'  => null,
-                    ],
-                ],
-            ],
+        $parser = $this->getParser($this->getResultMock());
 
-            [
-                'userAgent' => 'Mozilla/5.0 (Linux; U; Android 2.3.4; en-us; Silk/1.1.0-84) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 Silk-Accelerated=false',
-                'result'    => [
-                    'browser' => [
-                        'name'    => 'Amazon Silk',
-                        'version' => [
-                            'major'    => 1,
-                            'minor'    => 1,
-                            'patch'    => 0,
-                            'complete' => '1.1.0',
-                        ],
-                    ],
+        $provider = new UAParser();
+        $provider->setParser($parser);
 
-                    'renderingEngine' => [
-                        'name'    => null,
-                        'version' => [
-                            'major'    => null,
-                            'minor'    => null,
-                            'patch'    => null,
-                            'complete' => null,
-                        ],
-                    ],
-
-                    'operatingSystem' => [
-                        'name'    => 'Android',
-                        'version' => [
-                            'major'    => 2,
-                            'minor'    => 3,
-                            'patch'    => 4,
-                            'complete' => '2.3.4',
-                        ],
-                    ],
-
-                    'device' => [
-                        'model' => 'Kindle',
-                        'brand' => 'Amazon',
-                        'type'  => null,
-
-                        'isMobile' => null,
-                        'isTouch'  => null,
-                    ],
-                ],
-            ],
-        ];
+        $result = $provider->parse('A real user agent...');
     }
 
     /**
-     * @dataProvider dataProvider
+     * Bot
      */
-    public function testAllParseResults($userAgent, $expectedResult)
+    public function testParseBot()
     {
+        $result                 = $this->getResultMock();
+        $result->device->family = 'Spider';
+        $result->ua->family     = 'Googlebot';
+
+        $parser = $this->getParser($result);
+
         $provider = new UAParser();
-        $result   = $provider->parse($userAgent);
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => 'Googlebot',
+                'type'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Browser small
+     */
+    public function testParseBrowser()
+    {
+        $result             = $this->getResultMock();
+        $result->ua->family = 'Firefox';
+        $result->ua->major  = 3;
+        $result->ua->minor  = 2;
+        $result->ua->patch  = 1;
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'browser' => [
+                'name'    => 'Firefox',
+                'version' => [
+                    'major'    => 3,
+                    'minor'    => 2,
+                    'patch'    => 1,
+                    'complete' => '3.2.1',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * OS only
+     */
+    public function testParseOperatingSystem()
+    {
+        $result             = $this->getResultMock();
+        $result->os->family = 'Windows';
+        $result->os->major  = 7;
+        $result->os->minor  = 0;
+        $result->os->patch  = 1;
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'operatingSystem' => [
+                'name'    => 'Windows',
+                'version' => [
+                    'major'    => 7,
+                    'minor'    => 0,
+                    'patch'    => 1,
+                    'complete' => '7.0.1',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only
+     */
+    public function testParseDevice()
+    {
+        $result                = $this->getResultMock();
+        $result->device->model = 'iPhone';
+        $result->device->brand = 'Apple';
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => 'iPhone',
+                'brand' => 'Apple',
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+        ];
 
         $this->assertProviderResult($result, $expectedResult);
     }

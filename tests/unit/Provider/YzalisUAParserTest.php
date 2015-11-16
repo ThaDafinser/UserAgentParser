@@ -8,6 +8,51 @@ use UserAgentParser\Provider\YzalisUAParser;
  */
 class YzalisUAParserTest extends AbstractProviderTestCase
 {
+    /**
+     *
+     * @return \UAParser\Result\Result
+     */
+    private function getResultMock()
+    {
+        $result = $this->getMock('UAParser\Result\Result');
+
+        $result->expects($this->any())
+            ->method('getBrowser')
+            ->will($this->returnValue(new \UAParser\Result\BrowserResult()));
+
+        $result->expects($this->any())
+            ->method('getOperatingSystem')
+            ->will($this->returnValue(new \UAParser\Result\OperatingSystemResult()));
+
+        $result->expects($this->any())
+            ->method('getDevice')
+            ->will($this->returnValue(new \UAParser\Result\DeviceResult()));
+
+        $result->expects($this->any())
+            ->method('getEmailClient')
+            ->will($this->returnValue(new \UAParser\Result\EmailClientResult()));
+
+        $result->expects($this->any())
+            ->method('getRenderingEngine')
+            ->will($this->returnValue(new \UAParser\Result\RenderingEngineResult()));
+
+        return $result;
+    }
+
+    /**
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser($returnValue)
+    {
+        $parser = $this->getMock('UAParser\UAParser', [], [], '', false);
+        $parser->expects($this->any())
+            ->method('parse')
+            ->will($this->returnValue($returnValue));
+
+        return $parser;
+    }
+
     public function testName()
     {
         $provider = new YzalisUAParser();
@@ -34,66 +79,176 @@ class YzalisUAParserTest extends AbstractProviderTestCase
      */
     public function testNoResultFoundException()
     {
+        $parser = $this->getParser($this->getResultMock());
+
         $provider = new YzalisUAParser();
-        $provider->parse('A real user agent...');
-    }
+        $provider->setParser($parser);
 
-    public function dataProvider()
-    {
-        return [
-            [
-                'userAgent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A405 Safari/8536.25',
-                'result'    => [
-                    'browser' => [
-                        'name'    => 'Safari',
-                        'version' => [
-                            'major'    => 6,
-                            'minor'    => 0,
-                            'patch'    => null,
-                            'complete' => '6.0',
-                        ],
-                    ],
-
-                    'renderingEngine' => [
-                        'name'    => 'WebKit',
-                        'version' => [
-                            'major'    => 536,
-                            'minor'    => 26,
-                            'patch'    => null,
-                            'complete' => '536.26',
-                        ],
-                    ],
-
-                    'operatingSystem' => [
-                        'name'    => 'iOS',
-                        'version' => [
-                            'major'    => 6,
-                            'minor'    => 0,
-                            'patch'    => null,
-                            'complete' => '6.0',
-                        ],
-                    ],
-
-                    'device' => [
-                        'model' => 'iPhone',
-                        'brand' => 'Apple',
-                        'type'  => 'mobile',
-
-                        'isMobile' => true,
-                        'isTouch'  => null,
-                    ],
-                ],
-            ],
-        ];
+        $result = $provider->parse('A real user agent...');
     }
 
     /**
-     * @dataProvider dataProvider
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testAllParseResults($userAgent, $expectedResult)
+    public function testNoResultFoundExceptionDefaultValue()
     {
+        $result = $this->getResultMock();
+        $result->getBrowser()->fromArray([
+            'family' => 'Other',
+        ]);
+        $parser = $this->getParser($result);
+
         $provider = new YzalisUAParser();
-        $result   = $provider->parse($userAgent);
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * Browser small
+     */
+    public function testParseBrowser()
+    {
+        $result = $this->getResultMock();
+        $result->getBrowser()->fromArray([
+            'family' => 'Firefox',
+            'major'  => 3,
+            'minor'  => 2,
+            'patch'  => 1,
+        ]);
+        $result->getRenderingEngine()->fromArray([
+            'family'  => 'WebKit',
+            'version' => '6.5.4',
+        ]);
+
+        $parser = $this->getParser($result);
+
+        $provider = new YzalisUAParser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'browser' => [
+                'name'    => 'Firefox',
+                'version' => [
+                    'major'    => 3,
+                    'minor'    => 2,
+                    'patch'    => 1,
+                    'complete' => '3.2.1',
+                ],
+            ],
+
+            'renderingEngine' => [
+                'name'    => 'WebKit',
+                'version' => [
+                    'major'    => 6,
+                    'minor'    => 5,
+                    'patch'    => 4,
+                    'complete' => '6.5.4',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * OS only
+     */
+    public function testParseOperatingSystem()
+    {
+        $result = $this->getResultMock();
+        $result->getOperatingSystem()->fromArray([
+            'family' => 'Windows',
+            'major'  => 7,
+            'minor'  => 0,
+            'patch'  => 1,
+        ]);
+
+        $parser = $this->getParser($result);
+
+        $provider = new YzalisUAParser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'operatingSystem' => [
+                'name'    => 'Windows',
+                'version' => [
+                    'major'    => 7,
+                    'minor'    => 0,
+                    'patch'    => 1,
+                    'complete' => '7.0.1',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only
+     */
+    public function testParseDevice()
+    {
+        $result = $this->getResultMock();
+        $result->getDevice()->fromArray([
+            'constructor' => 'Apple',
+            'model'       => 'iPad',
+            'type'        => 'tablet',
+        ]);
+
+        $parser = $this->getParser($result);
+
+        $provider = new YzalisUAParser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => 'iPad',
+                'brand' => 'Apple',
+                'type'  => 'tablet',
+
+                'isMobile' => true,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only model
+     */
+    public function testParseDeviceOnlyModel()
+    {
+        $result = $this->getResultMock();
+        $result->getDevice()->fromArray([
+            'model' => 'iPad',
+            'type'  => 'mobile',
+        ]);
+
+        $parser = $this->getParser($result);
+
+        $provider = new YzalisUAParser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => 'iPad',
+                'brand' => null,
+                'type'  => 'mobile',
+
+                'isMobile' => true,
+                'isTouch'  => null,
+            ],
+        ];
 
         $this->assertProviderResult($result, $expectedResult);
     }

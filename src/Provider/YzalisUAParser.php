@@ -20,6 +20,16 @@ class YzalisUAParser extends AbstractProvider
     }
 
     /**
+     * Initial needed for uniTest mocking
+     *
+     * @param \UAParser\UAParser $parser
+     */
+    public function setParser(\UAParser\UAParser $parser)
+    {
+        $this->parser = $parser;
+    }
+
+    /**
      *
      * @return \UAParser\UAParser
      */
@@ -47,28 +57,25 @@ class YzalisUAParser extends AbstractProvider
         /* @var $browserRaw \UAParser\Result\BrowserResult */
         $browserRaw = $resultRaw->getBrowser();
 
-        if ($browserRaw->getFamily() !== 'Other') {
+        if ($browserRaw !== null && $this->isRealResult($browserRaw->getFamily()) === true) {
             return true;
         }
 
         /* @var $osRaw \UAParser\Result\OperatingSystemResult */
         $osRaw = $resultRaw->getOperatingSystem();
 
-        if ($osRaw->getFamily() !== 'Other') {
+        if ($osRaw !== null && $this->isRealResult($osRaw->getFamily()) === true) {
             return true;
         }
 
         /* @var $deviceRaw \UAParser\Result\DeviceResult */
         $deviceRaw = $resultRaw->getDevice();
 
-        if ($deviceRaw->getConstructor() !== 'Other') {
+        if ($deviceRaw !== null && $this->isRealResult($deviceRaw->getConstructor()) === true) {
             return true;
         }
 
-        /* @var $emailRaw \UAParser\Result\EmailClientResult */
-        $emailRaw = $resultRaw->getEmailClient();
-
-        if ($emailRaw->getFamily() !== 'Other') {
+        if ($deviceRaw !== null && $this->isRealResult($deviceRaw->getModel()) === true) {
             return true;
         }
 
@@ -83,7 +90,7 @@ class YzalisUAParser extends AbstractProvider
      */
     private function isRealResult($value)
     {
-        if ($value === '') {
+        if ($value === '' || $value === null) {
             return false;
         }
 
@@ -153,8 +160,8 @@ class YzalisUAParser extends AbstractProvider
 
         /*
          * Bot detection
+         * i think this is currently not possible
          */
-        // @todo i think this is currently not possible
 
         /*
          * Browser
@@ -216,7 +223,8 @@ class YzalisUAParser extends AbstractProvider
             $device->setBrand($deviceRaw->getConstructor());
         }
 
-        if ($this->isRealResult($deviceRaw->getType()) === true) {
+        // removed desktop type, since it's a default value and not really detected
+        if ($this->isRealResult($deviceRaw->getType()) === true && $deviceRaw->getType() !== 'desktop') {
             $device->setType($deviceRaw->getType());
         }
 

@@ -8,6 +8,22 @@ use UserAgentParser\Provider\WhichBrowser;
  */
 class WhichBrowserTest extends AbstractProviderTestCase
 {
+    /**
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser()
+    {
+        $parser = $this->getMock('WhichBrowser\Parser', [], [], '', false);
+
+        $parser->browser = new \WhichBrowser\Browser();
+        $parser->engine  = new \WhichBrowser\Engine();
+        $parser->os      = new \WhichBrowser\Os();
+        $parser->device  = new \WhichBrowser\Device();
+
+        return $parser;
+    }
+
     public function testName()
     {
         $provider = new WhichBrowser();
@@ -34,195 +50,199 @@ class WhichBrowserTest extends AbstractProviderTestCase
      */
     public function testNoResultFoundException()
     {
+        $parser = $this->getParser();
+
         $provider = new WhichBrowser();
-        $provider->parse('A real user agent...');
-    }
+        $provider->setParser($parser);
 
-    public function dataProvider()
-    {
-        return [
-            [
-                'userAgent' => 'Googlebot/2.1 (http://www.googlebot.com/bot.html)',
-                'result'    => [
-
-                    'bot' => [
-                        'isBot' => true,
-                        'name'  => 'Googlebot',
-                        'type'  => null,
-                    ],
-                ],
-            ],
-
-            [
-                'userAgent' => 'Mozilla/5.0 (Linux; U; Android 2.3.4; en-us; Silk/1.1.0-84) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 Silk-Accelerated=false',
-                'result'    => [
-
-                    'browser' => [
-                        'name'    => 'Silk',
-                        'version' => [
-                            'major'    => 1,
-                            'minor'    => 1,
-                            'patch'    => null,
-                            'complete' => '1.1',
-                        ],
-                    ],
-
-                    'renderingEngine' => [
-                        'name'    => 'Webkit',
-                        'version' => [
-                            'major'    => 533,
-                            'minor'    => 1,
-                            'patch'    => null,
-                            'complete' => '533.1',
-                        ],
-                    ],
-
-                    'operatingSystem' => [
-                        'name'    => 'Android',
-                        'version' => [
-                            'major'    => 2,
-                            'minor'    => 3,
-                            'patch'    => 4,
-                            'complete' => '2.3.4',
-                        ],
-                    ],
-
-                    'device' => [
-                        'model' => 'Kindle Fire',
-                        'brand' => 'Amazon',
-                        'type'  => 'tablet',
-
-                        'isMobile' => true,
-                        'isTouch'  => null,
-                    ],
-                ],
-            ],
-
-            [
-                'userAgent' => 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10162',
-                'result'    => [
-
-                    'browser' => [
-                        'name'    => 'Edge 12',
-                        'version' => [
-                            'major'    => null,
-                            'minor'    => null,
-                            'patch'    => null,
-                            'complete' => null,
-                        ],
-                    ],
-
-                    'renderingEngine' => [
-                        'name'    => 'EdgeHTML',
-                        'version' => [
-                            'major'    => 12,
-                            'minor'    => null,
-                            'patch'    => null,
-                            'complete' => '12',
-                        ],
-                    ],
-
-                    'operatingSystem' => [
-                        'name'    => 'Windows',
-                        'version' => [
-                            'major'    => 10,
-                            'minor'    => null,
-                            'patch'    => null,
-                            'complete' => '10',
-                        ],
-                    ],
-
-                    'device' => [
-                        'model' => null,
-                        'brand' => null,
-                        'type'  => 'desktop',
-
-                        'isMobile' => null,
-                        'isTouch'  => null,
-                    ],
-                ],
-            ],
-
-            [
-                'userAgent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3',
-
-                'result' => [
-
-                    'browser' => [
-                        'name'    => 'Safari',
-                        'version' => [
-                            'major'    => null,
-                            'minor'    => null,
-                            'patch'    => null,
-                            'complete' => null,
-                        ],
-                    ],
-
-                    'renderingEngine' => [
-                        'name'    => 'Webkit',
-                        'version' => [
-                            'major'    => 534,
-                            'minor'    => 46,
-                            'patch'    => null,
-                            'complete' => '534.46',
-                        ],
-                    ],
-
-                    'operatingSystem' => [
-                        'name'    => 'iOS',
-                        'version' => [
-                            'major'    => 5,
-                            'minor'    => 0,
-                            'patch'    => null,
-                            'complete' => '5.0',
-                        ],
-                    ],
-
-                    'device' => [
-                        'model' => 'iPhone',
-                        'brand' => 'Apple',
-                        'type'  => 'mobile',
-
-                        'isMobile' => true,
-                        'isTouch'  => null,
-                    ],
-                ],
-            ],
-
-            [
-                'userAgent' => 'KreaTVWebKit/531 (Motorola STB; Linux)',
-
-                'result' => [
-                    'renderingEngine' => [
-                        'name'    => 'Webkit',
-                        'version' => [
-                            'major'    => 531,
-                            'minor'    => null,
-                            'patch'    => null,
-                            'complete' => '531',
-                        ],
-                    ],
-
-                    'device' => [
-                        'model' => 'KreaTV',
-                        'brand' => 'Motorola',
-                        'type'  => 'television',
-
-                        'isMobile' => null,
-                        'isTouch'  => null,
-                    ],
-                ],
-            ],
-        ];
+        $result = $provider->parse('A real user agent...');
     }
 
     /**
-     * @dataProvider dataProvider
+     * Bot
      */
-    public function testAllParseResults($userAgent, $expectedResult)
+    public function testParseBot()
     {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isDetected')
+            ->will($this->returnValue(true));
+
+        $parser->expects($this->any())
+            ->method('isType')
+            ->will($this->returnValue(true));
+        $parser->browser = new \WhichBrowser\Browser([
+            'name' => 'Googlebot',
+        ]);
+
         $provider = new WhichBrowser();
-        $result   = $provider->parse($userAgent);
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => 'Googlebot',
+                'type'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Browser only
+     */
+    public function testParseBrowser()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isDetected')
+            ->will($this->returnValue(true));
+
+        $parser->browser = new \WhichBrowser\Browser([
+            'name'    => 'Firefox',
+            'version' => new \WhichBrowser\Version([
+                'value' => '3.2.1',
+            ]),
+        ]);
+
+        $provider = new WhichBrowser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'browser' => [
+                'name'    => 'Firefox',
+                'version' => [
+                    'major'    => 3,
+                    'minor'    => 2,
+                    'patch'    => 1,
+                    'complete' => '3.2.1',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Rendering engine only
+     */
+    public function testParseRenderingEngine()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isDetected')
+            ->will($this->returnValue(true));
+
+        $parser->engine = new \WhichBrowser\Engine([
+            'name'    => 'Webkit',
+            'version' => new \WhichBrowser\Version([
+                'value' => '3.2.1',
+            ]),
+        ]);
+
+        $provider = new WhichBrowser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'renderingEngine' => [
+                'name'    => 'Webkit',
+                'version' => [
+                    'major'    => 3,
+                    'minor'    => 2,
+                    'patch'    => 1,
+                    'complete' => '3.2.1',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * OS only
+     */
+    public function testParseOperatingSystem()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isDetected')
+            ->will($this->returnValue(true));
+
+        $parser->os = new \WhichBrowser\Os([
+            'name'    => 'Windows',
+            'version' => new \WhichBrowser\Version([
+                'value' => '7.0.1',
+            ]),
+        ]);
+
+        $provider = new WhichBrowser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'operatingSystem' => [
+                'name'    => 'Windows',
+                'version' => [
+                    'major'    => 7,
+                    'minor'    => 0,
+                    'patch'    => 1,
+                    'complete' => '7.0.1',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only
+     */
+    public function testParseDevice()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isDetected')
+            ->will($this->returnValue(true));
+
+        $parser->device = new \WhichBrowser\Device([
+            'identified'   => true,
+            'model'        => 'iPhone',
+            'manufacturer' => 'Apple',
+            'type'         => 'smartphone',
+        ]);
+
+        $parser->expects($this->at(2))
+            ->method('isType')
+            ->with('bot')
+            ->will($this->returnValue(false));
+
+        $parser->expects($this->at(3))
+        ->method('isType')
+        ->will($this->returnValue(true));
+
+        $provider = new WhichBrowser();
+        $provider->setParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => 'iPhone',
+                'brand' => 'Apple',
+                'type'  => 'smartphone',
+
+                'isMobile' => true,
+                'isTouch'  => null,
+            ],
+        ];
 
         $this->assertProviderResult($result, $expectedResult);
     }

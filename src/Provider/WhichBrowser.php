@@ -7,6 +7,12 @@ use WhichBrowser\Parser as WhichBrowserParser;
 
 class WhichBrowser extends AbstractProvider
 {
+    /**
+     * 
+     * @var WhichBrowserParser
+     */
+    private $parser;
+
     public function getName()
     {
         return 'WhichBrowser';
@@ -17,11 +23,34 @@ class WhichBrowser extends AbstractProvider
         return 'whichbrowser/parser';
     }
 
+    /**
+     * Initial needed for uniTest mocking
+     *
+     * @param WhichBrowserParser $parser
+     */
+    public function setParser(WhichBrowserParser $parser)
+    {
+        $this->parser = $parser;
+    }
+
+    /**
+     * @param  array              $headers
+     * @return WhichBrowserParser
+     */
+    private function getParser(array $headers)
+    {
+        if ($this->parser !== null) {
+            return $this->parser;
+        }
+
+        return new WhichBrowserParser($headers);
+    }
+
     public function parse($userAgent, array $headers = [])
     {
         $headers['User-Agent'] = $userAgent;
 
-        $parser = new WhichBrowserParser($headers);
+        $parser = $this->getParser($headers);
 
         /*
          * No result found?
@@ -113,7 +142,7 @@ class WhichBrowser extends AbstractProvider
 
         $device->setType($parser->device->type);
 
-        if ($parser->isType('mobile', 'tablet', 'ereader', 'media', 'watch', 'camera')) {
+        if ($parser->isType('mobile', 'tablet', 'ereader', 'media', 'watch', 'camera') === true) {
             $device->setIsMobile(true);
         }
 

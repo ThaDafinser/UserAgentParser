@@ -114,7 +114,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
     }
 
     /**
-     * Browser small
+     * Browser only
      */
     public function testParseBrowser()
     {

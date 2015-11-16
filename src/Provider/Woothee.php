@@ -21,8 +21,18 @@ class Woothee extends AbstractProvider
     }
 
     /**
+     * Initial needed for uniTest mocking
      *
-     * @return \Woothee\Classifier
+     * @param Classifier $parser
+     */
+    public function setParser(Classifier $parser)
+    {
+        $this->parser = $parser;
+    }
+
+    /**
+     *
+     * @return Classifier
      */
     private function getParser()
     {
@@ -59,7 +69,7 @@ class Woothee extends AbstractProvider
      */
     private function isBot(array $resultRaw)
     {
-        if ($resultRaw['category'] === DataSet::DATASET_CATEGORY_CRAWLER) {
+        if (isset($resultRaw['category']) && $resultRaw['category'] === DataSet::DATASET_CATEGORY_CRAWLER) {
             return true;
         }
 
@@ -99,11 +109,11 @@ class Woothee extends AbstractProvider
          * const DATASET_CATEGORY_APPLIANCE = 'appliance';
          * const DATASET_CATEGORY_MISC = 'misc';
          */
-        if ($resultRaw['category'] === DataSet::DATASET_CATEGORY_SMARTPHONE) {
+        if (isset($resultRaw['category']) && $resultRaw['category'] === DataSet::DATASET_CATEGORY_SMARTPHONE) {
             return true;
         }
 
-        if ($resultRaw['category'] === DataSet::DATASET_CATEGORY_MOBILEPHONE) {
+        if (isset($resultRaw['category']) && $resultRaw['category'] === DataSet::DATASET_CATEGORY_MOBILEPHONE) {
             return true;
         }
 
@@ -136,7 +146,7 @@ class Woothee extends AbstractProvider
             $bot = $result->getBot();
             $bot->setIsBot(true);
 
-            if ($this->isRealResult($resultRaw['name']) === true) {
+            if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name']) === true) {
                 $bot->setName($resultRaw['name']);
             }
 
@@ -148,17 +158,17 @@ class Woothee extends AbstractProvider
          */
         $browser = $result->getBrowser();
 
-        if ($this->isRealResult($resultRaw['name']) === true) {
+        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name']) === true) {
             $browser->setName($resultRaw['name']);
         }
 
-        if ($this->isRealResult($resultRaw['version']) === true) {
+        if (isset($resultRaw['version']) && $this->isRealResult($resultRaw['version']) === true) {
             $browser->getVersion()->setComplete($resultRaw['version']);
         }
 
         /*
          * renderingEngine
-         * Currently not supported
+         * currently not supported
          */
 
         /*
@@ -170,10 +180,6 @@ class Woothee extends AbstractProvider
         // @todo ... filled OS is mixed! Examples: iPod, iPhone, Android...
         // split it by hand for device/OS?
         // include only version?
-
-        if ($this->isRealResult($resultRaw['os_version']) === true) {
-            $operatingSystem->getVersion()->setComplete($resultRaw['os_version']);
-        }
 
         /*
          * device

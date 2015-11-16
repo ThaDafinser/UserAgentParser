@@ -63,7 +63,7 @@ abstract class AbstractProvider
         if ($content === false || $content === '') {
             return;
         }
-        
+
         $content = json_decode($content);
 
         return $content->packages;

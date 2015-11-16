@@ -103,7 +103,7 @@ class UAParserTest extends AbstractProviderTestCase
     }
 
     /**
-     * Browser small
+     * Browser only
      */
     public function testParseBrowser()
     {

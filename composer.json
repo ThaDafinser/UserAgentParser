@@ -58,7 +58,7 @@
         "piwik/device-detector": "^3.4",
         "doctrine/cache": "^1.5",
         
-        "sinergi/browser-detector": "^5.0",
+        "sinergi/browser-detector": "^5.1",
         
         "ua-parser/uap-php": "^3.4",
         

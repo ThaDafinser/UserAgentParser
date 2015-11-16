@@ -61,10 +61,8 @@ class BrowscapPhpTest extends AbstractProviderTestCase
      */
     public function testParseNoResultFoundExceptionRealProvider()
     {
-        $userAgent = 'not valid';
-
         $provider = new BrowscapPhp();
-        $provider->parse($userAgent);
+        $provider->parse('A real user agent...');
     }
 
     /**

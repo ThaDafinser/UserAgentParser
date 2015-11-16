@@ -58,7 +58,7 @@
         
         "ua-parser/uap-php": "^3.4",
         
-        "whichbrowser/whichbrowser": ">=1.0.1039,<1.1",
+        "whichbrowser/parser": ">=1.0.1044,<1.1",
         
         "woothee/woothee": "^1.2",
         

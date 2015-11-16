@@ -14,133 +14,19 @@ class WhichBrowser extends AbstractProvider
 
     public function getComposerPackageName()
     {
-        return 'whichbrowser/whichbrowser';
-    }
-
-    /**
-     *
-     * @param array $resultRaw
-     *
-     * @return bool
-     */
-    private function hasResult(array $resultRaw)
-    {
-        if (count($resultRaw) === 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function isBot(array $resultRaw)
-    {
-        if (isset($resultRaw['device']['type']) && $resultRaw['device']['type'] === 'bot') {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     *
-     * @param array $resultRaw
-     *
-     * @return bool
-     */
-    private function isMobile(array $resultRaw)
-    {
-        if (! isset($resultRaw['device']['type'])) {
-            return false;
-        }
-
-        /*
-         * Available types...
-         *
-         * TYPE_DESKTOP
-         * TYPE_MOBILE
-         * TYPE_DECT
-         * TYPE_TABLET
-         * TYPE_GAMING
-         * TYPE_EREADER
-         * TYPE_MEDIA
-         * TYPE_HEADSET
-         * TYPE_WATCH
-         * TYPE_EMULATOR
-         * TYPE_TELEVISION
-         * TYPE_MONITOR
-         * TYPE_CAMERA
-         * TYPE_SIGNAGE
-         * TYPE_WHITEBOARD
-         */
-
-        if ($resultRaw['device']['type'] === TYPE_MOBILE) {
-            return true;
-        }
-
-        if ($resultRaw['device']['type'] === TYPE_TABLET) {
-            return true;
-        }
-
-        if ($resultRaw['device']['type'] === TYPE_EREADER) {
-            return true;
-        }
-
-        if ($resultRaw['device']['type'] === TYPE_MEDIA) {
-            return true;
-        }
-
-        if ($resultRaw['device']['type'] === TYPE_WATCH) {
-            return true;
-        }
-
-        if ($resultRaw['device']['type'] === TYPE_CAMERA) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     *
-     * @param unknown $versionPart
-     *
-     * @return string
-     */
-    private function getVersionString($versionPart)
-    {
-        if (! is_array($versionPart)) {
-            return $versionPart;
-        }
-
-        $version = null;
-
-        if (isset($versionPart['alias'])) {
-            $version = $versionPart['alias'];
-        } elseif (isset($versionPart['value'])) {
-            $version = $versionPart['value'];
-        }
-
-        if (isset($versionPart['nickname'])) {
-            $version .= ' ' . $versionPart['nickname'];
-        }
-
-        return $version;
+        return 'whichbrowser/parser';
     }
 
     public function parse($userAgent, array $headers = [])
     {
         $headers['User-Agent'] = $userAgent;
 
-        $parser = new WhichBrowserParser([
-            'headers' => $headers,
-        ]);
-
-        $resultRaw = $parser->toArray();
+        $parser = new WhichBrowserParser($headers);
 
         /*
          * No result found?
          */
-        if ($this->hasResult($resultRaw) !== true) {
+        if ($parser->isDetected() !== true) {
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
@@ -148,17 +34,18 @@ class WhichBrowser extends AbstractProvider
          * Hydrate the model
          */
         $result = new Model\UserAgent();
-        $result->setProviderResultRaw($resultRaw);
+        $result->setProviderResultRaw($parser->toArray());
 
         /*
          * Bot detection
          */
-        if ($this->isBot($resultRaw) === true) {
+        if ($parser->isType('bot') === true) {
             $bot = $result->getBot();
             $bot->setIsBot(true);
 
-            if (isset($resultRaw['browser']['name'])) {
-                $bot->setName($resultRaw['browser']['name']);
+            $name = $parser->browser->getName();
+            if ($name !== '') {
+                $bot->setName($name);
             }
 
             return $result;
@@ -169,14 +56,14 @@ class WhichBrowser extends AbstractProvider
          */
         $browser = $result->getBrowser();
 
-        if (isset($resultRaw['browser']['alias'])) {
-            $browser->setName($resultRaw['browser']['name']);
-        } elseif (isset($resultRaw['browser']['name'])) {
-            $browser->setName($resultRaw['browser']['name']);
+        $name = $parser->browser->getName();
+        if ($name !== '') {
+            $browser->setName($name);
         }
 
-        if (isset($resultRaw['browser']['version'])) {
-            $browser->getVersion()->setComplete($this->getVersionString($resultRaw['browser']['version']));
+        $version = $parser->browser->getVersion();
+        if ($version !== '') {
+            $browser->getVersion()->setComplete($version);
         }
 
         /*
@@ -184,12 +71,14 @@ class WhichBrowser extends AbstractProvider
          */
         $renderingEngine = $result->getRenderingEngine();
 
-        if (isset($resultRaw['engine']['name'])) {
-            $renderingEngine->setName($resultRaw['engine']['name']);
+        $name = $parser->engine->getName();
+        if ($name !== '') {
+            $renderingEngine->setName($name);
         }
 
-        if (isset($resultRaw['engine']['version'])) {
-            $renderingEngine->getVersion()->setComplete($resultRaw['engine']['version']);
+        $version = $parser->engine->getVersion();
+        if ($version !== '') {
+            $renderingEngine->getVersion()->setComplete($version);
         }
 
         /*
@@ -197,12 +86,14 @@ class WhichBrowser extends AbstractProvider
          */
         $operatingSystem = $result->getOperatingSystem();
 
-        if (isset($resultRaw['os']['name'])) {
-            $operatingSystem->setName($resultRaw['os']['name']);
+        $name = $parser->os->getName();
+        if ($name !== '') {
+            $operatingSystem->setName($name);
         }
 
-        if (isset($resultRaw['os']['version'])) {
-            $operatingSystem->getVersion()->setComplete($this->getVersionString($resultRaw['os']['version']));
+        $version = $parser->os->getVersion();
+        if ($version !== '') {
+            $operatingSystem->getVersion()->setComplete($version);
         }
 
         /*
@@ -210,25 +101,19 @@ class WhichBrowser extends AbstractProvider
          */
         $device = $result->getDevice();
 
-        if (isset($resultRaw['device']['model'])) {
-            $model = $resultRaw['device']['model'];
-
-            if (isset($resultRaw['device']['series'])) {
-                $model .= ' ' . $resultRaw['device']['series'];
-            }
-
+        $model = $parser->device->getModel();
+        if ($model !== '') {
             $device->setModel($model);
         }
 
-        if (isset($resultRaw['device']['manufacturer'])) {
-            $device->setBrand($resultRaw['device']['manufacturer']);
+        $brand = $parser->device->getManufacturer();
+        if ($brand !== '') {
+            $device->setBrand($brand);
         }
 
-        if (isset($resultRaw['device']['type'])) {
-            $device->setType($resultRaw['device']['type']);
-        }
+        $device->setType($parser->device->type);
 
-        if ($this->isMobile($resultRaw) === true) {
+        if ($parser->isType('mobile', 'tablet', 'ereader', 'media', 'watch', 'camera')) {
             $device->setIsMobile(true);
         }
 

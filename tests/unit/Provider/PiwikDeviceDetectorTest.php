@@ -57,14 +57,12 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
      */
     public function testNoResultFoundException()
     {
-        $userAgent = 'not valid';
-
         $parser = $this->getParser();
 
         $provider = new PiwikDeviceDetector();
         $provider->setParser($parser);
 
-        $result = $provider->parse($userAgent);
+        $result = $provider->parse('A real user agent...');
     }
 
     /**

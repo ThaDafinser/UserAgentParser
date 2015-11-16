@@ -3,6 +3,7 @@ namespace UserAgentParser\Provider;
 
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
+use WhichBrowser\Parser as WhichBrowserParser;
 
 class WhichBrowser extends AbstractProvider
 {
@@ -20,12 +21,12 @@ class WhichBrowser extends AbstractProvider
     {
         $headers['User-Agent'] = $userAgent;
 
-        $parser = new \WhichBrowser\Parser($headers);
+        $parser = new WhichBrowserParser($headers);
 
         /*
          * No result found?
          */
-        if (!$parser->isDetected()) {
+        if ($parser->isDetected() !== true) {
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
@@ -38,13 +39,16 @@ class WhichBrowser extends AbstractProvider
         /*
          * Bot detection
          */
-        if ($parser->isType('bot')) {
+        if ($parser->isType('bot') === true) {
             $bot = $result->getBot();
             $bot->setIsBot(true);
 
-            if ($name = $parser->browser->getName()) {
-                $bot->setname($name);
+            $name = $parser->browser->getName();
+            if ($name !== '') {
+                $bot->setName($name);
             }
+
+            return $result;
         }
 
         /*
@@ -52,11 +56,13 @@ class WhichBrowser extends AbstractProvider
          */
         $browser = $result->getBrowser();
 
-        if ($name = $parser->browser->getName()) {
-            $browser->setname($name);
+        $name = $parser->browser->getName();
+        if ($name !== '') {
+            $browser->setName($name);
         }
 
-        if ($version = $parser->browser->getVersion()) {
+        $version = $parser->browser->getVersion();
+        if ($version !== '') {
             $browser->getVersion()->setComplete($version);
         }
 
@@ -65,11 +71,13 @@ class WhichBrowser extends AbstractProvider
          */
         $renderingEngine = $result->getRenderingEngine();
 
-        if ($name = $parser->engine->getName()) {
-            $renderingEngine->setname($name);
+        $name = $parser->engine->getName();
+        if ($name !== '') {
+            $renderingEngine->setName($name);
         }
 
-        if ($version = $parser->engine->getVersion()) {
+        $version = $parser->engine->getVersion();
+        if ($version !== '') {
             $renderingEngine->getVersion()->setComplete($version);
         }
 
@@ -78,11 +86,13 @@ class WhichBrowser extends AbstractProvider
          */
         $operatingSystem = $result->getOperatingSystem();
 
-        if ($name = $parser->os->getName()) {
-            $operatingSystem->setname($name);
+        $name = $parser->os->getName();
+        if ($name !== '') {
+            $operatingSystem->setName($name);
         }
 
-        if ($version = $parser->os->getVersion()) {
+        $version = $parser->os->getVersion();
+        if ($version !== '') {
             $operatingSystem->getVersion()->setComplete($version);
         }
 
@@ -91,12 +101,14 @@ class WhichBrowser extends AbstractProvider
          */
         $device = $result->getDevice();
 
-        if ($model = $parser->device->getModel()) {
+        $model = $parser->device->getModel();
+        if ($model !== '') {
             $device->setModel($model);
         }
 
-        if ($model = $parser->device->getManufacturer()) {
-            $device->setBrand($model);
+        $brand = $parser->device->getManufacturer();
+        if ($brand !== '') {
+            $device->setBrand($brand);
         }
 
         $device->setType($parser->device->type);

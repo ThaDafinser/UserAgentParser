@@ -19,7 +19,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
     {
         $provider = new WhichBrowser();
 
-        $this->assertEquals('whichbrowser/whichbrowser', $provider->getComposerPackageName());
+        $this->assertEquals('whichbrowser/parser', $provider->getComposerPackageName());
     }
 
     public function testVersion()
@@ -46,6 +46,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
             [
                 'userAgent' => 'Googlebot/2.1 (http://www.googlebot.com/bot.html)',
                 'result'    => [
+
                     'bot' => [
                         'isBot' => true,
                         'name'  => 'Googlebot',
@@ -57,6 +58,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
             [
                 'userAgent' => 'Mozilla/5.0 (Linux; U; Android 2.3.4; en-us; Silk/1.1.0-84) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 Silk-Accelerated=false',
                 'result'    => [
+
                     'browser' => [
                         'name'    => 'Silk',
                         'version' => [
@@ -99,10 +101,11 @@ class WhichBrowserTest extends AbstractProviderTestCase
             ],
 
             [
-                'userAgent' => 'User-Agent: Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10162',
+                'userAgent' => 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10162',
                 'result'    => [
+
                     'browser' => [
-                        'name'    => 'Edge',
+                        'name'    => 'Edge 12',
                         'version' => [
                             'major'    => null,
                             'minor'    => null,
@@ -143,16 +146,17 @@ class WhichBrowserTest extends AbstractProviderTestCase
             ],
 
             [
-                'userAgent' => 'User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3',
+                'userAgent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3',
 
                 'result' => [
+
                     'browser' => [
                         'name'    => 'Safari',
                         'version' => [
-                            'major'    => 5,
-                            'minor'    => 1,
+                            'major'    => null,
+                            'minor'    => null,
                             'patch'    => null,
-                            'complete' => '5.1',
+                            'complete' => null,
                         ],
                     ],
 
@@ -188,7 +192,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
             ],
 
             [
-                'userAgent' => 'User-Agent: KreaTVWebKit/531 (Motorola STB; Linux)',
+                'userAgent' => 'KreaTVWebKit/531 (Motorola STB; Linux)',
 
                 'result' => [
                     'renderingEngine' => [
@@ -202,7 +206,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
                     ],
 
                     'device' => [
-                        'model' => null,
+                        'model' => 'KreaTV',
                         'brand' => 'Motorola',
                         'type'  => 'television',
 

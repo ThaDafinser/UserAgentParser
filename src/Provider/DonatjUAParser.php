@@ -17,17 +17,18 @@ class DonatjUAParser extends AbstractProvider
     }
 
     /**
+     *
      * @param array $resultRaw
      *
      * @return bool
      */
     private function hasResult(array $resultRaw)
     {
-        if ($resultRaw['platform'] === null && $resultRaw['browser'] === null && $resultRaw['version'] === null) {
-            return false;
+        if ($resultRaw['browser'] !== null) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public function parse($userAgent, array $headers = [])
@@ -63,7 +64,7 @@ class DonatjUAParser extends AbstractProvider
 
         /*
          * operatingSystem
-         * 
+         *
          * @todo $resultRaw['platform'] has sometimes informations about the OS or the device
          * ... maybe split it or how do that?
          */

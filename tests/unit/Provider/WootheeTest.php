@@ -34,10 +34,8 @@ class WootheeTest extends AbstractProviderTestCase
      */
     public function testNoResultFoundException()
     {
-        $userAgent = 'nothing';
-
         $provider = new Woothee();
-        $provider->parse($userAgent);
+        $provider->parse('A real user agent...');
     }
 
     public function dataProvider()

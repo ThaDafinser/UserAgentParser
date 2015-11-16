@@ -34,10 +34,8 @@ class YzalisUAParserTest extends AbstractProviderTestCase
      */
     public function testNoResultFoundException()
     {
-        $userAgent = 'nothing';
-
         $provider = new YzalisUAParser();
-        $provider->parse($userAgent);
+        $provider->parse('A real user agent...');
     }
 
     public function dataProvider()

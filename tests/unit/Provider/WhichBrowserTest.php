@@ -34,10 +34,8 @@ class WhichBrowserTest extends AbstractProviderTestCase
      */
     public function testNoResultFoundException()
     {
-        $userAgent = 'nothing';
-
         $provider = new WhichBrowser();
-        $provider->parse($userAgent);
+        $provider->parse('A real user agent...');
     }
 
     public function dataProvider()

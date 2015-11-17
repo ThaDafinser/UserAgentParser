@@ -68,7 +68,7 @@
     },
     
     "require-dev": {
-        "phpunit/PHPUnit": "^5.0",
+        "phpunit/PHPUnit": "^4.0|^5.0",
         
         "fabpot/php-cs-fixer": "^1.10.0"
     }

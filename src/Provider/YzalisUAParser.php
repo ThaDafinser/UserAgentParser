@@ -20,11 +20,10 @@ class YzalisUAParser extends AbstractProvider
     }
 
     /**
-     * Initial needed for uniTest mocking
      *
      * @param \UAParser\UAParser $parser
      */
-    public function setParser(\UAParser\UAParser $parser)
+    public function setParser(\UAParser\UAParser $parser = null)
     {
         $this->parser = $parser;
     }
@@ -33,15 +32,13 @@ class YzalisUAParser extends AbstractProvider
      *
      * @return \UAParser\UAParser
      */
-    private function getParser()
+    public function getParser()
     {
         if ($this->parser !== null) {
             return $this->parser;
         }
 
-        $uaParser = new \UAParser\UAParser();
-
-        $this->parser = $uaParser;
+        $this->parser = new \UAParser\UAParser();
 
         return $this->parser;
     }

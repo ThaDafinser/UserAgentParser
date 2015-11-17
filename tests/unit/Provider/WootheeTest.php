@@ -43,6 +43,19 @@ class WootheeTest extends AbstractProviderTestCase
         $this->assertInternalType('string', $provider->getVersion());
     }
 
+    public function testParser()
+    {
+        $parser = $this->getParser();
+
+        $provider = new Woothee();
+        $provider->setParser($parser);
+
+        $this->assertSame($parser, $provider->getParser());
+
+        $provider->setParser(null);
+        $this->assertInstanceOf('Woothee\Classifier', $provider->getParser());
+    }
+
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
@@ -130,7 +143,7 @@ class WootheeTest extends AbstractProviderTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => null,
+                'type'  => 'smartphone',
 
                 'isMobile' => true,
                 'isTouch'  => null,
@@ -169,7 +182,7 @@ class WootheeTest extends AbstractProviderTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => null,
+                'type'  => 'mobilephone',
 
                 'isMobile' => true,
                 'isTouch'  => null,

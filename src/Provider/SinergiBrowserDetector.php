@@ -9,21 +9,21 @@ class SinergiBrowserDetector extends AbstractProvider
 {
     /**
      * Used for unitTests mocking
-     * 
+     *
      * @var BrowserDetector\Browser
      */
     private $browserParser;
 
     /**
      * Used for unitTests mocking
-     * 
+     *
      * @var BrowserDetector\Os
      */
     private $osParser;
 
     /**
      * Used for unitTests mocking
-     * 
+     *
      * @var BrowserDetector\Device
      */
     private $deviceParser;
@@ -43,7 +43,7 @@ class SinergiBrowserDetector extends AbstractProvider
      * @param  string                  $userAgent
      * @return BrowserDetector\Browser
      */
-    private function getBrowserParser($userAgent)
+    public function getBrowserParser($userAgent)
     {
         if ($this->browserParser !== null) {
             return $this->browserParser;
@@ -57,7 +57,7 @@ class SinergiBrowserDetector extends AbstractProvider
      * @param  string             $userAgent
      * @return BrowserDetector\Os
      */
-    private function getOperatingSystemParser($userAgent)
+    public function getOperatingSystemParser($userAgent)
     {
         if ($this->osParser !== null) {
             return $this->osParser;
@@ -71,7 +71,7 @@ class SinergiBrowserDetector extends AbstractProvider
      * @param  string                 $userAgent
      * @return BrowserDetector\Device
      */
-    private function getDeviceParser($userAgent)
+    public function getDeviceParser($userAgent)
     {
         if ($this->deviceParser !== null) {
             return $this->deviceParser;

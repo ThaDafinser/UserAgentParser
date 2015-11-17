@@ -20,11 +20,10 @@ class UAParser extends AbstractProvider
     }
 
     /**
-     * Initial needed for uniTest mocking
      *
      * @param Parser $parser
      */
-    public function setParser(Parser $parser)
+    public function setParser(Parser $parser = null)
     {
         $this->parser = $parser;
     }
@@ -32,7 +31,7 @@ class UAParser extends AbstractProvider
     /**
      * @return Parser
      */
-    private function getParser()
+    public function getParser()
     {
         if ($this->parser !== null) {
             return $this->parser;

@@ -2,20 +2,11 @@
 namespace UserAgentParser\Provider;
 
 use DeviceDetector\DeviceDetector;
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-use Doctrine\Common\Cache;
-use Doctrine\Common\Cache\CacheProvider;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
 class PiwikDeviceDetector extends AbstractProvider
 {
-    /**
-     *
-     * @var CacheProvider
-     */
-    private $cache;
-
     /**
      *
      * @var DeviceDetector
@@ -34,28 +25,9 @@ class PiwikDeviceDetector extends AbstractProvider
 
     /**
      *
-     * @param CacheProvider $cache
-     */
-    public function setCache(CacheProvider $cache)
-    {
-        $this->cache = $cache;
-    }
-
-    /**
-     *
-     * @return CacheProvider
-     */
-    public function getCache()
-    {
-        return $this->cache;
-    }
-
-    /**
-     * Initial needed for uniTest mocking
-     *
      * @param DeviceDetector $parser
      */
-    public function setParser(DeviceDetector $parser)
+    public function setParser(DeviceDetector $parser = null)
     {
         $this->parser = $parser;
     }
@@ -64,20 +36,13 @@ class PiwikDeviceDetector extends AbstractProvider
      *
      * @return DeviceDetector
      */
-    private function getParser()
+    public function getParser()
     {
         if ($this->parser !== null) {
             return $this->parser;
         }
 
-        DeviceParserAbstract::setVersionTruncation(DeviceParserAbstract::VERSION_TRUNCATION_NONE);
-
-        $dd = new DeviceDetector();
-        if ($this->getCache() !== null) {
-            $dd->setCache($this->getCache());
-        }
-
-        $this->parser = $dd;
+        $this->parser = new DeviceDetector();
 
         return $this->parser;
     }

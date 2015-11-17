@@ -43,7 +43,7 @@ class YzalisUAParserTest extends AbstractProviderTestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getParser($returnValue)
+    private function getParser($returnValue = null)
     {
         $parser = $this->getMock('UAParser\UAParser', [], [], '', false);
         $parser->expects($this->any())
@@ -72,6 +72,19 @@ class YzalisUAParserTest extends AbstractProviderTestCase
         $provider = new YzalisUAParser();
 
         $this->assertInternalType('string', $provider->getVersion());
+    }
+
+    public function testParser()
+    {
+        $parser = $this->getParser();
+
+        $provider = new YzalisUAParser();
+        $provider->setParser($parser);
+
+        $this->assertSame($parser, $provider->getParser());
+
+        $provider->setParser(null);
+        $this->assertInstanceOf('UAParser\UAParser', $provider->getParser());
     }
 
     /**

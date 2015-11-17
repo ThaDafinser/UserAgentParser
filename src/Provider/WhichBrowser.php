@@ -8,7 +8,7 @@ use WhichBrowser\Parser as WhichBrowserParser;
 class WhichBrowser extends AbstractProvider
 {
     /**
-     * 
+     * Used for unitTests mocking
      * @var WhichBrowserParser
      */
     private $parser;
@@ -24,20 +24,10 @@ class WhichBrowser extends AbstractProvider
     }
 
     /**
-     * Initial needed for uniTest mocking
-     *
-     * @param WhichBrowserParser $parser
-     */
-    public function setParser(WhichBrowserParser $parser)
-    {
-        $this->parser = $parser;
-    }
-
-    /**
      * @param  array              $headers
      * @return WhichBrowserParser
      */
-    private function getParser(array $headers)
+    public function getParser(array $headers)
     {
         if ($this->parser !== null) {
             return $this->parser;

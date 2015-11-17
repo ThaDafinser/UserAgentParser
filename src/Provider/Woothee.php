@@ -21,11 +21,10 @@ class Woothee extends AbstractProvider
     }
 
     /**
-     * Initial needed for uniTest mocking
      *
      * @param Classifier $parser
      */
-    public function setParser(Classifier $parser)
+    public function setParser(Classifier $parser = null)
     {
         $this->parser = $parser;
     }
@@ -34,7 +33,7 @@ class Woothee extends AbstractProvider
      *
      * @return Classifier
      */
-    private function getParser()
+    public function getParser()
     {
         if ($this->parser !== null) {
             return $this->parser;
@@ -187,6 +186,10 @@ class Woothee extends AbstractProvider
 
         // @todo ... filled OS is mixed! Examples: iPod, iPhone, Android...
         // @todo vendor is filled with device and/or browser
+
+        if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category']) === true) {
+            $device->setType($resultRaw['category']);
+        }
 
         if ($this->isMobile($resultRaw) === true) {
             $device->setIsMobile(true);

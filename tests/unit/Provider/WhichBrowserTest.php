@@ -45,6 +45,13 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $this->assertInternalType('string', $provider->getVersion());
     }
 
+    public function testParser()
+    {
+        $provider = new WhichBrowser();
+
+        $this->assertInstanceOf('WhichBrowser\Parser', $provider->getParser([]));
+    }
+
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
@@ -53,7 +60,11 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $parser = $this->getParser();
 
         $provider = new WhichBrowser();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
     }
@@ -76,7 +87,11 @@ class WhichBrowserTest extends AbstractProviderTestCase
         ]);
 
         $provider = new WhichBrowser();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -109,7 +124,11 @@ class WhichBrowserTest extends AbstractProviderTestCase
         ]);
 
         $provider = new WhichBrowser();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -146,7 +165,11 @@ class WhichBrowserTest extends AbstractProviderTestCase
         ]);
 
         $provider = new WhichBrowser();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -183,7 +206,11 @@ class WhichBrowserTest extends AbstractProviderTestCase
         ]);
 
         $provider = new WhichBrowser();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -229,7 +256,11 @@ class WhichBrowserTest extends AbstractProviderTestCase
         ->will($this->returnValue(true));
 
         $provider = new WhichBrowser();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
 

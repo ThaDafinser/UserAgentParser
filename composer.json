@@ -53,7 +53,7 @@
         
         "donatj/phpuseragentparser": "^0.5.0",
         
-        "mimmi20/wurfl": "1.6.0.1",
+        "mimmi20/wurfl": "^1.6",
         
         "piwik/device-detector": "^3.4",
         "doctrine/cache": "^1.5",

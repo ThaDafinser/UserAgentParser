@@ -2,21 +2,22 @@
 namespace UserAgentParser\Provider;
 
 use BrowscapPHP\Browscap;
-use BrowscapPHP\Cache\BrowscapCache;
 use stdClass;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
-use WurflCache\Adapter\AdapterInterface;
 
 class BrowscapPhp extends AbstractProvider
 {
     /**
-     *
-     * @var AdapterInterface
+     * 
+     * @var Browscap
      */
-    private $cache;
-
     private $parser;
+
+    public function __construct(Browscap $parser)
+    {
+        $this->setParser($parser);
+    }
 
     public function getName()
     {
@@ -35,25 +36,6 @@ class BrowscapPhp extends AbstractProvider
 
     /**
      *
-     * @param AdapterInterface $cache
-     */
-    public function setCache(AdapterInterface $cache)
-    {
-        $this->cache = $cache;
-    }
-
-    /**
-     *
-     * @return AdapterInterface
-     */
-    public function getCache()
-    {
-        return $this->cache;
-    }
-
-    /**
-     * Initial needed for uniTest mocking
-     * 
      * @param Browscap $parser
      */
     public function setParser(Browscap $parser)
@@ -65,21 +47,8 @@ class BrowscapPhp extends AbstractProvider
      *
      * @return \BrowscapPHP\Browscap
      */
-    private function getParser()
+    public function getParser()
     {
-        if ($this->parser !== null) {
-            return $this->parser;
-        }
-
-        $parser = new Browscap();
-
-        if ($this->getCache() !== null) {
-            $cache = new BrowscapCache($this->getCache());
-            $parser->setCache($cache);
-        }
-
-        $this->parser = $parser;
-
         return $this->parser;
     }
 

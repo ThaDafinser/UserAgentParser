@@ -31,7 +31,7 @@ class UAParserTest extends AbstractProviderTestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getParser($returnValue)
+    private function getParser($returnValue = null)
     {
         $parser = $this->getMock('UAParser\Parser', [], [], '', false);
         $parser->expects($this->any())
@@ -60,6 +60,19 @@ class UAParserTest extends AbstractProviderTestCase
         $provider = new UAParser();
 
         $this->assertInternalType('string', $provider->getVersion());
+    }
+
+    public function testParser()
+    {
+        $parser = $this->getParser();
+
+        $provider = new UAParser();
+        $provider->setParser($parser);
+
+        $this->assertSame($parser, $provider->getParser());
+
+        $provider->setParser(null);
+        $this->assertInstanceOf('UAParser\Parser', $provider->getParser());
     }
 
     /**

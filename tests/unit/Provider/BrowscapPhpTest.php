@@ -12,7 +12,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getParser(\stdClass $result)
+    private function getParser(\stdClass $result = null)
     {
         $parser = $this->getMock('BrowscapPHP\Browscap');
         $parser->expects($this->any())
@@ -24,146 +24,140 @@ class BrowscapPhpTest extends AbstractProviderTestCase
 
     public function testName()
     {
-        $provider = new BrowscapPhp();
+        $provider = new BrowscapPhp($this->getParser());
 
         $this->assertEquals('BrowscapPhp', $provider->getName());
     }
 
     public function testGetComposerPackageName()
     {
-        $provider = new BrowscapPhp();
+        $provider = new BrowscapPhp($this->getParser());
 
         $this->assertEquals('browscap/browscap-php', $provider->getComposerPackageName());
     }
 
     public function testVersion()
     {
-        $provider = new BrowscapPhp();
+        $cache = $this->getMock('BrowscapPHP\Cache\BrowscapCache', [], [], '', false);
+        $cache->expects($this->any())
+            ->method('getVersion')
+            ->will($this->returnValue('321'));
 
-        $this->assertNull($provider->getVersion());
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('getCache')
+            ->will($this->returnValue($cache));
+
+        $provider = new BrowscapPhp($parser);
+
+        $this->assertEquals('321', $provider->getVersion());
     }
 
-    public function testCache()
+    public function testParser()
     {
-        $provider = new BrowscapPhp();
+        $parser = $this->getParser();
 
-        $this->assertNull($provider->getCache());
+        $provider = new BrowscapPhp($parser);
 
-        $cache = $this->getMock('WurflCache\Adapter\AdapterInterface');
-        $provider->setCache($cache);
-        $this->assertSame($cache, $provider->getCache());
+        $this->assertSame($parser, $provider->getParser());
     }
 
     /**
-     * Real provider with no data
+     * Default provider with no data
+     *
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testParseNoResultFoundExceptionDefaultProvider()
+    {
+        $result = new \stdClass();
+
+        $provider = new BrowscapPhp($this->getParser($result));
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * Provider no result
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
     public function testParseNoResultFoundExceptionRealProvider()
     {
-        $provider = new BrowscapPhp();
-        $provider->parse('A real user agent...');
-    }
-
-    /**
-     * Real provider with no data, but with cache
-     *
-     * @expectedException \UserAgentParser\Exception\NoResultFoundException
-     */
-    public function testParseNoResultFoundExceptionRealProviderAndCache()
-    {
-        $userAgent = 'not valid';
-
-        $cache = $this->getMock('WurflCache\Adapter\AdapterInterface');
-
-        $provider = new BrowscapPhp();
-        $provider->setCache($cache);
-
-        $provider->parse($userAgent);
-    }
-
-    /**
-     * not set
-     *
-     * @expectedException \UserAgentParser\Exception\NoResultFoundException
-     */
-    public function testParseNoResultFoundExceptionNotSet()
-    {
-        $userAgent = 'not valid';
-
         $result = new \stdClass();
 
-        $provider = new BrowscapPhp();
-        $provider->setParser($this->getParser($result));
-        $provider->parse($userAgent);
+        $parser = $this->getParser($result);
+
+        $provider = new BrowscapPhp($parser);
+
+        $result = $provider->parse('A real user agent...');
     }
 
     /**
-     * nothing
+     * Provider result empty
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testParseNoResultFoundExceptionNothing()
+    public function testParseNoResultFoundExceptionResultEmpty()
     {
-        $userAgent = 'not valid';
-
         $result          = new \stdClass();
         $result->browser = '';
 
-        $provider = new BrowscapPhp();
-        $provider->setParser($this->getParser($result));
-        $provider->parse($userAgent);
+        $parser = $this->getParser($result);
+
+        $provider = new BrowscapPhp($parser);
+
+        $result = $provider->parse('A real user agent...');
     }
 
     /**
-     * unknown
+     * Provider result unknown
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testParseNoResultFoundExceptionUnknown()
+    public function testParseNoResultFoundExceptionResultUnknown()
     {
-        $userAgent = 'not valid';
-
         $result          = new \stdClass();
         $result->browser = 'unknown';
 
-        $provider = new BrowscapPhp();
-        $provider->setParser($this->getParser($result));
-        $provider->parse($userAgent);
+        $parser = $this->getParser($result);
+
+        $provider = new BrowscapPhp($parser);
+
+        $result = $provider->parse('A real user agent...');
     }
 
     /**
-     * DefaultProperties
+     * Provider result DefaultProperties
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testParseNoResultFoundExceptionDefaultProperties()
+    public function testParseNoResultFoundExceptionResultDefaultProperties()
     {
-        $userAgent = 'not valid';
-
         $result          = new \stdClass();
         $result->browser = 'DefaultProperties';
 
-        $provider = new BrowscapPhp();
-        $provider->setParser($this->getParser($result));
-        $provider->parse($userAgent);
+        $parser = $this->getParser($result);
+
+        $provider = new BrowscapPhp($parser);
+
+        $result = $provider->parse('A real user agent...');
     }
 
     /**
-     * Default Browser
+     * Provider result Default Browser
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testParseNoResultFoundExceptionDefaultBrowser()
+    public function testParseNoResultFoundExceptionResultDefaultBrowser()
     {
-        $userAgent = 'not valid';
-
         $result          = new \stdClass();
         $result->browser = 'Default Browser';
 
-        $provider = new BrowscapPhp();
-        $provider->setParser($this->getParser($result));
-        $provider->parse($userAgent);
+        $parser = $this->getParser($result);
+
+        $provider = new BrowscapPhp($parser);
+
+        $result = $provider->parse('A real user agent...');
     }
 
     /**
@@ -176,8 +170,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $result->browser_type = 'Bot/Crawler';
         $result->crawler      = true;
 
-        $provider = new BrowscapPhp();
-        $provider->setParser($this->getParser($result));
+        $provider = new BrowscapPhp($this->getParser($result));
 
         $result = $provider->parse('A real user agent...');
 
@@ -203,8 +196,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $result->crawler             = true;
         $result->issyndicationreader = true;
 
-        $provider = new BrowscapPhp();
-        $provider->setParser($this->getParser($result));
+        $provider = new BrowscapPhp($this->getParser($result));
 
         $result = $provider->parse('A real user agent...');
 
@@ -229,8 +221,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $result->browser_type = 'Bot/test';
         $result->crawler      = true;
 
-        $provider = new BrowscapPhp();
-        $provider->setParser($this->getParser($result));
+        $provider = new BrowscapPhp($this->getParser($result));
 
         $result = $provider->parse('A real user agent...');
 
@@ -255,8 +246,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $result->version = '0.0';
         $result->crawler = false;
 
-        $provider = new BrowscapPhp();
-        $provider->setParser($this->getParser($result));
+        $provider = new BrowscapPhp($this->getParser($result));
 
         $result = $provider->parse('A real user agent...');
 
@@ -296,8 +286,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $result->ismobiledevice         = true;
         $result->device_pointing_method = 'touchscreen';
 
-        $provider = new BrowscapPhp();
-        $provider->setParser($this->getParser($result));
+        $provider = new BrowscapPhp($this->getParser($result));
 
         $result = $provider->parse('A real user agent...');
 

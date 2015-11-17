@@ -41,15 +41,17 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
         $this->assertInternalType('string', $provider->getVersion());
     }
 
-    public function testCache()
+    public function testParser()
     {
+        $parser = $this->getParser();
+
         $provider = new PiwikDeviceDetector();
+        $provider->setParser($parser);
 
-        $this->assertNull($provider->getCache());
+        $this->assertSame($parser, $provider->getParser());
 
-        $cache = $this->getMock('Doctrine\Common\Cache\CacheProvider');
-        $provider->setCache($cache);
-        $this->assertSame($cache, $provider->getCache());
+        $provider->setParser(null);
+        $this->assertInstanceOf('DeviceDetector\DeviceDetector', $provider->getParser());
     }
 
     /**
@@ -164,8 +166,8 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
-        ->method('getClient')
-        ->will($this->returnValue([
+            ->method('getClient')
+            ->will($this->returnValue([
             'engine' => DeviceDetector::UNKNOWN,
         ]));
         $parser->expects($this->any())

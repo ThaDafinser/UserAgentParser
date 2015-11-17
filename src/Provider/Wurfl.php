@@ -4,10 +4,24 @@ namespace UserAgentParser\Provider;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
 use Wurfl\CustomDevice;
+use Wurfl\Manager as WurflManager;
 
 class Wurfl extends AbstractProvider
 {
-    private $config;
+    /**
+     *
+     * @var WurflManager
+     */
+    private $parser;
+
+    /**
+     *
+     * @param WurflManager $parser
+     */
+    public function __construct(WurflManager $parser)
+    {
+        $this->setParser($parser);
+    }
 
     public function getName()
     {
@@ -21,45 +35,25 @@ class Wurfl extends AbstractProvider
 
     public function getVersion()
     {
-        return $this->getManager()->getWurflInfo()->version;
-    }
-
-    /**
-     * 
-     * @param \Wurfl\Configuration\Config $config
-     */
-    public function setConfig(\Wurfl\Configuration\Config $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * 
-     * @return \Wurfl\Configuration\Config
-     */
-    public function getConfig()
-    {
-        return $this->config;
+        return $this->getParser()->getWurflInfo()->version;
     }
 
     /**
      *
-     * @return \Wurfl\Manager
+     * @param WurflManager $parser
      */
-    private function getManager()
+    public function setParser(WurflManager $parser)
     {
-        $wurflConfig = $this->getConfig();
+        $this->parser = $parser;
+    }
 
-        // Create the cache instance from the configuration
-        $cacheStorage = \Wurfl\Storage\Factory::create($wurflConfig->cache);
-
-        // Create the persistent cache instance from the configuration
-        $persistenceStorage = \Wurfl\Storage\Factory::create($wurflConfig->persistence);
-
-        // Create a WURFL Manager from the WURFL Configuration
-        $wurflManager = new \Wurfl\Manager($wurflConfig, $persistenceStorage, $cacheStorage);
-
-        return $wurflManager;
+    /**
+     *
+     * @return WurflManager
+     */
+    public function getParser()
+    {
+        return $this->parser;
     }
 
     /**
@@ -69,7 +63,7 @@ class Wurfl extends AbstractProvider
      */
     private function hasResult(CustomDevice $device)
     {
-        if ($device->id !== 'generic') {
+        if ($device->id !== null && $device->id != '' && $device->id !== 'generic') {
             return true;
         }
 
@@ -78,9 +72,9 @@ class Wurfl extends AbstractProvider
 
     public function parse($userAgent, array $headers = [])
     {
-        $manager = $this->getManager();
+        $parser = $this->getParser();
 
-        $deviceRaw = $manager->getDeviceForUserAgent($userAgent);
+        $deviceRaw = $parser->getDeviceForUserAgent($userAgent);
 
         /*
          * No result found?
@@ -93,7 +87,10 @@ class Wurfl extends AbstractProvider
          * Hydrate the model
          */
         $result = new Model\UserAgent();
-        $result->setProviderResultRaw($deviceRaw->getAllVirtualCapabilities());
+        $result->setProviderResultRaw([
+            'virtual' => $deviceRaw->getAllVirtualCapabilities(),
+            'all'     => $deviceRaw->getAllCapabilities(),
+        ]);
 
         /*
          * Bot detection
@@ -128,7 +125,7 @@ class Wurfl extends AbstractProvider
          */
         $device = $result->getDevice();
 
-        if ($deviceRaw->getVirtualCapability('is_full_desktop') === 'false') {
+        if ($deviceRaw->getVirtualCapability('is_full_desktop') !== 'true') {
             $device->setModel($deviceRaw->getCapability('model_name'));
             $device->setBrand($deviceRaw->getCapability('brand_name'));
 
@@ -140,6 +137,9 @@ class Wurfl extends AbstractProvider
                 $device->setIsTouch(true);
             }
         }
+
+        // @see the list of all types http://web.wurfl.io/
+        $device->setType($deviceRaw->getVirtualCapability('form_factor'));
 
         return $result;
     }

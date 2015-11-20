@@ -75,6 +75,30 @@ class UAParser extends AbstractProvider
             return false;
         }
 
+        if ($value === 'iOS-Device') {
+            return false;
+        }
+
+        if ($value === 'Feature Phone') {
+            return false;
+        }
+
+        if ($value === 'Smartphone') {
+            return false;
+        }
+
+        if ($value === 'Generic_Android') {
+            return false;
+        }
+
+        if ($value === 'Generic_Inettv') {
+            return false;
+        }
+        
+        if ($value === 'Generic') {
+            return false;
+        }
+
         if ($value === 'Other') {
             return false;
         }

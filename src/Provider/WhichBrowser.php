@@ -130,7 +130,7 @@ class WhichBrowser extends AbstractProvider
             $device->setBrand($brand);
         }
 
-        $device->setType($parser->device->type);
+        $device->setType($parser->getType());
 
         if ($parser->isType('mobile', 'tablet', 'ereader', 'media', 'watch', 'camera', 'gaming:portable') === true) {
             $device->setIsMobile(true);

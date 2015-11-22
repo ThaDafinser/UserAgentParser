@@ -78,11 +78,22 @@ class WhichBrowser extends AbstractProvider
         $name = $parser->browser->getName();
         if ($name !== '') {
             $browser->setName($name);
-        }
 
-        $version = $parser->browser->getVersion();
-        if ($version !== '') {
-            $browser->getVersion()->setComplete($version);
+            $version = $parser->browser->getVersion();
+            if ($version !== '') {
+                $browser->getVersion()->setComplete($version);
+            }
+        }
+        else if (isset($parser->browser->using)) {
+            $name = $parser->browser->using->getName();
+            if ($name !== '') {
+                $browser->setName($name);
+
+                $version = $parser->browser->using->getVersion();
+                if ($version !== '') {
+                    $browser->getVersion()->setComplete($version);
+                }
+            }
         }
 
         /*

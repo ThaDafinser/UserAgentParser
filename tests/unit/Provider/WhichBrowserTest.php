@@ -80,8 +80,8 @@ class WhichBrowserTest extends AbstractProviderTestCase
             ->will($this->returnValue(true));
 
         $parser->expects($this->any())
-            ->method('isType')
-            ->will($this->returnValue(true));
+            ->method('getType')
+            ->will($this->returnValue('bot'));
         $parser->browser = new \WhichBrowser\Browser([
             'name' => 'Googlebot',
         ]);
@@ -146,6 +146,47 @@ class WhichBrowserTest extends AbstractProviderTestCase
 
         $this->assertProviderResult($result, $expectedResult);
     }
+
+//     /**
+//      * Browser only "using"
+//      */
+//     public function testParseBrowserUsing()
+//     {
+//         $parser = $this->getParser();
+//         $parser->expects($this->any())
+//         ->method('isDetected')
+//         ->will($this->returnValue(true));
+
+//         $parser->browser = new \WhichBrowser\Browser([
+//             'using'    => 'Test',
+//             'version' => new \WhichBrowser\Version([
+//                 'value' => '3.2.1',
+//             ]),
+//         ]);
+
+//         $provider = new WhichBrowser();
+
+//         $reflection = new \ReflectionClass($provider);
+//         $property   = $reflection->getProperty('parser');
+//         $property->setAccessible(true);
+//         $property->setValue($provider, $parser);
+
+//         $result = $provider->parse('A real user agent...');
+
+//         $expectedResult = [
+//             'browser' => [
+//                 'name'    => 'test',
+//                 'version' => [
+//                     'major'    => 3,
+//                     'minor'    => 2,
+//                     'patch'    => 1,
+//                     'complete' => '3.2.1',
+//                 ],
+//             ],
+//         ];
+
+//         $this->assertProviderResult($result, $expectedResult);
+//     }
 
     /**
      * Rendering engine only
@@ -238,20 +279,18 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $parser->expects($this->any())
             ->method('isDetected')
             ->will($this->returnValue(true));
+        $parser->expects($this->any())
+        ->method('getType')
+        ->will($this->returnValue('watch'));
 
         $parser->device = new \WhichBrowser\Device([
             'identified'   => true,
             'model'        => 'iPhone',
             'manufacturer' => 'Apple',
-            'type'         => 'smartphone',
+            'type'         => 'watch',
         ]);
 
-        $parser->expects($this->at(2))
-            ->method('isType')
-            ->with('bot')
-            ->will($this->returnValue(false));
-
-        $parser->expects($this->at(3))
+        $parser->expects($this->any())
         ->method('isType')
         ->will($this->returnValue(true));
 
@@ -268,7 +307,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => 'smartphone',
+                'type'  => 'watch',
 
                 'isMobile' => true,
                 'isTouch'  => null,

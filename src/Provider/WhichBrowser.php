@@ -58,7 +58,7 @@ class WhichBrowser extends AbstractProvider
         /*
          * Bot detection
          */
-        if ($parser->isType('bot') === true) {
+        if ($parser->getType() === 'bot') {
             $bot = $result->getBot();
             $bot->setIsBot(true);
 
@@ -78,11 +78,21 @@ class WhichBrowser extends AbstractProvider
         $name = $parser->browser->getName();
         if ($name !== '') {
             $browser->setName($name);
-        }
 
-        $version = $parser->browser->getVersion();
-        if ($version !== '') {
-            $browser->getVersion()->setComplete($version);
+            $version = $parser->browser->getVersion();
+            if ($version !== '') {
+                $browser->getVersion()->setComplete($version);
+            }
+        } elseif (isset($parser->browser->using)) {
+            $name = $parser->browser->using->getName();
+            if ($name !== '') {
+                $browser->setName($name);
+
+                $version = $parser->browser->using->getVersion();
+                if ($version !== '') {
+                    $browser->getVersion()->setComplete($version);
+                }
+            }
         }
 
         /*
@@ -130,9 +140,9 @@ class WhichBrowser extends AbstractProvider
             $device->setBrand($brand);
         }
 
-        $device->setType($parser->device->type);
+        $device->setType($parser->getType());
 
-        if ($parser->isType('mobile', 'tablet', 'ereader', 'media', 'watch', 'camera') === true) {
+        if ($parser->isType('mobile', 'tablet', 'ereader', 'media', 'watch', 'camera', 'gaming:portable') === true) {
             $device->setIsMobile(true);
         }
 

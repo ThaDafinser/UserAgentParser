@@ -60,19 +60,25 @@ class BrowscapPhp extends AbstractProvider
      */
     private function isRealResult($value)
     {
-        if ($value === '') {
+        if ($value === '' || $value === null) {
             return false;
         }
 
-        if ($value === 'unknown') {
-            return false;
-        }
+        $value = (string) $value;
 
-        if ($value === 'DefaultProperties') {
-            return false;
-        }
+        $defaultValues = [
+            'general Desktop',
+            'general Mobile Device',
+            'general Mobile Phone',
+            'general Tablet',
 
-        if ($value === 'Default Browser') {
+            'DefaultProperties',
+            'Default Browser',
+
+            'unknown',
+        ];
+
+        if (in_array($value, $defaultValues, true) === true) {
             return false;
         }
 

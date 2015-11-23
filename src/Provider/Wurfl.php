@@ -57,6 +57,66 @@ class Wurfl extends AbstractProvider
     }
 
     /**
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    private function isRealBrand($value)
+    {
+        if ($value === '' || $value === null) {
+            return false;
+        }
+
+        if ($value == 'Generic') {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    private function isRealModel($value)
+    {
+        if ($value === '' || $value === null) {
+            return false;
+        }
+
+        if (substr((string) $value, 0, 7) == 'Android') {
+            return false;
+        }
+
+        if (substr((string) $value, 0, 7) == 'Firefox') {
+            return false;
+        }
+
+        if (substr((string) $value, 0, 7) == 'Generic') {
+            return false;
+        }
+
+        if (substr((string) $value, 0, 12) == 'unrecognized') {
+            return false;
+        }
+
+        if (substr((string) $value, 0, 14) == 'Windows Mobile') {
+            return false;
+        }
+
+        if (substr((string) $value, 0, 13) == 'Windows Phone') {
+            return false;
+        }
+
+        if (substr((string) $value, 0, 10) == 'Windows RT') {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      *
      * @param  CustomDevice $device
      * @return boolean
@@ -126,8 +186,13 @@ class Wurfl extends AbstractProvider
         $device = $result->getDevice();
 
         if ($deviceRaw->getVirtualCapability('is_full_desktop') !== 'true') {
-            $device->setModel($deviceRaw->getCapability('model_name'));
-            $device->setBrand($deviceRaw->getCapability('brand_name'));
+            if ($this->isRealModel($deviceRaw->getCapability('model_name')) === true) {
+                $device->setModel($deviceRaw->getCapability('model_name'));
+            }
+
+            if ($this->isRealBrand($deviceRaw->getCapability('brand_name')) === true) {
+                $device->setBrand($deviceRaw->getCapability('brand_name'));
+            }
 
             if ($deviceRaw->getVirtualCapability('is_mobile') === 'true') {
                 $device->setIsMobile(true);

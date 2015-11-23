@@ -147,46 +147,50 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $this->assertProviderResult($result, $expectedResult);
     }
 
-//     /**
-//      * Browser only "using"
-//      */
-//     public function testParseBrowserUsing()
-//     {
-//         $parser = $this->getParser();
-//         $parser->expects($this->any())
-//         ->method('isDetected')
-//         ->will($this->returnValue(true));
+    /**
+     * Browser only "using"
+     */
+    public function testParseBrowserUsing()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isDetected')
+            ->will($this->returnValue(true));
 
-//         $parser->browser = new \WhichBrowser\Browser([
-//             'using'    => 'Test',
-//             'version' => new \WhichBrowser\Version([
-//                 'value' => '3.2.1',
-//             ]),
-//         ]);
+        $using = new \WhichBrowser\Using([
+            'name'    => 'Another',
+            'version' => new \WhichBrowser\Version([
+                'value' => '4.7.3',
+            ]),
+        ]);
 
-//         $provider = new WhichBrowser();
+        $parser->browser = new \WhichBrowser\Browser([
+            'using'    => $using,
+        ]);
 
-//         $reflection = new \ReflectionClass($provider);
-//         $property   = $reflection->getProperty('parser');
-//         $property->setAccessible(true);
-//         $property->setValue($provider, $parser);
+        $provider = new WhichBrowser();
 
-//         $result = $provider->parse('A real user agent...');
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
-//         $expectedResult = [
-//             'browser' => [
-//                 'name'    => 'test',
-//                 'version' => [
-//                     'major'    => 3,
-//                     'minor'    => 2,
-//                     'patch'    => 1,
-//                     'complete' => '3.2.1',
-//                 ],
-//             ],
-//         ];
+        $result = $provider->parse('A real user agent...');
 
-//         $this->assertProviderResult($result, $expectedResult);
-//     }
+        $expectedResult = [
+            'browser' => [
+                'name'    => 'Another',
+                'version' => [
+                    'major'    => 4,
+                    'minor'    => 7,
+                    'patch'    => 3,
+                    'complete' => '4.7.3',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
 
     /**
      * Rendering engine only

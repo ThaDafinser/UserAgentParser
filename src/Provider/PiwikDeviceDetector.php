@@ -7,6 +7,10 @@ use UserAgentParser\Model;
 
 class PiwikDeviceDetector extends AbstractProvider
 {
+    protected $defaultValues = [
+        DeviceDetector::UNKNOWN,
+    ];
+
     /**
      *
      * @var DeviceDetector
@@ -56,12 +60,6 @@ class PiwikDeviceDetector extends AbstractProvider
     private function hasResult(DeviceDetector $dd)
     {
         if ($dd->isBot() === true) {
-            $bot = $dd->getBot();
-
-            if ($bot['name'] === null || $bot['name'] === DeviceDetector::UNKNOWN) {
-                return false;
-            }
-
             return true;
         }
 
@@ -80,25 +78,6 @@ class PiwikDeviceDetector extends AbstractProvider
         }
 
         return false;
-    }
-
-    /**
-     *
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isRealResult($value)
-    {
-        if ($value === '' || $value === null) {
-            return false;
-        }
-
-        if ($value === DeviceDetector::UNKNOWN) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

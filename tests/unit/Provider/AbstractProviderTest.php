@@ -58,4 +58,40 @@ class AbstractProviderTest extends AbstractProviderTestCase
         // cached
         $this->assertInternalType('string', $provider->getVersion());
     }
+
+    public function testIsRealResult()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+        $method     = $reflection->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $this->assertFalse($method->invoke($provider, ''));
+        $this->assertFalse($method->invoke($provider, null));
+
+        $this->assertTrue($method->invoke($provider, 'some value'));
+    }
+
+    public function testIsRealResultWithDefaultValues()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+
+        $property = $reflection->getProperty('defaultValues');
+        $property->setAccessible(true);
+        $property->setValue($provider, [
+            'default value',
+        ]);
+
+        $method = $reflection->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $this->assertFalse($method->invoke($provider, 'default value'));
+
+        $this->assertTrue($method->invoke($provider, 'default other'));
+
+        $this->assertFalse($method->invoke($provider, 'default other', ['default', 'default other']));
+    }
 }

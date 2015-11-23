@@ -54,11 +54,11 @@ class DonatjUAParser extends AbstractProvider
          */
         $browser = $result->getBrowser();
 
-        if ($resultRaw['browser'] !== null) {
+        if ($this->isRealResult($resultRaw['browser']) === true) {
             $browser->setName($resultRaw['browser']);
         }
 
-        if ($resultRaw['version'] !== null) {
+        if ($this->isRealResult($resultRaw['version']) === true) {
             $browser->getVersion()->setComplete($resultRaw['version']);
         }
 

@@ -68,22 +68,6 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
     }
 
     /**
-     * @expectedException \UserAgentParser\Exception\NoResultFoundException
-     */
-    public function testNoResultFoundExceptionBot()
-    {
-        $parser = $this->getParser();
-        $parser->expects($this->any())
-            ->method('isBot')
-            ->will($this->returnValue(true));
-
-        $provider = new PiwikDeviceDetector();
-        $provider->setParser($parser);
-
-        $result = $provider->parse('A real user agent...');
-    }
-
-    /**
      * Bot
      */
     public function testParseBot()

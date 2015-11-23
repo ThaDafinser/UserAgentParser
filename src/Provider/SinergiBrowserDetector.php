@@ -7,6 +7,10 @@ use UserAgentParser\Model;
 
 class SinergiBrowserDetector extends AbstractProvider
 {
+    protected $defaultValues = [
+        BrowserDetector\Browser::UNKNOWN,
+    ];
+
     /**
      * Used for unitTests mocking
      *
@@ -107,25 +111,6 @@ class SinergiBrowserDetector extends AbstractProvider
         }
 
         return false;
-    }
-
-    /**
-     *
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isRealResult($value)
-    {
-        if ($value === '' || $value === null) {
-            return false;
-        }
-
-        if ($value === BrowserDetector\Browser::UNKNOWN) {
-            return false;
-        }
-
-        return true;
     }
 
     public function parse($userAgent, array $headers = [])

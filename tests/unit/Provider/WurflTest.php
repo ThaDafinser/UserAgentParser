@@ -276,4 +276,77 @@ class WurflTest extends AbstractProviderTestCase
 
         $this->assertProviderResult($result, $expectedResult);
     }
+
+    /**
+     * Device no valid model
+     */
+    public function testParseDeviceNoValidModel()
+    {
+        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return->id = 'some_id';
+
+        $map = [
+            [
+                'is_robot',
+                'false',
+            ],
+            [
+                'is_full_desktop',
+                'false',
+            ],
+
+            [
+                'is_mobile',
+                'true',
+            ],
+            [
+                'is_touchscreen',
+                'true',
+            ],
+            [
+                'form_factor',
+                'smartphone',
+            ],
+        ];
+
+        $return->expects($this->any())
+        ->method('getVirtualCapability')
+        ->will($this->returnValueMap($map));
+
+        $map = [
+            [
+                'model_name',
+                'Android something',
+            ],
+            [
+                'brand_name',
+                'Apple',
+            ],
+        ];
+        $return->expects($this->any())
+        ->method('getCapability')
+        ->will($this->returnValueMap($map));
+
+        $manager = $this->getManager();
+        $manager->expects($this->any())
+        ->method('getDeviceForUserAgent')
+        ->will($this->returnValue($return));
+
+        $provider = new Wurfl($manager);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => null,
+                'brand' => 'Apple',
+                'type'  => 'smartphone',
+
+                'isMobile' => true,
+                'isTouch'  => true,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
 }

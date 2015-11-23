@@ -8,6 +8,10 @@ use Wurfl\Manager as WurflManager;
 
 class Wurfl extends AbstractProvider
 {
+    protected $defaultValues = [
+        'Generic',
+    ];
+
     /**
      *
      * @var WurflManager
@@ -61,56 +65,27 @@ class Wurfl extends AbstractProvider
      *
      * @return bool
      */
-    private function isRealBrand($value)
+    private function isRealDeviceModel($value)
     {
-        if ($value === '' || $value === null) {
+        if ($this->isRealResult($value) !== true) {
             return false;
         }
 
-        if ($value == 'Generic') {
-            return false;
-        }
+        $value = (string) $value;
 
-        return true;
-    }
+        $defaultValues = [
+            'Android',
+            'Firefox',
+            'unrecognized',
+            'Windows Mobile',
+            'Windows Phone',
+            'Windows RT',
+        ];
 
-    /**
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isRealModel($value)
-    {
-        if ($value === '' || $value === null) {
-            return false;
-        }
-
-        if (substr((string) $value, 0, 7) == 'Android') {
-            return false;
-        }
-
-        if (substr((string) $value, 0, 7) == 'Firefox') {
-            return false;
-        }
-
-        if (substr((string) $value, 0, 7) == 'Generic') {
-            return false;
-        }
-
-        if (substr((string) $value, 0, 12) == 'unrecognized') {
-            return false;
-        }
-
-        if (substr((string) $value, 0, 14) == 'Windows Mobile') {
-            return false;
-        }
-
-        if (substr((string) $value, 0, 13) == 'Windows Phone') {
-            return false;
-        }
-
-        if (substr((string) $value, 0, 10) == 'Windows RT') {
-            return false;
+        foreach ($defaultValues as $defaultValue) {
+            if (substr($value, 0, strlen($defaultValue)) == $defaultValue) {
+                return false;
+            }
         }
 
         return true;
@@ -186,11 +161,11 @@ class Wurfl extends AbstractProvider
         $device = $result->getDevice();
 
         if ($deviceRaw->getVirtualCapability('is_full_desktop') !== 'true') {
-            if ($this->isRealModel($deviceRaw->getCapability('model_name')) === true) {
+            if ($this->isRealDeviceModel($deviceRaw->getCapability('model_name')) === true) {
                 $device->setModel($deviceRaw->getCapability('model_name'));
             }
 
-            if ($this->isRealBrand($deviceRaw->getCapability('brand_name')) === true) {
+            if ($this->isRealResult($deviceRaw->getCapability('brand_name')) === true) {
                 $device->setBrand($deviceRaw->getCapability('brand_name'));
             }
 

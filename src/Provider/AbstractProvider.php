@@ -8,6 +8,8 @@ abstract class AbstractProvider
 {
     private $version;
 
+    protected $defaultValues = [];
+
     /**
      * Return the name of the provider
      *
@@ -67,6 +69,29 @@ abstract class AbstractProvider
         $content = json_decode($content);
 
         return $content->packages;
+    }
+
+    /**
+     *
+     * @param  mixed   $value
+     * @param  array   $additionalDefaultValues
+     * @return boolean
+     */
+    protected function isRealResult($value, array $additionalDefaultValues = [])
+    {
+        if ($value === '' || $value === null) {
+            return false;
+        }
+
+        $value = (string) $value;
+
+        $defaultValues = array_merge($this->defaultValues, $additionalDefaultValues);
+
+        if (in_array($value, $defaultValues, true) === true) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

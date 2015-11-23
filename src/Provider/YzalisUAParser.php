@@ -7,6 +7,10 @@ use UserAgentParser\Model;
 
 class YzalisUAParser extends AbstractProvider
 {
+    protected $defaultValues = [
+        'Other',
+    ];
+
     private $parser;
 
     public function getName()
@@ -77,25 +81,6 @@ class YzalisUAParser extends AbstractProvider
         }
 
         return false;
-    }
-
-    /**
-     *
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isRealResult($value)
-    {
-        if ($value === '' || $value === null) {
-            return false;
-        }
-
-        if ($value === 'Other') {
-            return false;
-        }
-
-        return true;
     }
 
     /**

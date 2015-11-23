@@ -8,8 +8,15 @@ use UserAgentParser\Model;
 
 class BrowscapPhp extends AbstractProvider
 {
+    protected $defaultValues = [
+        'DefaultProperties',
+        'Default Browser',
+
+        'unknown',
+    ];
+
     /**
-     * 
+     *
      * @var Browscap
      */
     private $parser;
@@ -31,7 +38,9 @@ class BrowscapPhp extends AbstractProvider
 
     public function getVersion()
     {
-        return $this->getParser()->getCache()->getVersion();
+        return $this->getParser()
+            ->getCache()
+            ->getVersion();
     }
 
     /**
@@ -45,7 +54,7 @@ class BrowscapPhp extends AbstractProvider
 
     /**
      *
-     * @return \BrowscapPHP\Browscap
+     * @return Browscap
      */
     public function getParser()
     {
@@ -54,48 +63,30 @@ class BrowscapPhp extends AbstractProvider
 
     /**
      *
-     * @param mixed $value
-     *
-     * @return bool
+     * @return array
      */
-    private function isRealResult($value)
+    private function getDeviceModelDefaultValues()
     {
-        if ($value === '' || $value === null) {
-            return false;
-        }
-
-        $value = (string) $value;
-
-        $defaultValues = [
+        return [
             'general Desktop',
             'general Mobile Device',
             'general Mobile Phone',
             'general Tablet',
-
-            'DefaultProperties',
-            'Default Browser',
-
-            'unknown',
         ];
+    }
 
-        if (in_array($value, $defaultValues, true) === true) {
+    /**
+     *
+     * @param  stdClass $resultRaw
+     * @return boolean
+     */
+    private function isBot(stdClass $resultRaw)
+    {
+        if (! isset($resultRaw->crawler) || $resultRaw->crawler !== true) {
             return false;
         }
 
         return true;
-    }
-
-    private function isBot(stdClass $resultRaw)
-    {
-        if (! isset($resultRaw->crawler)) {
-            return false;
-        }
-
-        if ($resultRaw->crawler === true) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -204,7 +195,7 @@ class BrowscapPhp extends AbstractProvider
          */
         $device = $result->getDevice();
 
-        if (isset($resultRaw->device_name) && $this->isRealResult($resultRaw->device_name) === true) {
+        if (isset($resultRaw->device_name) && $this->isRealResult($resultRaw->device_name, $this->getDeviceModelDefaultValues()) === true) {
             $device->setModel($resultRaw->device_name);
         }
 

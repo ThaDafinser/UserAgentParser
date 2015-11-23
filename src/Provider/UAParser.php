@@ -7,6 +7,10 @@ use UserAgentParser\Model;
 
 class UAParser extends AbstractProvider
 {
+    protected $defaultValues = [
+        'Other',
+    ];
+
     private $parser;
 
     public function getName()
@@ -29,6 +33,7 @@ class UAParser extends AbstractProvider
     }
 
     /**
+     *
      * @return Parser
      */
     public function getParser()
@@ -43,6 +48,7 @@ class UAParser extends AbstractProvider
     }
 
     /**
+     *
      * @param \UAParser\Result\Client $resultRaw
      *
      * @return bool
@@ -64,39 +70,26 @@ class UAParser extends AbstractProvider
         return false;
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isRealResult($value)
+    private function getDeviceModelDefaultValues()
     {
-        if ($value === '' || $value === null) {
-            return false;
-        }
-
-        $value = (string) $value;
-
-        $defaultValues = [
-            'iOS-Device',
+        return [
             'Feature Phone',
+            'iOS-Device',
             'Smartphone',
+        ];
+    }
 
+    private function getDeviceBrandDefaultValues()
+    {
+        return [
             'Generic',
             'Generic_Android',
             'Generic_Inettv',
-
-            'Other',
         ];
-
-        if (in_array($value, $defaultValues, true) === true) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
+     *
      * @param \UAParser\Result\Client $resultRaw
      *
      * @return bool
@@ -195,11 +188,11 @@ class UAParser extends AbstractProvider
          */
         $device = $result->getDevice();
 
-        if ($this->isRealResult($resultRaw->device->model) === true) {
+        if ($this->isRealResult($resultRaw->device->model, $this->getDeviceModelDefaultValues()) === true) {
             $device->setModel($resultRaw->device->model);
         }
 
-        if ($this->isRealResult($resultRaw->device->brand) === true) {
+        if ($this->isRealResult($resultRaw->device->brand, $this->getDeviceBrandDefaultValues()) === true) {
             $device->setBrand($resultRaw->device->brand);
         }
 

@@ -8,6 +8,10 @@ use Woothee\DataSet;
 
 class Woothee extends AbstractProvider
 {
+    protected $defaultValues = [
+        DataSet::VALUE_UNKNOWN,
+    ];
+
     private $parser;
 
     public function getName()
@@ -53,7 +57,7 @@ class Woothee extends AbstractProvider
     private function hasResult(array $resultRaw)
     {
         foreach ($resultRaw as $value) {
-            if ($value !== DataSet::VALUE_UNKNOWN) {
+            if ($this->isRealResult($value) === true) {
                 return true;
             }
         }
@@ -73,21 +77,6 @@ class Woothee extends AbstractProvider
         }
 
         return false;
-    }
-
-    /**
-     *
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isRealResult($value)
-    {
-        if ($value === DataSet::VALUE_UNKNOWN) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

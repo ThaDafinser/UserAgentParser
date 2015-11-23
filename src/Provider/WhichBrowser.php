@@ -58,7 +58,7 @@ class WhichBrowser extends AbstractProvider
         /*
          * Bot detection
          */
-        if ($parser->isType('bot') === true) {
+        if ($parser->getType() === 'bot') {
             $bot = $result->getBot();
             $bot->setIsBot(true);
 
@@ -83,8 +83,7 @@ class WhichBrowser extends AbstractProvider
             if ($version !== '') {
                 $browser->getVersion()->setComplete($version);
             }
-        }
-        else if (isset($parser->browser->using)) {
+        } elseif (isset($parser->browser->using)) {
             $name = $parser->browser->using->getName();
             if ($name !== '') {
                 $browser->setName($name);

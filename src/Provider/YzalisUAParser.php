@@ -1,6 +1,7 @@
 <?php
 namespace UserAgentParser\Provider;
 
+use UAParser\Result as UAResult;
 use UAParser\Result\Result as UAParserResult;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
@@ -85,15 +86,92 @@ class YzalisUAParser extends AbstractProvider
 
     /**
      *
-     * @param UAParserResult $resultRaw
+     * @param Model\Browser          $browser
+     * @param UAResult\BrowserResult $browserRaw
+     */
+    private function hydrateBrowser(Model\Browser $browser, UAResult\BrowserResult $browserRaw)
+    {
+        if ($this->isRealResult($browserRaw->getFamily()) === true) {
+            $browser->setName($browserRaw->getFamily());
+        }
+
+        if ($this->isRealResult($browserRaw->getVersionString()) === true) {
+            $browser->getVersion()->setComplete($browserRaw->getVersionString());
+        }
+    }
+
+    /**
      *
+     * @param Model\RenderingEngine          $engine
+     * @param UAResult\RenderingEngineResult $renderingEngineRaw
+     */
+    private function hydrateRenderingEngine(Model\RenderingEngine $engine, UAResult\RenderingEngineResult $renderingEngineRaw)
+    {
+        if ($this->isRealResult($renderingEngineRaw->getFamily()) === true) {
+            $engine->setName($renderingEngineRaw->getFamily());
+        }
+
+        if ($this->isRealResult($renderingEngineRaw->getVersion()) === true) {
+            $engine->getVersion()->setComplete($renderingEngineRaw->getVersion());
+        }
+    }
+
+    /**
+     *
+     * @param Model\OperatingSystem          $os
+     * @param UAResult\OperatingSystemResult $resultRaw
+     */
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, UAResult\OperatingSystemResult $osRaw)
+    {
+        if ($this->isRealResult($osRaw->getFamily()) === true) {
+            $os->setName($osRaw->getFamily());
+        }
+
+        if ($this->isRealResult($osRaw->getMajor()) === true) {
+            $os->getVersion()->setMajor($osRaw->getMajor());
+
+            if ($this->isRealResult($osRaw->getMinor()) === true) {
+                $os->getVersion()->setMinor($osRaw->getMinor());
+            }
+
+            if ($this->isRealResult($osRaw->getPatch()) === true) {
+                $os->getVersion()->setPatch($osRaw->getPatch());
+            }
+        }
+    }
+
+    /**
+     *
+     * @param Model\UserAgent       $device
+     * @param UAResult\DeviceResult $deviceRaw
+     */
+    private function hydrateDevice(Model\Device $device, UAResult\DeviceResult $deviceRaw)
+    {
+        if ($this->isRealResult($deviceRaw->getModel()) === true) {
+            $device->setModel($deviceRaw->getModel());
+        }
+
+        if ($this->isRealResult($deviceRaw->getConstructor()) === true) {
+            $device->setBrand($deviceRaw->getConstructor());
+        }
+
+        // removed desktop type, since it's a default value and not really detected
+        if ($this->isRealResult($deviceRaw->getType()) === true && $deviceRaw->getType() !== 'desktop') {
+            $device->setType($deviceRaw->getType());
+        }
+
+        if ($this->isMobile($deviceRaw) === true) {
+            $device->setIsMobile(true);
+        }
+    }
+
+    /**
+     *
+     * @param  UAResult\DeviceResult $deviceRaw
      * @return bool
      */
-    private function isMobile(UAParserResult $resultRaw)
+    private function isMobile(UAResult\DeviceResult $deviceRaw)
     {
-        /* @var $deviceRaw \UAParser\Result\DeviceResult */
-        $deviceRaw = $resultRaw->getDevice();
-
         if ($deviceRaw->getType() === 'mobile') {
             return true;
         }
@@ -119,18 +197,6 @@ class YzalisUAParser extends AbstractProvider
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
-        /* @var $browserRaw \UAParser\Result\BrowserResult */
-        $browserRaw = $resultRaw->getBrowser();
-
-        /* @var $renderingEngineRaw \UAParser\Result\RenderingEngineResult */
-        $renderingEngineRaw = $resultRaw->getRenderingEngine();
-
-        /* @var $osRaw \UAParser\Result\OperatingSystemResult */
-        $osRaw = $resultRaw->getOperatingSystem();
-
-        /* @var $deviceRaw \UAParser\Result\DeviceResult */
-        $deviceRaw = $resultRaw->getDevice();
-
         /* @var $emailRaw \UAParser\Result\EmailClientResult */
         // currently not used...any idea to implement it?
 
@@ -141,78 +207,13 @@ class YzalisUAParser extends AbstractProvider
         $result->setProviderResultRaw($resultRaw);
 
         /*
-         * Bot detection
-         * i think this is currently not possible
+         * Bot detection is currently not possible
          */
 
-        /*
-         * Browser
-         */
-        $browser = $result->getBrowser();
-
-        if ($this->isRealResult($browserRaw->getFamily()) === true) {
-            $browser->setName($browserRaw->getFamily());
-        }
-
-        if ($this->isRealResult($browserRaw->getVersionString()) === true) {
-            $browser->getVersion()->setComplete($browserRaw->getVersionString());
-        }
-
-        /*
-         * renderingEngine
-         */
-        $renderingEngine = $result->getRenderingEngine();
-
-        if ($this->isRealResult($renderingEngineRaw->getFamily()) === true) {
-            $renderingEngine->setName($renderingEngineRaw->getFamily());
-        }
-
-        if ($this->isRealResult($renderingEngineRaw->getVersion()) === true) {
-            $renderingEngine->getVersion()->setComplete($renderingEngineRaw->getVersion());
-        }
-
-        /*
-         * operatingSystem
-         */
-        $operatingSystem = $result->getOperatingSystem();
-
-        if ($this->isRealResult($osRaw->getFamily()) === true) {
-            $operatingSystem->setName($osRaw->getFamily());
-        }
-
-        if ($this->isRealResult($osRaw->getMajor()) === true) {
-            $operatingSystem->getVersion()->setMajor($osRaw->getMajor());
-
-            if ($this->isRealResult($osRaw->getMinor()) === true) {
-                $operatingSystem->getVersion()->setMinor($osRaw->getMinor());
-            }
-
-            if ($this->isRealResult($osRaw->getPatch()) === true) {
-                $operatingSystem->getVersion()->setPatch($osRaw->getPatch());
-            }
-        }
-
-        /*
-         * device
-         */
-        $device = $result->getDevice();
-
-        if ($this->isRealResult($deviceRaw->getModel()) === true) {
-            $device->setModel($deviceRaw->getModel());
-        }
-
-        if ($this->isRealResult($deviceRaw->getConstructor()) === true) {
-            $device->setBrand($deviceRaw->getConstructor());
-        }
-
-        // removed desktop type, since it's a default value and not really detected
-        if ($this->isRealResult($deviceRaw->getType()) === true && $deviceRaw->getType() !== 'desktop') {
-            $device->setType($deviceRaw->getType());
-        }
-
-        if ($this->isMobile($resultRaw) === true) {
-            $device->setIsMobile(true);
-        }
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw->getBrowser());
+        $this->hydrateRenderingEngine($result->getRenderingEngine(), $resultRaw->getRenderingEngine());
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw->getOperatingSystem());
+        $this->hydrateDevice($result->getDevice(), $resultRaw->getDevice());
 
         return $result;
     }

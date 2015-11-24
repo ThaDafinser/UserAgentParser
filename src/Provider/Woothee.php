@@ -81,8 +81,53 @@ class Woothee extends AbstractProvider
 
     /**
      *
-     * @param array $resultRaw
+     * @param Model\Bot $bot
+     * @param array     $resultRaw
+     */
+    private function hydrateBot(Model\Bot $bot, array $resultRaw)
+    {
+        $bot->setIsBot(true);
+
+        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name']) === true) {
+            $bot->setName($resultRaw['name']);
+        }
+    }
+
+    /**
      *
+     * @param Model\Browser $browser
+     * @param array         $resultRaw
+     */
+    private function hydrateBrowser(Model\Browser $browser, array $resultRaw)
+    {
+        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name']) === true) {
+            $browser->setName($resultRaw['name']);
+        }
+
+        if (isset($resultRaw['version']) && $this->isRealResult($resultRaw['version']) === true) {
+            $browser->getVersion()->setComplete($resultRaw['version']);
+        }
+    }
+
+    /**
+     *
+     * @param Model\Device $device
+     * @param array        $resultRaw
+     */
+    private function hydrateDevice(Model\Device $device, array $resultRaw)
+    {
+        if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category']) === true) {
+            $device->setType($resultRaw['category']);
+        }
+
+        if ($this->isMobile($resultRaw) === true) {
+            $device->setIsMobile(true);
+        }
+    }
+
+    /**
+     *
+     * @param  array $resultRaw
      * @return bool
      */
     private function isMobile(array $resultRaw)
@@ -131,58 +176,18 @@ class Woothee extends AbstractProvider
          * Bot detection
          */
         if ($this->isBot($resultRaw) === true) {
-            $bot = $result->getBot();
-            $bot->setIsBot(true);
-
-            if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name']) === true) {
-                $bot->setName($resultRaw['name']);
-            }
+            $this->hydrateBot($result->getBot(), $resultRaw);
 
             return $result;
         }
 
         /*
-         * Browser
+         * hydrate the result
          */
-        $browser = $result->getBrowser();
-
-        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name']) === true) {
-            $browser->setName($resultRaw['name']);
-        }
-
-        if (isset($resultRaw['version']) && $this->isRealResult($resultRaw['version']) === true) {
-            $browser->getVersion()->setComplete($resultRaw['version']);
-        }
-
-        /*
-         * renderingEngine
-         * currently not supported
-         */
-
-        /*
-         * operatingSystem
-         * currently not supported
-         */
-
-        // @todo ... filled OS is mixed! Examples: iPod, iPhone, Android...
-        // split it by hand for device/OS?
-        // include only version?
-
-        /*
-         * device
-         */
-        $device = $result->getDevice();
-
-        // @todo ... filled OS is mixed! Examples: iPod, iPhone, Android...
-        // @todo vendor is filled with device and/or browser
-
-        if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category']) === true) {
-            $device->setType($resultRaw['category']);
-        }
-
-        if ($this->isMobile($resultRaw) === true) {
-            $device->setIsMobile(true);
-        }
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        // renderingEngine - not supported
+        // operatingSystem - not supported (filled OS is mixed! Examples: iPod, iPhone, Android...)
+        $this->hydrateDevice($result->getDevice(), $resultRaw);
 
         return $result;
     }

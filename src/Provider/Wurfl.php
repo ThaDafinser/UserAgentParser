@@ -61,6 +61,20 @@ class Wurfl extends AbstractProvider
     }
 
     /**
+     *
+     * @param  CustomDevice $device
+     * @return boolean
+     */
+    private function hasResult(CustomDevice $device)
+    {
+        if ($device->id !== null && $device->id != '' && $device->id !== 'generic') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param mixed $value
      *
      * @return bool
@@ -89,20 +103,6 @@ class Wurfl extends AbstractProvider
         }
 
         return true;
-    }
-
-    /**
-     *
-     * @param  CustomDevice $device
-     * @return boolean
-     */
-    private function hasResult(CustomDevice $device)
-    {
-        if ($device->id !== null && $device->id != '' && $device->id !== 'generic') {
-            return true;
-        }
-
-        return false;
     }
 
     public function parse($userAgent, array $headers = [])

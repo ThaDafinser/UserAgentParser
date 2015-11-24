@@ -112,6 +112,9 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
             'version' => '3.0',
             'engine'  => 'WebKit',
         ]));
+        $parser->expects($this->any())
+            ->method('getOs')
+            ->will($this->returnValue([]));
 
         $provider = new PiwikDeviceDetector();
         $provider->setParser($parser);
@@ -187,6 +190,13 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
     public function testParseDevice()
     {
         $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('getClient')
+            ->will($this->returnValue([]));
+        $parser->expects($this->any())
+        ->method('getOs')
+        ->will($this->returnValue([]));
+
         $parser->expects($this->any())
             ->method('getDevice')
             ->will($this->returnValue(1));

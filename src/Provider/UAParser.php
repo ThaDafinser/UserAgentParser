@@ -103,6 +103,84 @@ class UAParser extends AbstractProvider
         return false;
     }
 
+    /**
+     *
+     * @param Model\Bot               $bot
+     * @param \UAParser\Result\Client $resultRaw
+     */
+    private function hydrateBot(Model\Bot $bot, \UAParser\Result\Client $resultRaw)
+    {
+        $bot->setIsBot(true);
+
+        if ($this->isRealResult($resultRaw->ua->family) === true) {
+            $bot->setName($resultRaw->ua->family);
+        }
+    }
+
+    /**
+     *
+     * @param Model\Browser           $browser
+     * @param \UAParser\Result\Client $resultRaw
+     */
+    private function hydrateBrowser(Model\Browser $browser, \UAParser\Result\Client $resultRaw)
+    {
+        if ($this->isRealResult($resultRaw->ua->family) === true) {
+            $browser->setName($resultRaw->ua->family);
+        }
+
+        if ($this->isRealResult($resultRaw->ua->major) === true) {
+            $browser->getVersion()->setMajor($resultRaw->ua->major);
+        }
+
+        if ($this->isRealResult($resultRaw->ua->minor) === true) {
+            $browser->getVersion()->setMinor($resultRaw->ua->minor);
+        }
+
+        if ($this->isRealResult($resultRaw->ua->patch) === true) {
+            $browser->getVersion()->setPatch($resultRaw->ua->patch);
+        }
+    }
+
+    /**
+     *
+     * @param Model\OperatingSystem   $os
+     * @param \UAParser\Result\Client $resultRaw
+     */
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, \UAParser\Result\Client $resultRaw)
+    {
+        if ($this->isRealResult($resultRaw->os->family) === true) {
+            $os->setName($resultRaw->os->family);
+        }
+
+        if ($this->isRealResult($resultRaw->os->major) === true) {
+            $os->getVersion()->setMajor($resultRaw->os->major);
+        }
+
+        if ($this->isRealResult($resultRaw->os->minor) === true) {
+            $os->getVersion()->setMinor($resultRaw->os->minor);
+        }
+
+        if ($this->isRealResult($resultRaw->os->patch) === true) {
+            $os->getVersion()->setPatch($resultRaw->os->patch);
+        }
+    }
+
+    /**
+     *
+     * @param Model\UserAgent         $device
+     * @param \UAParser\Result\Client $resultRaw
+     */
+    private function hydrateDevice(Model\Device $device, \UAParser\Result\Client $resultRaw)
+    {
+        if ($this->isRealResult($resultRaw->device->model, $this->getDeviceModelDefaultValues()) === true) {
+            $device->setModel($resultRaw->device->model);
+        }
+
+        if ($this->isRealResult($resultRaw->device->brand, $this->getDeviceBrandDefaultValues()) === true) {
+            $device->setBrand($resultRaw->device->brand);
+        }
+    }
+
     public function parse($userAgent, array $headers = [])
     {
         $parser = $this->getParser();
@@ -127,12 +205,7 @@ class UAParser extends AbstractProvider
          * Bot detection
          */
         if ($this->isBot($resultRaw) === true) {
-            $bot = $result->getBot();
-            $bot->setIsBot(true);
-
-            if ($this->isRealResult($resultRaw->ua->family) === true) {
-                $bot->setName($resultRaw->ua->family);
-            }
+            $this->hydrateBot($result->getBot(), $resultRaw);
 
             return $result;
         }
@@ -140,61 +213,10 @@ class UAParser extends AbstractProvider
         /*
          * Browser
          */
-        $browser = $result->getBrowser();
-
-        if ($this->isRealResult($resultRaw->ua->family) === true) {
-            $browser->setName($resultRaw->ua->family);
-        }
-
-        if ($this->isRealResult($resultRaw->ua->major) === true) {
-            $browser->getVersion()->setMajor($resultRaw->ua->major);
-        }
-
-        if ($this->isRealResult($resultRaw->ua->minor) === true) {
-            $browser->getVersion()->setMinor($resultRaw->ua->minor);
-        }
-
-        if ($this->isRealResult($resultRaw->ua->patch) === true) {
-            $browser->getVersion()->setPatch($resultRaw->ua->patch);
-        }
-
-        /*
-         * renderingEngine - is currently not possible!
-         */
-
-        /*
-         * operatingSystem
-         */
-        $operatingSystem = $result->getOperatingSystem();
-
-        if ($this->isRealResult($resultRaw->os->family) === true) {
-            $operatingSystem->setName($resultRaw->os->family);
-        }
-
-        if ($this->isRealResult($resultRaw->os->major) === true) {
-            $operatingSystem->getVersion()->setMajor($resultRaw->os->major);
-        }
-
-        if ($this->isRealResult($resultRaw->os->minor) === true) {
-            $operatingSystem->getVersion()->setMinor($resultRaw->os->minor);
-        }
-
-        if ($this->isRealResult($resultRaw->os->patch) === true) {
-            $operatingSystem->getVersion()->setPatch($resultRaw->os->patch);
-        }
-
-        /*
-         * device
-         */
-        $device = $result->getDevice();
-
-        if ($this->isRealResult($resultRaw->device->model, $this->getDeviceModelDefaultValues()) === true) {
-            $device->setModel($resultRaw->device->model);
-        }
-
-        if ($this->isRealResult($resultRaw->device->brand, $this->getDeviceBrandDefaultValues()) === true) {
-            $device->setBrand($resultRaw->device->brand);
-        }
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        // renderingEngine is currently not possible
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
+        $this->hydrateDevice($result->getDevice(), $resultRaw);
 
         return $result;
     }

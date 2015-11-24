@@ -9,6 +9,7 @@ class WhichBrowser extends AbstractProvider
 {
     /**
      * Used for unitTests mocking
+     *
      * @var WhichBrowserParser
      */
     private $parser;
@@ -24,6 +25,7 @@ class WhichBrowser extends AbstractProvider
     }
 
     /**
+     *
      * @param  array              $headers
      * @return WhichBrowserParser
      */
@@ -34,6 +36,106 @@ class WhichBrowser extends AbstractProvider
         }
 
         return new WhichBrowserParser($headers);
+    }
+
+    /**
+     *
+     * @param Model\Bot             $bot
+     * @param \WhichBrowser\Browser $browserRaw
+     */
+    private function hydrateBot(Model\Bot $bot, \WhichBrowser\Browser $browserRaw)
+    {
+        $bot->setIsBot(true);
+
+        if ($this->isRealResult($browserRaw->getName()) === true) {
+            $bot->setName($browserRaw->getName());
+        }
+    }
+
+    /**
+     *
+     * @param Model\Browser         $browser
+     * @param \WhichBrowser\Browser $browserRaw
+     */
+    private function hydrateBrowser(Model\Browser $browser, \WhichBrowser\Browser $browserRaw)
+    {
+        if ($this->isRealResult($browserRaw->getName()) === true) {
+            $browser->setName($browserRaw->getName());
+
+            if ($this->isRealResult($browserRaw->getVersion()) === true) {
+                $browser->getVersion()->setComplete($browserRaw->getVersion());
+            }
+
+            return;
+        }
+
+        if (isset($browserRaw->using) && $browserRaw->using instanceof \WhichBrowser\Using) {
+            /* @var $usingRaw \WhichBrowser\Using */
+            $usingRaw = $browserRaw->using;
+
+            if ($this->isRealResult($usingRaw->getName()) === true) {
+                $browser->setName($usingRaw->getName());
+
+                if ($this->isRealResult($usingRaw->getVersion()) === true) {
+                    $browser->getVersion()->setComplete($usingRaw->getVersion());
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @param Model\RenderingEngine $engine
+     * @param \WhichBrowser\Engine  $engineRaw
+     */
+    private function hydrateRenderingEngine(Model\RenderingEngine $engine, \WhichBrowser\Engine $engineRaw)
+    {
+        if ($this->isRealResult($engineRaw->getName()) === true) {
+            $engine->setName($engineRaw->getName());
+        }
+
+        if ($this->isRealResult($engineRaw->getVersion()) === true) {
+            $engine->getVersion()->setComplete($engineRaw->getVersion());
+        }
+    }
+
+    /**
+     *
+     * @param Model\OperatingSystem $os
+     * @param \WhichBrowser\Os      $osRaw
+     */
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, \WhichBrowser\Os $osRaw)
+    {
+        if ($this->isRealResult($osRaw->getName()) === true) {
+            $os->setName($osRaw->getName());
+        }
+
+        if ($this->isRealResult($osRaw->getVersion()) === true) {
+            $os->getVersion()->setComplete($osRaw->getVersion());
+        }
+    }
+
+    /**
+     *
+     * @param Model\Device         $device
+     * @param \WhichBrowser\Device $deviceRaw
+     * @param WhichBrowserParser   $parser
+     */
+    private function hydrateDevice(Model\Device $device, \WhichBrowser\Device $deviceRaw, WhichBrowserParser $parser)
+    {
+        if ($this->isRealResult($deviceRaw->getModel()) === true) {
+            $device->setModel($deviceRaw->getModel());
+        }
+
+        if ($this->isRealResult($deviceRaw->getManufacturer()) === true) {
+            $device->setBrand($deviceRaw->getManufacturer());
+        }
+
+        $device->setType($parser->getType());
+
+        if ($parser->isType('mobile', 'tablet', 'ereader', 'media', 'watch', 'camera', 'gaming:portable') === true) {
+            $device->setIsMobile(true);
+        }
     }
 
     public function parse($userAgent, array $headers = [])
@@ -59,92 +161,18 @@ class WhichBrowser extends AbstractProvider
          * Bot detection
          */
         if ($parser->getType() === 'bot') {
-            $bot = $result->getBot();
-            $bot->setIsBot(true);
-
-            $name = $parser->browser->getName();
-            if ($name !== '') {
-                $bot->setName($name);
-            }
+            $this->hydrateBot($result->getBot(), $parser->browser);
 
             return $result;
         }
 
         /*
-         * Browser
+         * hydrate the result
          */
-        $browser = $result->getBrowser();
-
-        $name = $parser->browser->getName();
-        if ($name !== '') {
-            $browser->setName($name);
-
-            $version = $parser->browser->getVersion();
-            if ($version !== '') {
-                $browser->getVersion()->setComplete($version);
-            }
-        } elseif (isset($parser->browser->using)) {
-            $name = $parser->browser->using->getName();
-            if ($name !== '') {
-                $browser->setName($name);
-
-                $version = $parser->browser->using->getVersion();
-                if ($version !== '') {
-                    $browser->getVersion()->setComplete($version);
-                }
-            }
-        }
-
-        /*
-         * renderingEngine
-         */
-        $renderingEngine = $result->getRenderingEngine();
-
-        $name = $parser->engine->getName();
-        if ($name !== '') {
-            $renderingEngine->setName($name);
-        }
-
-        $version = $parser->engine->getVersion();
-        if ($version !== '') {
-            $renderingEngine->getVersion()->setComplete($version);
-        }
-
-        /*
-         * operatingSystem
-         */
-        $operatingSystem = $result->getOperatingSystem();
-
-        $name = $parser->os->getName();
-        if ($name !== '') {
-            $operatingSystem->setName($name);
-        }
-
-        $version = $parser->os->getVersion();
-        if ($version !== '') {
-            $operatingSystem->getVersion()->setComplete($version);
-        }
-
-        /*
-         * device
-         */
-        $device = $result->getDevice();
-
-        $model = $parser->device->getModel();
-        if ($model !== '') {
-            $device->setModel($model);
-        }
-
-        $brand = $parser->device->getManufacturer();
-        if ($brand !== '') {
-            $device->setBrand($brand);
-        }
-
-        $device->setType($parser->getType());
-
-        if ($parser->isType('mobile', 'tablet', 'ereader', 'media', 'watch', 'camera', 'gaming:portable') === true) {
-            $device->setIsMobile(true);
-        }
+        $this->hydrateBrowser($result->getBrowser(), $parser->browser);
+        $this->hydrateRenderingEngine($result->getRenderingEngine(), $parser->engine);
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $parser->os);
+        $this->hydrateDevice($result->getDevice(), $parser->device, $parser);
 
         return $result;
     }

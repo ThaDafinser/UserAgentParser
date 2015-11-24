@@ -119,7 +119,7 @@ class YzalisUAParser extends AbstractProvider
     /**
      *
      * @param Model\OperatingSystem          $os
-     * @param UAResult\OperatingSystemResult $resultRaw
+     * @param UAResult\OperatingSystemResult $osRaw
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, UAResult\OperatingSystemResult $osRaw)
     {

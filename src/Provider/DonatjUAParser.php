@@ -24,11 +24,27 @@ class DonatjUAParser extends AbstractProvider
      */
     private function hasResult(array $resultRaw)
     {
-        if ($resultRaw['browser'] !== null) {
+        if ($this->isRealResult($resultRaw['browser'])) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     *
+     * @param Model\Browser $browser
+     * @param array         $resultRaw
+     */
+    private function hydrateBrowser(Model\Browser $browser, array $resultRaw)
+    {
+        if ($this->isRealResult($resultRaw['browser']) === true) {
+            $browser->setName($resultRaw['browser']);
+        }
+
+        if ($this->isRealResult($resultRaw['version']) === true) {
+            $browser->getVersion()->setComplete($resultRaw['version']);
+        }
     }
 
     public function parse($userAgent, array $headers = [])
@@ -52,15 +68,7 @@ class DonatjUAParser extends AbstractProvider
         /*
          * Browser
          */
-        $browser = $result->getBrowser();
-
-        if ($this->isRealResult($resultRaw['browser']) === true) {
-            $browser->setName($resultRaw['browser']);
-        }
-
-        if ($this->isRealResult($resultRaw['version']) === true) {
-            $browser->getVersion()->setComplete($resultRaw['version']);
-        }
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
 
         /*
          * operatingSystem

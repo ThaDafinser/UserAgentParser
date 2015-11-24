@@ -77,20 +77,6 @@ class BrowscapPhp extends AbstractProvider
 
     /**
      *
-     * @param  stdClass $resultRaw
-     * @return boolean
-     */
-    private function isBot(stdClass $resultRaw)
-    {
-        if (! isset($resultRaw->crawler) || $resultRaw->crawler !== true) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     *
      * @param stdClass $resultRaw
      *
      * @return bool
@@ -109,13 +95,26 @@ class BrowscapPhp extends AbstractProvider
     }
 
     /**
-     * 
-     * @param stdClass        $resultRaw
-     * @param Model\UserAgent $result
+     *
+     * @param  stdClass $resultRaw
+     * @return boolean
      */
-    private function hydrateBotResult(stdClass $resultRaw, Model\UserAgent $result)
+    private function isBot(stdClass $resultRaw)
     {
-        $bot = $result->getBot();
+        if (! isset($resultRaw->crawler) || $resultRaw->crawler !== true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param Model\Bot $bot
+     * @param stdClass  $resultRaw
+     */
+    private function hydrateBot(Model\Bot $bot, stdClass $resultRaw)
+    {
         $bot->setIsBot(true);
 
         if (isset($resultRaw->browser) && $this->isRealResult($resultRaw->browser) === true) {
@@ -134,13 +133,11 @@ class BrowscapPhp extends AbstractProvider
 
     /**
      *
-     * @param stdClass        $resultRaw
-     * @param Model\UserAgent $result
+     * @param Model\Browser $browser
+     * @param stdClass      $resultRaw
      */
-    private function hydrateBrowser(stdClass $resultRaw, Model\UserAgent $result)
+    private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        $browser = $result->getBrowser();
-
         if (isset($resultRaw->browser) && $this->isRealResult($resultRaw->browser) === true) {
             $browser->setName($resultRaw->browser);
         }
@@ -152,49 +149,43 @@ class BrowscapPhp extends AbstractProvider
 
     /**
      *
-     * @param stdClass        $resultRaw
-     * @param Model\UserAgent $result
+     * @param Model\RenderingEngine $engine
+     * @param stdClass              $resultRaw
      */
-    private function hydrateRenderingEngine(stdClass $resultRaw, Model\UserAgent $result)
+    private function hydrateRenderingEngine(Model\RenderingEngine $engine, stdClass $resultRaw)
     {
-        $renderingEngine = $result->getRenderingEngine();
-
         if (isset($resultRaw->renderingengine_name) && $this->isRealResult($resultRaw->renderingengine_name) === true) {
-            $renderingEngine->setName($resultRaw->renderingengine_name);
+            $engine->setName($resultRaw->renderingengine_name);
         }
 
         if (isset($resultRaw->renderingengine_version) && $this->isRealResult($resultRaw->renderingengine_version) === true) {
-            $renderingEngine->getVersion()->setComplete($resultRaw->renderingengine_version);
+            $engine->getVersion()->setComplete($resultRaw->renderingengine_version);
         }
     }
 
     /**
      *
-     * @param stdClass        $resultRaw
-     * @param Model\UserAgent $result
+     * @param Model\OperatingSystem $os
+     * @param stdClass              $resultRaw
      */
-    private function hydrateOperatingSystem(stdClass $resultRaw, Model\UserAgent $result)
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
-        $operatingSystem = $result->getOperatingSystem();
-
         if (isset($resultRaw->platform) && $this->isRealResult($resultRaw->platform) === true) {
-            $operatingSystem->setName($resultRaw->platform);
+            $os->setName($resultRaw->platform);
         }
 
         if (isset($resultRaw->platform_version) && $this->isRealResult($resultRaw->platform_version) === true) {
-            $operatingSystem->getVersion()->setComplete($resultRaw->platform_version);
+            $os->getVersion()->setComplete($resultRaw->platform_version);
         }
     }
 
     /**
-     * 
+     *
+     * @param Model\UserAgent $device
      * @param stdClass        $resultRaw
-     * @param Model\UserAgent $result
      */
-    private function hydrateDevice(stdClass $resultRaw, Model\UserAgent $result)
+    private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
-        $device = $result->getDevice();
-
         if (isset($resultRaw->device_name) && $this->isRealResult($resultRaw->device_name, $this->getDeviceModelDefaultValues()) === true) {
             $device->setModel($resultRaw->device_name);
         }
@@ -241,15 +232,18 @@ class BrowscapPhp extends AbstractProvider
          * Bot detection (does only work with full_php_browscap.ini)
          */
         if ($this->isBot($resultRaw) === true) {
-            $this->hydrateBotResult($resultRaw, $result);
+            $this->hydrateBot($result->getBot(), $resultRaw);
 
             return $result;
         }
 
-        $this->hydrateBrowser($resultRaw, $result);
-        $this->hydrateRenderingEngine($resultRaw, $result);
-        $this->hydrateOperatingSystem($resultRaw, $result);
-        $this->hydrateDevice($resultRaw, $result);
+        /*
+         * hydrate the result
+         */
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        $this->hydrateRenderingEngine($result->getRenderingEngine(), $resultRaw);
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
+        $this->hydrateDevice($result->getDevice(), $resultRaw);
 
         return $result;
     }

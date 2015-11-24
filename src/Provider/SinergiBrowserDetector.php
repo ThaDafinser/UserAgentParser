@@ -113,6 +113,55 @@ class SinergiBrowserDetector extends AbstractProvider
         return false;
     }
 
+    /**
+     *
+     * @param Model\Browser           $browser
+     * @param BrowserDetector\Browser $browserRaw
+     */
+    private function hydrateBrowser(Model\Browser $browser, BrowserDetector\Browser $browserRaw)
+    {
+        if ($this->isRealResult($browserRaw->getName()) === true) {
+            $browser->setName($browserRaw->getName());
+        }
+
+        if ($this->isRealResult($browserRaw->getVersion()) === true) {
+            $browser->getVersion()->setComplete($browserRaw->getVersion());
+        }
+    }
+
+    /**
+     *
+     * @param Model\OperatingSystem $os
+     * @param BrowserDetector\Os    $osRaw
+     */
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, BrowserDetector\Os $osRaw)
+    {
+        if ($this->isRealResult($osRaw->getName()) === true) {
+            $os->setName($osRaw->getName());
+        }
+
+        if ($this->isRealResult($osRaw->getVersion()) === true) {
+            $os->getVersion()->setComplete($osRaw->getVersion());
+        }
+    }
+
+    /**
+     *
+     * @param Model\UserAgent        $device
+     * @param BrowserDetector\Os     $osRaw
+     * @param BrowserDetector\Device $deviceRaw
+     */
+    private function hydrateDevice(Model\Device $device, BrowserDetector\Os $osRaw, BrowserDetector\Device $deviceRaw)
+    {
+        if ($this->isRealResult($deviceRaw->getName()) === true) {
+            $device->setModel($deviceRaw->getName());
+        }
+
+        if ($osRaw->isMobile() === true) {
+            $device->setIsMobile(true);
+        }
+    }
+
     public function parse($userAgent, array $headers = [])
     {
         $browserRaw = $this->getBrowserParser($userAgent);
@@ -147,43 +196,11 @@ class SinergiBrowserDetector extends AbstractProvider
         }
 
         /*
-         * Browser
+         * hydrate the result
          */
-        $browser = $result->getBrowser();
-
-        if ($this->isRealResult($browserRaw->getName()) === true) {
-            $browser->setName($browserRaw->getName());
-        }
-
-        if ($this->isRealResult($browserRaw->getVersion()) === true) {
-            $browser->getVersion()->setComplete($browserRaw->getVersion());
-        }
-
-        /*
-         * operatingSystem
-         */
-        $operatingSystem = $result->getOperatingSystem();
-
-        if ($this->isRealResult($osRaw->getName()) === true) {
-            $operatingSystem->setName($osRaw->getName());
-        }
-
-        if ($this->isRealResult($osRaw->getVersion()) === true) {
-            $operatingSystem->getVersion()->setComplete($osRaw->getVersion());
-        }
-
-        /*
-         * device
-         */
-        $device = $result->getDevice();
-
-        if ($this->isRealResult($deviceRaw->getName()) === true) {
-            $device->setModel($deviceRaw->getName());
-        }
-
-        if ($osRaw->isMobile() === true) {
-            $device->setIsMobile(true);
-        }
+        $this->hydrateBrowser($result->getBrowser(), $browserRaw);
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $osRaw);
+        $this->hydrateDevice($result->getDevice(), $osRaw, $deviceRaw);
 
         return $result;
     }

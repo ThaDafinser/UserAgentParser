@@ -55,35 +55,6 @@ class PiwikDeviceDetector extends AbstractProvider
      *
      * @param DeviceDetector $dd
      *
-     * @return bool
-     */
-    private function hasResult(DeviceDetector $dd)
-    {
-        if ($dd->isBot() === true) {
-            return true;
-        }
-
-        $client = $dd->getClient();
-        if (isset($client['name']) && $this->isRealResult($client['name'])) {
-            return true;
-        }
-
-        $os = $dd->getOs();
-        if (isset($os['name']) && $this->isRealResult($os['name'])) {
-            return true;
-        }
-
-        if ($dd->getDevice() !== null) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     *
-     * @param DeviceDetector $dd
-     *
      * @return array
      */
     private function getResultRaw(DeviceDetector $dd)
@@ -137,6 +108,124 @@ class PiwikDeviceDetector extends AbstractProvider
         return $raw;
     }
 
+    /**
+     *
+     * @param DeviceDetector $dd
+     *
+     * @return bool
+     */
+    private function hasResult(DeviceDetector $dd)
+    {
+        if ($dd->isBot() === true) {
+            return true;
+        }
+
+        $client = $dd->getClient();
+        if (isset($client['name']) && $this->isRealResult($client['name'])) {
+            return true;
+        }
+
+        $os = $dd->getOs();
+        if (isset($os['name']) && $this->isRealResult($os['name'])) {
+            return true;
+        }
+
+        if ($dd->getDevice() !== null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param Model\Bot $bot
+     * @param array     $botRaw
+     */
+    private function hydrateBot(Model\Bot $bot, array $botRaw)
+    {
+        $bot->setIsBot(true);
+
+        if (isset($botRaw['name']) && $this->isRealResult($botRaw['name'])) {
+            $bot->setName($botRaw['name']);
+        }
+        if (isset($botRaw['category']) && $this->isRealResult($botRaw['category'])) {
+            $bot->setType($botRaw['category']);
+        }
+    }
+
+    /**
+     *
+     * @param Model\Browser $browser
+     * @param array         $clientRaw
+     */
+    private function hydrateBrowser(Model\Browser $browser, array $clientRaw)
+    {
+        if (isset($clientRaw['name']) && $this->isRealResult($clientRaw['name']) === true) {
+            $browser->setName($clientRaw['name']);
+        }
+
+        if (isset($clientRaw['version']) && $this->isRealResult($clientRaw['version']) === true) {
+            $browser->getVersion()->setComplete($clientRaw['version']);
+        }
+    }
+
+    /**
+     *
+     * @param Model\RenderingEngine $engine
+     * @param array                 $clientRaw
+     */
+    private function hydrateRenderingEngine(Model\RenderingEngine $engine, array $clientRaw)
+    {
+        if (isset($clientRaw['engine']) && $this->isRealResult($clientRaw['engine']) === true) {
+            $engine->setName($clientRaw['engine']);
+        }
+    }
+
+    /**
+     *
+     * @param Model\OperatingSystem $os
+     * @param stdClass              $osRaw
+     */
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, array $osRaw)
+    {
+        if (isset($osRaw['name']) && $this->isRealResult($osRaw['name']) === true) {
+            $os->setName($osRaw['name']);
+        }
+
+        if (isset($osRaw['version']) && $this->isRealResult($osRaw['version']) === true) {
+            $os->getVersion()->setComplete($osRaw['version']);
+        }
+    }
+
+    /**
+     *
+     * @param Model\UserAgent $device
+     * @param stdClass        $resultRaw
+     */
+    private function hydrateDevice(Model\Device $device, DeviceDetector $dd)
+    {
+        if ($this->isRealResult($dd->getModel()) === true) {
+            $device->setModel($dd->getModel());
+        }
+
+        if ($this->isRealResult($dd->getBrandName()) === true) {
+            $device->setBrand($dd->getBrandName());
+        }
+
+        if ($this->isRealResult($dd->getDeviceName()) === true) {
+            $device->setType($dd->getDeviceName());
+        }
+
+        if ($dd->isMobile() === true) {
+            $device->setIsMobile(true);
+        }
+
+        if ($dd->isTouchEnabled() === true) {
+            $device->setIsTouch(true);
+        }
+    }
+
     public function parse($userAgent, array $headers = [])
     {
         $dd = $this->getParser();
@@ -161,81 +250,18 @@ class PiwikDeviceDetector extends AbstractProvider
          * Bot detection
          */
         if ($dd->isBot() === true) {
-            $bot = $result->getBot();
-            $bot->setIsBot(true);
-
-            $botRaw = $dd->getBot();
-            if (isset($botRaw['name']) && $this->isRealResult($botRaw['name'])) {
-                $bot->setName($botRaw['name']);
-            }
-            if (isset($botRaw['category']) && $this->isRealResult($botRaw['category'])) {
-                $bot->setType($botRaw['category']);
-            }
+            $this->hydrateBot($result->getBot(), $dd->getBot());
 
             return $result;
         }
 
         /*
-         * Browser
+         * hydrate the result
          */
-        $browser = $result->getBrowser();
-
-        $ddClient = $dd->getClient();
-        if (isset($ddClient['name']) && $this->isRealResult($ddClient['name']) === true) {
-            $browser->setName($ddClient['name']);
-        }
-
-        if (isset($ddClient['version']) && $this->isRealResult($ddClient['version']) === true) {
-            $browser->getVersion()->setComplete($ddClient['version']);
-        }
-
-        /*
-         * renderingEngine
-         */
-        $renderingEngine = $result->getRenderingEngine();
-
-        if (isset($ddClient['engine']) && $this->isRealResult($ddClient['engine']) === true) {
-            $renderingEngine->setName($ddClient['engine']);
-        }
-
-        /*
-         * operatingSystem
-         */
-        $operatingSystem = $result->getOperatingSystem();
-
-        $ddOs = $dd->getOs();
-        if (isset($ddOs['name']) && $this->isRealResult($ddOs['name']) === true) {
-            $operatingSystem->setName($ddOs['name']);
-        }
-
-        if (isset($ddOs['version']) && $this->isRealResult($ddOs['version']) === true) {
-            $operatingSystem->getVersion()->setComplete($ddOs['version']);
-        }
-
-        /*
-         * device
-         */
-        $device = $result->getDevice();
-
-        if ($this->isRealResult($dd->getModel()) === true) {
-            $device->setModel($dd->getModel());
-        }
-
-        if ($this->isRealResult($dd->getBrandName()) === true) {
-            $device->setBrand($dd->getBrandName());
-        }
-
-        if ($this->isRealResult($dd->getDeviceName()) === true) {
-            $device->setType($dd->getDeviceName());
-        }
-
-        if ($dd->isMobile() === true) {
-            $device->setIsMobile(true);
-        }
-
-        if ($dd->isTouchEnabled() === true) {
-            $device->setIsTouch(true);
-        }
+        $this->hydrateBrowser($result->getBrowser(), $dd->getClient());
+        $this->hydrateRenderingEngine($result->getRenderingEngine(), $dd->getClient());
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $dd->getOs());
+        $this->hydrateDevice($result->getDevice(), $dd);
 
         return $result;
     }

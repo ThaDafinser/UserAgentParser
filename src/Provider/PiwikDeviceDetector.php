@@ -139,10 +139,10 @@ class PiwikDeviceDetector extends AbstractProvider
 
     /**
      *
-     * @param Model\Bot $bot
-     * @param array     $botRaw
+     * @param Model\Bot     $bot
+     * @param array|boolean $botRaw
      */
-    private function hydrateBot(Model\Bot $bot, array $botRaw)
+    private function hydrateBot(Model\Bot $bot, $botRaw)
     {
         $bot->setIsBot(true);
 
@@ -157,9 +157,9 @@ class PiwikDeviceDetector extends AbstractProvider
     /**
      *
      * @param Model\Browser $browser
-     * @param array         $clientRaw
+     * @param array|string  $clientRaw
      */
-    private function hydrateBrowser(Model\Browser $browser, array $clientRaw)
+    private function hydrateBrowser(Model\Browser $browser, $clientRaw)
     {
         if (isset($clientRaw['name']) && $this->isRealResult($clientRaw['name']) === true) {
             $browser->setName($clientRaw['name']);
@@ -173,9 +173,9 @@ class PiwikDeviceDetector extends AbstractProvider
     /**
      *
      * @param Model\RenderingEngine $engine
-     * @param array                 $clientRaw
+     * @param array|string          $clientRaw
      */
-    private function hydrateRenderingEngine(Model\RenderingEngine $engine, array $clientRaw)
+    private function hydrateRenderingEngine(Model\RenderingEngine $engine, $clientRaw)
     {
         if (isset($clientRaw['engine']) && $this->isRealResult($clientRaw['engine']) === true) {
             $engine->setName($clientRaw['engine']);
@@ -185,9 +185,9 @@ class PiwikDeviceDetector extends AbstractProvider
     /**
      *
      * @param Model\OperatingSystem $os
-     * @param stdClass              $osRaw
+     * @param array|string          $osRaw
      */
-    private function hydrateOperatingSystem(Model\OperatingSystem $os, array $osRaw)
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, $osRaw)
     {
         if (isset($osRaw['name']) && $this->isRealResult($osRaw['name']) === true) {
             $os->setName($osRaw['name']);
@@ -201,7 +201,7 @@ class PiwikDeviceDetector extends AbstractProvider
     /**
      *
      * @param Model\UserAgent $device
-     * @param stdClass        $resultRaw
+     * @param DeviceDetector  $dd
      */
     private function hydrateDevice(Model\Device $device, DeviceDetector $dd)
     {

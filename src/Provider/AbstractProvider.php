@@ -2,7 +2,7 @@
 namespace UserAgentParser\Provider;
 
 use UserAgentParser\Exception;
-use UserAgentParser\Result;
+use UserAgentParser\Model;
 
 abstract class AbstractProvider
 {
@@ -101,7 +101,7 @@ abstract class AbstractProvider
      *
      * @throws Exception\NoResultFoundException
      *
-     * @return Result\UserAgent
+     * @return Model\UserAgent
      */
     abstract public function parse($userAgent, array $headers = []);
 }

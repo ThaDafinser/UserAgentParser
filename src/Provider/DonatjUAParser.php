@@ -66,16 +66,12 @@ class DonatjUAParser extends AbstractProvider
          */
 
         /*
-         * Browser
+         * hydrate the result
          */
         $this->hydrateBrowser($result->getBrowser(), $resultRaw);
-
-        /*
-         * operatingSystem
-         *
-         * @todo $resultRaw['platform'] has sometimes informations about the OS or the device
-         * ... maybe split it or how do that?
-         */
+        // renderingEngine not available
+        // os is mixed with device informations
+        // device is mixed with os
 
         return $result;
     }

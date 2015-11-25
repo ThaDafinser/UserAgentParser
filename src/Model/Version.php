@@ -3,14 +3,34 @@ namespace UserAgentParser\Model;
 
 class Version
 {
+    /**
+     * 
+     * @var integer
+     */
     private $major;
 
+    /**
+     * 
+     * @var integer
+     */
     private $minor;
 
+    /**
+     * 
+     * @var integer
+     */
     private $patch;
 
+    /**
+     * 
+     * @var string
+     */
     private $complete;
 
+    /**
+     *
+     * @param integer $major
+     */
     public function setMajor($major)
     {
         if ($major !== null) {
@@ -22,11 +42,19 @@ class Version
         $this->calculateComplete();
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function getMajor()
     {
         return $this->major;
     }
 
+    /**
+     *
+     * @param integer $minor
+     */
     public function setMinor($minor)
     {
         if ($minor !== null) {
@@ -38,11 +66,19 @@ class Version
         $this->calculateComplete();
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function getMinor()
     {
         return $this->minor;
     }
 
+    /**
+     *
+     * @param integer $patch
+     */
     public function setPatch($patch)
     {
         if ($patch !== null) {
@@ -54,6 +90,10 @@ class Version
         $this->calculateComplete();
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function getPatch()
     {
         return $this->patch;
@@ -77,6 +117,10 @@ class Version
         $this->hydrateVersionParts($complete);
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getComplete()
     {
         if ($this->complete === null) {
@@ -151,6 +195,10 @@ class Version
         $this->complete = $version;
     }
 
+    /**
+     *
+     * @return array
+     */
     public function toArray()
     {
         return [

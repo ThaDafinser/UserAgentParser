@@ -210,6 +210,9 @@ class YzalisUAParser extends AbstractProvider
          * Bot detection is currently not possible
          */
 
+        /*
+         * hydrate the result
+         */
         $this->hydrateBrowser($result->getBrowser(), $resultRaw->getBrowser());
         $this->hydrateRenderingEngine($result->getRenderingEngine(), $resultRaw->getRenderingEngine());
         $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw->getOperatingSystem());

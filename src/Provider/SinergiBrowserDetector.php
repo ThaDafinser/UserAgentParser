@@ -199,6 +199,7 @@ class SinergiBrowserDetector extends AbstractProvider
          * hydrate the result
          */
         $this->hydrateBrowser($result->getBrowser(), $browserRaw);
+        // renderingEngine not available
         $this->hydrateOperatingSystem($result->getOperatingSystem(), $osRaw);
         $this->hydrateDevice($result->getDevice(), $osRaw, $deviceRaw);
 

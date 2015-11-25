@@ -105,6 +105,57 @@ class Wurfl extends AbstractProvider
         return true;
     }
 
+    /**
+     *
+     * @param Model\Browser $browser
+     * @param CustomDevice  $deviceRaw
+     */
+    private function hydrateBrowser(Model\Browser $browser, CustomDevice $deviceRaw)
+    {
+        $browser->setName($deviceRaw->getVirtualCapability('advertised_browser'));
+        $browser->getVersion()->setComplete($deviceRaw->getVirtualCapability('advertised_browser_version'));
+    }
+
+    /**
+     *
+     * @param Model\OperatingSystem $os
+     * @param CustomDevice          $deviceRaw
+     */
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, CustomDevice $deviceRaw)
+    {
+        $os->setName($deviceRaw->getVirtualCapability('advertised_device_os'));
+        $os->getVersion()->setComplete($deviceRaw->getVirtualCapability('advertised_device_os_version'));
+    }
+
+    /**
+     *
+     * @param Model\UserAgent $device
+     * @param CustomDevice    $deviceRaw
+     */
+    private function hydrateDevice(Model\Device $device, CustomDevice $deviceRaw)
+    {
+        if ($deviceRaw->getVirtualCapability('is_full_desktop') !== 'true') {
+            if ($this->isRealDeviceModel($deviceRaw->getCapability('model_name')) === true) {
+                $device->setModel($deviceRaw->getCapability('model_name'));
+            }
+
+            if ($this->isRealResult($deviceRaw->getCapability('brand_name')) === true) {
+                $device->setBrand($deviceRaw->getCapability('brand_name'));
+            }
+
+            if ($deviceRaw->getVirtualCapability('is_mobile') === 'true') {
+                $device->setIsMobile(true);
+            }
+
+            if ($deviceRaw->getVirtualCapability('is_touchscreen') === 'true') {
+                $device->setIsTouch(true);
+            }
+        }
+
+        // @see the list of all types http://web.wurfl.io/
+        $device->setType($deviceRaw->getVirtualCapability('form_factor'));
+    }
+
     public function parse($userAgent, array $headers = [])
     {
         $parser = $this->getParser();
@@ -140,46 +191,12 @@ class Wurfl extends AbstractProvider
         }
 
         /*
-         * browser
+         * hydrate the result
          */
-        $browser = $result->getBrowser();
-
-        $browser->setName($deviceRaw->getVirtualCapability('advertised_browser'));
-        $browser->getVersion()->setComplete($deviceRaw->getVirtualCapability('advertised_browser_version'));
-
-        /*
-         * operatingSystem
-         */
-        $operatingSystem = $result->getOperatingSystem();
-
-        $operatingSystem->setName($deviceRaw->getVirtualCapability('advertised_device_os'));
-        $operatingSystem->getVersion()->setComplete($deviceRaw->getVirtualCapability('advertised_device_os_version'));
-
-        /*
-         * device
-         */
-        $device = $result->getDevice();
-
-        if ($deviceRaw->getVirtualCapability('is_full_desktop') !== 'true') {
-            if ($this->isRealDeviceModel($deviceRaw->getCapability('model_name')) === true) {
-                $device->setModel($deviceRaw->getCapability('model_name'));
-            }
-
-            if ($this->isRealResult($deviceRaw->getCapability('brand_name')) === true) {
-                $device->setBrand($deviceRaw->getCapability('brand_name'));
-            }
-
-            if ($deviceRaw->getVirtualCapability('is_mobile') === 'true') {
-                $device->setIsMobile(true);
-            }
-
-            if ($deviceRaw->getVirtualCapability('is_touchscreen') === 'true') {
-                $device->setIsTouch(true);
-            }
-        }
-
-        // @see the list of all types http://web.wurfl.io/
-        $device->setType($deviceRaw->getVirtualCapability('form_factor'));
+        $this->hydrateBrowser($result->getBrowser(), $deviceRaw);
+        // renderingEngine not available
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $deviceRaw);
+        $this->hydrateDevice($result->getDevice(), $deviceRaw);
 
         return $result;
     }

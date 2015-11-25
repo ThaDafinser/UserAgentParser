@@ -6,6 +6,10 @@ use UserAgentParser\Model;
 
 abstract class AbstractProvider
 {
+    /**
+     * 
+     * @var string
+     */
     private $version;
 
     protected $defaultValues = [];

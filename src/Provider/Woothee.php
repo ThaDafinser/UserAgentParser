@@ -185,8 +185,8 @@ class Woothee extends AbstractProvider
          * hydrate the result
          */
         $this->hydrateBrowser($result->getBrowser(), $resultRaw);
-        // renderingEngine - not supported
-        // operatingSystem - not supported (filled OS is mixed! Examples: iPod, iPhone, Android...)
+        // renderingEngine not available
+        // operatingSystem filled OS is mixed! Examples: iPod, iPhone, Android...
         $this->hydrateDevice($result->getDevice(), $resultRaw);
 
         return $result;

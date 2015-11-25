@@ -211,10 +211,10 @@ class UAParser extends AbstractProvider
         }
 
         /*
-         * Browser
+         * hydrate the result
          */
         $this->hydrateBrowser($result->getBrowser(), $resultRaw);
-        // renderingEngine is currently not possible
+        // renderingEngine not available
         $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
         $this->hydrateDevice($result->getDevice(), $resultRaw);
 

@@ -89,6 +89,9 @@ namespace UserAgentParserTest\Provider
                         'major'    => 3,
                         'minor'    => 0,
                         'patch'    => 1,
+
+                        'alias' => null,
+
                         'complete' => '3.0.1',
                     ],
                 ],

@@ -119,65 +119,65 @@ class UAParser extends AbstractProvider
 
     /**
      *
-     * @param Model\Browser           $browser
-     * @param \UAParser\Result\Client $resultRaw
+     * @param Model\Browser              $browser
+     * @param \UAParser\Result\UserAgent $uaRaw
      */
-    private function hydrateBrowser(Model\Browser $browser, \UAParser\Result\Client $resultRaw)
+    private function hydrateBrowser(Model\Browser $browser, \UAParser\Result\UserAgent $uaRaw)
     {
-        if ($this->isRealResult($resultRaw->ua->family) === true) {
-            $browser->setName($resultRaw->ua->family);
+        if ($this->isRealResult($uaRaw->family) === true) {
+            $browser->setName($uaRaw->family);
         }
 
-        if ($this->isRealResult($resultRaw->ua->major) === true) {
-            $browser->getVersion()->setMajor($resultRaw->ua->major);
+        if ($this->isRealResult($uaRaw->major) === true) {
+            $browser->getVersion()->setMajor($uaRaw->major);
         }
 
-        if ($this->isRealResult($resultRaw->ua->minor) === true) {
-            $browser->getVersion()->setMinor($resultRaw->ua->minor);
+        if ($this->isRealResult($uaRaw->minor) === true) {
+            $browser->getVersion()->setMinor($uaRaw->minor);
         }
 
-        if ($this->isRealResult($resultRaw->ua->patch) === true) {
-            $browser->getVersion()->setPatch($resultRaw->ua->patch);
+        if ($this->isRealResult($uaRaw->patch) === true) {
+            $browser->getVersion()->setPatch($uaRaw->patch);
         }
     }
 
     /**
      *
-     * @param Model\OperatingSystem   $os
-     * @param \UAParser\Result\Client $resultRaw
+     * @param Model\OperatingSystem            $os
+     * @param \UAParser\Result\OperatingSystem $osRaw
      */
-    private function hydrateOperatingSystem(Model\OperatingSystem $os, \UAParser\Result\Client $resultRaw)
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, \UAParser\Result\OperatingSystem $osRaw)
     {
-        if ($this->isRealResult($resultRaw->os->family) === true) {
-            $os->setName($resultRaw->os->family);
+        if ($this->isRealResult($osRaw->family) === true) {
+            $os->setName($osRaw->family);
         }
 
-        if ($this->isRealResult($resultRaw->os->major) === true) {
-            $os->getVersion()->setMajor($resultRaw->os->major);
+        if ($this->isRealResult($osRaw->major) === true) {
+            $os->getVersion()->setMajor($osRaw->major);
         }
 
-        if ($this->isRealResult($resultRaw->os->minor) === true) {
-            $os->getVersion()->setMinor($resultRaw->os->minor);
+        if ($this->isRealResult($osRaw->minor) === true) {
+            $os->getVersion()->setMinor($osRaw->minor);
         }
 
-        if ($this->isRealResult($resultRaw->os->patch) === true) {
-            $os->getVersion()->setPatch($resultRaw->os->patch);
+        if ($this->isRealResult($osRaw->patch) === true) {
+            $os->getVersion()->setPatch($osRaw->patch);
         }
     }
 
     /**
      *
      * @param Model\UserAgent         $device
-     * @param \UAParser\Result\Client $resultRaw
+     * @param \UAParser\Result\Device $deviceRaw
      */
-    private function hydrateDevice(Model\Device $device, \UAParser\Result\Client $resultRaw)
+    private function hydrateDevice(Model\Device $device, \UAParser\Result\Device $deviceRaw)
     {
-        if ($this->isRealResult($resultRaw->device->model, $this->getDeviceModelDefaultValues()) === true) {
-            $device->setModel($resultRaw->device->model);
+        if ($this->isRealResult($deviceRaw->model, $this->getDeviceModelDefaultValues()) === true) {
+            $device->setModel($deviceRaw->model);
         }
 
-        if ($this->isRealResult($resultRaw->device->brand, $this->getDeviceBrandDefaultValues()) === true) {
-            $device->setBrand($resultRaw->device->brand);
+        if ($this->isRealResult($deviceRaw->brand, $this->getDeviceBrandDefaultValues()) === true) {
+            $device->setBrand($deviceRaw->brand);
         }
     }
 
@@ -213,10 +213,10 @@ class UAParser extends AbstractProvider
         /*
          * hydrate the result
          */
-        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw->ua);
         // renderingEngine not available
-        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
-        $this->hydrateDevice($result->getDevice(), $resultRaw);
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw->os);
+        $this->hydrateDevice($result->getDevice(), $resultRaw->device);
 
         return $result;
     }

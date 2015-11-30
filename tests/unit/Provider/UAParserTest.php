@@ -140,6 +140,9 @@ class UAParserTest extends AbstractProviderTestCase
                     'major'    => 3,
                     'minor'    => 2,
                     'patch'    => 1,
+
+                    'alias' => null,
+
                     'complete' => '3.2.1',
                 ],
             ],
@@ -173,6 +176,9 @@ class UAParserTest extends AbstractProviderTestCase
                     'major'    => 7,
                     'minor'    => 0,
                     'patch'    => 1,
+
+                    'alias' => null,
+
                     'complete' => '7.0.1',
                 ],
             ],

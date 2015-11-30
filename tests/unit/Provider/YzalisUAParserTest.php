@@ -148,6 +148,9 @@ class YzalisUAParserTest extends AbstractProviderTestCase
                     'major'    => 3,
                     'minor'    => 2,
                     'patch'    => 1,
+
+                    'alias' => null,
+
                     'complete' => '3.2.1',
                 ],
             ],
@@ -158,6 +161,9 @@ class YzalisUAParserTest extends AbstractProviderTestCase
                     'major'    => 6,
                     'minor'    => 5,
                     'patch'    => 4,
+
+                    'alias' => null,
+
                     'complete' => '6.5.4',
                 ],
             ],
@@ -193,6 +199,9 @@ class YzalisUAParserTest extends AbstractProviderTestCase
                     'major'    => 7,
                     'minor'    => 0,
                     'patch'    => 1,
+
+                    'alias' => null,
+
                     'complete' => '7.0.1',
                 ],
             ],

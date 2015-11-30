@@ -139,6 +139,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
                     'major'    => 3,
                     'minor'    => 2,
                     'patch'    => 1,
+
+                    'alias' => null,
+
                     'complete' => '3.2.1',
                 ],
             ],
@@ -184,6 +187,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
                     'major'    => 4,
                     'minor'    => 7,
                     'patch'    => 3,
+
+                    'alias' => null,
+
                     'complete' => '4.7.3',
                 ],
             ],
@@ -225,6 +231,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
                     'major'    => 3,
                     'minor'    => 2,
                     'patch'    => 1,
+
+                    'alias' => null,
+
                     'complete' => '3.2.1',
                 ],
             ],
@@ -266,6 +275,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
                     'major'    => 7,
                     'minor'    => 0,
                     'patch'    => 1,
+
+                    'alias' => null,
+
                     'complete' => '7.0.1',
                 ],
             ],

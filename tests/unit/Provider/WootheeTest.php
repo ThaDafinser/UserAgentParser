@@ -117,6 +117,9 @@ class WootheeTest extends AbstractProviderTestCase
                     'major'    => 3,
                     'minor'    => 0,
                     'patch'    => 1,
+
+                    'alias' => null,
+
                     'complete' => '3.0.1',
                 ],
             ],
@@ -175,6 +178,9 @@ class WootheeTest extends AbstractProviderTestCase
                     'major'    => null,
                     'minor'    => null,
                     'patch'    => null,
+
+                    'alias' => null,
+
                     'complete' => null,
                 ],
             ],

@@ -257,6 +257,9 @@ class BrowscapPhpTest extends AbstractProviderTestCase
                     'major'    => null,
                     'minor'    => null,
                     'patch'    => null,
+
+                    'alias' => null,
+
                     'complete' => null,
                 ],
             ],
@@ -297,6 +300,9 @@ class BrowscapPhpTest extends AbstractProviderTestCase
                     'major'    => 1,
                     'minor'    => 5,
                     'patch'    => 2,
+
+                    'alias' => null,
+
                     'complete' => '1.5.2',
                 ],
             ],
@@ -307,6 +313,9 @@ class BrowscapPhpTest extends AbstractProviderTestCase
                     'major'    => 13,
                     'minor'    => 0,
                     'patch'    => null,
+
+                    'alias' => null,
+
                     'complete' => '13.0',
                 ],
             ],
@@ -317,6 +326,9 @@ class BrowscapPhpTest extends AbstractProviderTestCase
                     'major'    => 5,
                     'minor'    => 0,
                     'patch'    => null,
+
+                    'alias' => null,
+
                     'complete' => '5.0',
                 ],
             ],

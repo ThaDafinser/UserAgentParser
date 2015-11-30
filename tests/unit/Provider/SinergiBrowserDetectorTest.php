@@ -172,6 +172,9 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
                     'major'    => 28,
                     'minor'    => 0,
                     'patch'    => 1468,
+
+                    'alias' => null,
+
                     'complete' => '28.0.1468',
                 ],
             ],
@@ -218,6 +221,9 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
                     'major'    => 7,
                     'minor'    => 0,
                     'patch'    => 1,
+
+                    'alias' => null,
+
                     'complete' => '7.0.1',
                 ],
             ],

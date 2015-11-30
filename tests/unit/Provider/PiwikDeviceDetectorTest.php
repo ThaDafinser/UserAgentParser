@@ -128,6 +128,9 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
                     'major'    => 3,
                     'minor'    => 0,
                     'patch'    => null,
+
+                    'alias' => null,
+
                     'complete' => '3.0',
                 ],
             ],
@@ -138,6 +141,9 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
                     'major'    => null,
                     'minor'    => null,
                     'patch'    => null,
+
+                    'alias' => null,
+
                     'complete' => null,
                 ],
             ],
@@ -176,6 +182,9 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
                     'major'    => 7,
                     'minor'    => 0,
                     'patch'    => null,
+
+                    'alias' => null,
+
                     'complete' => '7.0',
                 ],
             ],

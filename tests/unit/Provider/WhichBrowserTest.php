@@ -16,10 +16,10 @@ class WhichBrowserTest extends AbstractProviderTestCase
     {
         $parser = $this->getMock('WhichBrowser\Parser', [], [], '', false);
 
-        $parser->browser = new \WhichBrowser\Browser();
-        $parser->engine  = new \WhichBrowser\Engine();
-        $parser->os      = new \WhichBrowser\Os();
-        $parser->device  = new \WhichBrowser\Device();
+        $parser->browser = new \WhichBrowser\Model\Browser();
+        $parser->engine  = new \WhichBrowser\Model\Engine();
+        $parser->os      = new \WhichBrowser\Model\Os();
+        $parser->device  = new \WhichBrowser\Model\Device();
 
         return $parser;
     }
@@ -82,7 +82,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $parser->expects($this->any())
             ->method('getType')
             ->will($this->returnValue('bot'));
-        $parser->browser = new \WhichBrowser\Browser([
+        $parser->browser = new \WhichBrowser\Model\Browser([
             'name' => 'Googlebot',
         ]);
 
@@ -116,9 +116,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
             ->method('isDetected')
             ->will($this->returnValue(true));
 
-        $parser->browser = new \WhichBrowser\Browser([
+        $parser->browser = new \WhichBrowser\Model\Browser([
             'name'    => 'Firefox',
-            'version' => new \WhichBrowser\Version([
+            'version' => new \WhichBrowser\Model\Version([
                 'value' => '3.2.1',
             ]),
         ]);
@@ -160,14 +160,14 @@ class WhichBrowserTest extends AbstractProviderTestCase
             ->method('isDetected')
             ->will($this->returnValue(true));
 
-        $using = new \WhichBrowser\Using([
+        $using = new \WhichBrowser\Model\Using([
             'name'    => 'Another',
-            'version' => new \WhichBrowser\Version([
+            'version' => new \WhichBrowser\Model\Version([
                 'value' => '4.7.3',
             ]),
         ]);
 
-        $parser->browser = new \WhichBrowser\Browser([
+        $parser->browser = new \WhichBrowser\Model\Browser([
             'using'    => $using,
         ]);
 
@@ -208,9 +208,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
             ->method('isDetected')
             ->will($this->returnValue(true));
 
-        $parser->engine = new \WhichBrowser\Engine([
+        $parser->engine = new \WhichBrowser\Model\Engine([
             'name'    => 'Webkit',
-            'version' => new \WhichBrowser\Version([
+            'version' => new \WhichBrowser\Model\Version([
                 'value' => '3.2.1',
             ]),
         ]);
@@ -252,9 +252,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
             ->method('isDetected')
             ->will($this->returnValue(true));
 
-        $parser->os = new \WhichBrowser\Os([
+        $parser->os = new \WhichBrowser\Model\Os([
             'name'    => 'Windows',
-            'version' => new \WhichBrowser\Version([
+            'version' => new \WhichBrowser\Model\Version([
                 'value' => '7.0.1',
             ]),
         ]);
@@ -299,7 +299,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
         ->method('getType')
         ->will($this->returnValue('watch'));
 
-        $parser->device = new \WhichBrowser\Device([
+        $parser->device = new \WhichBrowser\Model\Device([
             'identified'   => true,
             'model'        => 'iPhone',
             'manufacturer' => 'Apple',

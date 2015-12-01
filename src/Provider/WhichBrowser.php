@@ -40,10 +40,10 @@ class WhichBrowser extends AbstractProvider
 
     /**
      *
-     * @param Model\Bot             $bot
-     * @param \WhichBrowser\Browser $browserRaw
+     * @param Model\Bot                   $bot
+     * @param \WhichBrowser\Model\Browser $browserRaw
      */
-    private function hydrateBot(Model\Bot $bot, \WhichBrowser\Browser $browserRaw)
+    private function hydrateBot(Model\Bot $bot, \WhichBrowser\Model\Browser $browserRaw)
     {
         $bot->setIsBot(true);
 
@@ -54,10 +54,10 @@ class WhichBrowser extends AbstractProvider
 
     /**
      *
-     * @param Model\Browser         $browser
-     * @param \WhichBrowser\Browser $browserRaw
+     * @param Model\Browser               $browser
+     * @param \WhichBrowser\Model\Browser $browserRaw
      */
-    private function hydrateBrowser(Model\Browser $browser, \WhichBrowser\Browser $browserRaw)
+    private function hydrateBrowser(Model\Browser $browser, \WhichBrowser\Model\Browser $browserRaw)
     {
         if ($this->isRealResult($browserRaw->getName()) === true) {
             $browser->setName($browserRaw->getName());
@@ -69,8 +69,8 @@ class WhichBrowser extends AbstractProvider
             return;
         }
 
-        if (isset($browserRaw->using) && $browserRaw->using instanceof \WhichBrowser\Using) {
-            /* @var $usingRaw \WhichBrowser\Using */
+        if (isset($browserRaw->using) && $browserRaw->using instanceof \WhichBrowser\Model\Using) {
+            /* @var $usingRaw \WhichBrowser\Model\Using */
             $usingRaw = $browserRaw->using;
 
             if ($this->isRealResult($usingRaw->getName()) === true) {
@@ -85,10 +85,10 @@ class WhichBrowser extends AbstractProvider
 
     /**
      *
-     * @param Model\RenderingEngine $engine
-     * @param \WhichBrowser\Engine  $engineRaw
+     * @param Model\RenderingEngine      $engine
+     * @param \WhichBrowser\Model\Engine $engineRaw
      */
-    private function hydrateRenderingEngine(Model\RenderingEngine $engine, \WhichBrowser\Engine $engineRaw)
+    private function hydrateRenderingEngine(Model\RenderingEngine $engine, \WhichBrowser\Model\Engine $engineRaw)
     {
         if ($this->isRealResult($engineRaw->getName()) === true) {
             $engine->setName($engineRaw->getName());
@@ -101,10 +101,10 @@ class WhichBrowser extends AbstractProvider
 
     /**
      *
-     * @param Model\OperatingSystem $os
-     * @param \WhichBrowser\Os      $osRaw
+     * @param Model\OperatingSystem  $os
+     * @param \WhichBrowser\Model\Os $osRaw
      */
-    private function hydrateOperatingSystem(Model\OperatingSystem $os, \WhichBrowser\Os $osRaw)
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, \WhichBrowser\Model\Os $osRaw)
     {
         if ($this->isRealResult($osRaw->getName()) === true) {
             $os->setName($osRaw->getName());
@@ -117,11 +117,11 @@ class WhichBrowser extends AbstractProvider
 
     /**
      *
-     * @param Model\Device         $device
-     * @param \WhichBrowser\Device $deviceRaw
-     * @param WhichBrowserParser   $parser
+     * @param Model\Device               $device
+     * @param \WhichBrowser\Model\Device $deviceRaw
+     * @param WhichBrowserParser         $parser
      */
-    private function hydrateDevice(Model\Device $device, \WhichBrowser\Device $deviceRaw, WhichBrowserParser $parser)
+    private function hydrateDevice(Model\Device $device, \WhichBrowser\Model\Device $deviceRaw, WhichBrowserParser $parser)
     {
         if ($this->isRealResult($deviceRaw->getModel()) === true) {
             $device->setModel($deviceRaw->getModel());

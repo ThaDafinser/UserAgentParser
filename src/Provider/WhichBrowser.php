@@ -3,14 +3,14 @@ namespace UserAgentParser\Provider;
 
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
-use WhichBrowser\Parser as WhichBrowserParser;
+use WhichBrowser\Parser;
 
 class WhichBrowser extends AbstractProvider
 {
     /**
      * Used for unitTests mocking
      *
-     * @var WhichBrowserParser
+     * @var Parser
      */
     private $parser;
 
@@ -26,8 +26,8 @@ class WhichBrowser extends AbstractProvider
 
     /**
      *
-     * @param  array              $headers
-     * @return WhichBrowserParser
+     * @param  array  $headers
+     * @return Parser
      */
     public function getParser(array $headers)
     {
@@ -35,7 +35,7 @@ class WhichBrowser extends AbstractProvider
             return $this->parser;
         }
 
-        return new WhichBrowserParser($headers);
+        return new Parser($headers);
     }
 
     /**
@@ -119,9 +119,9 @@ class WhichBrowser extends AbstractProvider
      *
      * @param Model\Device               $device
      * @param \WhichBrowser\Model\Device $deviceRaw
-     * @param WhichBrowserParser         $parser
+     * @param Parser                     $parser
      */
-    private function hydrateDevice(Model\Device $device, \WhichBrowser\Model\Device $deviceRaw, WhichBrowserParser $parser)
+    private function hydrateDevice(Model\Device $device, \WhichBrowser\Model\Device $deviceRaw, Parser $parser)
     {
         if ($this->isRealResult($deviceRaw->getModel()) === true) {
             $device->setModel($deviceRaw->getModel());

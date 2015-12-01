@@ -62,7 +62,7 @@
         
         "whichbrowser/parser": "^2.0",
         
-        "woothee/woothee": "^1.2",
+        "woothee/woothee": ">=2.0.3,<2.1",
         
         "yzalis/ua-parser": "^0.2"
     },

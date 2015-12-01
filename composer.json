@@ -60,9 +60,9 @@
         
         "ua-parser/uap-php": "^3.4",
         
-        "whichbrowser/parser": "^2.0",
+        "whichbrowser/parser": ">=2.0.3,<2.1",
         
-        "woothee/woothee": ">=2.0.3,<2.1",
+        "woothee/woothee": "^1.2",
         
         "yzalis/ua-parser": "^0.2"
     },

@@ -6,6 +6,38 @@ use UserAgentParser\Model;
 
 class DonatjUAParser extends AbstractProvider
 {
+    protected $detectionCapabilities = [
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'device' => [
+            'model'    => false,
+            'brand'    => false,
+            'type'     => false,
+            'isMobile' => false,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => false,
+            'name'  => false,
+            'type'  => false,
+        ],
+    ];
+
     public function getName()
     {
         return 'DonatjUAParser';

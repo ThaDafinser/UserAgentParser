@@ -7,6 +7,38 @@ use UserAgentParser\Model;
 
 class UAParser extends AbstractProvider
 {
+    protected $detectionCapabilities = [
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'device' => [
+            'model'    => true,
+            'brand'    => true,
+            'type'     => false,
+            'isMobile' => false,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => true,
+            'name'  => true,
+            'type'  => false,
+        ],
+    ];
+
     protected $defaultValues = [
         'Other',
     ];

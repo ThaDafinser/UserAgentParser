@@ -7,6 +7,38 @@ use UserAgentParser\Model;
 
 class PiwikDeviceDetector extends AbstractProvider
 {
+    protected $detectionCapabilities = [
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => true,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'device' => [
+            'model'    => true,
+            'brand'    => true,
+            'type'     => true,
+            'isMobile' => true,
+            'isTouch'  => true,
+        ],
+
+        'bot' => [
+            'isBot' => true,
+            'name'  => true,
+            'type'  => true,
+        ],
+    ];
+
     protected $defaultValues = [
         DeviceDetector::UNKNOWN,
     ];

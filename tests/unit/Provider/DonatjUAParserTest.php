@@ -53,6 +53,43 @@ namespace UserAgentParserTest\Provider
             $this->assertInternalType('string', $provider->getVersion());
         }
 
+        public function testDetectionCapabilities()
+        {
+            $provider = new DonatjUAParser();
+
+            $this->assertEquals([
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'device' => [
+            'model'    => false,
+            'brand'    => false,
+            'type'     => false,
+            'isMobile' => false,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => false,
+            'name'  => false,
+            'type'  => false,
+        ],
+    ], $provider->getDetectionCapabilities());
+        }
+
         /**
          * @expectedException \UserAgentParser\Exception\NoResultFoundException
          */

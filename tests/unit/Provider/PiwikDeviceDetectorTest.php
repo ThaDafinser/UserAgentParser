@@ -41,6 +41,43 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
         $this->assertInternalType('string', $provider->getVersion());
     }
 
+    public function testDetectionCapabilities()
+    {
+        $provider = new PiwikDeviceDetector();
+
+        $this->assertEquals([
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => true,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'device' => [
+            'model'    => true,
+            'brand'    => true,
+            'type'     => true,
+            'isMobile' => true,
+            'isTouch'  => true,
+        ],
+
+        'bot' => [
+            'isBot' => true,
+            'name'  => true,
+            'type'  => true,
+        ],
+    ], $provider->getDetectionCapabilities());
+    }
+
     public function testParser()
     {
         $parser = $this->getParser();

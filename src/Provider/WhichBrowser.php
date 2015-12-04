@@ -7,6 +7,38 @@ use WhichBrowser\Parser as WhichBrowserParser;
 
 class WhichBrowser extends AbstractProvider
 {
+    protected $detectionCapabilities = [
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'operatingSystem' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'device' => [
+            'model'    => true,
+            'brand'    => true,
+            'type'     => true,
+            'isMobile' => true,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => true,
+            'name'  => true,
+            'type'  => false,
+        ],
+    ];
+
     /**
      * Used for unitTests mocking
      *

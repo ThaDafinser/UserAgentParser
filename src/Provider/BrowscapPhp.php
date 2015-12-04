@@ -8,6 +8,38 @@ use UserAgentParser\Model;
 
 class BrowscapPhp extends AbstractProvider
 {
+    protected $detectionCapabilities = [
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'operatingSystem' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'device' => [
+            'model'    => true,
+            'brand'    => true,
+            'type'     => true,
+            'isMobile' => true,
+            'isTouch'  => true,
+        ],
+
+        'bot' => [
+            'isBot' => true,
+            'name'  => true,
+            'type'  => true,
+        ],
+    ];
+
     protected $defaultValues = [
         'DefaultProperties',
         'Default Browser',

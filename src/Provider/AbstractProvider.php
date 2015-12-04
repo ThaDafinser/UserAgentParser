@@ -7,12 +7,56 @@ use UserAgentParser\Model;
 abstract class AbstractProvider
 {
     /**
-     * 
+     *
      * @var string
      */
     private $version;
 
     protected $defaultValues = [];
+
+    /**
+     * Per default the provider cannot detect anything
+     * Activate them in $detectionCapabilities
+     *
+     * @var array
+     */
+    protected $allDetectionCapabilities = [
+        'browser' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'renderingEngine' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'device' => [
+            'model'    => false,
+            'brand'    => false,
+            'type'     => false,
+            'isMobile' => false,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => false,
+            'name'  => false,
+            'type'  => false,
+        ],
+    ];
+
+    /**
+     * Set this in each Provider implementation
+     *
+     * @var array
+     */
+    protected $detectionCapabilities = [];
 
     /**
      * Return the name of the provider
@@ -76,6 +120,16 @@ abstract class AbstractProvider
     }
 
     /**
+     * What kind of capabilities this provider can detect
+     *
+     * @return array
+     */
+    public function getDetectionCapabilities()
+    {
+        return array_merge($this->allDetectionCapabilities, $this->detectionCapabilities);
+    }
+
+    /**
      *
      * @param  mixed   $value
      * @param  array   $additionalDefaultValues
@@ -99,6 +153,7 @@ abstract class AbstractProvider
     }
 
     /**
+     * Parse the given user agent and return a result if possible
      *
      * @param string $userAgent
      * @param array  $headers

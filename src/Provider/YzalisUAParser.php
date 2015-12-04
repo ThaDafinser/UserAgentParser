@@ -8,6 +8,38 @@ use UserAgentParser\Model;
 
 class YzalisUAParser extends AbstractProvider
 {
+    protected $detectionCapabilities = [
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'operatingSystem' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'device' => [
+            'model'    => true,
+            'brand'    => true,
+            'type'     => true,
+            'isMobile' => false,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => false,
+            'name'  => false,
+            'type'  => false,
+        ],
+    ];
+
     protected $defaultValues = [
         'Other',
     ];
@@ -159,28 +191,6 @@ class YzalisUAParser extends AbstractProvider
         if ($this->isRealResult($deviceRaw->getType()) === true && $deviceRaw->getType() !== 'desktop') {
             $device->setType($deviceRaw->getType());
         }
-
-        if ($this->isMobile($deviceRaw) === true) {
-            $device->setIsMobile(true);
-        }
-    }
-
-    /**
-     *
-     * @param  UAResult\DeviceResult $deviceRaw
-     * @return bool
-     */
-    private function isMobile(UAResult\DeviceResult $deviceRaw)
-    {
-        if ($deviceRaw->getType() === 'mobile') {
-            return true;
-        }
-
-        if ($deviceRaw->getType() === 'tablet') {
-            return true;
-        }
-
-        return false;
     }
 
     public function parse($userAgent, array $headers = [])

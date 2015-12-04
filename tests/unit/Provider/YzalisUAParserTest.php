@@ -74,6 +74,43 @@ class YzalisUAParserTest extends AbstractProviderTestCase
         $this->assertInternalType('string', $provider->getVersion());
     }
 
+    public function testDetectionCapabilities()
+    {
+        $provider = new YzalisUAParser();
+
+        $this->assertEquals([
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'operatingSystem' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'device' => [
+            'model'    => true,
+            'brand'    => true,
+            'type'     => true,
+            'isMobile' => false,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => false,
+            'name'  => false,
+            'type'  => false,
+        ],
+    ], $provider->getDetectionCapabilities());
+    }
+
     public function testParser()
     {
         $parser = $this->getParser();
@@ -145,9 +182,9 @@ class YzalisUAParserTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Firefox',
                 'version' => [
-                    'major'    => 3,
-                    'minor'    => 2,
-                    'patch'    => 1,
+                    'major' => 3,
+                    'minor' => 2,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -158,9 +195,9 @@ class YzalisUAParserTest extends AbstractProviderTestCase
             'renderingEngine' => [
                 'name'    => 'WebKit',
                 'version' => [
-                    'major'    => 6,
-                    'minor'    => 5,
-                    'patch'    => 4,
+                    'major' => 6,
+                    'minor' => 5,
+                    'patch' => 4,
 
                     'alias' => null,
 
@@ -196,9 +233,9 @@ class YzalisUAParserTest extends AbstractProviderTestCase
             'operatingSystem' => [
                 'name'    => 'Windows',
                 'version' => [
-                    'major'    => 7,
-                    'minor'    => 0,
-                    'patch'    => 1,
+                    'major' => 7,
+                    'minor' => 0,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -235,7 +272,7 @@ class YzalisUAParserTest extends AbstractProviderTestCase
                 'brand' => 'Apple',
                 'type'  => 'tablet',
 
-                'isMobile' => true,
+                'isMobile' => null,
                 'isTouch'  => null,
             ],
         ];
@@ -267,7 +304,7 @@ class YzalisUAParserTest extends AbstractProviderTestCase
                 'brand' => null,
                 'type'  => 'mobile',
 
-                'isMobile' => true,
+                'isMobile' => null,
                 'isTouch'  => null,
             ],
         ];

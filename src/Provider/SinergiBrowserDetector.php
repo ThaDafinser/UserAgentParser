@@ -7,6 +7,38 @@ use UserAgentParser\Model;
 
 class SinergiBrowserDetector extends AbstractProvider
 {
+    protected $detectionCapabilities = [
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'device' => [
+            'model'    => true,
+            'brand'    => false,
+            'type'     => false,
+            'isMobile' => true,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => true,
+            'name'  => false,
+            'type'  => false,
+        ],
+    ];
+
     protected $defaultValues = [
         BrowserDetector\Browser::UNKNOWN,
     ];

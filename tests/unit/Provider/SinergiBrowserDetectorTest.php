@@ -62,6 +62,43 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         $this->assertInternalType('string', $provider->getVersion());
     }
 
+    public function testDetectionCapabilities()
+    {
+        $provider = new SinergiBrowserDetector();
+
+        $this->assertEquals([
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'device' => [
+            'model'    => true,
+            'brand'    => false,
+            'type'     => false,
+            'isMobile' => true,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => true,
+            'name'  => false,
+            'type'  => false,
+        ],
+    ], $provider->getDetectionCapabilities());
+    }
+
     public function testProvider()
     {
         $provider = new SinergiBrowserDetector();

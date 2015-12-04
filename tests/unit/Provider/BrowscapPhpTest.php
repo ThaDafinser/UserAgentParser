@@ -53,6 +53,43 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $this->assertEquals('321', $provider->getVersion());
     }
 
+    public function testDetectionCapabilities()
+    {
+        $provider = new BrowscapPhp($this->getParser());
+
+        $this->assertEquals([
+
+            'browser' => [
+                'name'    => true,
+                'version' => true,
+            ],
+
+            'renderingEngine' => [
+                'name'    => true,
+                'version' => true,
+            ],
+
+            'operatingSystem' => [
+                'name'    => true,
+                'version' => true,
+            ],
+
+            'device' => [
+                'model'    => true,
+                'brand'    => true,
+                'type'     => true,
+                'isMobile' => true,
+                'isTouch'  => true,
+            ],
+
+            'bot' => [
+                'isBot' => true,
+                'name'  => true,
+                'type'  => true,
+            ],
+        ], $provider->getDetectionCapabilities());
+    }
+
     public function testParser()
     {
         $parser = $this->getParser();
@@ -254,9 +291,9 @@ class BrowscapPhpTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Midori',
                 'version' => [
-                    'major'    => null,
-                    'minor'    => null,
-                    'patch'    => null,
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
 
                     'alias' => null,
 
@@ -297,9 +334,9 @@ class BrowscapPhpTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Midori',
                 'version' => [
-                    'major'    => 1,
-                    'minor'    => 5,
-                    'patch'    => 2,
+                    'major' => 1,
+                    'minor' => 5,
+                    'patch' => 2,
 
                     'alias' => null,
 
@@ -310,9 +347,9 @@ class BrowscapPhpTest extends AbstractProviderTestCase
             'renderingEngine' => [
                 'name'    => 'WebKit',
                 'version' => [
-                    'major'    => 13,
-                    'minor'    => 0,
-                    'patch'    => null,
+                    'major' => 13,
+                    'minor' => 0,
+                    'patch' => null,
 
                     'alias' => null,
 
@@ -323,9 +360,9 @@ class BrowscapPhpTest extends AbstractProviderTestCase
             'operatingSystem' => [
                 'name'    => 'iOS',
                 'version' => [
-                    'major'    => 5,
-                    'minor'    => 0,
-                    'patch'    => null,
+                    'major' => 5,
+                    'minor' => 0,
+                    'patch' => null,
 
                     'alias' => null,
 

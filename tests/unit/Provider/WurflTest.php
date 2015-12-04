@@ -45,6 +45,58 @@ class WurflTest extends AbstractProviderTestCase
         $this->assertEquals('2015-12-04 00:00:00', $provider->getVersion());
     }
 
+    public function testVersionNull()
+    {
+        $return          = new \stdClass();
+        $return->version = 'something elese';
+
+        $manager = $this->getManager();
+        $manager->expects($this->any())
+        ->method('getWurflInfo')
+        ->will($this->returnValue($return));
+
+        $provider = new Wurfl($manager);
+
+        $this->assertNull($provider->getVersion());
+    }
+
+    public function testDetectionCapabilities()
+    {
+        $provider = new Wurfl($this->getManager());
+
+        $this->assertEquals([
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'device' => [
+            'model'    => true,
+            'brand'    => true,
+            'type'     => true,
+            'isMobile' => true,
+            'isTouch'  => true,
+        ],
+
+        'bot' => [
+            'isBot' => true,
+            'name'  => false,
+            'type'  => false,
+        ],
+    ], $provider->getDetectionCapabilities());
+    }
+
     public function testParser()
     {
         $manager = $this->getManager();

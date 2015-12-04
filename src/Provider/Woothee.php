@@ -8,6 +8,38 @@ use Woothee\DataSet;
 
 class Woothee extends AbstractProvider
 {
+    protected $detectionCapabilities = [
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'device' => [
+            'model'    => false,
+            'brand'    => false,
+            'type'     => true,
+            'isMobile' => false,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => true,
+            'name'  => true,
+            'type'  => false,
+        ],
+    ];
+
     protected $defaultValues = [
         DataSet::VALUE_UNKNOWN,
     ];
@@ -119,38 +151,6 @@ class Woothee extends AbstractProvider
         if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category']) === true) {
             $device->setType($resultRaw['category']);
         }
-
-        if ($this->isMobile($resultRaw) === true) {
-            $device->setIsMobile(true);
-        }
-    }
-
-    /**
-     *
-     * @param  array $resultRaw
-     * @return bool
-     */
-    private function isMobile(array $resultRaw)
-    {
-        /*
-         * Available types...
-         *
-         * const DATASET_CATEGORY_PC = 'pc';
-         * const DATASET_CATEGORY_SMARTPHONE = 'smartphone';
-         * const DATASET_CATEGORY_MOBILEPHONE = 'mobilephone';
-         * const DATASET_CATEGORY_CRAWLER = 'crawler';
-         * const DATASET_CATEGORY_APPLIANCE = 'appliance';
-         * const DATASET_CATEGORY_MISC = 'misc';
-         */
-        if (isset($resultRaw['category']) && $resultRaw['category'] === DataSet::DATASET_CATEGORY_SMARTPHONE) {
-            return true;
-        }
-
-        if (isset($resultRaw['category']) && $resultRaw['category'] === DataSet::DATASET_CATEGORY_MOBILEPHONE) {
-            return true;
-        }
-
-        return false;
     }
 
     public function parse($userAgent, array $headers = [])

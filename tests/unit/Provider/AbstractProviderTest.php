@@ -59,6 +59,15 @@ class AbstractProviderTest extends AbstractProviderTestCase
         $this->assertInternalType('string', $provider->getVersion());
     }
 
+    public function testDetectionCapabilities()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $this->assertInternalType('array', $provider->getDetectionCapabilities());
+        $this->assertCount(5, $provider->getDetectionCapabilities());
+        $this->assertFalse($provider->getDetectionCapabilities()['browser']['name']);
+    }
+
     public function testIsRealResult()
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
@@ -92,6 +101,9 @@ class AbstractProviderTest extends AbstractProviderTestCase
 
         $this->assertTrue($method->invoke($provider, 'default other'));
 
-        $this->assertFalse($method->invoke($provider, 'default other', ['default', 'default other']));
+        $this->assertFalse($method->invoke($provider, 'default other', [
+            'default',
+            'default other',
+        ]));
     }
 }

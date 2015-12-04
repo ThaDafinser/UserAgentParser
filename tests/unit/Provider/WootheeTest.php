@@ -43,6 +43,43 @@ class WootheeTest extends AbstractProviderTestCase
         $this->assertInternalType('string', $provider->getVersion());
     }
 
+    public function testDetectionCapabilities()
+    {
+        $provider = new Woothee();
+
+        $this->assertEquals([
+
+        'browser' => [
+            'name'    => true,
+            'version' => true,
+        ],
+
+        'renderingEngine' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'operatingSystem' => [
+            'name'    => false,
+            'version' => false,
+        ],
+
+        'device' => [
+            'model'    => false,
+            'brand'    => false,
+            'type'     => true,
+            'isMobile' => false,
+            'isTouch'  => false,
+        ],
+
+        'bot' => [
+            'isBot' => true,
+            'name'  => true,
+            'type'  => false,
+        ],
+    ], $provider->getDetectionCapabilities());
+    }
+
     public function testParser()
     {
         $parser = $this->getParser();
@@ -148,7 +185,7 @@ class WootheeTest extends AbstractProviderTestCase
                 'brand' => null,
                 'type'  => 'smartphone',
 
-                'isMobile' => true,
+                'isMobile' => null,
                 'isTouch'  => null,
             ],
         ];
@@ -190,7 +227,7 @@ class WootheeTest extends AbstractProviderTestCase
                 'brand' => null,
                 'type'  => 'mobilephone',
 
-                'isMobile' => true,
+                'isMobile' => null,
                 'isTouch'  => null,
             ],
         ];

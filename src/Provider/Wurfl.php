@@ -39,7 +39,14 @@ class Wurfl extends AbstractProvider
 
     public function getVersion()
     {
-        return $this->getParser()->getWurflInfo()->version;
+        $version      = $this->getParser()->getWurflInfo()->version;
+        $versionParts = explode(' - ', $version);
+
+        if (count($versionParts) === 2) {
+            return trim($versionParts[1]);
+        }
+
+        return;
     }
 
     /**

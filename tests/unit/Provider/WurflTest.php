@@ -32,7 +32,7 @@ class WurflTest extends AbstractProviderTestCase
     public function testVersion()
     {
         $return          = new \stdClass();
-        $return->version = 'test';
+        $return->version = 'test - 2015-12-04 00:00:00';
 
         $manager = $this->getManager();
         $manager->expects($this->any())
@@ -42,6 +42,7 @@ class WurflTest extends AbstractProviderTestCase
         $provider = new Wurfl($manager);
 
         $this->assertInternalType('string', $provider->getVersion());
+        $this->assertEquals('2015-12-04 00:00:00', $provider->getVersion());
     }
 
     public function testParser()

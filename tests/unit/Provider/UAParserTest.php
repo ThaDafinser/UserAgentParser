@@ -27,19 +27,19 @@ class UAParserTest extends AbstractProviderTestCase
         return $client;
     }
 
-//     /**
-//      *
-//      * @return \PHPUnit_Framework_MockObject_MockObject
-//      */
-//     private function getParser($returnValue = null)
-//     {
-//         $parser = $this->getMock('UAParser\Parser', [], [], '', false);
-//         $parser->expects($this->any())
-//             ->method('parse')
-//             ->will($this->returnValue($returnValue));
+    /**
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser($returnValue = null)
+    {
+        $parser = $this->getMock('UAParser\Parser', [], [], '', false);
+        $parser->expects($this->any())
+            ->method('parse')
+            ->will($this->returnValue($returnValue));
 
-//         return $parser;
-//     }
+        return $parser;
+    }
 
 //     public function testPackageNotLoaded()
 //     {

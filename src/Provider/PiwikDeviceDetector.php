@@ -49,11 +49,18 @@ class PiwikDeviceDetector extends AbstractProvider
      */
     private $parser;
 
-    public function __construct()
+    /**
+     * 
+     * @param  DeviceDetector             $parser
+     * @throws Exception\PackageNotLoaded
+     */
+    public function __construct(DeviceDetector $parser = null)
     {
         if (! class_exists('DeviceDetector\Cache\StaticCache', true)) {
             throw new Exception\PackageNotLoaded('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
         }
+
+        $this->parser = $parser;
     }
 
     public function getName()
@@ -64,15 +71,6 @@ class PiwikDeviceDetector extends AbstractProvider
     public function getComposerPackageName()
     {
         return 'piwik/device-detector';
-    }
-
-    /**
-     *
-     * @param DeviceDetector $parser
-     */
-    public function setParser(DeviceDetector $parser = null)
-    {
-        $this->parser = $parser;
     }
 
     /**

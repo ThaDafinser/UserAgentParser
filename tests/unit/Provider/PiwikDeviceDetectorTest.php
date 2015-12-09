@@ -105,15 +105,14 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
 
     public function testParser()
     {
+        $provider = new PiwikDeviceDetector();
+        $this->assertInstanceOf('DeviceDetector\DeviceDetector', $provider->getParser());
+
         $parser = $this->getParser();
 
-        $provider = new PiwikDeviceDetector();
-        $provider->setParser($parser);
+        $provider = new PiwikDeviceDetector($parser);
 
         $this->assertSame($parser, $provider->getParser());
-
-        $provider->setParser(null);
-        $this->assertInstanceOf('DeviceDetector\DeviceDetector', $provider->getParser());
     }
 
     /**
@@ -123,8 +122,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
     {
         $parser = $this->getParser();
 
-        $provider = new PiwikDeviceDetector();
-        $provider->setParser($parser);
+        $provider = new PiwikDeviceDetector($parser);
 
         $result = $provider->parse('A real user agent...');
     }
@@ -145,8 +143,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
             'category' => 'something',
         ]));
 
-        $provider = new PiwikDeviceDetector();
-        $provider->setParser($parser);
+        $provider = new PiwikDeviceDetector($parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -178,8 +175,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
             ->method('getOs')
             ->will($this->returnValue([]));
 
-        $provider = new PiwikDeviceDetector();
-        $provider->setParser($parser);
+        $provider = new PiwikDeviceDetector($parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -232,8 +228,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
             'version' => '7.0',
         ]));
 
-        $provider = new PiwikDeviceDetector();
-        $provider->setParser($parser);
+        $provider = new PiwikDeviceDetector($parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -290,8 +285,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
             ->method('isTouchEnabled')
             ->will($this->returnValue(true));
 
-        $provider = new PiwikDeviceDetector();
-        $provider->setParser($parser);
+        $provider = new PiwikDeviceDetector($parser);
 
         $result = $provider->parse('A real user agent...');
 

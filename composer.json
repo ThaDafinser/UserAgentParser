@@ -51,21 +51,13 @@
     
     "suggest": {
         "browscap/browscap-php": "Needed to use Provider\\BrowscapPhp",
-         
         "donatj/phpuseragentparser": "Needed to use Provider\\DonatjUAParser",
-        
         "piwik/device-detector": "Needed to use Provider\\PiwikDeviceDetector",
-        
         "sinergi/browser-detector": "Needed to use Provider\\SinergiBrowserDetector",
-        
         "ua-parser/uap-php": "Needed to use Provider\\UAParser",
-        
         "whichbrowser/parser": "Needed to use Provider\\WhichBrowser",
-        
         "woothee/woothee": "Needed to use Provider\\Woothee",
-        
         "mimmi20/wurfl": "Needed to use Provider\\Wurfl",
-        
         "yzalis/ua-parser": "Needed to use Provider\\YzalisUAParser"
     },
     

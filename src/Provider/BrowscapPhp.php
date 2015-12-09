@@ -55,7 +55,7 @@ class BrowscapPhp extends AbstractProvider
 
     public function __construct(Browscap $parser)
     {
-        $this->setParser($parser);
+        $this->parser = $parser;
     }
 
     public function getName()
@@ -73,15 +73,6 @@ class BrowscapPhp extends AbstractProvider
         return $this->getParser()
             ->getCache()
             ->getVersion();
-    }
-
-    /**
-     *
-     * @param Browscap $parser
-     */
-    public function setParser(Browscap $parser)
-    {
-        $this->parser = $parser;
     }
 
     /**

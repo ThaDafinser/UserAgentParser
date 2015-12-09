@@ -107,14 +107,8 @@ class WootheeTest extends AbstractProviderTestCase
 
     public function testParser()
     {
-        $parser = $this->getParser();
-
         $provider = new Woothee();
-        $provider->setParser($parser);
 
-        $this->assertSame($parser, $provider->getParser());
-
-        $provider->setParser(null);
         $this->assertInstanceOf('Woothee\Classifier', $provider->getParser());
     }
 
@@ -126,7 +120,11 @@ class WootheeTest extends AbstractProviderTestCase
         $parser = $this->getParser();
 
         $provider = new Woothee();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
     }
@@ -142,7 +140,11 @@ class WootheeTest extends AbstractProviderTestCase
         ]);
 
         $provider = new Woothee();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -168,7 +170,11 @@ class WootheeTest extends AbstractProviderTestCase
         ]);
 
         $provider = new Woothee();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -200,7 +206,11 @@ class WootheeTest extends AbstractProviderTestCase
         ]);
 
         $provider = new Woothee();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -229,7 +239,11 @@ class WootheeTest extends AbstractProviderTestCase
         ]);
 
         $provider = new Woothee();
-        $provider->setParser($parser);
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
 
         $result = $provider->parse('A real user agent...');
 

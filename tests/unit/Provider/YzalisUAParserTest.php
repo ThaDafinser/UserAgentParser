@@ -138,15 +138,14 @@ class YzalisUAParserTest extends AbstractProviderTestCase
 
     public function testParser()
     {
+        $provider = new YzalisUAParser();
+        $this->assertInstanceOf('UAParser\UAParser', $provider->getParser());
+
         $parser = $this->getParser();
 
-        $provider = new YzalisUAParser();
-        $provider->setParser($parser);
+        $provider = new YzalisUAParser($parser);
 
         $this->assertSame($parser, $provider->getParser());
-
-        $provider->setParser(null);
-        $this->assertInstanceOf('UAParser\UAParser', $provider->getParser());
     }
 
     /**
@@ -156,8 +155,7 @@ class YzalisUAParserTest extends AbstractProviderTestCase
     {
         $parser = $this->getParser($this->getResultMock());
 
-        $provider = new YzalisUAParser();
-        $provider->setParser($parser);
+        $provider = new YzalisUAParser($parser);
 
         $result = $provider->parse('A real user agent...');
     }
@@ -173,8 +171,7 @@ class YzalisUAParserTest extends AbstractProviderTestCase
         ]);
         $parser = $this->getParser($result);
 
-        $provider = new YzalisUAParser();
-        $provider->setParser($parser);
+        $provider = new YzalisUAParser($parser);
 
         $result = $provider->parse('A real user agent...');
     }
@@ -198,8 +195,7 @@ class YzalisUAParserTest extends AbstractProviderTestCase
 
         $parser = $this->getParser($result);
 
-        $provider = new YzalisUAParser();
-        $provider->setParser($parser);
+        $provider = new YzalisUAParser($parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -249,8 +245,7 @@ class YzalisUAParserTest extends AbstractProviderTestCase
 
         $parser = $this->getParser($result);
 
-        $provider = new YzalisUAParser();
-        $provider->setParser($parser);
+        $provider = new YzalisUAParser($parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -286,8 +281,7 @@ class YzalisUAParserTest extends AbstractProviderTestCase
 
         $parser = $this->getParser($result);
 
-        $provider = new YzalisUAParser();
-        $provider->setParser($parser);
+        $provider = new YzalisUAParser($parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -318,8 +312,7 @@ class YzalisUAParserTest extends AbstractProviderTestCase
 
         $parser = $this->getParser($result);
 
-        $provider = new YzalisUAParser();
-        $provider->setParser($parser);
+        $provider = new YzalisUAParser($parser);
 
         $result = $provider->parse('A real user agent...');
 

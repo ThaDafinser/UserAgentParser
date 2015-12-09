@@ -126,15 +126,14 @@ class UAParserTest extends AbstractProviderTestCase
 
     public function testParser()
     {
+        $provider = new UAParser();
+        $this->assertInstanceOf('UAParser\Parser', $provider->getParser());
+
         $parser = $this->getParser();
 
-        $provider = new UAParser();
-        $provider->setParser($parser);
+        $provider = new UAParser($parser);
 
         $this->assertSame($parser, $provider->getParser());
-
-        $provider->setParser(null);
-        $this->assertInstanceOf('UAParser\Parser', $provider->getParser());
     }
 
     /**
@@ -144,8 +143,7 @@ class UAParserTest extends AbstractProviderTestCase
     {
         $parser = $this->getParser($this->getResultMock());
 
-        $provider = new UAParser();
-        $provider->setParser($parser);
+        $provider = new UAParser($parser);
 
         $result = $provider->parse('A real user agent...');
     }
@@ -161,8 +159,7 @@ class UAParserTest extends AbstractProviderTestCase
 
         $parser = $this->getParser($result);
 
-        $provider = new UAParser();
-        $provider->setParser($parser);
+        $provider = new UAParser($parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -190,8 +187,7 @@ class UAParserTest extends AbstractProviderTestCase
 
         $parser = $this->getParser($result);
 
-        $provider = new UAParser();
-        $provider->setParser($parser);
+        $provider = new UAParser($parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -226,8 +222,7 @@ class UAParserTest extends AbstractProviderTestCase
 
         $parser = $this->getParser($result);
 
-        $provider = new UAParser();
-        $provider->setParser($parser);
+        $provider = new UAParser($parser);
 
         $result = $provider->parse('A real user agent...');
 
@@ -260,8 +255,7 @@ class UAParserTest extends AbstractProviderTestCase
 
         $parser = $this->getParser($result);
 
-        $provider = new UAParser();
-        $provider->setParser($parser);
+        $provider = new UAParser($parser);
 
         $result = $provider->parse('A real user agent...');
 

@@ -56,7 +56,7 @@ class Wurfl extends AbstractProvider
      */
     public function __construct(WurflManager $parser)
     {
-        $this->setParser($parser);
+        $this->parser = $parser;
     }
 
     public function getName()
@@ -79,15 +79,6 @@ class Wurfl extends AbstractProvider
         }
 
         return;
-    }
-
-    /**
-     *
-     * @param WurflManager $parser
-     */
-    public function setParser(WurflManager $parser)
-    {
-        $this->parser = $parser;
     }
 
     /**

@@ -22,30 +22,30 @@ class WootheeTest extends AbstractProviderTestCase
         return $parser;
     }
 
-//     public function testPackageNotLoaded()
-//     {
-//         $this->backupAutoload();
+    public function testPackageNotLoaded()
+    {
+        $this->backupAutoload();
 
-//         $autoloadFunction = function ($class) {
-//             if ($class == 'Woothee\Classifier') {
-//                 $this->disableDefaultAutoload();
-//             } else {
-//                 $this->enableDefaultAutoload();
-//             }
-//         };
+        $autoloadFunction = function ($class) {
+            if ($class == 'Woothee\Classifier') {
+                $this->disableDefaultAutoload();
+            } else {
+                $this->enableDefaultAutoload();
+            }
+        };
 
-//         spl_autoload_register($autoloadFunction, true, true);
+        spl_autoload_register($autoloadFunction, true, true);
 
-//         try {
-//             $provider = new Woothee();
-//         } catch (\Exception $ex) {
-//         }
+        try {
+            $provider = new Woothee();
+        } catch (\Exception $ex) {
+        }
 
-//         $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
+        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
 
-//         spl_autoload_unregister($autoloadFunction);
-//         $this->enableDefaultAutoload();
-//     }
+        spl_autoload_unregister($autoloadFunction);
+        $this->enableDefaultAutoload();
+    }
 
     public function testName()
     {

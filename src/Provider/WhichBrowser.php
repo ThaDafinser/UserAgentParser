@@ -46,6 +46,13 @@ class WhichBrowser extends AbstractProvider
      */
     private $parser;
 
+    public function __construct()
+    {
+        if (! class_exists('WhichBrowser\Parser', true)) {
+            throw new Exception\PackageNotLoaded('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+        }
+    }
+
     public function getName()
     {
         return 'WhichBrowser';

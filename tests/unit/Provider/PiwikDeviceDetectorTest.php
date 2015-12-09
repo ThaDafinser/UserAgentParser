@@ -20,6 +20,31 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
         return $parser;
     }
 
+    public function testPackageNotLoaded()
+    {
+        $this->backupAutoload();
+
+        $autoloadFunction = function ($class) {
+            if ($class == 'DeviceDetector\Cache\StaticCache') {
+                $this->disableDefaultAutoload();
+            } else {
+                $this->enableDefaultAutoload();
+            }
+        };
+
+        spl_autoload_register($autoloadFunction, true, true);
+
+        try {
+            $provider = new PiwikDeviceDetector();
+        } catch (\Exception $ex) {
+        }
+
+        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
+
+        spl_autoload_unregister($autoloadFunction);
+        $this->enableDefaultAutoload();
+    }
+
     public function testName()
     {
         $provider = new PiwikDeviceDetector();

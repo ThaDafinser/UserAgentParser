@@ -22,6 +22,31 @@ class WootheeTest extends AbstractProviderTestCase
         return $parser;
     }
 
+    public function testPackageNotLoaded()
+    {
+        $this->backupAutoload();
+
+        $autoloadFunction = function ($class) {
+            if ($class == 'Woothee\Classifier') {
+                $this->disableDefaultAutoload();
+            } else {
+                $this->enableDefaultAutoload();
+            }
+        };
+
+        spl_autoload_register($autoloadFunction, true, true);
+
+        try {
+            $provider = new Woothee();
+        } catch (\Exception $ex) {
+        }
+
+        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
+
+        spl_autoload_unregister($autoloadFunction);
+        $this->enableDefaultAutoload();
+    }
+
     public function testName()
     {
         $provider = new Woothee();
@@ -49,35 +74,35 @@ class WootheeTest extends AbstractProviderTestCase
 
         $this->assertEquals([
 
-        'browser' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'browser' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
-        ],
+            'renderingEngine' => [
+                'name'    => false,
+                'version' => false,
+            ],
 
-        'operatingSystem' => [
-            'name'    => false,
-            'version' => false,
-        ],
+            'operatingSystem' => [
+                'name'    => false,
+                'version' => false,
+            ],
 
-        'device' => [
-            'model'    => false,
-            'brand'    => false,
-            'type'     => true,
-            'isMobile' => false,
-            'isTouch'  => false,
-        ],
+            'device' => [
+                'model'    => false,
+                'brand'    => false,
+                'type'     => true,
+                'isMobile' => false,
+                'isTouch'  => false,
+            ],
 
-        'bot' => [
-            'isBot' => true,
-            'name'  => true,
-            'type'  => false,
-        ],
-    ], $provider->getDetectionCapabilities());
+            'bot' => [
+                'isBot' => true,
+                'name'  => true,
+                'type'  => false,
+            ],
+        ], $provider->getDetectionCapabilities());
     }
 
     public function testParser()
@@ -151,9 +176,9 @@ class WootheeTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Firefox',
                 'version' => [
-                    'major'    => 3,
-                    'minor'    => 0,
-                    'patch'    => 1,
+                    'major' => 3,
+                    'minor' => 0,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -212,9 +237,9 @@ class WootheeTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => null,
                 'version' => [
-                    'major'    => null,
-                    'minor'    => null,
-                    'patch'    => null,
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
 
                     'alias' => null,
 

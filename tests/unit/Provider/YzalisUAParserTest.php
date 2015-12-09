@@ -53,6 +53,31 @@ class YzalisUAParserTest extends AbstractProviderTestCase
         return $parser;
     }
 
+    public function testPackageNotLoaded()
+    {
+        $this->backupAutoload();
+
+        $autoloadFunction = function ($class) {
+            if ($class == 'UAParser\UAParser') {
+                $this->disableDefaultAutoload();
+            } else {
+                $this->enableDefaultAutoload();
+            }
+        };
+
+        spl_autoload_register($autoloadFunction, true, true);
+
+        try {
+            $provider = new YzalisUAParser();
+        } catch (\Exception $ex) {
+        }
+
+        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
+
+        $test = spl_autoload_unregister($autoloadFunction);
+        $this->enableDefaultAutoload();
+    }
+
     public function testName()
     {
         $provider = new YzalisUAParser();
@@ -80,35 +105,35 @@ class YzalisUAParserTest extends AbstractProviderTestCase
 
         $this->assertEquals([
 
-        'browser' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'browser' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'renderingEngine' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'renderingEngine' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'operatingSystem' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'operatingSystem' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => true,
-            'isMobile' => false,
-            'isTouch'  => false,
-        ],
+            'device' => [
+                'model'    => true,
+                'brand'    => true,
+                'type'     => true,
+                'isMobile' => false,
+                'isTouch'  => false,
+            ],
 
-        'bot' => [
-            'isBot' => false,
-            'name'  => false,
-            'type'  => false,
-        ],
-    ], $provider->getDetectionCapabilities());
+            'bot' => [
+                'isBot' => false,
+                'name'  => false,
+                'type'  => false,
+            ],
+        ], $provider->getDetectionCapabilities());
     }
 
     public function testParser()

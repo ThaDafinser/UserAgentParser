@@ -7,7 +7,6 @@ namespace UserAgentParser\Provider
      * This is need to mock the testing!
      * 
      * @param  string $userAgent
-     * @param  array  $result
      * @return array
      */
     function parse_user_agent($userAgent)

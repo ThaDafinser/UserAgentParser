@@ -51,46 +51,37 @@
     
     
     "suggest": {
-        "browscap/browscap-php": "Needed to use Provider\BrowscapPhp",
+        "browscap/browscap-php": "Needed to use Provider\\BrowscapPhp",
          
-        "donatj/phpuseragentparser": Needed to use Provider\DonatjUAParser",
+        "donatj/phpuseragentparser": Needed to use Provider\\DonatjUAParser",
         
-        "piwik/device-detector": "Needed to use Provider\PiwikDeviceDetector",
+        "piwik/device-detector": "Needed to use Provider\\PiwikDeviceDetector",
         
-        "sinergi/browser-detector": Needed to use Provider\SinergiBrowserDetector",
+        "sinergi/browser-detector": Needed to use Provider\\SinergiBrowserDetector",
         
-        "ua-parser/uap-php": "Needed to use Provider\UAParser",
+        "ua-parser/uap-php": "Needed to use Provider\\UAParser",
         
-        "whichbrowser/parser": "Needed to use Provider\WhichBrowser",
+        "whichbrowser/parser": "Needed to use Provider\\WhichBrowser",
         
         "woothee/woothee": "Needed to use Provider\Woothee",
         
-        "mimmi20/wurfl": "Needed to use Provider\Wurfl",
+        "mimmi20/wurfl": "Needed to use Provider\\Wurfl",
         
-        "yzalis/ua-parser": "Needed to use Provider\YzalisUAParser"
+        "yzalis/ua-parser": "Needed to use Provider\\YzalisUAParser"
     },
     
     "require-dev": {
         "phpunit/PHPUnit": "^4.0|^5.0",
-        
         "fabpot/php-cs-fixer": "^1.10.0",
         
         "browscap/browscap-php": "dev-master",
-         
         "donatj/phpuseragentparser": "^0.5.0",
-        
         "piwik/device-detector": "^3.4",
-        
         "sinergi/browser-detector": "^5.1",
-        
         "ua-parser/uap-php": "^3.4",
-        
         "whichbrowser/parser": ">=2.0.3,<2.1",
-        
         "woothee/woothee": "^1.2",
-        
         "mimmi20/wurfl": "^1.6",
         
-        "yzalis/ua-parser": "^0.2"
     }
 }

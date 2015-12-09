@@ -46,6 +46,13 @@ class Woothee extends AbstractProvider
 
     private $parser;
 
+    public function __construct()
+    {
+        if (! class_exists('Woothee\Classifier', true)) {
+            throw new Exception\PackageNotLoaded('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+        }
+    }
+
     public function getName()
     {
         return 'Woothee';

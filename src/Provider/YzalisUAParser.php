@@ -46,6 +46,13 @@ class YzalisUAParser extends AbstractProvider
 
     private $parser;
 
+    public function __construct()
+    {
+        if (! class_exists('UAParser\UAParser', true)) {
+            throw new Exception\PackageNotLoaded('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+        }
+    }
+
     public function getName()
     {
         return 'YzalisUAParser';

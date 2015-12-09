@@ -41,6 +41,31 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         return $parser;
     }
 
+    public function testPackageNotLoaded()
+    {
+        $this->backupAutoload();
+
+        $autoloadFunction = function ($class) {
+            if ($class == 'Sinergi\BrowserDetector\UserAgent') {
+                $this->disableDefaultAutoload();
+            } else {
+                $this->enableDefaultAutoload();
+            }
+        };
+
+        spl_autoload_register($autoloadFunction, true, true);
+
+        try {
+            $provider = new SinergiBrowserDetector();
+        } catch (\Exception $ex) {
+        }
+
+        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
+
+        $test = spl_autoload_unregister($autoloadFunction);
+        $this->enableDefaultAutoload();
+    }
+
     public function testName()
     {
         $provider = new SinergiBrowserDetector();
@@ -68,35 +93,35 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
 
         $this->assertEquals([
 
-        'browser' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'browser' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
-        ],
+            'renderingEngine' => [
+                'name'    => false,
+                'version' => false,
+            ],
 
-        'operatingSystem' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'operatingSystem' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'device' => [
-            'model'    => true,
-            'brand'    => false,
-            'type'     => false,
-            'isMobile' => true,
-            'isTouch'  => false,
-        ],
+            'device' => [
+                'model'    => true,
+                'brand'    => false,
+                'type'     => false,
+                'isMobile' => true,
+                'isTouch'  => false,
+            ],
 
-        'bot' => [
-            'isBot' => true,
-            'name'  => false,
-            'type'  => false,
-        ],
-    ], $provider->getDetectionCapabilities());
+            'bot' => [
+                'isBot' => true,
+                'name'  => false,
+                'type'  => false,
+            ],
+        ], $provider->getDetectionCapabilities());
     }
 
     public function testProvider()
@@ -206,9 +231,9 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Chrome',
                 'version' => [
-                    'major'    => 28,
-                    'minor'    => 0,
-                    'patch'    => 1468,
+                    'major' => 28,
+                    'minor' => 0,
+                    'patch' => 1468,
 
                     'alias' => null,
 
@@ -255,9 +280,9 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
             'operatingSystem' => [
                 'name'    => 'Windows',
                 'version' => [
-                    'major'    => 7,
-                    'minor'    => 0,
-                    'patch'    => 1,
+                    'major' => 7,
+                    'minor' => 0,
+                    'patch' => 1,
 
                     'alias' => null,
 

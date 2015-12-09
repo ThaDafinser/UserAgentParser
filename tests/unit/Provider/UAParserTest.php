@@ -41,6 +41,31 @@ class UAParserTest extends AbstractProviderTestCase
         return $parser;
     }
 
+    public function testPackageNotLoaded()
+    {
+        $this->backupAutoload();
+
+        $autoloadFunction = function ($class) {
+            if ($class == 'UAParser\Parser') {
+                $this->disableDefaultAutoload();
+            } else {
+                $this->enableDefaultAutoload();
+            }
+        };
+
+        spl_autoload_register($autoloadFunction, true, true);
+
+        try {
+            $provider = new UAParser();
+        } catch (\Exception $ex) {
+        }
+
+        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
+
+        spl_autoload_unregister($autoloadFunction);
+        $this->enableDefaultAutoload();
+    }
+
     public function testName()
     {
         $provider = new UAParser();

@@ -46,13 +46,38 @@
     },
     
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.5"
+    },
+    
+    
+    "suggest": {
+        "browscap/browscap-php": "Needed to use Provider\BrowscapPhp",
+         
+        "donatj/phpuseragentparser": Needed to use Provider\DonatjUAParser",
+        
+        "piwik/device-detector": "Needed to use Provider\PiwikDeviceDetector",
+        
+        "sinergi/browser-detector": Needed to use Provider\SinergiBrowserDetector",
+        
+        "ua-parser/uap-php": "Needed to use Provider\UAParser",
+        
+        "whichbrowser/parser": "Needed to use Provider\WhichBrowser",
+        
+        "woothee/woothee": "Needed to use Provider\Woothee",
+        
+        "mimmi20/wurfl": "Needed to use Provider\Wurfl",
+        
+        "yzalis/ua-parser": "Needed to use Provider\YzalisUAParser"
+    },
+    
+    "require-dev": {
+        "phpunit/PHPUnit": "^4.0|^5.0",
+        
+        "fabpot/php-cs-fixer": "^1.10.0",
         
         "browscap/browscap-php": "dev-master",
-        
+         
         "donatj/phpuseragentparser": "^0.5.0",
-        
-        "mimmi20/wurfl": "^1.6",
         
         "piwik/device-detector": "^3.4",
         
@@ -64,12 +89,8 @@
         
         "woothee/woothee": "^1.2",
         
-        "yzalis/ua-parser": "^0.2"
-    },
-    
-    "require-dev": {
-        "phpunit/PHPUnit": "^4.0|^5.0",
+        "mimmi20/wurfl": "^1.6",
         
-        "fabpot/php-cs-fixer": "^1.10.0"
+        "yzalis/ua-parser": "^0.2"
     }
 }

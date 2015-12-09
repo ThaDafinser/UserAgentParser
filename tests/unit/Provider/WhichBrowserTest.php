@@ -24,6 +24,31 @@ class WhichBrowserTest extends AbstractProviderTestCase
         return $parser;
     }
 
+    public function testPackageNotLoaded()
+    {
+        $this->backupAutoload();
+
+        $autoloadFunction = function ($class) {
+            if ($class == 'WhichBrowser\Parser') {
+                $this->disableDefaultAutoload();
+            } else {
+                $this->enableDefaultAutoload();
+            }
+        };
+
+        spl_autoload_register($autoloadFunction, true, true);
+
+        try {
+            $provider = new WhichBrowser();
+        } catch (\Exception $ex) {
+        }
+
+        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
+
+        spl_autoload_unregister($autoloadFunction);
+        $this->enableDefaultAutoload();
+    }
+
     public function testName()
     {
         $provider = new WhichBrowser();
@@ -51,35 +76,35 @@ class WhichBrowserTest extends AbstractProviderTestCase
 
         $this->assertEquals([
 
-        'browser' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'browser' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'renderingEngine' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'renderingEngine' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'operatingSystem' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'operatingSystem' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => true,
-            'isMobile' => true,
-            'isTouch'  => false,
-        ],
+            'device' => [
+                'model'    => true,
+                'brand'    => true,
+                'type'     => true,
+                'isMobile' => true,
+                'isTouch'  => false,
+            ],
 
-        'bot' => [
-            'isBot' => true,
-            'name'  => true,
-            'type'  => false,
-        ],
-    ], $provider->getDetectionCapabilities());
+            'bot' => [
+                'isBot' => true,
+                'name'  => true,
+                'type'  => false,
+            ],
+        ], $provider->getDetectionCapabilities());
     }
 
     public function testParser()
@@ -173,9 +198,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Firefox',
                 'version' => [
-                    'major'    => 3,
-                    'minor'    => 2,
-                    'patch'    => 1,
+                    'major' => 3,
+                    'minor' => 2,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -205,7 +230,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
         ]);
 
         $parser->browser = new \WhichBrowser\Model\Browser([
-            'using'    => $using,
+            'using' => $using,
         ]);
 
         $provider = new WhichBrowser();
@@ -221,9 +246,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Another',
                 'version' => [
-                    'major'    => 4,
-                    'minor'    => 7,
-                    'patch'    => 3,
+                    'major' => 4,
+                    'minor' => 7,
+                    'patch' => 3,
 
                     'alias' => null,
 
@@ -265,9 +290,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
             'renderingEngine' => [
                 'name'    => 'Webkit',
                 'version' => [
-                    'major'    => 3,
-                    'minor'    => 2,
-                    'patch'    => 1,
+                    'major' => 3,
+                    'minor' => 2,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -309,9 +334,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
             'operatingSystem' => [
                 'name'    => 'Windows',
                 'version' => [
-                    'major'    => 7,
-                    'minor'    => 0,
-                    'patch'    => 1,
+                    'major' => 7,
+                    'minor' => 0,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -333,8 +358,8 @@ class WhichBrowserTest extends AbstractProviderTestCase
             ->method('isDetected')
             ->will($this->returnValue(true));
         $parser->expects($this->any())
-        ->method('getType')
-        ->will($this->returnValue('watch'));
+            ->method('getType')
+            ->will($this->returnValue('watch'));
 
         $parser->device = new \WhichBrowser\Model\Device([
             'identified'   => true,
@@ -344,8 +369,8 @@ class WhichBrowserTest extends AbstractProviderTestCase
         ]);
 
         $parser->expects($this->any())
-        ->method('isType')
-        ->will($this->returnValue(true));
+            ->method('isType')
+            ->will($this->returnValue(true));
 
         $provider = new WhichBrowser();
 

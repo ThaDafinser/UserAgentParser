@@ -27,44 +27,44 @@ class UAParserTest extends AbstractProviderTestCase
         return $client;
     }
 
-    /**
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getParser($returnValue = null)
-    {
-        $parser = $this->getMock('UAParser\Parser', [], [], '', false);
-        $parser->expects($this->any())
-            ->method('parse')
-            ->will($this->returnValue($returnValue));
+//     /**
+//      *
+//      * @return \PHPUnit_Framework_MockObject_MockObject
+//      */
+//     private function getParser($returnValue = null)
+//     {
+//         $parser = $this->getMock('UAParser\Parser', [], [], '', false);
+//         $parser->expects($this->any())
+//             ->method('parse')
+//             ->will($this->returnValue($returnValue));
 
-        return $parser;
-    }
+//         return $parser;
+//     }
 
-    public function testPackageNotLoaded()
-    {
-        $this->backupAutoload();
+//     public function testPackageNotLoaded()
+//     {
+//         $this->backupAutoload();
 
-        $autoloadFunction = function ($class) {
-            if ($class == 'UAParser\Parser') {
-                $this->disableDefaultAutoload();
-            } else {
-                $this->enableDefaultAutoload();
-            }
-        };
+//         $autoloadFunction = function ($class) {
+//             if ($class == 'UAParser\Parser') {
+//                 $this->disableDefaultAutoload();
+//             } else {
+//                 $this->enableDefaultAutoload();
+//             }
+//         };
 
-        spl_autoload_register($autoloadFunction, true, true);
+//         spl_autoload_register($autoloadFunction, true, true);
 
-        try {
-            $provider = new UAParser();
-        } catch (\Exception $ex) {
-        }
+//         try {
+//             $provider = new UAParser();
+//         } catch (\Exception $ex) {
+//         }
 
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
+//         $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
 
-        spl_autoload_unregister($autoloadFunction);
-        $this->enableDefaultAutoload();
-    }
+//         spl_autoload_unregister($autoloadFunction);
+//         $this->enableDefaultAutoload();
+//     }
 
     public function testName()
     {

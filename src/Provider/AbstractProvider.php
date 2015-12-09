@@ -101,7 +101,7 @@ abstract class AbstractProvider
 
     /**
      *
-     * @return \stdClass null
+     * @return array null
      */
     private function getComposerPackages()
     {
@@ -116,7 +116,7 @@ abstract class AbstractProvider
 
         $content = json_decode($content);
 
-        return $content->packages;
+        return array_merge($content->packages, $content->{'packages-dev'});
     }
 
     /**

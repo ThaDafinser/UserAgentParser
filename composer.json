@@ -49,21 +49,20 @@
         "php": ">=5.5"
     },
     
-    
     "suggest": {
         "browscap/browscap-php": "Needed to use Provider\\BrowscapPhp",
          
-        "donatj/phpuseragentparser": Needed to use Provider\\DonatjUAParser",
+        "donatj/phpuseragentparser": "Needed to use Provider\\DonatjUAParser",
         
         "piwik/device-detector": "Needed to use Provider\\PiwikDeviceDetector",
         
-        "sinergi/browser-detector": Needed to use Provider\\SinergiBrowserDetector",
+        "sinergi/browser-detector": "Needed to use Provider\\SinergiBrowserDetector",
         
         "ua-parser/uap-php": "Needed to use Provider\\UAParser",
         
         "whichbrowser/parser": "Needed to use Provider\\WhichBrowser",
         
-        "woothee/woothee": "Needed to use Provider\Woothee",
+        "woothee/woothee": "Needed to use Provider\\Woothee",
         
         "mimmi20/wurfl": "Needed to use Provider\\Wurfl",
         
@@ -81,7 +80,6 @@
         "ua-parser/uap-php": "^3.4",
         "whichbrowser/parser": ">=2.0.3,<2.1",
         "woothee/woothee": "^1.2",
-        "mimmi20/wurfl": "^1.6",
-        
+        "mimmi20/wurfl": "^1.6"
     }
 }

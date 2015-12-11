@@ -48,7 +48,7 @@ class UAParser extends AbstractProvider
     public function __construct(Parser $parser = null)
     {
         if (! class_exists('UAParser\Parser', true)) {
-            throw new Exception\PackageNotLoaded('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
         }
 
         $this->parser = $parser;

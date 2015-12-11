@@ -3,26 +3,43 @@
     
     "description": "UserAgentParser abstraction for different parse providers",
     "keywords": [
-        "UserAgentParser", 
+        "UA",
+        "UA parser",
+        "UAparser",
+        "User agent",
+        "User agent parser",
+        "User agent detection",
         "UserAgent", 
+        "UserAgentParser",
+        
         "Parser", 
         "Detection",
-        "User agent",
-        "UA",
-        "Browser",
-        "Rendering engine",
-        "Operating system",
-        "OS",
-        "Device",
         
-        "mobile detection", 
+        "Browser",
+        "Engine",
+        "Rendering engine",
+        "OS",
+        "Operating system",
+        "Device",
+        "device detection",
+        "mobile detection",
+        "mobile detector",
+        "mobile device detection",
         "bot detection", 
         
+        "get_browser",
         "browscap",
-        "phpuseragentparser",
-        "device detector",
+        "piwik",
+        "sinergi",
         "whichbrowser",
-        "woothee"
+        "woothee",
+        "wurfl",
+        "yzalis",
+        
+        "udger",
+        "useragentapi",
+        "useragentstring",
+        "whatismybrowser"
     ],
     
     "license": "MIT",
@@ -46,7 +63,8 @@
     },
     
     "require": {
-        "php": ">=5.5"
+        "php": ">=5.5",
+        "guzzlehttp/guzzle": "^6.1"
     },
     
     "suggest": {

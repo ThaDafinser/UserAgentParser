@@ -24,7 +24,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
         return $parser;
     }
 
-    public function testPackageNotLoaded()
+    public function testPackageNotLoadedException()
     {
         $this->backupAutoload();
 
@@ -43,7 +43,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
         } catch (\Exception $ex) {
         }
 
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
+        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
 
         spl_autoload_unregister($autoloadFunction);
         $this->enableDefaultAutoload();

@@ -67,7 +67,7 @@ class SinergiBrowserDetector extends AbstractProvider
     public function __construct()
     {
         if (! class_exists('Sinergi\BrowserDetector\UserAgent', true)) {
-            throw new Exception\PackageNotLoaded('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
         }
     }
 

@@ -41,7 +41,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         return $parser;
     }
 
-    public function testPackageNotLoaded()
+    public function testPackageNotLoadedException()
     {
         $this->backupAutoload();
 
@@ -60,7 +60,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         } catch (\Exception $ex) {
         }
 
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoaded', $ex);
+        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
 
         $test = spl_autoload_unregister($autoloadFunction);
         $this->enableDefaultAutoload();

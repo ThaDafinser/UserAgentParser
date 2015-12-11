@@ -1,4 +1,5 @@
 # UserAgentParser
+
 [![Build Status](https://travis-ci.org/ThaDafinser/UserAgentParser.svg)](https://travis-ci.org/ThaDafinser/UserAgentParser)
 [![Code Coverage](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
@@ -8,39 +9,91 @@
 [![License](https://poser.pugx.org/thadafinser/user-agent-parser/license)](https://packagist.org/packages/thadafinser/user-agent-parser)
 [![Total Downloads](https://poser.pugx.org/thadafinser/user-agent-parser/downloads)](https://packagist.org/packages/thadafinser/user-agent-parser) 
 
-`User agent` parsing is, was and will always be a painful thing, since it will never work correctly (since User agents are faked very often)!
+`User agent` parsing is, was and will always be a painful thing.
 
-The target of this package is to make it at least a bit less painful, by providing an abstract layer over many UserAgent parser. Inspired by the [Geocoder](https://github.com/geocoder-php/Geocoder) library, which does an excellent job.
+The target of this package is to make it at least a bit less painful, by providing an abstract layer for many user agent parsers. 
 
 So you can
-- try out or switch between different parsers fast, without changing your code
 - use multiple providers at the same time with the `Chain` provider
+- try out or switch between different parsers fast, without changing your code
 - compare the result of the different parsers [see results](http://thadafinser.github.io/UserAgentParserComparison/)
 - get always the same result model, regardless of which parser you use currently
 
-## Try it yourself
-[Test your browser](http://useragent.mkf.solutions/)
 
-[See a comparison result](http://thadafinser.github.io/UserAgentParserComparison/)
+## Try it yourself
+
+[LIVE test your browser](http://useragent.mkf.solutions/)
+
+[See the parser comparison result](http://thadafinser.github.io/UserAgentParserComparison/)
+
 
 ## Installation
 ```
 composer require thadafinser/user-agent-parser
 ```
 
-### Minimum stability currently
-Since the `BrowscapPhp` has no release for the `3.x` series, you need to include those lines in your `composer.json` as well, to be able to install this package for now
+`Note: you may need to install additional packages, which are inside of suggests, to you use local providers`
+
+## Getting started
+
+The easiest way is to use an HTTP API provider, since all you need is already installed
+
 ```
-{
-    "name": "your/package...",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    
-    ...
+use UserAgentParser\Exception\NoResultFoundException;
+use UserAgentParser\Provider\Http\UserAgentStringCom;
+use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Handler\CurlHandler;
+
+$handler = new CurlHandler();
+$stack = HandlerStack::create($handler);
+$client = new Client([
+    'handler' => $stack,
+]);
+
+$provider = new UserAgentStringCom($client);
+
+try {
+    /* @var $result \UserAgentParser\Model\UserAgent */
+    $result = $provider->parse('Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36');
+} catch (NoResultFoundException $ex){
+    // nothing found
 }
+
+// if one part has no result, it's always set not null
+$result->getBrowser()->getName();
+$result->getBrowser()->getVersion()->getComplete();
+
+$result->getRenderingEngine()->getName();
+$result->getRenderingEngine()->getVersion()->getComplete();
+
+$result->getOperatingSystem()->getName();
+$result->getOperatingSystem()->getVersion()->getComplete();
+
+$result->getDevice()->getModel();
+$result->getDevice()->getBrand();
+$result->getDevice()->getType();
+$result->getDevice()->getIsMobile();
+$result->getDevice()->getIsTouch();
+
+$result->getBot()->getIsBot();
+$result->getBot()->getName();
+$result->getBot()->getType();
 ```
 
-## Example
+## Providers
+
+UserAgnetParser comes with local and http providers. Http providers work out of the box.
+To use local providers, you need to install the needed package (listed in the section `suggest` of `composer.json`)
+
+### Comparison matrix
+
+Here is a comparison matrix, with many analyzed UserAgent strings, to help you device which provider fits your needs.
+Every provider has it's strengh and weakness, so it will depend on your need, which one you should use.
+
+[Go to the matrix](https://github.com/ThaDafinser/UserAgentParserMatrix)
+
+### Overview
 
 ### Single provider
 
@@ -51,18 +104,15 @@ use UserAgentParser\Provider;
 
 $userAgent = 'Mozilla/5.0 (iPod; U; CPU iPhone OS 4_3_5 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5';
 
-$dd = new Provider\PiwikDeviceDetector();
+$provider = new Provider\PiwikDeviceDetector();
 
 /* @var $result \UserAgentParser\Model\UserAgent */
-$result = $dd->parse($userAgent);
-
-// optional add all headers, to improve the result further (used currently only by WhichBrowser)
-$result = $dd->parse($userAgent, getallheaders());
+$result = $provider->parse($userAgent);
+// optional add all headers, to improve the result further
+// $result = $provider->parse($userAgent, getallheaders());
 
 $result->getBrowser()->getName(); // Mobile Safari
-
 $result->getOperatingSystem()->getName(); // iOS
-
 $result->getDevice()->getBrand(); // iPod Touch
 $result->getDevice()->getBrand(); // Apple
 $result->getDevice()->getType(); // portable media player
@@ -71,6 +121,11 @@ $resultArray = $result->toArray();
 ```
 
 ### Chain provider
+
+This is very useful to improve your results.
+The chain provider starts with the first provider and checks if there is a result, if not it takes the next one and so on.
+If none of them have a result, it will throw a NoResultException like a single provider.
+
 ```php
 require 'vendor/autoload.php';
 
@@ -78,17 +133,13 @@ use UserAgentParser\Provider;
 
 $userAgent = 'Mozilla/5.0 (iPod; U; CPU iPhone OS 4_3_5 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5';
 
-$browscapFull = new Provider\BrowscapPhp();
-$browscapFull->setCachePath('.tmp/browscap_full');
-
 $chain = new Provider\Chain([
-    $browscapFull,
-    new Provider\DonatjUAParser(),
     new Provider\PiwikDeviceDetector(),
-    new Provider\UAParser(),
     new Provider\WhichBrowser(),
+    new Provider\UAParser(),
     new Provider\Woothee(),
-    new Provider\YzalisUAParser()
+    new Provider\YzalisUAParser(),
+    new Provider\DonatjUAParser()
 ]);
 
 /* @var $result \UserAgentParser\Model\UserAgent */
@@ -105,73 +156,4 @@ $result->getDevice()->getBrand(); // Apple
 $result->getDevice()->getType(); // portable media player
 
 $resultArray = $result->toArray();
-```
-
-## Providers
-
-### Comparison matrix
-Here is a comparison matrix, with many analyzed UserAgent strings, to help you device which provider fits your needs:
-[Go to the matrix](https://github.com/ThaDafinser/UserAgentParserMatrix)
-
-### Overview
-
-| Provider | Browser | RenderingEngine | Operating system | Device | Bot | Only PHP | Comment |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| [BrowscapPhp](https://github.com/browscap/browscap-php) | yes | yes | yes | yes | yes | no | lite and full version available |
-| [DonatjUAParser](https://github.com/donatj/PhpUserAgent) | yes | jiein | no | jiein | no | yes | |
-| [PiwikDeviceDetector](https://github.com/piwik/device-detector) | yes | yes | yes | yes | yes | yes | |
-| [UAParser](https://github.com/ua-parser/uap-php) | yes | no | yes | yes | yes | no | |
-| [WhichBrowser](https://github.com/WhichBrowser/WhichBrowser) | yes | yes | yes | yes | yes | no | |
-| [Woothee](https://github.com/woothee/woothee-php) | yes | no | jiein | jiein | yes | no | |
-| [YzalisUAParser](https://github.com/yzalis/UAParser) | yes | yes | yes | yes | no | yes | |
-
-### BrowscapPhp
-To run this provider you need to generate the cache first.
-You can also choose between the `lite` and `full` version. Of course the lite version is faster, but does not contain all informations
-
-#### Generate the .ini files
-You should grad the latest release of [browscap](https://github.com/browscap/browscap/releases) first and then change the version number at the end `6009` accordingly
-```
-php vendor\browscap\browscap\bin\browscap build 6009
-```
-
-#### Lite version
-```php
-require 'vendor/autoload.php';
-
-use BrowscapPHP\Browscap;
-use BrowscapPHP\Cache\BrowscapCache;
-use BrowscapPHP\Command;
-use BrowscapPHP\Exception;
-use WurflCache\Adapter\File;
-
-$cacheAdapter = new File(array(
-    File::DIR => '.tmp/browscap_lite'
-    // File::DIR => '.tmp/browscap_full'
-));
-$cache = new BrowscapCache($cacheAdapter);
-
-$parser = new Browscap();
-$parser->setCache($cache);
-$parser->convertFile('vendor/browscap/browscap/build/php_browscap.ini');
-```
-
-#### Full version
-```php
-require 'vendor/autoload.php';
-
-use BrowscapPHP\Browscap;
-use BrowscapPHP\Cache\BrowscapCache;
-use BrowscapPHP\Command;
-use BrowscapPHP\Exception;
-use WurflCache\Adapter\File;
-
-$cacheAdapter = new File(array(
-    File::DIR => '.tmp/browscap_full'
-));
-$cache = new BrowscapCache($cacheAdapter);
-
-$parser = new Browscap();
-$parser->setCache($cache);
-$parser->convertFile('vendor/browscap/browscap/build/full_php_browscap.ini');
 ```

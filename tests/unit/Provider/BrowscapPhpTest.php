@@ -100,31 +100,15 @@ class BrowscapPhpTest extends AbstractProviderTestCase
     }
 
     /**
-     * Default provider with no data
-     *
-     * @expectedException \UserAgentParser\Exception\NoResultFoundException
-     */
-    public function testParseNoResultFoundExceptionDefaultProvider()
-    {
-        $result = new \stdClass();
-
-        $provider = new BrowscapPhp($this->getParser($result));
-
-        $result = $provider->parse('A real user agent...');
-    }
-
-    /**
      * Provider no result
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testParseNoResultFoundExceptionRealProvider()
+    public function testParseNoResultFoundException()
     {
         $result = new \stdClass();
 
-        $parser = $this->getParser($result);
-
-        $provider = new BrowscapPhp($parser);
+        $provider = new BrowscapPhp($this->getParser($result));
 
         $result = $provider->parse('A real user agent...');
     }

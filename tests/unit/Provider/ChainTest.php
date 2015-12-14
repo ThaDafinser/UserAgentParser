@@ -53,11 +53,11 @@ class ChainTest extends AbstractProviderTestCase
         $this->assertEquals('Chain', $chain->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new Chain();
 
-        $this->assertNull($provider->getComposerPackageName());
+        $this->assertNull($provider->getHomepage());
     }
 
     public function testVersion()

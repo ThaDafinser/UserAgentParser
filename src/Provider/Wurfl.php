@@ -8,6 +8,27 @@ use Wurfl\Manager as WurflManager;
 
 class Wurfl extends AbstractProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'Wurfl';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://github.com/mimmi20/Wurfl';
+
+    /**
+     * Composer package name
+     *
+     * @var string
+     */
+    protected $packageName = 'mimmi20/wurfl';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -59,26 +80,35 @@ class Wurfl extends AbstractProvider
         $this->parser = $parser;
     }
 
-    public function getName()
-    {
-        return 'Wurfl';
-    }
-
-    public function getComposerPackageName()
-    {
-        return 'mimmi20/wurfl';
-    }
-
     public function getVersion()
     {
         $version      = $this->getParser()->getWurflInfo()->version;
         $versionParts = explode(' - ', $version);
 
         if (count($versionParts) === 2) {
-            return trim($versionParts[1]);
+            $versionPart = $versionParts[0];
+            $versionPart = str_replace('for API', '', $versionPart);
+            $versionPart = str_replace(', db.scientiamobile.com', '', $versionPart);
+
+            return trim($versionPart);
         }
 
         return;
+    }
+
+    public function getUpdateDate()
+    {
+        // 2015-10-16 11:09:44 -0400
+        $lastUpdated  = $this->getParser()->getWurflInfo()->lastUpdated;
+
+        if ($lastUpdated == '') {
+            return;
+        }
+
+        $date = \DateTime::createFromFormat('Y-m-d H:i:s O', $lastUpdated);
+        $date->setTimezone(new \DateTimeZone('UTC'));
+
+        return $date;
     }
 
     /**

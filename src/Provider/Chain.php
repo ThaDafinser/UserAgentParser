@@ -6,6 +6,13 @@ use UserAgentParser\Exception;
 class Chain extends AbstractProvider
 {
     /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'Chain';
+
+    /**
      *
      * @var AbstractProvider[]
      */
@@ -18,16 +25,6 @@ class Chain extends AbstractProvider
     public function __construct(array $providers = [])
     {
         $this->providers = $providers;
-    }
-
-    public function getName()
-    {
-        return 'Chain';
-    }
-
-    public function getComposerPackageName()
-    {
-        return;
     }
 
     /**

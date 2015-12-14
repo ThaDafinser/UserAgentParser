@@ -29,11 +29,18 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $this->assertEquals('BrowscapPhp', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new BrowscapPhp($this->getParser());
 
-        $this->assertEquals('browscap/browscap-php', $provider->getComposerPackageName());
+        $this->assertEquals('https://github.com/browscap/browscap-php', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new BrowscapPhp($this->getParser());
+
+        $this->assertEquals('browscap/browscap-php', $provider->getPackageName());
     }
 
     public function testVersion()

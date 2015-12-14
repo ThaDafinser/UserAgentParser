@@ -54,11 +54,18 @@ class WootheeTest extends AbstractProviderTestCase
         $this->assertEquals('Woothee', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new Woothee();
 
-        $this->assertEquals('woothee/woothee', $provider->getComposerPackageName());
+        $this->assertEquals('https://github.com/woothee/woothee-php', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new Woothee();
+
+        $this->assertEquals('woothee/woothee', $provider->getPackageName());
     }
 
     public function testVersion()
@@ -66,6 +73,13 @@ class WootheeTest extends AbstractProviderTestCase
         $provider = new Woothee();
 
         $this->assertInternalType('string', $provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new Woothee();
+
+        $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()

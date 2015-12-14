@@ -7,6 +7,27 @@ use UserAgentParser\Model;
 
 class UAParser extends AbstractProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'UAParser';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://github.com/ua-parser/uap-php';
+
+    /**
+     * Composer package name
+     *
+     * @var string
+     */
+    protected $packageName = 'ua-parser/uap-php';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -48,20 +69,10 @@ class UAParser extends AbstractProvider
     public function __construct(Parser $parser = null)
     {
         if (! class_exists('UAParser\Parser', true)) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
 
         $this->parser = $parser;
-    }
-
-    public function getName()
-    {
-        return 'UAParser';
-    }
-
-    public function getComposerPackageName()
-    {
-        return 'ua-parser/uap-php';
     }
 
     /**

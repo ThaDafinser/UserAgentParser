@@ -8,6 +8,27 @@ use UserAgentParser\Model;
 
 class YzalisUAParser extends AbstractProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'YzalisUAParser';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://github.com/yzalis/UAParser';
+
+    /**
+     * Composer package name
+     *
+     * @var string
+     */
+    protected $packageName = 'yzalis/ua-parser';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -49,20 +70,10 @@ class YzalisUAParser extends AbstractProvider
     public function __construct(\UAParser\UAParser $parser = null)
     {
         if (! class_exists('UAParser\UAParser', true)) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
 
         $this->parser = $parser;
-    }
-
-    public function getName()
-    {
-        return 'YzalisUAParser';
-    }
-
-    public function getComposerPackageName()
-    {
-        return 'yzalis/ua-parser';
     }
 
     /**

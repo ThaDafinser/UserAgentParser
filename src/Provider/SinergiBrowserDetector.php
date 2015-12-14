@@ -7,6 +7,27 @@ use UserAgentParser\Model;
 
 class SinergiBrowserDetector extends AbstractProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'SinergiBrowserDetector';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://github.com/sinergi/php-browser-detector';
+
+    /**
+     * Composer package name
+     *
+     * @var string
+     */
+    protected $packageName = 'sinergi/browser-detector';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -67,18 +88,8 @@ class SinergiBrowserDetector extends AbstractProvider
     public function __construct()
     {
         if (! class_exists('Sinergi\BrowserDetector\UserAgent', true)) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
-    }
-
-    public function getName()
-    {
-        return 'SinergiBrowserDetector';
-    }
-
-    public function getComposerPackageName()
-    {
-        return 'sinergi/browser-detector';
     }
 
     /**

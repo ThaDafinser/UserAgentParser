@@ -73,11 +73,18 @@ class UAParserTest extends AbstractProviderTestCase
         $this->assertEquals('UAParser', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new UAParser();
 
-        $this->assertEquals('ua-parser/uap-php', $provider->getComposerPackageName());
+        $this->assertEquals('https://github.com/ua-parser/uap-php', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new UAParser();
+
+        $this->assertEquals('ua-parser/uap-php', $provider->getPackageName());
     }
 
     public function testVersion()
@@ -85,6 +92,13 @@ class UAParserTest extends AbstractProviderTestCase
         $provider = new UAParser();
 
         $this->assertInternalType('string', $provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new UAParser();
+
+        $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()

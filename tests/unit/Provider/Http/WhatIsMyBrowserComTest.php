@@ -17,11 +17,18 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
         $this->assertEquals('WhatIsMyBrowserCom', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new WhatIsMyBrowserCom($this->getClient(), 'apiKey123');
 
-        $this->assertNull($provider->getComposerPackageName());
+        $this->assertEquals('https://www.whatismybrowser.com/', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new WhatIsMyBrowserCom($this->getClient(), 'apiKey123');
+
+        $this->assertNull($provider->getPackageName());
     }
 
     public function testVersion()

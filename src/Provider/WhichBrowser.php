@@ -7,6 +7,27 @@ use WhichBrowser\Parser as WhichBrowserParser;
 
 class WhichBrowser extends AbstractProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'WhichBrowser';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://github.com/WhichBrowser/Parser';
+
+    /**
+     * Composer package name
+     *
+     * @var string
+     */
+    protected $packageName = 'whichbrowser/parser';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -49,7 +70,7 @@ class WhichBrowser extends AbstractProvider
     public function __construct()
     {
         if (! class_exists('WhichBrowser\Parser', true)) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
     }
 
@@ -58,9 +79,9 @@ class WhichBrowser extends AbstractProvider
         return 'WhichBrowser';
     }
 
-    public function getComposerPackageName()
+    public function getHomepage()
     {
-        return 'whichbrowser/parser';
+        return 'https://github.com/WhichBrowser/Parser';
     }
 
     /**

@@ -8,6 +8,27 @@ use Woothee\DataSet;
 
 class Woothee extends AbstractProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'Woothee';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://github.com/woothee/woothee-php';
+
+    /**
+     * Composer package name
+     *
+     * @var string
+     */
+    protected $packageName = 'woothee/woothee';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -49,18 +70,8 @@ class Woothee extends AbstractProvider
     public function __construct()
     {
         if (! class_exists('Woothee\Classifier', true)) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
-    }
-
-    public function getName()
-    {
-        return 'Woothee';
-    }
-
-    public function getComposerPackageName()
-    {
-        return 'woothee/woothee';
     }
 
     /**

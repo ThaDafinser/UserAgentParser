@@ -85,11 +85,18 @@ class YzalisUAParserTest extends AbstractProviderTestCase
         $this->assertEquals('YzalisUAParser', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new YzalisUAParser();
 
-        $this->assertEquals('yzalis/ua-parser', $provider->getComposerPackageName());
+        $this->assertEquals('https://github.com/yzalis/UAParser', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new YzalisUAParser();
+
+        $this->assertEquals('yzalis/ua-parser', $provider->getPackageName());
     }
 
     public function testVersion()
@@ -97,6 +104,13 @@ class YzalisUAParserTest extends AbstractProviderTestCase
         $provider = new YzalisUAParser();
 
         $this->assertInternalType('string', $provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new YzalisUAParser();
+
+        $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()

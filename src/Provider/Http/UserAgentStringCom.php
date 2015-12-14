@@ -12,6 +12,20 @@ use UserAgentParser\Model;
  */
 class UserAgentStringCom extends AbstractHttpProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'UserAgentStringCom';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'http://www.useragentstring.com/';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -58,16 +72,6 @@ class UserAgentStringCom extends AbstractHttpProvider
     ];
 
     private static $uri = 'http://www.useragentstring.com/';
-
-    public function getName()
-    {
-        return 'UserAgentStringCom';
-    }
-
-    public function getComposerPackageName()
-    {
-        return;
-    }
 
     public function getVersion()
     {

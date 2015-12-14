@@ -17,11 +17,18 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
         $this->assertEquals('NeutrinoApiCom', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new NeutrinoApiCom($this->getClient(), 'apiUser', 'apiKey123');
 
-        $this->assertNull($provider->getComposerPackageName());
+        $this->assertEquals('https://www.neutrinoapi.com/', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new NeutrinoApiCom($this->getClient(), 'apiUser', 'apiKey123');
+
+        $this->assertNull($provider->getPackageName());
     }
 
     public function testVersion()

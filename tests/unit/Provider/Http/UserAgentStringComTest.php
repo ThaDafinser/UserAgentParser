@@ -17,11 +17,18 @@ class UserAgentStringComTest extends AbstractProviderTestCase
         $this->assertEquals('UserAgentStringCom', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new UserAgentStringCom($this->getClient());
 
-        $this->assertNull($provider->getComposerPackageName());
+        $this->assertEquals('http://www.useragentstring.com/', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new UserAgentStringCom($this->getClient());
+
+        $this->assertNull($provider->getPackageName());
     }
 
     public function testVersion()

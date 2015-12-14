@@ -52,11 +52,18 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
         $this->assertEquals('PiwikDeviceDetector', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new PiwikDeviceDetector();
 
-        $this->assertEquals('piwik/device-detector', $provider->getComposerPackageName());
+        $this->assertEquals('https://github.com/piwik/device-detector', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new PiwikDeviceDetector();
+
+        $this->assertEquals('piwik/device-detector', $provider->getPackageName());
     }
 
     public function testVersion()
@@ -64,6 +71,13 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
         $provider = new PiwikDeviceDetector();
 
         $this->assertInternalType('string', $provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new PiwikDeviceDetector();
+
+        $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()

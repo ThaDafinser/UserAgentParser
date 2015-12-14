@@ -17,11 +17,18 @@ class UserAgentApiComTest extends AbstractProviderTestCase
         $this->assertEquals('UserAgentApiCom', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new UserAgentApiCom($this->getClient(), 'apiKey123');
 
-        $this->assertNull($provider->getComposerPackageName());
+        $this->assertEquals('http://useragentapi.com/', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new UserAgentApiCom($this->getClient(), 'apiKey123');
+
+        $this->assertNull($provider->getPackageName());
     }
 
     public function testVersion()

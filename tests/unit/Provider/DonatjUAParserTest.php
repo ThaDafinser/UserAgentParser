@@ -38,11 +38,18 @@ namespace UserAgentParserTest\Provider
             $this->assertEquals('DonatjUAParser', $provider->getName());
         }
 
-        public function testGetComposerPackageName()
+        public function testGetHomepage()
         {
             $provider = new DonatjUAParser();
 
-            $this->assertEquals('donatj/phpuseragentparser', $provider->getComposerPackageName());
+            $this->assertEquals('https://github.com/donatj/PhpUserAgent', $provider->getHomepage());
+        }
+
+        public function testGetPackageName()
+        {
+            $provider = new DonatjUAParser();
+
+            $this->assertEquals('donatj/phpuseragentparser', $provider->getPackageName());
         }
 
         public function testVersion()
@@ -52,41 +59,48 @@ namespace UserAgentParserTest\Provider
             $this->assertInternalType('string', $provider->getVersion());
         }
 
+        public function testUpdateDate()
+        {
+            $provider = new DonatjUAParser();
+
+            $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
+        }
+
         public function testDetectionCapabilities()
         {
             $provider = new DonatjUAParser();
 
             $this->assertEquals([
 
-        'browser' => [
-            'name'    => true,
-            'version' => true,
-        ],
+                'browser' => [
+                    'name'    => true,
+                    'version' => true,
+                ],
 
-        'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
-        ],
+                'renderingEngine' => [
+                    'name'    => false,
+                    'version' => false,
+                ],
 
-        'operatingSystem' => [
-            'name'    => false,
-            'version' => false,
-        ],
+                'operatingSystem' => [
+                    'name'    => false,
+                    'version' => false,
+                ],
 
-        'device' => [
-            'model'    => false,
-            'brand'    => false,
-            'type'     => false,
-            'isMobile' => false,
-            'isTouch'  => false,
-        ],
+                'device' => [
+                    'model'    => false,
+                    'brand'    => false,
+                    'type'     => false,
+                    'isMobile' => false,
+                    'isTouch'  => false,
+                ],
 
-        'bot' => [
-            'isBot' => false,
-            'name'  => false,
-            'type'  => false,
-        ],
-    ], $provider->getDetectionCapabilities());
+                'bot' => [
+                    'isBot' => false,
+                    'name'  => false,
+                    'type'  => false,
+                ],
+            ], $provider->getDetectionCapabilities());
         }
 
         /**

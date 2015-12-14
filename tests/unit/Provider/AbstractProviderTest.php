@@ -6,6 +6,48 @@ namespace UserAgentParserTest\Provider;
  */
 class AbstractProviderTest extends AbstractProviderTestCase
 {
+    public function testName()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $this->assertNull($provider->getName());
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('name');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'MyName');
+
+        $this->assertEquals('MyName', $provider->getName());
+    }
+
+    public function testHomepage()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $this->assertNull($provider->getHomepage());
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('homepage');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'https://github.com/vendor/package');
+
+        $this->assertEquals('https://github.com/vendor/package', $provider->getHomepage());
+    }
+
+    public function testPackageName()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $this->assertNull($provider->getPackageName());
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'vendor/package');
+
+        $this->assertEquals('vendor/package', $provider->getPackageName());
+    }
+
     public function testVersionNull()
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
@@ -14,22 +56,26 @@ class AbstractProviderTest extends AbstractProviderTestCase
         $this->assertNull($provider->getVersion());
 
         // no composer.lock found
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'vendor/package');
+
         $cwdir = getcwd();
         chdir('tests');
-
-        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
-        $provider->expects($this->any())
-            ->method('getComposerPackageName')
-            ->will($this->returnValue('something/other'));
 
         $this->assertNull($provider->getVersion());
         chdir($cwdir);
 
         // locked file
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
-        $provider->expects($this->any())
-            ->method('getComposerPackageName')
-            ->will($this->returnValue('something/other'));
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'vendor/package');
 
         $fp = fopen('composer.lock', 'r');
         flock($fp, LOCK_EX);
@@ -38,9 +84,11 @@ class AbstractProviderTest extends AbstractProviderTestCase
 
         // no package match
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
-        $provider->expects($this->any())
-            ->method('getComposerPackageName')
-            ->will($this->returnValue('something/other'));
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'vendor/package');
 
         $this->assertNull($provider->getVersion());
     }
@@ -48,15 +96,78 @@ class AbstractProviderTest extends AbstractProviderTestCase
     public function testVersion()
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
-        $provider->expects($this->any())
-            ->method('getComposerPackageName')
-            ->will($this->returnValue('browscap/browscap-php'));
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'piwik/device-detector');
 
         // match
         $this->assertInternalType('string', $provider->getVersion());
 
         // cached
         $this->assertInternalType('string', $provider->getVersion());
+    }
+
+    public function testUpdateDateNull()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        // no package name
+        $this->assertNull($provider->getUpdateDate());
+
+        // no composer.lock found
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'vendor/package');
+
+        $cwdir = getcwd();
+        chdir('tests');
+
+        $this->assertNull($provider->getUpdateDate());
+        chdir($cwdir);
+
+        // locked file
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'vendor/package');
+
+        $fp = fopen('composer.lock', 'r');
+        flock($fp, LOCK_EX);
+        $this->assertNull($provider->getUpdateDate());
+        flock($fp, LOCK_UN);
+
+        // no package match
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'vendor/package');
+
+        $this->assertNull($provider->getUpdateDate());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'piwik/device-detector');
+
+        // match
+        $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
+
+        // cached
+        $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()

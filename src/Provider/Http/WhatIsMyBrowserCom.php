@@ -13,6 +13,20 @@ use UserAgentParser\Model;
  */
 class WhatIsMyBrowserCom extends AbstractHttpProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'WhatIsMyBrowserCom';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://www.whatismybrowser.com/';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -59,16 +73,6 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
         parent::__construct($client);
 
         $this->apiKey = $apiKey;
-    }
-
-    public function getName()
-    {
-        return 'WhatIsMyBrowserCom';
-    }
-
-    public function getComposerPackageName()
-    {
-        return;
     }
 
     public function getVersion()

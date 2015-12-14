@@ -17,11 +17,18 @@ class UdgerComTest extends AbstractProviderTestCase
         $this->assertEquals('UdgerCom', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new UdgerCom($this->getClient(), 'apiKey123');
 
-        $this->assertNull($provider->getComposerPackageName());
+        $this->assertEquals('https://udger.com/', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new UdgerCom($this->getClient(), 'apiKey123');
+
+        $this->assertNull($provider->getPackageName());
     }
 
     public function testVersion()

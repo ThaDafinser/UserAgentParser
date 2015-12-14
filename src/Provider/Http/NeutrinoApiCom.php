@@ -7,12 +7,22 @@ use stdClass;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
-/**
- *
- * @see https://www.neutrinoapi.com/api/user-agent-info/
- */
 class NeutrinoApiCom extends AbstractHttpProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'NeutrinoApiCom';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://www.neutrinoapi.com/';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -61,16 +71,6 @@ class NeutrinoApiCom extends AbstractHttpProvider
 
         $this->apiUserId = $apiUserId;
         $this->apiKey    = $apiKey;
-    }
-
-    public function getName()
-    {
-        return 'NeutrinoApiCom';
-    }
-
-    public function getComposerPackageName()
-    {
-        return;
     }
 
     public function getVersion()
@@ -252,7 +252,7 @@ class NeutrinoApiCom extends AbstractHttpProvider
             $device->setType($resultRaw->type);
         }
 
-        if (isset($resultRaw->is_mobile) && $this->isRealResult($resultRaw->is_mobile) === true) {
+        if (isset($resultRaw->is_mobile) && $resultRaw->is_mobile === true) {
             $device->setIsMobile(true);
         }
     }

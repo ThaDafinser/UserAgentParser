@@ -14,6 +14,20 @@ use UserAgentParser\Model;
  */
 class UdgerCom extends AbstractHttpProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'UdgerCom';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://udger.com/';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -59,16 +73,6 @@ class UdgerCom extends AbstractHttpProvider
         parent::__construct($client);
 
         $this->apiKey = $apiKey;
-    }
-
-    public function getName()
-    {
-        return 'UdgerCom';
-    }
-
-    public function getComposerPackageName()
-    {
-        return;
     }
 
     public function getVersion()

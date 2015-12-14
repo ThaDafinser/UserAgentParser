@@ -22,17 +22,24 @@ class WurflTest extends AbstractProviderTestCase
         $this->assertEquals('Wurfl', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new Wurfl($this->getManager());
 
-        $this->assertEquals('mimmi20/wurfl', $provider->getComposerPackageName());
+        $this->assertEquals('https://github.com/mimmi20/Wurfl', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new Wurfl($this->getManager());
+
+        $this->assertEquals('mimmi20/wurfl', $provider->getPackageName());
     }
 
     public function testVersion()
     {
         $return          = new \stdClass();
-        $return->version = 'test - 2015-12-04 00:00:00';
+        $return->version = 'for API 1.6.4, db.scientiamobile.com - 2015-12-03 14:33:12';
 
         $manager = $this->getManager();
         $manager->expects($this->any())
@@ -42,7 +49,7 @@ class WurflTest extends AbstractProviderTestCase
         $provider = new Wurfl($manager);
 
         $this->assertInternalType('string', $provider->getVersion());
-        $this->assertEquals('2015-12-04 00:00:00', $provider->getVersion());
+        $this->assertEquals('1.6.4', $provider->getVersion());
     }
 
     public function testVersionNull()
@@ -52,12 +59,27 @@ class WurflTest extends AbstractProviderTestCase
 
         $manager = $this->getManager();
         $manager->expects($this->any())
-        ->method('getWurflInfo')
-        ->will($this->returnValue($return));
+            ->method('getWurflInfo')
+            ->will($this->returnValue($return));
 
         $provider = new Wurfl($manager);
 
         $this->assertNull($provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $return              = new \stdClass();
+        $return->lastUpdated = '2015-10-16 11:09:44 -0400';
+
+        $manager = $this->getManager();
+        $manager->expects($this->any())
+            ->method('getWurflInfo')
+            ->will($this->returnValue($return));
+
+        $provider = new Wurfl($manager);
+
+        $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()
@@ -66,35 +88,35 @@ class WurflTest extends AbstractProviderTestCase
 
         $this->assertEquals([
 
-        'browser' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'browser' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
-        ],
+            'renderingEngine' => [
+                'name'    => false,
+                'version' => false,
+            ],
 
-        'operatingSystem' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'operatingSystem' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => true,
-            'isMobile' => true,
-            'isTouch'  => true,
-        ],
+            'device' => [
+                'model'    => true,
+                'brand'    => true,
+                'type'     => true,
+                'isMobile' => true,
+                'isTouch'  => true,
+            ],
 
-        'bot' => [
-            'isBot' => true,
-            'name'  => false,
-            'type'  => false,
-        ],
-    ], $provider->getDetectionCapabilities());
+            'bot' => [
+                'isBot' => true,
+                'name'  => false,
+                'type'  => false,
+            ],
+        ], $provider->getDetectionCapabilities());
     }
 
     public function testParser()
@@ -195,9 +217,9 @@ class WurflTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Firefox',
                 'version' => [
-                    'major'    => 3,
-                    'minor'    => 0,
-                    'patch'    => 1,
+                    'major' => 3,
+                    'minor' => 0,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -249,9 +271,9 @@ class WurflTest extends AbstractProviderTestCase
             'operatingSystem' => [
                 'name'    => 'Windows',
                 'version' => [
-                    'major'    => 7,
-                    'minor'    => 0,
-                    'patch'    => 1,
+                    'major' => 7,
+                    'minor' => 0,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -369,8 +391,8 @@ class WurflTest extends AbstractProviderTestCase
         ];
 
         $return->expects($this->any())
-        ->method('getVirtualCapability')
-        ->will($this->returnValueMap($map));
+            ->method('getVirtualCapability')
+            ->will($this->returnValueMap($map));
 
         $map = [
             [
@@ -383,13 +405,13 @@ class WurflTest extends AbstractProviderTestCase
             ],
         ];
         $return->expects($this->any())
-        ->method('getCapability')
-        ->will($this->returnValueMap($map));
+            ->method('getCapability')
+            ->will($this->returnValueMap($map));
 
         $manager = $this->getManager();
         $manager->expects($this->any())
-        ->method('getDeviceForUserAgent')
-        ->will($this->returnValue($return));
+            ->method('getDeviceForUserAgent')
+            ->will($this->returnValue($return));
 
         $provider = new Wurfl($manager);
 

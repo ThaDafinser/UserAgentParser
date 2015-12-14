@@ -8,6 +8,27 @@ use UserAgentParser\Model;
 
 class BrowscapPhp extends AbstractProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'BrowscapPhp';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://github.com/browscap/browscap-php';
+
+    /**
+     * Composer package name
+     *
+     * @var string
+     */
+    protected $packageName = 'browscap/browscap-php';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -58,21 +79,16 @@ class BrowscapPhp extends AbstractProvider
         $this->parser = $parser;
     }
 
-    public function getName()
-    {
-        return 'BrowscapPhp';
-    }
-
-    public function getComposerPackageName()
-    {
-        return 'browscap/browscap-php';
-    }
-
     public function getVersion()
     {
         return $this->getParser()
             ->getCache()
             ->getVersion();
+    }
+
+    public function getUpdateDate()
+    {
+        return;
     }
 
     /**

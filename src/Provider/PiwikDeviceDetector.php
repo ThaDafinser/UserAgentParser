@@ -7,6 +7,27 @@ use UserAgentParser\Model;
 
 class PiwikDeviceDetector extends AbstractProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'PiwikDeviceDetector';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://github.com/piwik/device-detector';
+
+    /**
+     * Composer package name
+     *
+     * @var string
+     */
+    protected $packageName = 'piwik/device-detector';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -57,20 +78,10 @@ class PiwikDeviceDetector extends AbstractProvider
     public function __construct(DeviceDetector $parser = null)
     {
         if (! class_exists('DeviceDetector\Cache\StaticCache', true)) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
 
         $this->parser = $parser;
-    }
-
-    public function getName()
-    {
-        return 'PiwikDeviceDetector';
-    }
-
-    public function getComposerPackageName()
-    {
-        return 'piwik/device-detector';
     }
 
     /**

@@ -14,6 +14,20 @@ use UserAgentParser\Model;
  */
 class UserAgentApiCom extends AbstractHttpProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'UserAgentApiCom';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'http://useragentapi.com/';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -55,16 +69,6 @@ class UserAgentApiCom extends AbstractHttpProvider
         parent::__construct($client);
 
         $this->apiKey = $apiKey;
-    }
-
-    public function getName()
-    {
-        return 'UserAgentApiCom';
-    }
-
-    public function getComposerPackageName()
-    {
-        return;
     }
 
     public function getVersion()

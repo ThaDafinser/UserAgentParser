@@ -73,11 +73,18 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         $this->assertEquals('SinergiBrowserDetector', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new SinergiBrowserDetector();
 
-        $this->assertEquals('sinergi/browser-detector', $provider->getComposerPackageName());
+        $this->assertEquals('https://github.com/sinergi/php-browser-detector', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new SinergiBrowserDetector();
+
+        $this->assertEquals('sinergi/browser-detector', $provider->getPackageName());
     }
 
     public function testVersion()
@@ -85,6 +92,13 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         $provider = new SinergiBrowserDetector();
 
         $this->assertInternalType('string', $provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new SinergiBrowserDetector();
+
+        $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()

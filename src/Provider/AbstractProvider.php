@@ -1,18 +1,47 @@
 <?php
 namespace UserAgentParser\Provider;
 
+use DateTime;
+use DateTimeZone;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
 abstract class AbstractProvider
 {
     /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage;
+
+    /**
+     * Composer package name
+     *
+     * @var string
+     */
+    protected $packageName;
+
+    /**
+     * Version string for caching
      *
      * @var string
      */
     private $version;
 
-    protected $defaultValues = [];
+    /**
+     * Last update date 
+     * 
+     * @var DateTime
+     */
+    private $updateDate;
 
     /**
      * Per default the provider cannot detect anything
@@ -58,14 +87,37 @@ abstract class AbstractProvider
      */
     protected $detectionCapabilities = [];
 
+    protected $defaultValues = [];
+
     /**
      * Return the name of the provider
      *
      * @return string
      */
-    abstract public function getName();
+    public function getName()
+    {
+        return $this->name;
+    }
 
-    abstract public function getComposerPackageName();
+    /**
+     * Get the homepage
+     *
+     * @return string
+     */
+    public function getHomepage()
+    {
+        return $this->homepage;
+    }
+
+    /**
+     * Get the package name
+     *
+     * @return string null
+     */
+    public function getPackageName()
+    {
+        return $this->packageName;
+    }
 
     /**
      * Return the version of the provider
@@ -78,18 +130,18 @@ abstract class AbstractProvider
             return $this->version;
         }
 
-        if ($this->getComposerPackageName() === null) {
+        if ($this->getPackageName() === null) {
             return;
         }
 
-        $packages = $this->getComposerPackages();
+        $packages = $this->getPackages();
 
         if ($packages === null) {
             return;
         }
 
         foreach ($packages as $package) {
-            if ($package->name === $this->getComposerPackageName()) {
+            if ($package->name === $this->getPackageName()) {
                 $this->version = $package->version;
 
                 break;
@@ -100,10 +152,44 @@ abstract class AbstractProvider
     }
 
     /**
+     * Get the last change date of the provider
+     * 
+     * @return DateTime null
+     */
+    public function getUpdateDate()
+    {
+        if ($this->updateDate !== null) {
+            return $this->updateDate;
+        }
+
+        if ($this->getPackageName() === null) {
+            return;
+        }
+
+        $packages = $this->getPackages();
+
+        if ($packages === null) {
+            return;
+        }
+
+        foreach ($packages as $package) {
+            if ($package->name === $this->getPackageName()) {
+                $updateDate = new DateTime($package->time, new DateTimeZone('UTC'));
+
+                $this->updateDate = $updateDate;
+
+                break;
+            }
+        }
+
+        return $this->updateDate;
+    }
+
+    /**
      *
      * @return array null
      */
-    private function getComposerPackages()
+    private function getPackages()
     {
         if (! file_exists('composer.lock')) {
             return;

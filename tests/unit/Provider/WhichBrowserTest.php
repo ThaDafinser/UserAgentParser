@@ -56,11 +56,18 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $this->assertEquals('WhichBrowser', $provider->getName());
     }
 
-    public function testGetComposerPackageName()
+    public function testGetHomepage()
     {
         $provider = new WhichBrowser();
 
-        $this->assertEquals('whichbrowser/parser', $provider->getComposerPackageName());
+        $this->assertEquals('https://github.com/WhichBrowser/Parser', $provider->getHomepage());
+    }
+
+    public function testGetPackageName()
+    {
+        $provider = new WhichBrowser();
+
+        $this->assertEquals('whichbrowser/parser', $provider->getPackageName());
     }
 
     public function testVersion()
@@ -68,6 +75,13 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $provider = new WhichBrowser();
 
         $this->assertInternalType('string', $provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new WhichBrowser();
+
+        $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()

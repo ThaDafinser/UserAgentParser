@@ -6,6 +6,27 @@ use UserAgentParser\Model;
 
 class DonatjUAParser extends AbstractProvider
 {
+    /**
+     * Name of the provider
+     *
+     * @var string
+     */
+    protected $name = 'DonatjUAParser';
+
+    /**
+     * Homepage of the provider
+     *
+     * @var string
+     */
+    protected $homepage = 'https://github.com/donatj/PhpUserAgent';
+
+    /**
+     * Composer package name
+     *
+     * @var string
+     */
+    protected $packageName = 'donatj/phpuseragentparser';
+
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -41,18 +62,8 @@ class DonatjUAParser extends AbstractProvider
     public function __construct()
     {
         if (! function_exists('parse_user_agent')) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getComposerPackageName() . ' to use this provider');
+            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
-    }
-
-    public function getName()
-    {
-        return 'DonatjUAParser';
-    }
-
-    public function getComposerPackageName()
-    {
-        return 'donatj/phpuseragentparser';
     }
 
     /**

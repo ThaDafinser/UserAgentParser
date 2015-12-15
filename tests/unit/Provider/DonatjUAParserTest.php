@@ -1,11 +1,12 @@
 <?php
 namespace UserAgentParser\Provider
 {
+
     use UserAgentParserTest\Unit\Provider\DonatjUAParserTest;
 
     /**
      * This is need to mock the testing!
-     * 
+     *
      * @param  string $userAgent
      * @return array
      */
@@ -29,6 +30,7 @@ namespace UserAgentParserTest\Unit\Provider
     class DonatjUAParserTest extends AbstractProviderTestCase
     {
         public static $browser = null;
+
         public static $version = null;
 
         public function testName()
@@ -136,9 +138,9 @@ namespace UserAgentParserTest\Unit\Provider
                 'browser' => [
                     'name'    => 'Firefox',
                     'version' => [
-                        'major'    => 3,
-                        'minor'    => 0,
-                        'patch'    => 1,
+                        'major' => 3,
+                        'minor' => 0,
+                        'patch' => 1,
 
                         'alias' => null,
 

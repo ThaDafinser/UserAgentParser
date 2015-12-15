@@ -1,5 +1,5 @@
 <?php
-namespace UserAgentParserTest\Provider;
+namespace UserAgentParserTest\Unit\Provider;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;

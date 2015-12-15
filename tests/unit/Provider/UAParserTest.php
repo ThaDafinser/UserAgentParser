@@ -1,5 +1,5 @@
 <?php
-namespace UserAgentParserTest\Provider;
+namespace UserAgentParserTest\Unit\Provider;
 
 use UAParser\Result;
 use UserAgentParser\Provider\UAParser;

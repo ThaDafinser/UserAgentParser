@@ -1,5 +1,5 @@
 <?php
-namespace UserAgentParserTest\Provider;
+namespace UserAgentParserTest\Unit\Provider;
 
 use UserAgentParser\Provider\BrowscapPhp;
 
@@ -58,6 +58,13 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $provider = new BrowscapPhp($parser);
 
         $this->assertEquals('321', $provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new BrowscapPhp($this->getParser());
+
+        $this->assertNull($provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()

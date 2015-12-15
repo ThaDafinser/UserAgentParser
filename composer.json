@@ -58,7 +58,8 @@
 
     "autoload-dev": {
         "psr-4": {
-            "UserAgentParserTest\\":  "tests/unit"
+            "UserAgentParserTest\\Unit\\":  "tests/unit",
+            "UserAgentParserTest\\Integration\\":  "tests/integration"
         }
     },
     

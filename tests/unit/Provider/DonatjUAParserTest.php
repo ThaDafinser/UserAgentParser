@@ -1,7 +1,7 @@
 <?php
 namespace UserAgentParser\Provider
 {
-    use UserAgentParserTest\Provider\DonatjUAParserTest;
+    use UserAgentParserTest\Unit\Provider\DonatjUAParserTest;
 
     /**
      * This is need to mock the testing!
@@ -18,7 +18,7 @@ namespace UserAgentParser\Provider
     }
 }
 
-namespace UserAgentParserTest\Provider
+namespace UserAgentParserTest\Unit\Provider
 {
 
     use UserAgentParser\Provider\DonatjUAParser;

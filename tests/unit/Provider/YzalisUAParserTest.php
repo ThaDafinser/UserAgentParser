@@ -1,5 +1,5 @@
 <?php
-namespace UserAgentParserTest\Provider;
+namespace UserAgentParserTest\Unit\Provider;
 
 use UserAgentParser\Provider\YzalisUAParser;
 

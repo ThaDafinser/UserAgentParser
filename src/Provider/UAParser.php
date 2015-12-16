@@ -2,7 +2,8 @@
 namespace UserAgentParser\Provider;
 
 use UAParser\Parser;
-use UserAgentParser\Exception;
+use UserAgentParser\Exception\NoResultFoundException;
+use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
 class UAParser extends AbstractProvider
@@ -66,10 +67,15 @@ class UAParser extends AbstractProvider
 
     private $parser;
 
+    /**
+     * 
+     * @param  Parser                    $parser
+     * @throws PackageNotLoadedException
+     */
     public function __construct(Parser $parser = null)
     {
         if (! class_exists('UAParser\Parser', true)) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
+            throw new PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
 
         $this->parser = $parser;
@@ -235,7 +241,7 @@ class UAParser extends AbstractProvider
          * No result found?
          */
         if ($this->hasResult($resultRaw) !== true) {
-            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
         /*

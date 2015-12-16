@@ -1,7 +1,8 @@
 <?php
 namespace UserAgentParser\Provider;
 
-use UserAgentParser\Exception;
+use UserAgentParser\Exception\NoResultFoundException;
+use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 use Woothee\Classifier;
 use Woothee\DataSet;
@@ -67,10 +68,14 @@ class Woothee extends AbstractProvider
 
     private $parser;
 
+    /**
+     * 
+     * @throws PackageNotLoadedException
+     */
     public function __construct()
     {
         if (! class_exists('Woothee\Classifier', true)) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
+            throw new PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
     }
 
@@ -172,7 +177,7 @@ class Woothee extends AbstractProvider
          * No result found?
          */
         if ($this->hasResult($resultRaw) !== true) {
-            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
         /*

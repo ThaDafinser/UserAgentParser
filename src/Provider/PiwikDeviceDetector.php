@@ -2,7 +2,8 @@
 namespace UserAgentParser\Provider;
 
 use DeviceDetector\DeviceDetector;
-use UserAgentParser\Exception;
+use UserAgentParser\Exception\NoResultFoundException;
+use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
 class PiwikDeviceDetector extends AbstractProvider
@@ -72,13 +73,13 @@ class PiwikDeviceDetector extends AbstractProvider
 
     /**
      * 
-     * @param  DeviceDetector             $parser
-     * @throws Exception\PackageNotLoaded
+     * @param  DeviceDetector            $parser
+     * @throws PackageNotLoadedException
      */
     public function __construct(DeviceDetector $parser = null)
     {
         if (! class_exists('DeviceDetector\Cache\StaticCache', true)) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
+            throw new PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
 
         $this->parser = $parser;
@@ -285,7 +286,7 @@ class PiwikDeviceDetector extends AbstractProvider
          * No result found?
          */
         if ($this->hasResult($dd) !== true) {
-            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
         /*

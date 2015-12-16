@@ -1,7 +1,7 @@
 <?php
 namespace UserAgentParser\Provider;
 
-use UserAgentParser\Exception;
+use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Model;
 use Wurfl\CustomDevice;
 use Wurfl\Manager as WurflManager;
@@ -226,7 +226,7 @@ class Wurfl extends AbstractProvider
          * No result found?
          */
         if ($this->hasResult($deviceRaw) !== true) {
-            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
         /*

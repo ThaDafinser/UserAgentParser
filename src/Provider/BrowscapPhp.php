@@ -3,7 +3,7 @@ namespace UserAgentParser\Provider;
 
 use BrowscapPHP\Browscap;
 use stdClass;
-use UserAgentParser\Exception;
+use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Model;
 
 class BrowscapPhp extends AbstractProvider
@@ -258,7 +258,7 @@ class BrowscapPhp extends AbstractProvider
          * No result found?
          */
         if ($this->hasResult($resultRaw) !== true) {
-            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
         /*

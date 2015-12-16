@@ -2,7 +2,8 @@
 namespace UserAgentParser\Provider;
 
 use Sinergi\BrowserDetector;
-use UserAgentParser\Exception;
+use UserAgentParser\Exception\NoResultFoundException;
+use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
 class SinergiBrowserDetector extends AbstractProvider
@@ -85,10 +86,14 @@ class SinergiBrowserDetector extends AbstractProvider
      */
     private $deviceParser;
 
+    /**
+     * 
+     * @throws PackageNotLoadedException
+     */
     public function __construct()
     {
         if (! class_exists('Sinergi\BrowserDetector\UserAgent', true)) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
+            throw new PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
     }
 
@@ -222,7 +227,7 @@ class SinergiBrowserDetector extends AbstractProvider
          * No result found?
          */
         if ($this->hasResult($browserRaw, $osRaw, $deviceRaw) !== true) {
-            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
         /*

@@ -1,7 +1,7 @@
 <?php
 namespace UserAgentParser\Provider;
 
-use UserAgentParser\Exception;
+use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Model;
 
 class DonatjUAParser extends AbstractProvider
@@ -102,7 +102,7 @@ class DonatjUAParser extends AbstractProvider
         $resultRaw = parse_user_agent($userAgent);
 
         if ($this->hasResult($resultRaw) !== true) {
-            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
         /*

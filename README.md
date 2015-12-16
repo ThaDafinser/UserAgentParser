@@ -138,7 +138,6 @@ $chain = new Provider\Chain([
     new Provider\WhichBrowser(),
     new Provider\UAParser(),
     new Provider\Woothee(),
-    new Provider\YzalisUAParser(),
     new Provider\DonatjUAParser()
 ]);
 

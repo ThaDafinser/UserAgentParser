@@ -34,7 +34,6 @@
         "whichbrowser",
         "woothee",
         "wurfl",
-        "yzalis",
         
         "udger",
         "useragentapi",
@@ -77,7 +76,6 @@
         "whichbrowser/parser": "Needed to use Provider\\WhichBrowser",
         "woothee/woothee": "Needed to use Provider\\Woothee",
         "mimmi20/wurfl": "Needed to use Provider\\Wurfl",
-        "yzalis/ua-parser": "Needed to use Provider\\YzalisUAParser"
     },
     
     "require-dev": {
@@ -92,6 +90,5 @@
         "whichbrowser/parser": ">=2.0.3,<2.1",
         "woothee/woothee": "^1.2",
         "mimmi20/wurfl": "^1.6",
-        "yzalis/ua-parser": "^0.2"
     }
 }

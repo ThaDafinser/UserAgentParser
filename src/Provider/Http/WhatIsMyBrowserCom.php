@@ -62,6 +62,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
 
     protected $defaultValues = [
         'Unknown Mobile Browser',
+        'Unknown browser',
     ];
 
     private static $uri = 'http://api.whatismybrowser.com/api/v1/user_agent_parse';

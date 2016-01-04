@@ -88,7 +88,7 @@
         "sinergi/browser-detector": "^5.1",
         "ua-parser/uap-php": ">=3.4.3,<3.5",
         "whichbrowser/parser": ">=2.0.3,<2.1",
-        "woothee/woothee": "^1.2",
+        "woothee/woothee": "^1.3",
         "mimmi20/wurfl": "^1.6"
     }
 }

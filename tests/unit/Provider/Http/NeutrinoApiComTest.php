@@ -56,7 +56,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
 
             'operatingSystem' => [
                 'name'    => true,
-                'version' => false,
+                'version' => true,
             ],
 
             'device' => [

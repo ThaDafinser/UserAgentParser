@@ -37,7 +37,7 @@ class NeutrinoApiCom extends AbstractHttpProvider
 
         'operatingSystem' => [
             'name'    => true,
-            'version' => false,
+            'version' => true,
         ],
 
         'device' => [

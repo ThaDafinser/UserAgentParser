@@ -228,8 +228,12 @@ class NeutrinoApiCom extends AbstractHttpProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
-        if (isset($resultRaw->operating_system) && $this->isRealResult($resultRaw->operating_system) === true) {
-            $os->setName($resultRaw->operating_system);
+        if (isset($resultRaw->operating_system_family) && $this->isRealResult($resultRaw->operating_system_family) === true) {
+            $os->setName($resultRaw->operating_system_family);
+        }
+
+        if (isset($resultRaw->operating_system_version) && $this->isRealResult($resultRaw->operating_system_version) === true) {
+            $os->getVersion()->setComplete($resultRaw->operating_system_version);
         }
     }
 

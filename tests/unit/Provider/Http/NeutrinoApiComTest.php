@@ -328,9 +328,10 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
      */
     public function testParseOperatingSystem()
     {
-        $rawResult                   = new stdClass();
-        $rawResult->type             = 'desktop-browser';
-        $rawResult->operating_system = 'Windows 7';
+        $rawResult                           = new stdClass();
+        $rawResult->type                     = 'desktop-browser';
+        $rawResult->operating_system_family  = 'Windows';
+        $rawResult->operating_system_version = '7';
 
         $responseQueue = [
             new Response(200, [
@@ -344,15 +345,15 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows 7',
+                'name'    => 'Windows',
                 'version' => [
-                    'major' => null,
+                    'major' => 7,
                     'minor' => null,
                     'patch' => null,
 
                     'alias' => null,
 
-                    'complete' => null,
+                    'complete' => '7',
                 ],
             ],
 

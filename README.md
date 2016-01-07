@@ -38,7 +38,7 @@ composer require thadafinser/user-agent-parser
 
 The easiest way is to use an HTTP API provider, since all you need is already installed
 
-```
+```php
 use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Provider\Http\UserAgentStringCom;
 use GuzzleHttp\Client;

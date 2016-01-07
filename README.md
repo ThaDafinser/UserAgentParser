@@ -45,10 +45,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Handler\CurlHandler;
 
-$handler = new CurlHandler();
-$stack = HandlerStack::create($handler);
 $client = new Client([
-    'handler' => $stack,
+    'handler' => HandlerStack::create(new CurlHandler()),
 ]);
 
 $provider = new UserAgentStringCom($client);

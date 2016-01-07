@@ -58,25 +58,27 @@ try {
     // nothing found
 }
 
-// if one part has no result, it's always set not null
-$result->getBrowser()->getName();
-$result->getBrowser()->getVersion()->getComplete();
+if($result->getBot()->getIsBot() === true) {
+  // if one part has no result, it's always set not null
+  $result->getBot()->getName();
+  $result->getBot()->getType();
+} else {
+  // if one part has no result, it's always set not null
+  $result->getBrowser()->getName();
+  $result->getBrowser()->getVersion()->getComplete();
 
-$result->getRenderingEngine()->getName();
-$result->getRenderingEngine()->getVersion()->getComplete();
+  $result->getRenderingEngine()->getName();
+  $result->getRenderingEngine()->getVersion()->getComplete();
 
-$result->getOperatingSystem()->getName();
-$result->getOperatingSystem()->getVersion()->getComplete();
+  $result->getOperatingSystem()->getName();
+  $result->getOperatingSystem()->getVersion()->getComplete();
 
-$result->getDevice()->getModel();
-$result->getDevice()->getBrand();
-$result->getDevice()->getType();
-$result->getDevice()->getIsMobile();
-$result->getDevice()->getIsTouch();
-
-$result->getBot()->getIsBot();
-$result->getBot()->getName();
-$result->getBot()->getType();
+  $result->getDevice()->getModel();
+  $result->getDevice()->getBrand();
+  $result->getDevice()->getType();
+  $result->getDevice()->getIsMobile();
+  $result->getDevice()->getIsTouch();
+}
 ```
 
 ## Providers

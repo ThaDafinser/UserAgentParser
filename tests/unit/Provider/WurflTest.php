@@ -82,6 +82,21 @@ class WurflTest extends AbstractProviderTestCase
         $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
+    public function testUpdateDateBlank()
+    {
+        $return              = new \stdClass();
+        $return->lastUpdated = '';
+
+        $manager = $this->getManager();
+        $manager->expects($this->any())
+        ->method('getWurflInfo')
+        ->will($this->returnValue($return));
+
+        $provider = new Wurfl($manager);
+
+        $this->assertNull($provider->getUpdateDate());
+    }
+
     public function testDetectionCapabilities()
     {
         $provider = new Wurfl($this->getManager());

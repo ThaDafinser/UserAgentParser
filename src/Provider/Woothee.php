@@ -74,7 +74,7 @@ class Woothee extends AbstractProvider
      */
     public function __construct()
     {
-        if (! class_exists('Woothee\Classifier', true)) {
+        if (! class_exists('\Woothee\Classifier', true)) {
             throw new PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
     }

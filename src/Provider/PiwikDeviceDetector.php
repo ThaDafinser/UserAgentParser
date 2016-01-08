@@ -78,7 +78,7 @@ class PiwikDeviceDetector extends AbstractProvider
      */
     public function __construct(DeviceDetector $parser = null)
     {
-        if (! class_exists('DeviceDetector\Cache\StaticCache', true)) {
+        if (! class_exists('\DeviceDetector\Cache\StaticCache', true)) {
             throw new PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
 

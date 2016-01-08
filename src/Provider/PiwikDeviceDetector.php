@@ -3,7 +3,6 @@ namespace UserAgentParser\Provider;
 
 use DeviceDetector\DeviceDetector;
 use UserAgentParser\Exception\NoResultFoundException;
-use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
 class PiwikDeviceDetector extends AbstractProvider
@@ -74,7 +73,7 @@ class PiwikDeviceDetector extends AbstractProvider
     /**
      * 
      * @param  DeviceDetector            $parser
-     * @throws PackageNotLoadedException
+     * @throws \UserAgentParser\Exception\PackageNotLoadedException
      */
     public function __construct(DeviceDetector $parser = null)
     {

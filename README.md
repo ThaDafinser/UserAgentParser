@@ -32,7 +32,7 @@ So you can
 composer require thadafinser/user-agent-parser
 ```
 
-`Note: you may need to install additional packages, which are inside of suggests, to you use local providers`
+`Note: you may need to install additional packages, which are inside of suggests, to use local providers`
 
 ## Getting started
 

@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/ThaDafinser/UserAgentParser.svg)](https://travis-ci.org/ThaDafinser/UserAgentParser)
 [![Code Coverage](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ThaDafinser/UserAgentParser/?branch=master)
+[![PHP 7 ready](http://php7ready.timesplinter.ch/ThaDafinser/UserAgentParser/badge.svg)](https://travis-ci.org/ThaDafinser/UserAgentParser)
 
 [![Latest Stable Version](https://poser.pugx.org/thadafinser/user-agent-parser/v/stable)](https://packagist.org/packages/thadafinser/user-agent-parser)
 [![Latest Unstable Version](https://poser.pugx.org/thadafinser/user-agent-parser/v/unstable)](https://packagist.org/packages/thadafinser/user-agent-parser) 

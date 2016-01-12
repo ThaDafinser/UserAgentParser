@@ -22,27 +22,20 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
 
     public function testPackageNotLoadedException()
     {
-        $this->backupAutoload();
+        $file     = 'vendor/piwik/device-detector/composer.json';
+        $tempFile = 'vendor/piwik/device-detector/composer.json.tmp';
 
-        $autoloadFunction = function ($class) {
-            if ($class == 'DeviceDetector\Cache\StaticCache') {
-                $this->disableDefaultAutoload();
-            } else {
-                $this->enableDefaultAutoload();
-            }
-        };
-
-        spl_autoload_register($autoloadFunction, true, true);
+        rename($file, $tempFile);
 
         try {
             $provider = new PiwikDeviceDetector();
         } catch (\Exception $ex) {
+            // we need to catch the exception, since we need to rename the file again!
         }
 
         $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
 
-        spl_autoload_unregister($autoloadFunction);
-        $this->enableDefaultAutoload();
+        rename($tempFile, $file);
     }
 
     public function testName()
@@ -86,35 +79,35 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
 
         $this->assertEquals([
 
-        'browser' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'browser' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'renderingEngine' => [
-            'name'    => true,
-            'version' => false,
-        ],
+            'renderingEngine' => [
+                'name'    => true,
+                'version' => false,
+            ],
 
-        'operatingSystem' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'operatingSystem' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => true,
-            'isMobile' => true,
-            'isTouch'  => true,
-        ],
+            'device' => [
+                'model'    => true,
+                'brand'    => true,
+                'type'     => true,
+                'isMobile' => true,
+                'isTouch'  => true,
+            ],
 
-        'bot' => [
-            'isBot' => true,
-            'name'  => true,
-            'type'  => true,
-        ],
-    ], $provider->getDetectionCapabilities());
+            'bot' => [
+                'isBot' => true,
+                'name'  => true,
+                'type'  => true,
+            ],
+        ], $provider->getDetectionCapabilities());
     }
 
     public function testParser()
@@ -197,9 +190,9 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Firefox',
                 'version' => [
-                    'major'    => 3,
-                    'minor'    => 0,
-                    'patch'    => null,
+                    'major' => 3,
+                    'minor' => 0,
+                    'patch' => null,
 
                     'alias' => null,
 
@@ -210,9 +203,9 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
             'renderingEngine' => [
                 'name'    => 'WebKit',
                 'version' => [
-                    'major'    => null,
-                    'minor'    => null,
-                    'patch'    => null,
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
 
                     'alias' => null,
 
@@ -250,9 +243,9 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
             'operatingSystem' => [
                 'name'    => 'Windows',
                 'version' => [
-                    'major'    => 7,
-                    'minor'    => 0,
-                    'patch'    => null,
+                    'major' => 7,
+                    'minor' => 0,
+                    'patch' => null,
 
                     'alias' => null,
 
@@ -274,8 +267,8 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
             ->method('getClient')
             ->will($this->returnValue([]));
         $parser->expects($this->any())
-        ->method('getOs')
-        ->will($this->returnValue([]));
+            ->method('getOs')
+            ->will($this->returnValue([]));
 
         $parser->expects($this->any())
             ->method('getDevice')

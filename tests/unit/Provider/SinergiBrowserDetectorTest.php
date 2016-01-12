@@ -43,27 +43,20 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
 
     public function testPackageNotLoadedException()
     {
-        $this->backupAutoload();
+        $file     = 'vendor/sinergi/browser-detector/composer.json';
+        $tempFile = 'vendor/sinergi/browser-detector/composer.json.tmp';
 
-        $autoloadFunction = function ($class) {
-            if ($class == 'Sinergi\BrowserDetector\UserAgent') {
-                $this->disableDefaultAutoload();
-            } else {
-                $this->enableDefaultAutoload();
-            }
-        };
-
-        spl_autoload_register($autoloadFunction, true, true);
+        rename($file, $tempFile);
 
         try {
             $provider = new SinergiBrowserDetector();
         } catch (\Exception $ex) {
+            // we need to catch the exception, since we need to rename the file again!
         }
 
         $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
 
-        $test = spl_autoload_unregister($autoloadFunction);
-        $this->enableDefaultAutoload();
+        rename($tempFile, $file);
     }
 
     public function testName()

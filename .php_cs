@@ -3,10 +3,8 @@
 $finder = Symfony\CS\Finder\DefaultFinder::create();
 $finder->in([
     __DIR__ . '/src',
-    __DIR__ . '/tests'
-]);
-$finder->exclude([
-    __DIR__ . '/tests/resources'
+    __DIR__ . '/tests/integration',
+    __DIR__ . '/tests/unit'
 ]);
 
 $config = Symfony\CS\Config\Config::create();

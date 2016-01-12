@@ -5,6 +5,9 @@ $finder->in([
     __DIR__ . '/src',
     __DIR__ . '/tests'
 ]);
+$finder->exclude([
+    __DIR__ . '/tests/resources'
+]);
 
 $config = Symfony\CS\Config\Config::create();
 $config->setUsingCache(true);

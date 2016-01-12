@@ -43,27 +43,20 @@ class UAParserTest extends AbstractProviderTestCase
 
     public function testPackageNotLoadedException()
     {
-        $this->backupAutoload();
+        $file     = 'vendor/ua-parser/uap-php/composer.json';
+        $tempFile = 'vendor/ua-parser/uap-php/composer.json.tmp';
 
-        $autoloadFunction = function ($class) {
-            if ($class == 'UAParser\Parser') {
-                $this->disableDefaultAutoload();
-            } else {
-                $this->enableDefaultAutoload();
-            }
-        };
-
-        spl_autoload_register($autoloadFunction, true, true);
+        rename($file, $tempFile);
 
         try {
             $provider = new UAParser();
         } catch (\Exception $ex) {
+            // we need to catch the exception, since we need to rename the file again!
         }
 
         $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
 
-        spl_autoload_unregister($autoloadFunction);
-        $this->enableDefaultAutoload();
+        rename($tempFile, $file);
     }
 
     public function testName()

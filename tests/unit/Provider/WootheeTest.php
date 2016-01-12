@@ -24,17 +24,10 @@ class WootheeTest extends AbstractProviderTestCase
 
     public function testPackageNotLoadedException()
     {
-        $this->backupAutoload();
+        $file     = 'vendor/woothee/woothee/composer.json';
+        $tempFile = 'vendor/woothee/woothee/composer.json.tmp';
 
-        $autoloadFunction = function ($class) {
-            if ($class == 'Woothee\Classifier') {
-                $this->disableDefaultAutoload();
-            } else {
-                $this->enableDefaultAutoload();
-            }
-        };
-
-        spl_autoload_register($autoloadFunction, true, true);
+        rename($file, $tempFile);
 
         try {
             $provider = new Woothee();
@@ -43,8 +36,7 @@ class WootheeTest extends AbstractProviderTestCase
 
         $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
 
-        spl_autoload_unregister($autoloadFunction);
-        $this->enableDefaultAutoload();
+        rename($tempFile, $file);
     }
 
     public function testName()

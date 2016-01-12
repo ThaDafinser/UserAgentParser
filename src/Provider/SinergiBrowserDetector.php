@@ -92,7 +92,7 @@ class SinergiBrowserDetector extends AbstractProvider
      */
     public function __construct()
     {
-        if (! class_exists('Sinergi\BrowserDetector\UserAgent', true)) {
+        if (! class_exists('\Sinergi\BrowserDetector\UserAgent', true)) {
             throw new PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
         }
     }

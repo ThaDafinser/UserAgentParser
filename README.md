@@ -14,6 +14,8 @@
 
 The target of this package is to make it at least a bit less painful, by providing an abstract layer for many user agent parsers. 
 
+Currently **8 local providers** and **6 HTTP providers** are available! [See the list here](https://github.com/ThaDafinser/UserAgentParser/tree/master/src/Provider)
+
 So you can
 - use multiple providers at the same time with the `Chain` provider
 - try out or switch between different parsers fast, without changing your code
@@ -23,6 +25,7 @@ So you can
 
 ## Try it yourself
 
+[s
 [LIVE test your browser](http://useragent.mkf.solutions/)
 
 [See the parser comparison result](http://thadafinser.github.io/UserAgentParserComparison/)
@@ -84,7 +87,7 @@ if($result->getBot()->getIsBot() === true) {
 
 ## Providers
 
-UserAgnetParser comes with local and http providers. Http providers work out of the box.
+UserAgentParser comes with local and http providers. Http providers work all out of the box (but you may need a API key)
 To use local providers, you need to install the needed package (listed in the section `suggest` of `composer.json`)
 
 ### Comparison matrix

@@ -25,13 +25,13 @@ So you can
 
 ## Try it yourself
 
-[s
 [LIVE test your browser](http://useragent.mkf.solutions/)
 
 [See the parser comparison result](http://thadafinser.github.io/UserAgentParserComparison/)
 
 
 ## Installation
+
 ```
 composer require thadafinser/user-agent-parser
 ```

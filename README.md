@@ -12,32 +12,39 @@
 
 `User agent` parsing is, was and will always be a painful thing.
 
-The target of this package is to make it at least a bit less painful, by providing an abstract layer for many user agent parsers. 
+The target of this package is to make it less painful, by providing an abstract layer for many user agent parsers.
 
 So you can
 - use multiple providers at the same time with the `Chain` provider
-- try out or switch between different parsers fast, without changing your code
-- compare the result of the different parsers [see results](http://thadafinser.github.io/UserAgentParserComparison/)
+- use local and/or HTTP API providers at the same time
+- switch between different parsers, without changing your code
+- compare the result of the different parsers
 - get always the same result model, regardless of which parser you use currently
 
 
-## Try it yourself
+## Try it out
 
-[LIVE test your browser](http://useragent.mkf.solutions/)
+[LIVE test](http://useragent.mkf.solutions/)
 
-[See the parser comparison result](http://thadafinser.github.io/UserAgentParserComparison/)
+[Comparison matrix](http://thadafinser.github.io/UserAgentParserComparison/)
 
 
 ## Installation
+
+Using composer is currently the only supported way to install this package.
+
 ```
 composer require thadafinser/user-agent-parser
 ```
 
-`Note: you may need to install additional packages, which are inside of suggests, to use local providers`
+`Note:` to use local providers you need to install additional packages, which are listed inside the composer `suggests section`
+
 
 ## Getting started
 
-The easiest way is to use an HTTP API provider, since all you need is already installed
+After you have installed the package, you can use currently only `UserAgentStringCom` out of the box.
+For all other providers, you need to register an API key or install an additional package (listed in the section `suggest` of `composer.json`)
+
 
 ```php
 use UserAgentParser\Exception\NoResultFoundException;
@@ -84,8 +91,36 @@ if($result->getBot()->getIsBot() === true) {
 
 ## Providers
 
-UserAgnetParser comes with local and http providers. Http providers work out of the box.
-To use local providers, you need to install the needed package (listed in the section `suggest` of `composer.json`)
+UserAgentParser comes with local and http providers
+
+
+### Local providers
+
+Local providers are (most time) faster then HTTP providers and dont require a working internet connection.
+But you need to update them yourself from time to time, to make sure you detect the latest UAs
+
+- BrowscapPhp
+- DonatjUAParser
+- PiwikDeviceDetector
+- SinergiBrowserDetector
+- UAParser
+- WhichBrowser
+- Woothee
+- Wurfl
+
+
+### HTTP providers (API)
+
+HTTP providers are simple to use, since you need only an API key to get started.
+But they require (always) a working internet connection.
+
+- Http\DeviceAtlasCom
+- Http\NeutrinoApiCom
+- Http\UdgerCom
+- Http\UserAgentApiCom
+- Http\UserAgentStringCom (no API key required)
+- Http\WhatIsMyBrowserCom
+
 
 ### Comparison matrix
 

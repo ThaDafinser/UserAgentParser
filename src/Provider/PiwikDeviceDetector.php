@@ -63,6 +63,10 @@ class PiwikDeviceDetector extends AbstractProvider
 
     protected $defaultValues = [
         DeviceDetector::UNKNOWN,
+
+        // bot names
+        'Bot',
+        'Generic Bot',
     ];
 
     /**
@@ -72,7 +76,7 @@ class PiwikDeviceDetector extends AbstractProvider
     private $parser;
 
     /**
-     * 
+     *
      * @param  DeviceDetector            $parser
      * @throws PackageNotLoadedException
      */

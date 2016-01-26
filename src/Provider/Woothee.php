@@ -64,6 +64,9 @@ class Woothee extends AbstractProvider
 
     protected $defaultValues = [
         DataSet::VALUE_UNKNOWN,
+
+        // bot names
+        'misc crawler',
     ];
 
     private $parser;

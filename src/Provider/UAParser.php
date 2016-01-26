@@ -63,6 +63,9 @@ class UAParser extends AbstractProvider
 
     protected $defaultValues = [
         'Other',
+
+        // bot names
+        'crawler',
     ];
 
     private $parser;

@@ -75,7 +75,8 @@
         "ua-parser/uap-php": "Needed to use Provider\\UAParser",
         "whichbrowser/parser": "Needed to use Provider\\WhichBrowser",
         "woothee/woothee": "Needed to use Provider\\Woothee",
-        "mimmi20/wurfl": "Needed to use Provider\\Wurfl"
+        "mimmi20/wurfl": "Needed to use Provider\\Wurfl",
+        "zsxsoft/php-useragent": "Needed to use Provider\\Zsxsoft"
     },
     
     "require-dev": {
@@ -89,6 +90,7 @@
         "ua-parser/uap-php": ">=3.4.3,<3.5",
         "whichbrowser/parser": ">=2.0.3,<2.1",
         "woothee/woothee": "^1.2",
-        "mimmi20/wurfl": "^1.6"
+        "mimmi20/wurfl": "^1.6",
+        "zsxsoft/php-useragent": "^1.0"
     }
 }

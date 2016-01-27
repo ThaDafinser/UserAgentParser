@@ -14,7 +14,7 @@
 
 The target of this package is to make it less painful, by providing an abstract layer for many user agent parsers.
 
-Currently **8 local providers** and **6 HTTP providers** are available! [See the list here](https://github.com/ThaDafinser/UserAgentParser/tree/master/src/Provider)
+Currently **8 local providers** and **6 HTTP providers** are available! [See the list here](https://github.com/ThaDafinser/UserAgentParser#providers)
 
 So you can
 - use multiple providers at the same time with the `Chain` provider

@@ -28,7 +28,7 @@ So you can
 
 [LIVE test](http://useragent.mkf.solutions/)
 
-[Comparison matrix](http://thadafinser.github.io/UserAgentParserComparison/)
+[Compare the detection results of the parsers](http://thadafinser.github.io/UserAgentParserComparison/)
 
 
 ## Installation
@@ -95,6 +95,22 @@ if($result->getBot()->getIsBot() === true) {
 
 UserAgentParser comes with local and http providers
 
+| Name                   | Type | Browser | Engine | Operating system | Device model | Device brand | Device type | Is mobile | Is bot | Bot name | Bot type | Comment |
+| ---------------------- |----- | ------- | ------ | ---------------- | ------------ | ------------ | ----------- | --------- | ------ | -------- | -------- |-------- |
+| BrowscapPhp            | local | x | x | x | x | x | x | x | x | x | x |   |
+| DonatjUAParser         | local | x |   |   |   |   |   |   |   |   |   |   |
+| PiwikDeviceDetector    | local | x | x | x | x | x | x | x | x | x | x |   |
+| SinergiBrowserDetector | local | x |   | x | x |   |   | x | x |   |   |   |
+| UAParser               | local | x |   | x | x | x |   |   | x | x |   |   |
+| WhichBrowser           | local | x |   | x | x | x | x | x | x | x |   |   |
+| Woothee                | local | x |   |   |   |   | x |   | x | x |   |   |
+| Wurfl                  | local | x |   | x | x | x | x | x | x |   |   |   |
+| DeviceAtlasCom         | http  | x | x | x |   |   | x |   |   |   |   | free available / local and cloud |
+| NeutrinoApiCom         | http  | x |   | x | x | x | x | x | x | x |   | 25/day free |
+| UdgerCom               | http  | x | x | x |   |   | x |   | x |   |   | 500/period free (local is the Wurfl provider) |
+| UserAgentApiCom        | http  | x | x |   |   |   | x |   | x | x |   | 1000/day free |
+| UserAgentStringCom     | http  | x |   | x |   |   |   |   | x | x | x | free unlimited |
+| WhatIsMyBrowserCom     | http  | x |   | x |   |   |   |   |   |   |   | 500/month free |
 
 ### Local providers
 

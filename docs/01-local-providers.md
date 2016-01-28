@@ -3,6 +3,14 @@
 
 A detailed description of all local providers
 
+- [BrowscapPhp](#BrowscapPhp)
+- [DonatjUAParser](#DonatjUAParser)
+- [PiwikDeviceDetector](#PiwikDeviceDetector)
+- [SinergiBrowserDetector](#SinergiBrowserDetector)
+- [UAParser](#UAParser)
+- [WhichBrowser](#WhichBrowser)
+- [Woothee](#Woothee)
+- [Wurfl](#Wurfl)
 
 ## BrowscapPhp
 

@@ -3,6 +3,16 @@
 
 A detailed description of all HTTP providers
 
+- [General](#General)
+- [General](#note-about-http-providers)
+- [DeviceAtlasCom](#DeviceAtlasCom)
+- [NeutrinoApiCom](#NeutrinoApiCom)
+- [UdgerCom](#UdgerCom)
+- [UserAgentApiCom](#UserAgentApiCom)
+- [UserAgentStringCom](#UserAgentStringCom)
+- [WhatIsMyBrowserCom](#WhatIsMyBrowserCom)
+
+
 ## General
 
 Regardless of which HTTP provider you use, you need always a valid client to connect.

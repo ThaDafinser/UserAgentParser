@@ -3,14 +3,14 @@
 
 A detailed description of all HTTP providers
 
-- [General](#General)
-- [General](#note-about-http-providers)
-- [DeviceAtlasCom](#DeviceAtlasCom)
-- [NeutrinoApiCom](#NeutrinoApiCom)
-- [UdgerCom](#UdgerCom)
-- [UserAgentApiCom](#UserAgentApiCom)
-- [UserAgentStringCom](#UserAgentStringCom)
-- [WhatIsMyBrowserCom](#WhatIsMyBrowserCom)
+- [General](#general)
+- [Note about HTTP providers](#note-about-http-providers)
+- [DeviceAtlasCom](#deviceatlascom)
+- [NeutrinoApiCom](#neutrinoapicom)
+- [UdgerCom](#udgercom)
+- [UserAgentApiCom](#iseragentapicom)
+- [UserAgentStringCom](#useragentstringcom)
+- [WhatIsMyBrowserCom](#whatismybrowsercom)
 
 
 ## General

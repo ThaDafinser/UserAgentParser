@@ -14,7 +14,7 @@
 
 The target of this package is to make it less painful, by providing an abstract layer for many user agent parsers.
 
-Currently **8 local providers** and **6 HTTP providers** are available! [See the list here](https://github.com/ThaDafinser/UserAgentParser#providers)
+Currently **8 local providers** and **6 HTTP providers** are available! [See the comparison list here](https://github.com/ThaDafinser/UserAgentParser#providers)
 
 So you can
 - use multiple providers at the same time with the `Chain` provider
@@ -105,9 +105,9 @@ UserAgentParser comes with local and http providers
 | WhichBrowser           | local | x |   | x | x | x | x | x | x | x |   |   |
 | Woothee                | local | x |   |   |   |   | x |   | x | x |   |   |
 | Wurfl                  | local | x |   | x | x | x | x | x | x |   |   |   |
-| DeviceAtlasCom         | http  | x | x | x |   |   | x |   |   |   |   | free available / local and cloud |
+| DeviceAtlasCom         | http  | x | x | x |   |   | x |   |   |   |   | free available |
 | NeutrinoApiCom         | http  | x |   | x | x | x | x | x | x | x |   | 25/day free |
-| UdgerCom               | http  | x | x | x |   |   | x |   | x |   |   | 500/period free (local is the Wurfl provider) |
+| UdgerCom               | http  | x | x | x |   |   | x |   | x |   |   | 500/period free |
 | UserAgentApiCom        | http  | x | x |   |   |   | x |   | x | x |   | 1000/day free |
 | UserAgentStringCom     | http  | x |   | x |   |   |   |   | x | x | x | free unlimited |
 | WhatIsMyBrowserCom     | http  | x |   | x |   |   |   |   |   |   |   | 500/month free |

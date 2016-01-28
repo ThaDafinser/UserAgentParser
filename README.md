@@ -96,8 +96,11 @@ if($result->getBot()->getIsBot() === true) {
 UserAgentParser comes with local and http providers
 
 See detailed documenation here
+
 [local providers](docs/01-local-providers.md)
-[http providers](02-http-providers.md)
+
+[http providers](docs/02-http-providers.md)
+
 
 | Name                   | Type | Browser | Engine | Operating system | Device model | Device brand | Device type | Is mobile | Is bot | Bot name | Bot type | Comment |
 | ---------------------- |----- | ------- | ------ | ---------------- | ------------ | ------------ | ----------- | --------- | ------ | -------- | -------- |-------- |

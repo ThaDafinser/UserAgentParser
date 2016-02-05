@@ -202,7 +202,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
     {
         $result               = new \stdClass();
         $result->browser      = 'Google Bot';
-        $result->browser_type = 'Bot/Crawler';
+        $result->browser_type = 'Crawler';
         $result->crawler      = true;
 
         $provider = new BrowscapPhp($this->getParser($result));

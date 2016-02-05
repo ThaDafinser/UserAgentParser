@@ -160,11 +160,8 @@ class BrowscapPhp extends AbstractProvider
             $bot->setName($resultRaw->browser);
         }
 
-        // @todo convert to a common set of types (over all vendors)
         if (isset($resultRaw->issyndicationreader) && $resultRaw->issyndicationreader === true) {
             $bot->setType('RSS');
-        } elseif (isset($resultRaw->browser_type) && $resultRaw->browser_type === 'Bot/Crawler') {
-            $bot->setType('Crawler');
         } elseif (isset($resultRaw->browser_type) && $this->isRealResult($resultRaw->browser_type) === true) {
             $bot->setType($resultRaw->browser_type);
         }

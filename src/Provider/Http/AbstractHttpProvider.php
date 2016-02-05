@@ -55,19 +55,4 @@ abstract class AbstractHttpProvider extends AbstractProvider
 
         return $response;
     }
-
-    /**
-     * Parse the given user agent and return a result if possible
-     *
-     * @param string $userAgent
-     * @param array  $headers
-     *
-     * @throws Exception\NoResultFoundException
-     * @throws Exception\InvalidCredentialsException
-     * @throws Exception\LimitationExceededException
-     * @throws Exception\RequestException
-     *
-     * @return Model\UserAgent
-     */
-    abstract public function parse($userAgent, array $headers = []);
 }

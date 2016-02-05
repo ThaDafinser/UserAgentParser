@@ -50,8 +50,8 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
             ],
 
             'renderingEngine' => [
-                'name'    => false,
-                'version' => false,
+                'name'    => true,
+                'version' => true,
             ],
 
             'operatingSystem' => [
@@ -60,8 +60,8 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
             ],
 
             'device' => [
-                'model'    => false,
-                'brand'    => false,
+                'model'    => true,
+                'brand'    => true,
                 'type'     => false,
                 'isMobile' => false,
                 'isTouch'  => false,
@@ -259,6 +259,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
     public function testParseBrowser()
     {
         $parseResult                       = new stdClass();
+        $parseResult->user_agent           = 'A real user agent...';
         $parseResult->browser_name         = 'Firefox';
         $parseResult->browser_version_full = '3.2.1';
 
@@ -295,11 +296,54 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
     }
 
     /**
+     * Engine only
+     */
+    public function testParseEngine()
+    {
+        $parseResult                        = new stdClass();
+        $parseResult->user_agent            = 'A real user agent...';
+        $parseResult->layout_engine_name    = 'Webkit';
+        $parseResult->layout_engine_version = '3.2.1';
+
+        $rawResult         = new stdClass();
+        $rawResult->result = 'success';
+        $rawResult->parse  = $parseResult;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new WhatIsMyBrowserCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'renderingEngine' => [
+                'name'    => 'Webkit',
+                'version' => [
+                    'major' => 3,
+                    'minor' => 2,
+                    'patch' => 1,
+
+                    'alias' => null,
+
+                    'complete' => '3.2.1',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
      * OS only
      */
     public function testParseOperatingSystem()
     {
         $parseResult                                = new stdClass();
+        $parseResult->user_agent                    = 'A real user agent...';
         $parseResult->operating_system_name         = 'BlackBerryOS';
         $parseResult->operating_system_version_full = '6.0.0';
 
@@ -329,6 +373,44 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
 
                     'complete' => '6.0.0',
                 ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only
+     */
+    public function testParseDevice()
+    {
+        $parseResult                                 = new stdClass();
+        $parseResult->user_agent                     = 'A real user agent...';
+        $parseResult->operating_platform             = 'Galaxy Note';
+        $parseResult->operating_platform_vendor_name = 'Dell';
+
+        $rawResult         = new stdClass();
+        $rawResult->result = 'success';
+        $rawResult->parse  = $parseResult;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new WhatIsMyBrowserCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => 'Galaxy Note',
+                'brand' => 'Dell',
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
             ],
         ];
 

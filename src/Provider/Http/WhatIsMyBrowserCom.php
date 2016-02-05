@@ -35,8 +35,8 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
         ],
 
         'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
+            'name'    => true,
+            'version' => true,
         ],
 
         'operatingSystem' => [
@@ -45,8 +45,8 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
         ],
 
         'device' => [
-            'model' => false,
-            'brand' => false,
+            'model' => true,
+            'brand' => true,
 
             'type'     => false,
             'isMobile' => false,
@@ -165,11 +165,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hasResult(stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
-            return true;
-        }
-
-        if (isset($resultRaw->operating_system_name) && $this->isRealResult($resultRaw->operating_system_name) === true) {
+        if (isset($resultRaw->user_agent)) {
             return true;
         }
 
@@ -194,10 +190,26 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
 
     /**
      *
+     * @param Model\RenderingEngine $engine
+     * @param stdClass              $resultRaw
+     */
+    private function hydrateRenderingEngine(Model\RenderingEngine $engine, stdClass $resultRaw)
+    {
+        if (isset($resultRaw->layout_engine_name) && $this->isRealResult($resultRaw->layout_engine_name) === true) {
+            $engine->setName($resultRaw->layout_engine_name);
+        }
+
+        if (isset($resultRaw->layout_engine_version) && $this->isRealResult($resultRaw->layout_engine_version) === true) {
+            $engine->getVersion()->setComplete($resultRaw->layout_engine_version);
+        }
+    }
+
+    /**
+     *
      * @param Model\OperatingSystem $os
      * @param stdClass              $resultRaw
      */
-    private function hydrateOperatingSystem(Model\OperatingSystem $os, $resultRaw)
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
         if (isset($resultRaw->operating_system_name) && $this->isRealResult($resultRaw->operating_system_name) === true) {
             $os->setName($resultRaw->operating_system_name);
@@ -205,6 +217,22 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
 
         if (isset($resultRaw->operating_system_version_full) && $this->isRealResult($resultRaw->operating_system_version_full) === true) {
             $os->getVersion()->setComplete($resultRaw->operating_system_version_full);
+        }
+    }
+
+    /**
+     *
+     * @param Model\UserAgent $device
+     * @param stdClass        $resultRaw
+     */
+    private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
+    {
+        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform) === true) {
+            $device->setModel($resultRaw->operating_platform);
+        }
+
+        if (isset($resultRaw->operating_platform_vendor_name) && $this->isRealResult($resultRaw->operating_platform_vendor_name) === true) {
+            $device->setBrand($resultRaw->operating_platform_vendor_name);
         }
     }
 
@@ -229,7 +257,9 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
          * hydrate the result
          */
         $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        $this->hydrateRenderingEngine($result->getRenderingEngine(), $resultRaw);
         $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
+        $this->hydrateDevice($result->getDevice(), $resultRaw);
 
         return $result;
     }

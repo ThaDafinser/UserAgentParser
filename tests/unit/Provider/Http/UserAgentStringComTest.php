@@ -250,4 +250,55 @@ class UserAgentStringComTest extends AbstractProviderTestCase
 
         $this->assertProviderResult($result, $expectedResult);
     }
+
+    /**
+     * OS only
+     */
+    public function testVersionUnderscore()
+    {
+        $rawResult                   = new stdClass();
+        $rawResult->agent_type       = 'Browser';
+        $rawResult->agent_version    = '6_0_2';
+        $rawResult->os_versionNumber = '6_5_4';
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new UserAgentStringCom($this->getClient($responseQueue));
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'browser' => [
+                'name'    => null,
+                'version' => [
+                    'major' => 6,
+                    'minor' => 0,
+                    'patch' => 2,
+
+                    'alias' => null,
+
+                    'complete' => '6.0.2',
+                ],
+            ],
+
+            'operatingSystem' => [
+                'name'    => null,
+                'version' => [
+                    'major' => 6,
+                    'minor' => 5,
+                    'patch' => 4,
+
+                    'alias' => null,
+
+                    'complete' => '6.5.4',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
 }

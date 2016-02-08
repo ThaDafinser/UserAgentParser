@@ -382,6 +382,43 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
     /**
      * Device only
      */
+    public function testParseDeviceOnlyVendor()
+    {
+        $parseResult                                 = new stdClass();
+        $parseResult->user_agent                     = 'A real user agent...';
+        $parseResult->operating_platform_vendor_name = 'Dell';
+
+        $rawResult         = new stdClass();
+        $rawResult->result = 'success';
+        $rawResult->parse  = $parseResult;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new WhatIsMyBrowserCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => null,
+                'brand' => 'Dell',
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only
+     */
     public function testParseDevice()
     {
         $parseResult                                 = new stdClass();

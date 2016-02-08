@@ -165,7 +165,23 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hasResult(stdClass $resultRaw)
     {
-        if (isset($resultRaw->user_agent)) {
+        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
+            return true;
+        }
+
+        if (isset($resultRaw->layout_engine_name) && $this->isRealResult($resultRaw->layout_engine_name) === true) {
+            return true;
+        }
+
+        if (isset($resultRaw->operating_system_name) && $this->isRealResult($resultRaw->operating_system_name) === true) {
+            return true;
+        }
+
+        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform) === true) {
+            return true;
+        }
+
+        if (isset($resultRaw->operating_platform_vendor_name) && $this->isRealResult($resultRaw->operating_platform_vendor_name) === true) {
             return true;
         }
 

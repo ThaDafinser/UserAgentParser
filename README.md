@@ -114,7 +114,7 @@ See detailed documenation here
 | Wurfl                  | local | x |   | x | x | x | x | x | x |   |   |   |
 | DeviceAtlasCom         | http  | x | x | x |   |   | x |   |   |   |   | free available |
 | NeutrinoApiCom         | http  | x |   | x | x | x | x | x | x | x |   | 25/day free |
-| UdgerCom               | http  | x | x | x |   |   | x |   | x |   |   | 500/period free |
+| UdgerCom               | http  | x | x | x |   |   | x |   | x |   |   | 500/month free (API key only for one month valid!) |
 | UserAgentApiCom        | http  | x | x |   |   |   | x |   | x | x |   | 1000/day free |
 | UserAgentStringCom     | http  | x |   | x |   |   |   |   | x | x | x | free unlimited |
 | WhatIsMyBrowserCom     | http  | x |   | x |   |   |   |   |   |   |   | 500/month free |

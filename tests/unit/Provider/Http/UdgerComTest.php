@@ -92,7 +92,7 @@ class UdgerComTest extends AbstractProviderTestCase
     }
 
     /**
-     * 400 - flag 4
+     * 200 - flag 4
      *
      * @expectedException \UserAgentParser\Exception\InvalidCredentialsException
      */
@@ -102,7 +102,9 @@ class UdgerComTest extends AbstractProviderTestCase
         $rawResult->flag = 4;
 
         $responseQueue = [
-            new Response(400, [], json_encode($rawResult)),
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
         ];
 
         $provider = new UdgerCom($this->getClient($responseQueue), 'apiKey123');
@@ -111,7 +113,7 @@ class UdgerComTest extends AbstractProviderTestCase
     }
 
     /**
-     * 400 - flag 4
+     * 200 - flag 6
      *
      * @expectedException \UserAgentParser\Exception\LimitationExceededException
      */
@@ -121,7 +123,30 @@ class UdgerComTest extends AbstractProviderTestCase
         $rawResult->flag = 6;
 
         $responseQueue = [
-            new Response(400, [], json_encode($rawResult)),
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new UdgerCom($this->getClient($responseQueue), 'apiKey123');
+
+        $provider->parse('A real user agent...');
+    }
+
+    /**
+     * 200 - flag 99
+     *
+     * @expectedException \UserAgentParser\Exception\RequestException
+     */
+    public function testGetResultRequestException1()
+    {
+        $rawResult       = new stdClass();
+        $rawResult->flag = 99;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
         ];
 
         $provider = new UdgerCom($this->getClient($responseQueue), 'apiKey123');
@@ -134,7 +159,7 @@ class UdgerComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestException()
+    public function testGetResultRequestException2()
     {
         $responseQueue = [
             new Response(500),

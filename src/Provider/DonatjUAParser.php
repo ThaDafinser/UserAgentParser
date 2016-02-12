@@ -2,6 +2,7 @@
 namespace UserAgentParser\Provider;
 
 use UserAgentParser\Exception\NoResultFoundException;
+use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
 class DonatjUAParser extends AbstractProvider
@@ -61,8 +62,8 @@ class DonatjUAParser extends AbstractProvider
 
     public function __construct()
     {
-        if (! function_exists('parse_user_agent')) {
-            throw new Exception\PackageNotLoadedException('You need to install ' . $this->getHomepage() . ' to use this provider');
+        if (! file_exists('vendor/' . $this->getPackageName() . '/composer.json')) {
+            throw new PackageNotLoadedException('You need to install the package ' . $this->getPackageName() . ' to use this provider');
         }
     }
 

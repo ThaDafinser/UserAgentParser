@@ -77,6 +77,8 @@ class UAParser extends AbstractProvider
                 '/^Feature Phone$/i',
                 '/^iOS-Device$/i',
                 '/^Smartphone$/i',
+                '/^Windows$/i',
+                '/^Windows Phone$/i',
             ],
         ],
 

@@ -321,6 +321,7 @@ class UAParserTest extends AbstractProviderTestCase
                 'brand',
                 false,
             ],
+
             [
                 'Feature Phone',
                 'device',
@@ -339,6 +340,25 @@ class UAParserTest extends AbstractProviderTestCase
                 'model',
                 false,
             ],
+            [
+                'Windows',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Phone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Phone 8X by HTC',
+                'device',
+                'model',
+                true,
+            ],
+
             [
                 'crawler',
                 'bot',

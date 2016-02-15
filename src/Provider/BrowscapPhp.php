@@ -62,6 +62,7 @@ class BrowscapPhp extends AbstractProvider
     ];
 
     protected $defaultValues = [
+        
         'general' => [
             '/^DefaultProperties$/i',
             '/^Default Browser$/i',
@@ -71,7 +72,8 @@ class BrowscapPhp extends AbstractProvider
 
         'device' => [
             'model' => [
-                '/^general/i'
+                '/^general/i',
+                '/desktop/i',
             ],
         ],
     ];

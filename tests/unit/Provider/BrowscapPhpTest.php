@@ -436,6 +436,19 @@ class BrowscapPhpTest extends AbstractProviderTestCase
                 'model',
                 false,
             ],
+            [
+                'Linux Desktop',
+                'device',
+                'model',
+                false,
+            ]
+            ,
+            [
+                'Windows Desktop',
+                'device',
+                'model',
+                false,
+            ],
         ];
     }
 }

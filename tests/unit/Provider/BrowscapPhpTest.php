@@ -380,4 +380,62 @@ class BrowscapPhpTest extends AbstractProviderTestCase
 
         $this->assertProviderResult($result, $expectedResult);
     }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\BrowscapPhp');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $result = new \stdClass();
+
+        $provider = new BrowscapPhp($this->getParser($result));
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            [
+                'DefaultProperties',
+                null,
+                null,
+                false,
+            ],
+            [
+                'Default Browser',
+                null,
+                null,
+                false,
+            ],
+            [
+                'unknown',
+                null,
+                null,
+                false,
+            ],
+            [
+                'general',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'general Mobile Device',
+                'device',
+                'model',
+                false,
+            ],
+        ];
+    }
 }

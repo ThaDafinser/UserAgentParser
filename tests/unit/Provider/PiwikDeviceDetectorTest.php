@@ -309,4 +309,65 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
 
         $this->assertProviderResult($result, $expectedResult);
     }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\PiwikDeviceDetector');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $parser   = $this->getParser();
+        $provider = new PiwikDeviceDetector($parser);
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            [
+                DeviceDetector::UNKNOWN,
+                'browser',
+                'name',
+                false,
+            ],
+
+            [
+                'UNKNOWN',
+                'browser',
+                'name',
+                true,
+            ],
+
+            [
+                'Bot',
+                'bot',
+                'name',
+                false,
+            ],
+
+            [
+                'Bot123',
+                'bot',
+                'name',
+                true,
+            ],
+
+            [
+                'Generic bot',
+                'bot',
+                'name',
+                false,
+            ],
+        ];
+    }
 }

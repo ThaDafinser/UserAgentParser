@@ -62,10 +62,18 @@ class BrowscapPhp extends AbstractProvider
     ];
 
     protected $defaultValues = [
-        'DefaultProperties',
-        'Default Browser',
+        'general' => [
+            '/^DefaultProperties$/i',
+            '/^Default Browser$/i',
 
-        'unknown',
+            '/^unknown$/i',
+        ],
+
+        'device' => [
+            'model' => [
+                '/^general/i'
+            ],
+        ],
     ];
 
     /**
@@ -98,20 +106,6 @@ class BrowscapPhp extends AbstractProvider
     public function getParser()
     {
         return $this->parser;
-    }
-
-    /**
-     *
-     * @return array
-     */
-    private function getDeviceModelDefaultValues()
-    {
-        return [
-            'general Desktop',
-            'general Mobile Device',
-            'general Mobile Phone',
-            'general Tablet',
-        ];
     }
 
     /**
@@ -222,7 +216,7 @@ class BrowscapPhp extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
-        if (isset($resultRaw->device_name) && $this->isRealResult($resultRaw->device_name, $this->getDeviceModelDefaultValues()) === true) {
+        if (isset($resultRaw->device_name) && $this->isRealResult($resultRaw->device_name, 'device', 'model') === true) {
             $device->setModel($resultRaw->device_name);
         }
 

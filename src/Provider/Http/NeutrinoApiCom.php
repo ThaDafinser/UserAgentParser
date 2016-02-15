@@ -56,7 +56,9 @@ class NeutrinoApiCom extends AbstractHttpProvider
     ];
 
     protected $defaultValues = [
-        'unknown',
+        'general' => [
+            '/^unknown$/i',
+        ],
     ];
 
     private static $uri = 'https://neutrinoapi.com/user-agent-info';

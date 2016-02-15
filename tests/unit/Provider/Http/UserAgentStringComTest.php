@@ -301,4 +301,48 @@ class UserAgentStringComTest extends AbstractProviderTestCase
 
         $this->assertProviderResult($result, $expectedResult);
     }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\Http\UserAgentStringCom');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $provider = new UserAgentStringCom($this->getClient([]), 'apiUser', 'apiKey123');
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            [
+                'Null',
+                null,
+                null,
+                false,
+            ],
+            [
+                'unknown',
+                null,
+                null,
+                false,
+            ],
+            [
+                '--',
+                null,
+                null,
+                false,
+            ],
+        ];
+    }
 }

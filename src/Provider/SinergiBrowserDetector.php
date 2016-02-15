@@ -62,7 +62,9 @@ class SinergiBrowserDetector extends AbstractProvider
     ];
 
     protected $defaultValues = [
-        BrowserDetector\Browser::UNKNOWN,
+        'general' => [
+            '/^' . BrowserDetector\Browser::UNKNOWN . '$/i',
+        ],
     ];
 
     /**
@@ -87,7 +89,7 @@ class SinergiBrowserDetector extends AbstractProvider
     private $deviceParser;
 
     /**
-     * 
+     *
      * @throws PackageNotLoadedException
      */
     public function __construct()

@@ -61,8 +61,9 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
     ];
 
     protected $defaultValues = [
-        'Unknown Mobile Browser',
-        'Unknown browser',
+        'general' => [
+            '/^Unknown/i',
+        ],
     ];
 
     private static $uri = 'http://api.whatismybrowser.com/api/v1/user_agent_parse';
@@ -143,7 +144,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
             throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName());
         }
 
-        if (!isset($content->result) || $content->result !== 'success') {
+        if (! isset($content->result) || $content->result !== 'success') {
             throw new Exception\RequestException('Could not get valid response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
         }
 

@@ -89,8 +89,8 @@ class WurflTest extends AbstractProviderTestCase
 
         $manager = $this->getManager();
         $manager->expects($this->any())
-        ->method('getWurflInfo')
-        ->will($this->returnValue($return));
+            ->method('getWurflInfo')
+            ->will($this->returnValue($return));
 
         $provider = new Wurfl($manager);
 
@@ -374,75 +374,60 @@ class WurflTest extends AbstractProviderTestCase
     }
 
     /**
-     * Device no valid model
+     * @dataProvider isRealResult
      */
-    public function testParseDeviceNoValidModel()
+    public function testRealResult($value, $group, $part, $expectedResult)
     {
-        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
-        $return->id = 'some_id';
-
-        $map = [
-            [
-                'is_robot',
-                'false',
-            ],
-            [
-                'is_full_desktop',
-                'false',
-            ],
-
-            [
-                'is_mobile',
-                'true',
-            ],
-            [
-                'is_touchscreen',
-                'true',
-            ],
-            [
-                'form_factor',
-                'smartphone',
-            ],
-        ];
-
-        $return->expects($this->any())
-            ->method('getVirtualCapability')
-            ->will($this->returnValueMap($map));
-
-        $map = [
-            [
-                'model_name',
-                'Android something',
-            ],
-            [
-                'brand_name',
-                'Apple',
-            ],
-        ];
-        $return->expects($this->any())
-            ->method('getCapability')
-            ->will($this->returnValueMap($map));
+        $class  = new \ReflectionClass('UserAgentParser\Provider\Wurfl');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
 
         $manager = $this->getManager();
-        $manager->expects($this->any())
-            ->method('getDeviceForUserAgent')
-            ->will($this->returnValue($return));
 
         $provider = new Wurfl($manager);
 
-        $result = $provider->parse('A real user agent...');
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
 
-        $expectedResult = [
-            'device' => [
-                'model' => null,
-                'brand' => 'Apple',
-                'type'  => 'smartphone',
+        $this->assertEquals($expectedResult, $actualResult);
+    }
 
-                'isMobile' => true,
-                'isTouch'  => true,
+    public function isRealResult()
+    {
+        return [
+            [
+                'Generic',
+                null,
+                null,
+                false,
+            ],
+            [
+                'Android',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Firefox',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'unrecognized',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows',
+                'device',
+                'model',
+                false,
             ],
         ];
-
-        $this->assertProviderResult($result, $expectedResult);
     }
 }

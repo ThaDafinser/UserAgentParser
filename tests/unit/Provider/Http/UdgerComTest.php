@@ -414,4 +414,36 @@ class UdgerComTest extends AbstractProviderTestCase
 
         $this->assertProviderResult($result, $expectedResult);
     }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\Http\UdgerCom');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $provider = new UdgerCom($this->getClient([]), 'apiUser', 'apiKey123');
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            [
+                'unknown',
+                null,
+                null,
+                false,
+            ],
+        ];
+    }
 }

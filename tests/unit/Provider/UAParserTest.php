@@ -100,35 +100,35 @@ class UAParserTest extends AbstractProviderTestCase
 
         $this->assertEquals([
 
-        'browser' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'browser' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
-        ],
+            'renderingEngine' => [
+                'name'    => false,
+                'version' => false,
+            ],
 
-        'operatingSystem' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'operatingSystem' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => false,
-            'isMobile' => false,
-            'isTouch'  => false,
-        ],
+            'device' => [
+                'model'    => true,
+                'brand'    => true,
+                'type'     => false,
+                'isMobile' => false,
+                'isTouch'  => false,
+            ],
 
-        'bot' => [
-            'isBot' => true,
-            'name'  => true,
-            'type'  => false,
-        ],
-    ], $provider->getDetectionCapabilities());
+            'bot' => [
+                'isBot' => true,
+                'name'  => true,
+                'type'  => false,
+            ],
+        ], $provider->getDetectionCapabilities());
     }
 
     public function testParser()
@@ -202,9 +202,9 @@ class UAParserTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Firefox',
                 'version' => [
-                    'major'    => 3,
-                    'minor'    => 2,
-                    'patch'    => 1,
+                    'major' => 3,
+                    'minor' => 2,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -237,9 +237,9 @@ class UAParserTest extends AbstractProviderTestCase
             'operatingSystem' => [
                 'name'    => 'Windows',
                 'version' => [
-                    'major'    => 7,
-                    'minor'    => 0,
-                    'patch'    => 1,
+                    'major' => 7,
+                    'minor' => 0,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -278,5 +278,73 @@ class UAParserTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\UAParser');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $provider = new UAParser($this->getParser($this->getResultMock()));
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            [
+                'Other',
+                null,
+                null,
+                false,
+            ],
+            [
+                'Generic',
+                null,
+                null,
+                true,
+            ],
+            [
+                'Generic',
+                'device',
+                'brand',
+                false,
+            ],
+            [
+                'Feature Phone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'iOS-Device',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Smartphone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'crawler',
+                'bot',
+                'name',
+                false,
+            ],
+        ];
     }
 }

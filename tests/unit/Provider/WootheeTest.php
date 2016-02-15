@@ -279,4 +279,42 @@ class WootheeTest extends AbstractProviderTestCase
 
         $this->assertProviderResult($result, $expectedResult);
     }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\Woothee');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $provider = new Woothee();
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            [
+                'UNKNOWN',
+                null,
+                null,
+                false,
+            ],
+            [
+                'misc crawler',
+                'bot',
+                'name',
+                false,
+            ],
+        ];
+    }
 }

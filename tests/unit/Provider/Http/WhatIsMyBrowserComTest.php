@@ -453,4 +453,48 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
 
         $this->assertProviderResult($result, $expectedResult);
     }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\Http\WhatIsMyBrowserCom');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $provider = new WhatIsMyBrowserCom($this->getClient([]), 'apiUser', 'apiKey123');
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            [
+                'Unknown',
+                null,
+                null,
+                false,
+            ],
+            [
+                'Unknown Mobile Browser',
+                null,
+                null,
+                false,
+            ],
+            [
+                'Unknown browser',
+                null,
+                null,
+                false,
+            ],
+        ];
+    }
 }

@@ -62,7 +62,20 @@ class Wurfl extends AbstractProvider
     ];
 
     protected $defaultValues = [
-        'Generic',
+
+        'general' => [
+            '/^Generic$/i',
+        ],
+
+        'device' => [
+
+            'model' => [
+                '/^Android/i',
+                '/^Firefox/i',
+                '/^unrecognized/i',
+                '/^Windows/i',
+            ],
+        ],
     ];
 
     /**
@@ -99,7 +112,7 @@ class Wurfl extends AbstractProvider
     public function getUpdateDate()
     {
         // 2015-10-16 11:09:44 -0400
-        $lastUpdated  = $this->getParser()->getWurflInfo()->lastUpdated;
+        $lastUpdated = $this->getParser()->getWurflInfo()->lastUpdated;
 
         if ($lastUpdated == '') {
             return;
@@ -135,37 +148,6 @@ class Wurfl extends AbstractProvider
     }
 
     /**
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isRealDeviceModel($value)
-    {
-        if ($this->isRealResult($value) !== true) {
-            return false;
-        }
-
-        $value = (string) $value;
-
-        $defaultValues = [
-            'Android',
-            'Firefox',
-            'unrecognized',
-            'Windows Mobile',
-            'Windows Phone',
-            'Windows RT',
-        ];
-
-        foreach ($defaultValues as $defaultValue) {
-            if (substr($value, 0, strlen($defaultValue)) == $defaultValue) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      *
      * @param Model\Browser $browser
      * @param CustomDevice  $deviceRaw
@@ -195,7 +177,7 @@ class Wurfl extends AbstractProvider
     private function hydrateDevice(Model\Device $device, CustomDevice $deviceRaw)
     {
         if ($deviceRaw->getVirtualCapability('is_full_desktop') !== 'true') {
-            if ($this->isRealDeviceModel($deviceRaw->getCapability('model_name')) === true) {
+            if ($this->isRealResult($deviceRaw->getCapability('model_name'), 'device', 'model') === true) {
                 $device->setModel($deviceRaw->getCapability('model_name'));
             }
 

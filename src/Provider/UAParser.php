@@ -74,9 +74,11 @@ class UAParser extends AbstractProvider
             ],
 
             'model' => [
+                '/^Smartphone$/i',
                 '/^Feature Phone$/i',
                 '/^iOS-Device$/i',
-                '/^Smartphone$/i',
+                '/^Tablet$/i',
+                '/^Touch$/i',
                 '/^Windows$/i',
                 '/^Windows Phone$/i',
             ],
@@ -84,7 +86,11 @@ class UAParser extends AbstractProvider
 
         'bot' => [
             'name' => [
+                '/^Other$/i',
                 '/^crawler$/i',
+                '/^robot$/i',
+                '/^crawl$/i',
+                '/^Spider$/i',
             ],
         ],
     ];
@@ -136,7 +142,7 @@ class UAParser extends AbstractProvider
             return true;
         }
 
-        if ($this->isRealResult($resultRaw->device->model)) {
+        if ($this->isRealResult($resultRaw->device->model, 'device', 'model')) {
             return true;
         }
 
@@ -167,7 +173,7 @@ class UAParser extends AbstractProvider
     {
         $bot->setIsBot(true);
 
-        if ($this->isRealResult($resultRaw->ua->family) === true) {
+        if ($this->isRealResult($resultRaw->ua->family, 'bot', 'name') === true) {
             $bot->setName($resultRaw->ua->family);
         }
     }

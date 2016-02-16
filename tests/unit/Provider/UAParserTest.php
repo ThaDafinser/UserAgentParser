@@ -303,10 +303,23 @@ class UAParserTest extends AbstractProviderTestCase
     public function isRealResult()
     {
         return [
+            /*
+             * general
+             */
             [
                 'Other',
                 null,
                 null,
+                false,
+            ],
+
+            /*
+             * deviceBrand
+             */
+            [
+                'Generic',
+                'device',
+                'brand',
                 false,
             ],
             [
@@ -315,13 +328,16 @@ class UAParserTest extends AbstractProviderTestCase
                 null,
                 true,
             ],
+
+            /*
+             * deviceModel
+             */
             [
-                'Generic',
+                'Smartphone',
                 'device',
-                'brand',
+                'model',
                 false,
             ],
-
             [
                 'Feature Phone',
                 'device',
@@ -335,7 +351,13 @@ class UAParserTest extends AbstractProviderTestCase
                 false,
             ],
             [
-                'Smartphone',
+                'Tablet',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Touch',
                 'device',
                 'model',
                 false,
@@ -352,15 +374,36 @@ class UAParserTest extends AbstractProviderTestCase
                 'model',
                 false,
             ],
-            [
-                'Windows Phone 8X by HTC',
-                'device',
-                'model',
-                true,
-            ],
 
+            /*
+             * botName
+             */
+            [
+                'Other',
+                'bot',
+                'name',
+                false,
+            ],
             [
                 'crawler',
+                'bot',
+                'name',
+                false,
+            ],
+            [
+                'robot',
+                'bot',
+                'name',
+                false,
+            ],
+            [
+                'crawl',
+                'bot',
+                'name',
+                false,
+            ],
+            [
+                'Spider',
                 'bot',
                 'name',
                 false,

@@ -162,23 +162,6 @@ class BrowscapPhpTest extends AbstractProviderTestCase
     }
 
     /**
-     * Provider result DefaultProperties
-     *
-     * @expectedException \UserAgentParser\Exception\NoResultFoundException
-     */
-    public function testParseNoResultFoundExceptionResultDefaultProperties()
-    {
-        $result          = new \stdClass();
-        $result->browser = 'DefaultProperties';
-
-        $parser = $this->getParser($result);
-
-        $provider = new BrowscapPhp($parser);
-
-        $result = $provider->parse('A real user agent...');
-    }
-
-    /**
      * Provider result Default Browser
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
@@ -306,7 +289,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
     /**
      * Browser with all)
      */
-    public function testParseDevice1()
+    public function testParseDevice()
     {
         $result          = new \stdClass();
         $result->browser = 'Midori';
@@ -406,24 +389,29 @@ class BrowscapPhpTest extends AbstractProviderTestCase
     public function isRealResult()
     {
         return [
-            [
-                'DefaultProperties',
-                null,
-                null,
-                false,
-            ],
-            [
-                'Default Browser',
-                null,
-                null,
-                false,
-            ],
+            /*
+             * general
+             */
             [
                 'unknown',
                 null,
                 null,
                 false,
             ],
+
+            /*
+             * browserName
+             */
+            [
+                'Default Browser',
+                'browser',
+                'name',
+                false,
+            ],
+
+            /*
+             * deviceModel
+             */
             [
                 'general',
                 'device',
@@ -441,12 +429,21 @@ class BrowscapPhpTest extends AbstractProviderTestCase
                 'device',
                 'model',
                 false,
-            ]
-            ,
+            ],
             [
                 'Windows Desktop',
                 'device',
                 'model',
+                false,
+            ],
+
+            /*
+             * botName
+             */
+            [
+                'General Crawlers',
+                'bot',
+                'name',
                 false,
             ],
         ];

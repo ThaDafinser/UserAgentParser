@@ -65,7 +65,7 @@ class Woothee extends AbstractProvider
     protected $defaultValues = [
 
         'general' => [
-            '/^' . DataSet::VALUE_UNKNOWN . '$/i',
+            '/^UNKNOWN$/i',
         ],
 
         'bot' => [

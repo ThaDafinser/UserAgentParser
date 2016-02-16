@@ -64,7 +64,7 @@ class PiwikDeviceDetector extends AbstractProvider
     protected $defaultValues = [
 
         'general' => [
-            '/^' . DeviceDetector::UNKNOWN . '$/i',
+            '/^UNK$/i',
         ],
 
         'bot' => [

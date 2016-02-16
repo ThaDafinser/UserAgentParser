@@ -64,7 +64,7 @@ class SinergiBrowserDetector extends AbstractProvider
     protected $defaultValues = [
 
         'general' => [
-            '/^' . BrowserDetector\Browser::UNKNOWN . '$/i',
+            '/^unknown$/i',
         ],
 
         'device' => [

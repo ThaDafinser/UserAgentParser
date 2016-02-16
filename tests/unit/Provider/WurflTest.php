@@ -398,14 +398,49 @@ class WurflTest extends AbstractProviderTestCase
     public function isRealResult()
     {
         return [
+            /*
+             * osName
+             */
+            [
+                'Unknown',
+                'operatingSystem',
+                'name',
+                false,
+            ],
+
+            /*
+             * deviceBrand
+             */
             [
                 'Generic',
-                null,
-                null,
+                'device',
+                'brand',
+                false,
+            ],
+
+            /*
+             * deviceModel
+             */
+            [
+                'Android',
+                'device',
+                'model',
                 false,
             ],
             [
-                'Android',
+                'SmartTV',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Phone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Mobile',
                 'device',
                 'model',
                 false,
@@ -423,7 +458,25 @@ class WurflTest extends AbstractProviderTestCase
                 false,
             ],
             [
-                'Windows',
+                'Generic',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Disguised as Macintosh',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows RT',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Tablet on Android',
                 'device',
                 'model',
                 false,

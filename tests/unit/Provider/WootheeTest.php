@@ -303,12 +303,19 @@ class WootheeTest extends AbstractProviderTestCase
     public function isRealResult()
     {
         return [
+            /*
+             * general
+             */
             [
                 'UNKNOWN',
                 null,
                 null,
                 false,
             ],
+
+            /*
+             * botName
+             */
             [
                 'misc crawler',
                 'bot',

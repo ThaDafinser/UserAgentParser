@@ -334,6 +334,9 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
     public function isRealResult()
     {
         return [
+            /*
+             * general
+             */
             [
                 DeviceDetector::UNKNOWN,
                 'browser',
@@ -348,6 +351,9 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
                 true,
             ],
 
+            /*
+             * botName
+             */
             [
                 'Bot',
                 'bot',

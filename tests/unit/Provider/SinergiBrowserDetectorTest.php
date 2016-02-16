@@ -373,6 +373,9 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
     public function isRealResult()
     {
         return [
+            /*
+             * general
+             */
             [
                 'unknown',
                 null,
@@ -384,6 +387,16 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
                 null,
                 null,
                 true,
+            ],
+
+            /*
+             * deviceModel
+             */
+            [
+                'Windows Phone',
+                'device',
+                'model',
+                false,
             ],
         ];
     }

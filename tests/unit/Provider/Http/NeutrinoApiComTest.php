@@ -404,4 +404,135 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
 
         $this->assertProviderResult($result, $expectedResult);
     }
+
+    /**
+     * Device - default value
+     */
+    public function testParseDeviceDefaultValue()
+    {
+        $rawResult               = new stdClass();
+        $rawResult->type         = 'mobile-browser';
+        $rawResult->mobile_model = 'SmartTV';
+        $rawResult->mobile_brand = 'Generic';
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json;charset=UTF-8',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new NeutrinoApiCom($this->getClient($responseQueue), 'apiUser', 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => 'mobile-browser',
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\Http\NeutrinoApiCom');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $provider = new NeutrinoApiCom($this->getClient([]), 'apiUser', 'apiKey123');
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            /*
+             * general
+             */
+            [
+                'unknown',
+                null,
+                null,
+                false,
+            ],
+
+            /*
+             * deviceBrand
+             */
+            [
+                'Generic',
+                'device',
+                'brand',
+                false,
+            ],
+
+            /*
+             * deviceModel
+             */
+            [
+                'Android',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'SmartTV',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Phone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Mobile',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Firefox',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Generic',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Tablet on Android',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Tablet',
+                'device',
+                'model',
+                false,
+            ],
+        ];
+    }
 }

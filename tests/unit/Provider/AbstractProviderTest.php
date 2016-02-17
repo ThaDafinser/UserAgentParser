@@ -202,7 +202,15 @@ class AbstractProviderTest extends AbstractProviderTestCase
         $property = $reflection->getProperty('defaultValues');
         $property->setAccessible(true);
         $property->setValue($provider, [
-            'default value',
+            'general' => [
+                '/^default value$/i',
+            ],
+
+            'bot' => [
+                'name' => [
+                    '/^default other$/i',
+                ],
+            ],
         ]);
 
         $method = $reflection->getMethod('isRealResult');
@@ -212,9 +220,6 @@ class AbstractProviderTest extends AbstractProviderTestCase
 
         $this->assertTrue($method->invoke($provider, 'default other'));
 
-        $this->assertFalse($method->invoke($provider, 'default other', [
-            'default',
-            'default other',
-        ]));
+        $this->assertFalse($method->invoke($provider, 'default other', 'bot', 'name'));
     }
 }

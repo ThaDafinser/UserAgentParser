@@ -37,8 +37,8 @@ abstract class AbstractProvider
     private $version;
 
     /**
-     * Last update date 
-     * 
+     * Last update date
+     *
      * @var DateTime
      */
     private $updateDate;
@@ -87,7 +87,9 @@ abstract class AbstractProvider
      */
     protected $detectionCapabilities = [];
 
-    protected $defaultValues = [];
+    protected $defaultValues = [
+        'general' => [],
+    ];
 
     /**
      * Return the name of the provider
@@ -153,7 +155,7 @@ abstract class AbstractProvider
 
     /**
      * Get the last change date of the provider
-     * 
+     *
      * @return DateTime null
      */
     public function getUpdateDate()
@@ -218,21 +220,29 @@ abstract class AbstractProvider
     /**
      *
      * @param  mixed   $value
-     * @param  array   $additionalDefaultValues
+     * @param  string  $group
+     * @param  string  $part
      * @return boolean
      */
-    protected function isRealResult($value, array $additionalDefaultValues = [])
+    protected function isRealResult($value, $group = null, $part = null)
     {
-        if ($value === '' || $value === null) {
+        $value = (string) $value;
+        $value = trim($value);
+
+        if ($value === '') {
             return false;
         }
 
-        $value = (string) $value;
+        $regexes = $this->defaultValues['general'];
 
-        $defaultValues = array_merge($this->defaultValues, $additionalDefaultValues);
+        if ($group !== null && $part !== null && isset($this->defaultValues[$group][$part])) {
+            $regexes = array_merge($regexes, $this->defaultValues[$group][$part]);
+        }
 
-        if (in_array($value, $defaultValues, true) === true) {
-            return false;
+        foreach ($regexes as $regex) {
+            if (preg_match($regex, $value) === 1) {
+                return false;
+            }
         }
 
         return true;

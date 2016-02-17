@@ -61,8 +61,27 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
     ];
 
     protected $defaultValues = [
-        'Unknown Mobile Browser',
-        'Unknown browser',
+
+        'general' => [],
+
+        'browser' => [
+            'name' => [
+                '/^Unknown Mobile Browser$/i',
+                '/^Unknown browser$/i',
+                '/^Webkit based browser$/i',
+            ],
+        ],
+
+        'device' => [
+            'model' => [
+                // HTC generic or large parser error (over 1000 found)
+                '/^HTC$/i',
+                '/^Mobile$/i',
+                '/^Android Phone$/i',
+                '/^Android Tablet$/i',
+                '/^Tablet$/i',
+            ],
+        ],
     ];
 
     private static $uri = 'http://api.whatismybrowser.com/api/v1/user_agent_parse';
@@ -143,7 +162,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
             throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName());
         }
 
-        if (!isset($content->result) || $content->result !== 'success') {
+        if (! isset($content->result) || $content->result !== 'success') {
             throw new Exception\RequestException('Could not get valid response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
         }
 
@@ -165,7 +184,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hasResult(stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
+        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name, 'browser', 'name') === true) {
             return true;
         }
 
@@ -177,7 +196,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
             return true;
         }
 
-        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform) === true) {
+        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform, 'device', 'model') === true) {
             return true;
         }
 
@@ -195,7 +214,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
+        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name, 'browser', 'name') === true) {
             $browser->setName($resultRaw->browser_name);
         }
 
@@ -243,7 +262,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
-        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform) === true) {
+        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform, 'device', 'model') === true) {
             $device->setModel($resultRaw->operating_platform);
         }
 

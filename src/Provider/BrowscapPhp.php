@@ -62,10 +62,30 @@ class BrowscapPhp extends AbstractProvider
     ];
 
     protected $defaultValues = [
-        'DefaultProperties',
-        'Default Browser',
 
-        'unknown',
+        'general' => [
+            '/^unknown$/i',
+        ],
+
+        'browser' => [
+            'name' => [
+                '/^Default Browser$/i',
+            ],
+        ],
+
+        'device' => [
+            'model' => [
+                '/^general/i',
+                '/desktop$/i',
+            ],
+        ],
+
+        'bot' => [
+            'name' => [
+                '/^General Crawlers/i',
+            ],
+        ],
+
     ];
 
     /**
@@ -102,31 +122,13 @@ class BrowscapPhp extends AbstractProvider
 
     /**
      *
-     * @return array
-     */
-    private function getDeviceModelDefaultValues()
-    {
-        return [
-            'general Desktop',
-            'general Mobile Device',
-            'general Mobile Phone',
-            'general Tablet',
-        ];
-    }
-
-    /**
-     *
      * @param stdClass $resultRaw
      *
      * @return bool
      */
     private function hasResult(stdClass $resultRaw)
     {
-        if (! isset($resultRaw->browser)) {
-            return false;
-        }
-
-        if ($this->isRealResult($resultRaw->browser) !== true) {
+        if (! isset($resultRaw->browser) || $this->isRealResult($resultRaw->browser, 'browser', 'name') !== true) {
             return false;
         }
 
@@ -156,7 +158,7 @@ class BrowscapPhp extends AbstractProvider
     {
         $bot->setIsBot(true);
 
-        if (isset($resultRaw->browser) && $this->isRealResult($resultRaw->browser) === true) {
+        if (isset($resultRaw->browser) && $this->isRealResult($resultRaw->browser, 'bot', 'name') === true) {
             $bot->setName($resultRaw->browser);
         }
 
@@ -174,7 +176,7 @@ class BrowscapPhp extends AbstractProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser) && $this->isRealResult($resultRaw->browser) === true) {
+        if (isset($resultRaw->browser) && $this->isRealResult($resultRaw->browser, 'browser', 'name') === true) {
             $browser->setName($resultRaw->browser);
         }
 
@@ -222,7 +224,7 @@ class BrowscapPhp extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
-        if (isset($resultRaw->device_name) && $this->isRealResult($resultRaw->device_name, $this->getDeviceModelDefaultValues()) === true) {
+        if (isset($resultRaw->device_name) && $this->isRealResult($resultRaw->device_name, 'device', 'model') === true) {
             $device->setModel($resultRaw->device_name);
         }
 

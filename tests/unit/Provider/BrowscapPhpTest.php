@@ -162,23 +162,6 @@ class BrowscapPhpTest extends AbstractProviderTestCase
     }
 
     /**
-     * Provider result DefaultProperties
-     *
-     * @expectedException \UserAgentParser\Exception\NoResultFoundException
-     */
-    public function testParseNoResultFoundExceptionResultDefaultProperties()
-    {
-        $result          = new \stdClass();
-        $result->browser = 'DefaultProperties';
-
-        $parser = $this->getParser($result);
-
-        $provider = new BrowscapPhp($parser);
-
-        $result = $provider->parse('A real user agent...');
-    }
-
-    /**
      * Provider result Default Browser
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
@@ -272,6 +255,30 @@ class BrowscapPhpTest extends AbstractProviderTestCase
     }
 
     /**
+     * Bot - name default
+     */
+    public function testParseBotNameDefault()
+    {
+        $result          = new \stdClass();
+        $result->browser = 'General Crawlers';
+        $result->crawler = true;
+
+        $provider = new BrowscapPhp($this->getParser($result));
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => null,
+                'type'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
      * Browser small
      */
     public function testParseBrowserSmall()
@@ -304,9 +311,9 @@ class BrowscapPhpTest extends AbstractProviderTestCase
     }
 
     /**
-     * Browser with all)
+     * Browser with all
      */
-    public function testParseDevice1()
+    public function testParseAll()
     {
         $result          = new \stdClass();
         $result->browser = 'Midori';
@@ -379,5 +386,170 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device - model default
+     */
+    public function testParseDeviceModelDefault()
+    {
+        $result              = new \stdClass();
+        $result->browser     = 'Midori';
+        $result->device_name = 'general';
+
+        $provider = new BrowscapPhp($this->getParser($result));
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'browser' => [
+                'name'    => 'Midori',
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device - model default
+     */
+    public function testParseDeviceModelDefault2()
+    {
+        $result              = new \stdClass();
+        $result->browser     = 'Midori';
+        $result->device_name = 'desktop';
+
+        $provider = new BrowscapPhp($this->getParser($result));
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'browser' => [
+                'name'    => 'Midori',
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\BrowscapPhp');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $result = new \stdClass();
+
+        $provider = new BrowscapPhp($this->getParser($result));
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            /*
+             * general
+             */
+            [
+                'unknown',
+                null,
+                null,
+                false,
+            ],
+
+            /*
+             * browserName
+             */
+            [
+                'Default Browser',
+                'browser',
+                'name',
+                false,
+            ],
+
+            /*
+             * deviceModel
+             */
+            [
+                'general',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'general Mobile Device',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Linux Desktop',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Desktop',
+                'device',
+                'model',
+                false,
+            ],
+
+            /*
+             * botName
+             */
+            [
+                'General Crawlers',
+                'bot',
+                'name',
+                false,
+            ],
+        ];
     }
 }

@@ -59,9 +59,9 @@ class UserAgentStringCom extends AbstractHttpProvider
     ];
 
     protected $defaultValues = [
-        'Null',
-        'unknown',
-        '--',
+        'general' => [
+            '/^unknown$/i',
+        ],
     ];
 
     private $botTypes = [

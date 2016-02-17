@@ -61,7 +61,9 @@ class UdgerCom extends AbstractHttpProvider
     ];
 
     protected $defaultValues = [
-        'unknown',
+        'general' => [
+            '/^unknown$/i',
+        ],
     ];
 
     private static $uri = 'http://api.udger.com/parse';

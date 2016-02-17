@@ -254,6 +254,54 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
     }
 
     /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundExceptionDefaultValue()
+    {
+        $parseResult               = new stdClass();
+        $parseResult->user_agent   = 'A real user agent...';
+        $parseResult->browser_name = 'Unknown browser';
+
+        $rawResult         = new stdClass();
+        $rawResult->result = 'success';
+        $rawResult->parse  = $parseResult;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new WhatIsMyBrowserCom($this->getClient($responseQueue), 'apiKey123');
+
+        $provider->parse('A real user agent...');
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundExceptionDefaultValue2()
+    {
+        $parseResult                     = new stdClass();
+        $parseResult->user_agent         = 'A real user agent...';
+        $parseResult->operating_platform = 'Mobile';
+
+        $rawResult         = new stdClass();
+        $rawResult->result = 'success';
+        $rawResult->parse  = $parseResult;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new WhatIsMyBrowserCom($this->getClient($responseQueue), 'apiKey123');
+
+        $provider->parse('A real user agent...');
+    }
+
+    /**
      * Browser only
      */
     public function testParseBrowser()
@@ -288,6 +336,48 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
                     'alias' => null,
 
                     'complete' => '3.2.1',
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Browser only
+     */
+    public function testParseBrowserDefaultValue()
+    {
+        $parseResult                     = new stdClass();
+        $parseResult->user_agent         = 'A real user agent...';
+        $parseResult->browser_name       = 'Unknown browser';
+        $parseResult->layout_engine_name = 'Webkit';
+
+        $rawResult         = new stdClass();
+        $rawResult->result = 'success';
+        $rawResult->parse  = $parseResult;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new WhatIsMyBrowserCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'renderingEngine' => [
+                'name'    => 'Webkit',
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
                 ],
             ],
         ];
@@ -452,5 +542,138 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only
+     */
+    public function testParseDeviceDefaultValue()
+    {
+        $parseResult                                 = new stdClass();
+        $parseResult->user_agent                     = 'A real user agent...';
+        $parseResult->operating_platform             = 'Android Phone';
+        $parseResult->operating_platform_vendor_name = 'Dell';
+
+        $rawResult         = new stdClass();
+        $rawResult->result = 'success';
+        $rawResult->parse  = $parseResult;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new WhatIsMyBrowserCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => null,
+                'brand' => 'Dell',
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\Http\WhatIsMyBrowserCom');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $provider = new WhatIsMyBrowserCom($this->getClient([]), 'apiUser', 'apiKey123');
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            /*
+             * general
+             */
+            [
+                'Unknown',
+                null,
+                null,
+                true,
+            ],
+            /*
+             * browserName
+             */
+            [
+                'Unknown Mobile Browser',
+                'browser',
+                'name',
+                false,
+            ],
+            [
+                'Unknown browser',
+                'browser',
+                'name',
+                false,
+            ],
+            [
+                'Webkit based browser',
+                'browser',
+                'name',
+                false,
+            ],
+            /*
+             * deviceModel
+             */
+            [
+                'HTC',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'HTC one',
+                'device',
+                'model',
+                true,
+            ],
+            [
+                'Mobile',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Android Phone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Android Tablet',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Tablet',
+                'device',
+                'model',
+                false,
+            ],
+        ];
     }
 }

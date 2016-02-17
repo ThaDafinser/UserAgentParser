@@ -56,7 +56,28 @@ class NeutrinoApiCom extends AbstractHttpProvider
     ];
 
     protected $defaultValues = [
-        'unknown',
+
+        'general' => [
+            '/^unknown$/i',
+        ],
+
+        'device' => [
+
+            'brand' => [
+                '/^Generic$/i',
+            ],
+
+            'model' => [
+                '/^Android/i',
+                '/^SmartTV$/i',
+                '/^Windows Phone/i',
+                '/^Windows Mobile/i',
+                '/^Firefox/i',
+                '/^Generic/i',
+                '/^Tablet on Android$/i',
+                '/^Tablet$/i',
+            ],
+        ],
     ];
 
     private static $uri = 'https://neutrinoapi.com/user-agent-info';
@@ -244,11 +265,11 @@ class NeutrinoApiCom extends AbstractHttpProvider
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
-        if (isset($resultRaw->mobile_model) && $this->isRealResult($resultRaw->mobile_model) === true) {
+        if (isset($resultRaw->mobile_model) && $this->isRealResult($resultRaw->mobile_model, 'device', 'model') === true) {
             $device->setModel($resultRaw->mobile_model);
         }
 
-        if (isset($resultRaw->mobile_brand) && $this->isRealResult($resultRaw->mobile_brand) === true) {
+        if (isset($resultRaw->mobile_brand) && $this->isRealResult($resultRaw->mobile_brand, 'device', 'brand') === true) {
             $device->setBrand($resultRaw->mobile_brand);
         }
 

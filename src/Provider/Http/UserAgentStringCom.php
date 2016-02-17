@@ -60,9 +60,7 @@ class UserAgentStringCom extends AbstractHttpProvider
 
     protected $defaultValues = [
         'general' => [
-            '/^Null$/i',
             '/^unknown$/i',
-            '/^--$/i',
         ],
     ];
 

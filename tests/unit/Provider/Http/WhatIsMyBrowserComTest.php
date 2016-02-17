@@ -477,22 +477,73 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
     public function isRealResult()
     {
         return [
+            /*
+             * general
+             */
             [
                 'Unknown',
                 null,
                 null,
-                false,
+                true,
             ],
+            /*
+             * browserName
+             */
             [
                 'Unknown Mobile Browser',
-                null,
-                null,
+                'browser',
+                'name',
                 false,
             ],
             [
                 'Unknown browser',
-                null,
-                null,
+                'browser',
+                'name',
+                false,
+            ],
+            [
+                'Webkit based browser',
+                'browser',
+                'name',
+                false,
+            ],
+            /*
+             * deviceModel
+             */
+            [
+                'HTC',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'HTC one',
+                'device',
+                'model',
+                true,
+            ],
+            [
+                'Mobile',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Android Phone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Android Tablet',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Tablet',
+                'device',
+                'model',
                 false,
             ],
         ];

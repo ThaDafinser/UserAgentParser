@@ -61,8 +61,26 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
     ];
 
     protected $defaultValues = [
-        'general' => [
-            '/^Unknown/i',
+
+        'general' => [],
+
+        'browser' => [
+            'name' => [
+                '/^Unknown Mobile Browser$/i',
+                '/^Unknown browser$/i',
+                '/^Webkit based browser$/i',
+            ],
+        ],
+
+        'device' => [
+            'model' => [
+                //HTC generic or large parser error (over 1000 found)
+                '/^HTC$/i',
+                '/^Mobile$/i',
+                '/^Android Phone$/i',
+                '/^Android Tablet$/i',
+                '/^Tablet$/i',
+            ],
         ],
     ];
 
@@ -166,7 +184,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hasResult(stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
+        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name, 'browser', 'name') === true) {
             return true;
         }
 
@@ -178,7 +196,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
             return true;
         }
 
-        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform) === true) {
+        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform, 'device', 'model') === true) {
             return true;
         }
 
@@ -196,7 +214,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
+        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name, 'browser', 'name') === true) {
             $browser->setName($resultRaw->browser_name);
         }
 
@@ -244,7 +262,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
-        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform) === true) {
+        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform, 'device', 'model') === true) {
             $device->setModel($resultRaw->operating_platform);
         }
 

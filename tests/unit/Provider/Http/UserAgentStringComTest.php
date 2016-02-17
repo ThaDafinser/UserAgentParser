@@ -326,19 +326,7 @@ class UserAgentStringComTest extends AbstractProviderTestCase
     {
         return [
             [
-                'Null',
-                null,
-                null,
-                false,
-            ],
-            [
                 'unknown',
-                null,
-                null,
-                false,
-            ],
-            [
-                '--',
                 null,
                 null,
                 false,

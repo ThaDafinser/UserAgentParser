@@ -164,6 +164,69 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
     }
 
     /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundExceptionDefaultValue()
+    {
+        $browserParser = $this->getBrowserParser();
+        $browserParser->expects($this->any())
+            ->method('isRobot')
+            ->will($this->returnValue(false));
+        $browserParser->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('unknown'));
+
+        $provider = new SinergiBrowserDetector();
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('browserParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $browserParser);
+
+        $property = $reflection->getProperty('osParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $this->getOsParser());
+
+        $property = $reflection->getProperty('deviceParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $this->getDeviceParser());
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundExceptionDefaultValue2()
+    {
+        $browserParser = $this->getBrowserParser();
+        $browserParser->expects($this->any())
+            ->method('isRobot')
+            ->will($this->returnValue(false));
+        $deviceParser = $this->getDeviceParser();
+        $deviceParser->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('Windows Phone'));
+
+        $provider = new SinergiBrowserDetector();
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('browserParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $browserParser);
+
+        $property = $reflection->getProperty('osParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $this->getOsParser());
+
+        $property = $reflection->getProperty('deviceParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $deviceParser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()
@@ -343,6 +406,69 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
                 'type'  => null,
 
                 'isMobile' => true,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device - name default
+     */
+    public function testParseDeviceDefaultValue()
+    {
+        $browserParser = $this->getBrowserParser();
+        $browserParser->expects($this->any())
+            ->method('isRobot')
+            ->will($this->returnValue(false));
+        $browserParser->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('Chrome'));
+
+        $deviceParser = $this->getDeviceParser();
+        $deviceParser->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('Windows Phone'));
+
+        $provider = new SinergiBrowserDetector();
+
+        $reflection = new \ReflectionClass($provider);
+
+        $property = $reflection->getProperty('browserParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $browserParser);
+
+        $property = $reflection->getProperty('osParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $this->getOsParser());
+
+        $property = $reflection->getProperty('deviceParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $deviceParser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'browser' => [
+                'name'    => 'Chrome',
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => null,
+
+                'isMobile' => null,
                 'isTouch'  => null,
             ],
         ];

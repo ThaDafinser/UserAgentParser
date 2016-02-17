@@ -74,7 +74,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
 
         'device' => [
             'model' => [
-                //HTC generic or large parser error (over 1000 found)
+                // HTC generic or large parser error (over 1000 found)
                 '/^HTC$/i',
                 '/^Mobile$/i',
                 '/^Android Phone$/i',

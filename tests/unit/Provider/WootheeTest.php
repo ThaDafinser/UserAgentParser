@@ -136,6 +136,25 @@ class WootheeTest extends AbstractProviderTestCase
     }
 
     /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundExceptionDefaultValue()
+    {
+        $parser = $this->getParser([
+            'name' => 'UNKNOWN',
+        ]);
+
+        $provider = new Woothee();
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()
@@ -158,6 +177,36 @@ class WootheeTest extends AbstractProviderTestCase
             'bot' => [
                 'isBot' => true,
                 'name'  => 'Googlebot',
+                'type'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Bot
+     */
+    public function testParseBotDefaultValue()
+    {
+        $parser = $this->getParser([
+            'category' => \Woothee\DataSet::DATASET_CATEGORY_CRAWLER,
+            'name'     => 'misc crawler',
+        ]);
+
+        $provider = new Woothee();
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => null,
                 'type'  => null,
             ],
         ];

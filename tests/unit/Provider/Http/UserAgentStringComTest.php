@@ -146,6 +146,25 @@ class UserAgentStringComTest extends AbstractProviderTestCase
     }
 
     /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testParseNoResultFoundExceptionDefaultValue()
+    {
+        $rawResult             = new stdClass();
+        $rawResult->agent_type = 'unknown';
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new UserAgentStringCom($this->getClient($responseQueue));
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

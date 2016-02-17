@@ -134,6 +134,10 @@ class UAParser extends AbstractProvider
      */
     private function hasResult(\UAParser\Result\Client $resultRaw)
     {
+        if ($this->isBot($resultRaw) === true) {
+            return true;
+        }
+
         if ($this->isRealResult($resultRaw->ua->family)) {
             return true;
         }

@@ -301,6 +301,56 @@ class WurflTest extends AbstractProviderTestCase
     }
 
     /**
+     * OS - default value
+     */
+    public function testParseOperatingSystemDefaultValue()
+    {
+        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return->id = 'some_id';
+
+        $map = [
+            [
+                'is_robot',
+                'false',
+            ],
+            [
+                'advertised_device_os',
+                'Unknown',
+            ],
+        ];
+
+        $return->expects($this->any())
+            ->method('getVirtualCapability')
+            ->will($this->returnValueMap($map));
+
+        $manager = $this->getManager();
+        $manager->expects($this->any())
+            ->method('getDeviceForUserAgent')
+            ->will($this->returnValue($return));
+
+        $provider = new Wurfl($manager);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'operatingSystem' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
      * Device only
      */
     public function testParseDevice()
@@ -367,6 +417,71 @@ class WurflTest extends AbstractProviderTestCase
 
                 'isMobile' => true,
                 'isTouch'  => true,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device only
+     */
+    public function testParseDeviceDefaultValue()
+    {
+        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return->id = 'some_id';
+
+        $map = [
+            [
+                'is_robot',
+                'false',
+            ],
+            [
+                'is_full_desktop',
+                'false',
+            ],
+
+            [
+                'form_factor',
+                'smartphone',
+            ],
+        ];
+
+        $return->expects($this->any())
+            ->method('getVirtualCapability')
+            ->will($this->returnValueMap($map));
+
+        $map = [
+            [
+                'model_name',
+                'Android',
+            ],
+            [
+                'brand_name',
+                'Generic',
+            ],
+        ];
+        $return->expects($this->any())
+            ->method('getCapability')
+            ->will($this->returnValueMap($map));
+
+        $manager = $this->getManager();
+        $manager->expects($this->any())
+            ->method('getDeviceForUserAgent')
+            ->will($this->returnValue($return));
+
+        $provider = new Wurfl($manager);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => 'smartphone',
+
+                'isMobile' => null,
+                'isTouch'  => null,
             ],
         ];
 

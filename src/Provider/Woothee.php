@@ -111,10 +111,12 @@ class Woothee extends AbstractProvider
      */
     private function hasResult(array $resultRaw)
     {
-        foreach ($resultRaw as $value) {
-            if ($this->isRealResult($value) === true) {
-                return true;
-            }
+        if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category'])) {
+            return true;
+        }
+
+        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name'])) {
+            return true;
         }
 
         return false;
@@ -143,7 +145,7 @@ class Woothee extends AbstractProvider
     {
         $bot->setIsBot(true);
 
-        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name']) === true) {
+        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name'], 'bot', 'name') === true) {
             $bot->setName($resultRaw['name']);
         }
     }

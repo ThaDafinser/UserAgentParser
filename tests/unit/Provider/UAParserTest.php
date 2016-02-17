@@ -156,6 +156,36 @@ class UAParserTest extends AbstractProviderTestCase
     }
 
     /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundExceptionDefaultValue()
+    {
+        $result             = $this->getResultMock();
+        $result->ua->family = 'Other';
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundExceptionDefaultValueDeviceModel()
+    {
+        $result                = $this->getResultMock();
+        $result->device->model = 'Smartphone';
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()
@@ -174,6 +204,32 @@ class UAParserTest extends AbstractProviderTestCase
             'bot' => [
                 'isBot' => true,
                 'name'  => 'Googlebot',
+                'type'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Bot - default value
+     */
+    public function testParseBotDefaultValue()
+    {
+        $result                 = $this->getResultMock();
+        $result->device->family = 'Spider';
+        $result->ua->family     = 'Other';
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => null,
                 'type'  => null,
             ],
         ];
@@ -270,6 +326,51 @@ class UAParserTest extends AbstractProviderTestCase
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device - default value
+     */
+    public function testParseDeviceDefaultValue()
+    {
+        $result             = $this->getResultMock();
+        $result->os->family = 'Windows';
+        $result->os->major  = 7;
+
+        $result->device->model = 'Feature Phone';
+        $result->device->brand = 'Generic';
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'operatingSystem' => [
+                'name'    => 'Windows',
+                'version' => [
+                    'major' => 7,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => '7',
+                ],
+            ],
+
+            'device' => [
+                'model' => null,
+                'brand' => null,
                 'type'  => null,
 
                 'isMobile' => null,

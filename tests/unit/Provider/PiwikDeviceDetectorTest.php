@@ -135,6 +135,23 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
     }
 
     /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundExceptionDefaultValue()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('getClient')
+            ->will($this->returnValue([
+            'name' => 'UNK',
+        ]));
+
+        $provider = new PiwikDeviceDetector($parser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()
@@ -159,6 +176,66 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
                 'isBot' => true,
                 'name'  => 'Hatena RSS',
                 'type'  => 'something',
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Bot - name default
+     */
+    public function testParseBotNameDefault()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isBot')
+            ->will($this->returnValue(true));
+        $parser->expects($this->any())
+            ->method('getBot')
+            ->will($this->returnValue([
+            'name' => 'Bot',
+        ]));
+
+        $provider = new PiwikDeviceDetector($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => null,
+                'type'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Bot - name default
+     */
+    public function testParseBotNameDefault2()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isBot')
+            ->will($this->returnValue(true));
+        $parser->expects($this->any())
+            ->method('getBot')
+            ->will($this->returnValue([
+            'name' => 'Generic Bot',
+        ]));
+
+        $provider = new PiwikDeviceDetector($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => null,
+                'type'  => null,
             ],
         ];
 

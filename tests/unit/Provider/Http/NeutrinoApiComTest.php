@@ -406,6 +406,40 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
     }
 
     /**
+     * Device - default value
+     */
+    public function testParseDeviceDefaultValue()
+    {
+        $rawResult               = new stdClass();
+        $rawResult->type         = 'mobile-browser';
+        $rawResult->mobile_model = 'SmartTV';
+        $rawResult->mobile_brand = 'Generic';
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json;charset=UTF-8',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new NeutrinoApiCom($this->getClient($responseQueue), 'apiUser', 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => 'mobile-browser',
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
      * @dataProvider isRealResult
      */
     public function testRealResult($value, $group, $part, $expectedResult)
@@ -428,10 +462,75 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
     public function isRealResult()
     {
         return [
+            /*
+             * general
+             */
             [
                 'unknown',
                 null,
                 null,
+                false,
+            ],
+
+            /*
+             * deviceBrand
+             */
+            [
+                'Generic',
+                'device',
+                'brand',
+                false,
+            ],
+
+            /*
+             * deviceModel
+             */
+            [
+                'Android',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'SmartTV',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Phone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Mobile',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Firefox',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Generic',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Tablet on Android',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Tablet',
+                'device',
+                'model',
                 false,
             ],
         ];

@@ -47,7 +47,6 @@ $config->fixers([
 	'align_equals',
 	'concat_with_spaces',
 	'multiline_spaces_before_semicolon',
-	'no_blank_lines_before_namespace',
 	'ordered_use',
 	'short_array_syntax',
 ]);

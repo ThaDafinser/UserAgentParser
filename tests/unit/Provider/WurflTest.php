@@ -89,8 +89,8 @@ class WurflTest extends AbstractProviderTestCase
 
         $manager = $this->getManager();
         $manager->expects($this->any())
-        ->method('getWurflInfo')
-        ->will($this->returnValue($return));
+            ->method('getWurflInfo')
+            ->will($this->returnValue($return));
 
         $provider = new Wurfl($manager);
 
@@ -301,6 +301,56 @@ class WurflTest extends AbstractProviderTestCase
     }
 
     /**
+     * OS - default value
+     */
+    public function testParseOperatingSystemDefaultValue()
+    {
+        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return->id = 'some_id';
+
+        $map = [
+            [
+                'is_robot',
+                'false',
+            ],
+            [
+                'advertised_device_os',
+                'Unknown',
+            ],
+        ];
+
+        $return->expects($this->any())
+            ->method('getVirtualCapability')
+            ->will($this->returnValueMap($map));
+
+        $manager = $this->getManager();
+        $manager->expects($this->any())
+            ->method('getDeviceForUserAgent')
+            ->will($this->returnValue($return));
+
+        $provider = new Wurfl($manager);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'operatingSystem' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
      * Device only
      */
     public function testParseDevice()
@@ -374,9 +424,9 @@ class WurflTest extends AbstractProviderTestCase
     }
 
     /**
-     * Device no valid model
+     * Device only
      */
-    public function testParseDeviceNoValidModel()
+    public function testParseDeviceDefaultValue()
     {
         $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
         $return->id = 'some_id';
@@ -392,14 +442,6 @@ class WurflTest extends AbstractProviderTestCase
             ],
 
             [
-                'is_mobile',
-                'true',
-            ],
-            [
-                'is_touchscreen',
-                'true',
-            ],
-            [
                 'form_factor',
                 'smartphone',
             ],
@@ -412,11 +454,11 @@ class WurflTest extends AbstractProviderTestCase
         $map = [
             [
                 'model_name',
-                'Android something',
+                'Android',
             ],
             [
                 'brand_name',
-                'Apple',
+                'Generic',
             ],
         ];
         $return->expects($this->any())
@@ -435,14 +477,125 @@ class WurflTest extends AbstractProviderTestCase
         $expectedResult = [
             'device' => [
                 'model' => null,
-                'brand' => 'Apple',
+                'brand' => null,
                 'type'  => 'smartphone',
 
-                'isMobile' => true,
-                'isTouch'  => true,
+                'isMobile' => null,
+                'isTouch'  => null,
             ],
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\Wurfl');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $manager = $this->getManager();
+
+        $provider = new Wurfl($manager);
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            /*
+             * osName
+             */
+            [
+                'Unknown',
+                'operatingSystem',
+                'name',
+                false,
+            ],
+
+            /*
+             * deviceBrand
+             */
+            [
+                'Generic',
+                'device',
+                'brand',
+                false,
+            ],
+
+            /*
+             * deviceModel
+             */
+            [
+                'Android',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'SmartTV',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Phone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Mobile',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Firefox',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'unrecognized',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Generic',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Disguised as Macintosh',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows RT',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Tablet on Android',
+                'device',
+                'model',
+                false,
+            ],
+        ];
     }
 }

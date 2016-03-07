@@ -59,8 +59,9 @@ class UserAgentStringCom extends AbstractHttpProvider
     ];
 
     protected $defaultValues = [
-        'Null',
-        'unknown',
+        'general' => [
+            '/^unknown$/i',
+        ],
     ];
 
     private $botTypes = [
@@ -179,7 +180,9 @@ class UserAgentStringCom extends AbstractHttpProvider
         }
 
         if (isset($resultRaw->agent_version) && $this->isRealResult($resultRaw->agent_version) === true) {
-            $browser->getVersion()->setComplete($resultRaw->agent_version);
+            $version = preg_replace('/(\d*)_(\d*)/', '$1.$2', $resultRaw->agent_version);
+
+            $browser->getVersion()->setComplete($version);
         }
     }
 
@@ -195,7 +198,9 @@ class UserAgentStringCom extends AbstractHttpProvider
         }
 
         if (isset($resultRaw->os_versionNumber) && $this->isRealResult($resultRaw->os_versionNumber) === true) {
-            $os->getVersion()->setComplete($resultRaw->os_versionNumber);
+            $version = preg_replace('/(\d*)_(\d*)/', '$1.$2', $resultRaw->os_versionNumber);
+
+            $os->getVersion()->setComplete($version);
         }
     }
 

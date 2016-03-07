@@ -62,11 +62,17 @@ class PiwikDeviceDetector extends AbstractProvider
     ];
 
     protected $defaultValues = [
-        DeviceDetector::UNKNOWN,
 
-        // bot names
-        'Bot',
-        'Generic Bot',
+        'general' => [
+            '/^UNK$/i',
+        ],
+
+        'bot' => [
+            'name' => [
+                '/^Bot$/i',
+                '/^Generic Bot$/i',
+            ],
+        ],
     ];
 
     /**
@@ -199,7 +205,7 @@ class PiwikDeviceDetector extends AbstractProvider
     {
         $bot->setIsBot(true);
 
-        if (isset($botRaw['name']) && $this->isRealResult($botRaw['name'])) {
+        if (isset($botRaw['name']) && $this->isRealResult($botRaw['name'], 'bot', 'name')) {
             $bot->setName($botRaw['name']);
         }
         if (isset($botRaw['category']) && $this->isRealResult($botRaw['category'])) {

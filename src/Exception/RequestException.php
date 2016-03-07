@@ -2,7 +2,7 @@
 namespace UserAgentParser\Exception;
 
 /**
- * A http request could not be made...
+ * A http request failed
  */
 class RequestException extends \Exception implements ExceptionInterface
 {

@@ -14,7 +14,7 @@
 
 The target of this package is to make it less painful, by providing an abstract layer for many user agent parsers.
 
-Currently **8 local providers** and **6 HTTP providers** are available! [See the list here](https://github.com/ThaDafinser/UserAgentParser/tree/master/src/Provider)
+Currently **8 local providers** and **6 HTTP providers** are available! [See the comparison list here](https://github.com/ThaDafinser/UserAgentParser#providers)
 
 So you can
 - use multiple providers at the same time with the `Chain` provider
@@ -28,7 +28,7 @@ So you can
 
 [LIVE test](http://useragent.mkf.solutions/)
 
-[Comparison matrix](http://thadafinser.github.io/UserAgentParserComparison/)
+[Compare the detection results of the parsers](http://thadafinser.github.io/UserAgentParserComparison/)
 
 
 ## Installation
@@ -95,6 +95,29 @@ if($result->getBot()->getIsBot() === true) {
 
 UserAgentParser comes with local and http providers
 
+See detailed documenation here
+
+[local providers](docs/01-local-providers.md)
+
+[http providers](docs/02-http-providers.md)
+
+
+| Name                   | Type | Browser | Engine | Operating system | Device model | Device brand | Device type | Is mobile | Is bot | Bot name | Bot type | Comment |
+| ---------------------- |----- | ------- | ------ | ---------------- | ------------ | ------------ | ----------- | --------- | ------ | -------- | -------- |-------- |
+| BrowscapPhp            | local | x | x | x | x | x | x | x | x | x | x |   |
+| DonatjUAParser         | local | x |   |   |   |   |   |   |   |   |   |   |
+| PiwikDeviceDetector    | local | x | x | x | x | x | x | x | x | x | x |   |
+| SinergiBrowserDetector | local | x |   | x | x |   |   | x | x |   |   |   |
+| UAParser               | local | x |   | x | x | x |   |   | x | x |   |   |
+| WhichBrowser           | local | x |   | x | x | x | x | x | x | x |   |   |
+| Woothee                | local | x |   |   |   |   | x |   | x | x |   |   |
+| Wurfl                  | local | x |   | x | x | x | x | x | x |   |   |   |
+| DeviceAtlasCom         | http  | x | x | x |   |   | x |   |   |   |   | free available |
+| NeutrinoApiCom         | http  | x |   | x | x | x | x | x | x | x |   | 25/day free |
+| UdgerCom               | http  | x | x | x |   |   | x |   | x |   |   | 500/month free (API key only for one month valid!) |
+| UserAgentApiCom        | http  | x | x |   |   |   | x |   | x | x |   | 1000/day free |
+| UserAgentStringCom     | http  | x |   | x |   |   |   |   | x | x | x | free unlimited |
+| WhatIsMyBrowserCom     | http  | x |   | x |   |   |   |   |   |   |   | 500/month free |
 
 ### Local providers
 

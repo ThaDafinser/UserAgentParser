@@ -63,16 +63,22 @@ class Woothee extends AbstractProvider
     ];
 
     protected $defaultValues = [
-        DataSet::VALUE_UNKNOWN,
 
-        // bot names
-        'misc crawler',
+        'general' => [
+            '/^UNKNOWN$/i',
+        ],
+
+        'bot' => [
+            'name' => [
+                '/^misc crawler$/i',
+            ],
+        ],
     ];
 
     private $parser;
 
     /**
-     * 
+     *
      * @throws PackageNotLoadedException
      */
     public function __construct()
@@ -105,10 +111,12 @@ class Woothee extends AbstractProvider
      */
     private function hasResult(array $resultRaw)
     {
-        foreach ($resultRaw as $value) {
-            if ($this->isRealResult($value) === true) {
-                return true;
-            }
+        if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category'])) {
+            return true;
+        }
+
+        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name'])) {
+            return true;
         }
 
         return false;
@@ -137,7 +145,7 @@ class Woothee extends AbstractProvider
     {
         $bot->setIsBot(true);
 
-        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name']) === true) {
+        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name'], 'bot', 'name') === true) {
             $bot->setName($resultRaw['name']);
         }
     }

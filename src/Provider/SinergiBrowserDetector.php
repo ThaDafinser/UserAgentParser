@@ -62,7 +62,16 @@ class SinergiBrowserDetector extends AbstractProvider
     ];
 
     protected $defaultValues = [
-        BrowserDetector\Browser::UNKNOWN,
+
+        'general' => [
+            '/^unknown$/i',
+        ],
+
+        'device' => [
+            'model' => [
+                '/^Windows Phone$/i',
+            ],
+        ],
     ];
 
     /**
@@ -87,7 +96,7 @@ class SinergiBrowserDetector extends AbstractProvider
     private $deviceParser;
 
     /**
-     * 
+     *
      * @throws PackageNotLoadedException
      */
     public function __construct()
@@ -157,7 +166,7 @@ class SinergiBrowserDetector extends AbstractProvider
             return true;
         }
 
-        if ($this->isRealResult($deviceRaw->getName())) {
+        if ($this->isRealResult($deviceRaw->getName(), 'device', 'model')) {
             return true;
         }
 
@@ -208,7 +217,7 @@ class SinergiBrowserDetector extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, BrowserDetector\Os $osRaw, BrowserDetector\Device $deviceRaw)
     {
-        if ($this->isRealResult($deviceRaw->getName()) === true) {
+        if ($this->isRealResult($deviceRaw->getName(), 'device', 'model') === true) {
             $device->setModel($deviceRaw->getName());
         }
 

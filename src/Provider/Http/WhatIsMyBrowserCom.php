@@ -35,8 +35,8 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
         ],
 
         'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
+            'name'    => true,
+            'version' => true,
         ],
 
         'operatingSystem' => [
@@ -45,8 +45,8 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
         ],
 
         'device' => [
-            'model' => false,
-            'brand' => false,
+            'model' => true,
+            'brand' => true,
 
             'type'     => false,
             'isMobile' => false,
@@ -61,8 +61,27 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
     ];
 
     protected $defaultValues = [
-        'Unknown Mobile Browser',
-        'Unknown browser',
+
+        'general' => [],
+
+        'browser' => [
+            'name' => [
+                '/^Unknown Mobile Browser$/i',
+                '/^Unknown browser$/i',
+                '/^Webkit based browser$/i',
+            ],
+        ],
+
+        'device' => [
+            'model' => [
+                // HTC generic or large parser error (over 1000 found)
+                '/^HTC$/i',
+                '/^Mobile$/i',
+                '/^Android Phone$/i',
+                '/^Android Tablet$/i',
+                '/^Tablet$/i',
+            ],
+        ],
     ];
 
     private static $uri = 'http://api.whatismybrowser.com/api/v1/user_agent_parse';
@@ -143,7 +162,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
             throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName());
         }
 
-        if (!isset($content->result) || $content->result !== 'success') {
+        if (! isset($content->result) || $content->result !== 'success') {
             throw new Exception\RequestException('Could not get valid response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
         }
 
@@ -165,11 +184,23 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hasResult(stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
+        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name, 'browser', 'name') === true) {
+            return true;
+        }
+
+        if (isset($resultRaw->layout_engine_name) && $this->isRealResult($resultRaw->layout_engine_name) === true) {
             return true;
         }
 
         if (isset($resultRaw->operating_system_name) && $this->isRealResult($resultRaw->operating_system_name) === true) {
+            return true;
+        }
+
+        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform, 'device', 'model') === true) {
+            return true;
+        }
+
+        if (isset($resultRaw->operating_platform_vendor_name) && $this->isRealResult($resultRaw->operating_platform_vendor_name) === true) {
             return true;
         }
 
@@ -183,7 +214,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
+        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name, 'browser', 'name') === true) {
             $browser->setName($resultRaw->browser_name);
         }
 
@@ -194,10 +225,26 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
 
     /**
      *
+     * @param Model\RenderingEngine $engine
+     * @param stdClass              $resultRaw
+     */
+    private function hydrateRenderingEngine(Model\RenderingEngine $engine, stdClass $resultRaw)
+    {
+        if (isset($resultRaw->layout_engine_name) && $this->isRealResult($resultRaw->layout_engine_name) === true) {
+            $engine->setName($resultRaw->layout_engine_name);
+        }
+
+        if (isset($resultRaw->layout_engine_version) && $this->isRealResult($resultRaw->layout_engine_version) === true) {
+            $engine->getVersion()->setComplete($resultRaw->layout_engine_version);
+        }
+    }
+
+    /**
+     *
      * @param Model\OperatingSystem $os
      * @param stdClass              $resultRaw
      */
-    private function hydrateOperatingSystem(Model\OperatingSystem $os, $resultRaw)
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
         if (isset($resultRaw->operating_system_name) && $this->isRealResult($resultRaw->operating_system_name) === true) {
             $os->setName($resultRaw->operating_system_name);
@@ -205,6 +252,22 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
 
         if (isset($resultRaw->operating_system_version_full) && $this->isRealResult($resultRaw->operating_system_version_full) === true) {
             $os->getVersion()->setComplete($resultRaw->operating_system_version_full);
+        }
+    }
+
+    /**
+     *
+     * @param Model\UserAgent $device
+     * @param stdClass        $resultRaw
+     */
+    private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
+    {
+        if (isset($resultRaw->operating_platform) && $this->isRealResult($resultRaw->operating_platform, 'device', 'model') === true) {
+            $device->setModel($resultRaw->operating_platform);
+        }
+
+        if (isset($resultRaw->operating_platform_vendor_name) && $this->isRealResult($resultRaw->operating_platform_vendor_name) === true) {
+            $device->setBrand($resultRaw->operating_platform_vendor_name);
         }
     }
 
@@ -229,7 +292,9 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
          * hydrate the result
          */
         $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        $this->hydrateRenderingEngine($result->getRenderingEngine(), $resultRaw);
         $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
+        $this->hydrateDevice($result->getDevice(), $resultRaw);
 
         return $result;
     }

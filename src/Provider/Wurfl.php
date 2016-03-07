@@ -62,7 +62,34 @@ class Wurfl extends AbstractProvider
     ];
 
     protected $defaultValues = [
-        'Generic',
+
+        'general' => [],
+
+        'operatingSystem' => [
+            'name' => [
+                '/^Unknown$/i',
+            ],
+        ],
+
+        'device' => [
+
+            'brand' => [
+                '/^Generic$/i',
+            ],
+
+            'model' => [
+                '/^Android/i',
+                '/^SmartTV$/i',
+                '/^Windows Phone/i',
+                '/^Windows Mobile/i',
+                '/^Firefox/i',
+                '/^unrecognized/i',
+                '/^Generic/i',
+                '/^Disguised as Macintosh$/i',
+                '/^Windows RT/i',
+                '/^Tablet on Android$/i',
+            ],
+        ],
     ];
 
     /**
@@ -99,7 +126,7 @@ class Wurfl extends AbstractProvider
     public function getUpdateDate()
     {
         // 2015-10-16 11:09:44 -0400
-        $lastUpdated  = $this->getParser()->getWurflInfo()->lastUpdated;
+        $lastUpdated = $this->getParser()->getWurflInfo()->lastUpdated;
 
         if ($lastUpdated == '') {
             return;
@@ -135,37 +162,6 @@ class Wurfl extends AbstractProvider
     }
 
     /**
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isRealDeviceModel($value)
-    {
-        if ($this->isRealResult($value) !== true) {
-            return false;
-        }
-
-        $value = (string) $value;
-
-        $defaultValues = [
-            'Android',
-            'Firefox',
-            'unrecognized',
-            'Windows Mobile',
-            'Windows Phone',
-            'Windows RT',
-        ];
-
-        foreach ($defaultValues as $defaultValue) {
-            if (substr($value, 0, strlen($defaultValue)) == $defaultValue) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      *
      * @param Model\Browser $browser
      * @param CustomDevice  $deviceRaw
@@ -183,7 +179,10 @@ class Wurfl extends AbstractProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, CustomDevice $deviceRaw)
     {
-        $os->setName($deviceRaw->getVirtualCapability('advertised_device_os'));
+        if ($this->isRealResult($deviceRaw->getVirtualCapability('advertised_device_os'), 'operatingSystem', 'name')) {
+            $os->setName($deviceRaw->getVirtualCapability('advertised_device_os'));
+        }
+
         $os->getVersion()->setComplete($deviceRaw->getVirtualCapability('advertised_device_os_version'));
     }
 
@@ -194,26 +193,28 @@ class Wurfl extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, CustomDevice $deviceRaw)
     {
-        if ($deviceRaw->getVirtualCapability('is_full_desktop') !== 'true') {
-            if ($this->isRealDeviceModel($deviceRaw->getCapability('model_name')) === true) {
-                $device->setModel($deviceRaw->getCapability('model_name'));
-            }
-
-            if ($this->isRealResult($deviceRaw->getCapability('brand_name')) === true) {
-                $device->setBrand($deviceRaw->getCapability('brand_name'));
-            }
-
-            if ($deviceRaw->getVirtualCapability('is_mobile') === 'true') {
-                $device->setIsMobile(true);
-            }
-
-            if ($deviceRaw->getVirtualCapability('is_touchscreen') === 'true') {
-                $device->setIsTouch(true);
-            }
-        }
-
         // @see the list of all types http://web.wurfl.io/
         $device->setType($deviceRaw->getVirtualCapability('form_factor'));
+
+        if ($deviceRaw->getVirtualCapability('is_full_desktop') === 'true') {
+            return;
+        }
+
+        if ($this->isRealResult($deviceRaw->getCapability('model_name'), 'device', 'model') === true) {
+            $device->setModel($deviceRaw->getCapability('model_name'));
+        }
+
+        if ($this->isRealResult($deviceRaw->getCapability('brand_name'), 'device', 'brand') === true) {
+            $device->setBrand($deviceRaw->getCapability('brand_name'));
+        }
+
+        if ($deviceRaw->getVirtualCapability('is_mobile') === 'true') {
+            $device->setIsMobile(true);
+        }
+
+        if ($deviceRaw->getVirtualCapability('is_touchscreen') === 'true') {
+            $device->setIsTouch(true);
+        }
     }
 
     public function parse($userAgent, array $headers = [])

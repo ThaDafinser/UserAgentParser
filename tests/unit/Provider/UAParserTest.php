@@ -100,35 +100,35 @@ class UAParserTest extends AbstractProviderTestCase
 
         $this->assertEquals([
 
-        'browser' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'browser' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
-        ],
+            'renderingEngine' => [
+                'name'    => false,
+                'version' => false,
+            ],
 
-        'operatingSystem' => [
-            'name'    => true,
-            'version' => true,
-        ],
+            'operatingSystem' => [
+                'name'    => true,
+                'version' => true,
+            ],
 
-        'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => false,
-            'isMobile' => false,
-            'isTouch'  => false,
-        ],
+            'device' => [
+                'model'    => true,
+                'brand'    => true,
+                'type'     => false,
+                'isMobile' => false,
+                'isTouch'  => false,
+            ],
 
-        'bot' => [
-            'isBot' => true,
-            'name'  => true,
-            'type'  => false,
-        ],
-    ], $provider->getDetectionCapabilities());
+            'bot' => [
+                'isBot' => true,
+                'name'  => true,
+                'type'  => false,
+            ],
+        ], $provider->getDetectionCapabilities());
     }
 
     public function testParser()
@@ -149,6 +149,36 @@ class UAParserTest extends AbstractProviderTestCase
     public function testNoResultFoundException()
     {
         $parser = $this->getParser($this->getResultMock());
+
+        $provider = new UAParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundExceptionDefaultValue()
+    {
+        $result             = $this->getResultMock();
+        $result->ua->family = 'Other';
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFoundExceptionDefaultValueDeviceModel()
+    {
+        $result                = $this->getResultMock();
+        $result->device->model = 'Smartphone';
+
+        $parser = $this->getParser($result);
 
         $provider = new UAParser($parser);
 
@@ -182,6 +212,32 @@ class UAParserTest extends AbstractProviderTestCase
     }
 
     /**
+     * Bot - default value
+     */
+    public function testParseBotDefaultValue()
+    {
+        $result                 = $this->getResultMock();
+        $result->device->family = 'Spider';
+        $result->ua->family     = 'Other';
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => null,
+                'type'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
      * Browser only
      */
     public function testParseBrowser()
@@ -202,9 +258,9 @@ class UAParserTest extends AbstractProviderTestCase
             'browser' => [
                 'name'    => 'Firefox',
                 'version' => [
-                    'major'    => 3,
-                    'minor'    => 2,
-                    'patch'    => 1,
+                    'major' => 3,
+                    'minor' => 2,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -237,9 +293,9 @@ class UAParserTest extends AbstractProviderTestCase
             'operatingSystem' => [
                 'name'    => 'Windows',
                 'version' => [
-                    'major'    => 7,
-                    'minor'    => 0,
-                    'patch'    => 1,
+                    'major' => 7,
+                    'minor' => 0,
+                    'patch' => 1,
 
                     'alias' => null,
 
@@ -278,5 +334,181 @@ class UAParserTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * Device - default value
+     */
+    public function testParseDeviceDefaultValue()
+    {
+        $result             = $this->getResultMock();
+        $result->os->family = 'Windows';
+        $result->os->major  = 7;
+
+        $result->device->model = 'Feature Phone';
+        $result->device->brand = 'Generic';
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'operatingSystem' => [
+                'name'    => 'Windows',
+                'version' => [
+                    'major' => 7,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => '7',
+                ],
+            ],
+
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @dataProvider isRealResult
+     */
+    public function testRealResult($value, $group, $part, $expectedResult)
+    {
+        $class  = new \ReflectionClass('UserAgentParser\Provider\UAParser');
+        $method = $class->getMethod('isRealResult');
+        $method->setAccessible(true);
+
+        $provider = new UAParser($this->getParser($this->getResultMock()));
+
+        $actualResult = $method->invokeArgs($provider, [
+            $value,
+            $group,
+            $part,
+        ]);
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function isRealResult()
+    {
+        return [
+            /*
+             * general
+             */
+            [
+                'Other',
+                null,
+                null,
+                false,
+            ],
+
+            /*
+             * deviceBrand
+             */
+            [
+                'Generic',
+                'device',
+                'brand',
+                false,
+            ],
+            [
+                'Generic',
+                null,
+                null,
+                true,
+            ],
+
+            /*
+             * deviceModel
+             */
+            [
+                'Smartphone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Feature Phone',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'iOS-Device',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Tablet',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Touch',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows',
+                'device',
+                'model',
+                false,
+            ],
+            [
+                'Windows Phone',
+                'device',
+                'model',
+                false,
+            ],
+
+            /*
+             * botName
+             */
+            [
+                'Other',
+                'bot',
+                'name',
+                false,
+            ],
+            [
+                'crawler',
+                'bot',
+                'name',
+                false,
+            ],
+            [
+                'robot',
+                'bot',
+                'name',
+                false,
+            ],
+            [
+                'crawl',
+                'bot',
+                'name',
+                false,
+            ],
+            [
+                'Spider',
+                'bot',
+                'name',
+                false,
+            ],
+        ];
     }
 }

@@ -367,6 +367,9 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $parser->expects($this->any())
             ->method('getType')
             ->will($this->returnValue('watch'));
+        $parser->expects($this->any())
+            ->method('isMobile')
+            ->will($this->returnValue(true));
 
         $parser->device = new \WhichBrowser\Model\Device([
             'identified'   => true,

@@ -61,7 +61,9 @@ class UdgerCom extends AbstractHttpProvider
     ];
 
     protected $defaultValues = [
-        'unknown',
+        'general' => [
+            '/^unknown$/i',
+        ],
     ];
 
     private static $uri = 'http://api.udger.com/parse';
@@ -107,29 +109,7 @@ class UdgerCom extends AbstractHttpProvider
             'Content-Type' => 'application/x-www-form-urlencoded',
         ], $body);
 
-        try {
-            $response = $this->getResponse($request);
-        } catch (Exception\RequestException $ex) {
-            /* @var $prevEx \GuzzleHttp\Exception\ClientException */
-            $prevEx = $ex->getPrevious();
-
-            if ($prevEx->hasResponse() === true && $prevEx->getResponse()->getStatusCode() === 400) {
-                $content = $prevEx->getResponse()
-                    ->getBody()
-                    ->getContents();
-                $content = json_decode($content);
-
-                if (isset($content->flag) && $content->flag == 4) {
-                    throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName(), null, $ex);
-                }
-
-                if (isset($content->flag) && $content->flag == 6) {
-                    throw new Exception\LimitationExceededException('Exceeded the maximum number of request with API key "' . $this->apiKey . '" for ' . $this->getName(), null, $ex);
-                }
-            }
-
-            throw $ex;
-        }
+        $response = $this->getResponse($request);
 
         /*
          * no json returned?
@@ -146,6 +126,21 @@ class UdgerCom extends AbstractHttpProvider
          */
         if (isset($content->flag) && $content->flag == 3) {
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+        }
+
+        /*
+         * Errors
+         */
+        if (isset($content->flag) && $content->flag == 4) {
+            throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName());
+        }
+
+        if (isset($content->flag) && $content->flag == 6) {
+            throw new Exception\LimitationExceededException('Exceeded the maximum number of request with API key "' . $this->apiKey . '" for ' . $this->getName());
+        }
+
+        if (isset($content->flag) && $content->flag > 3) {
+            throw new Exception\RequestException('Could not get valid response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
         }
 
         /*

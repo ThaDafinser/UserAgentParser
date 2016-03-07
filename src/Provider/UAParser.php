@@ -62,16 +62,43 @@ class UAParser extends AbstractProvider
     ];
 
     protected $defaultValues = [
-        'Other',
 
-        // bot names
-        'crawler',
+        'general' => [
+            '/^Other$/i',
+        ],
+
+        'device' => [
+
+            'brand' => [
+                '/^Generic/i',
+            ],
+
+            'model' => [
+                '/^Smartphone$/i',
+                '/^Feature Phone$/i',
+                '/^iOS-Device$/i',
+                '/^Tablet$/i',
+                '/^Touch$/i',
+                '/^Windows$/i',
+                '/^Windows Phone$/i',
+            ],
+        ],
+
+        'bot' => [
+            'name' => [
+                '/^Other$/i',
+                '/^crawler$/i',
+                '/^robot$/i',
+                '/^crawl$/i',
+                '/^Spider$/i',
+            ],
+        ],
     ];
 
     private $parser;
 
     /**
-     * 
+     *
      * @param  Parser                    $parser
      * @throws PackageNotLoadedException
      */
@@ -107,6 +134,10 @@ class UAParser extends AbstractProvider
      */
     private function hasResult(\UAParser\Result\Client $resultRaw)
     {
+        if ($this->isBot($resultRaw) === true) {
+            return true;
+        }
+
         if ($this->isRealResult($resultRaw->ua->family)) {
             return true;
         }
@@ -115,29 +146,11 @@ class UAParser extends AbstractProvider
             return true;
         }
 
-        if ($this->isRealResult($resultRaw->device->model)) {
+        if ($this->isRealResult($resultRaw->device->model, 'device', 'model')) {
             return true;
         }
 
         return false;
-    }
-
-    private function getDeviceModelDefaultValues()
-    {
-        return [
-            'Feature Phone',
-            'iOS-Device',
-            'Smartphone',
-        ];
-    }
-
-    private function getDeviceBrandDefaultValues()
-    {
-        return [
-            'Generic',
-            'Generic_Android',
-            'Generic_Inettv',
-        ];
     }
 
     /**
@@ -164,7 +177,7 @@ class UAParser extends AbstractProvider
     {
         $bot->setIsBot(true);
 
-        if ($this->isRealResult($resultRaw->ua->family) === true) {
+        if ($this->isRealResult($resultRaw->ua->family, 'bot', 'name') === true) {
             $bot->setName($resultRaw->ua->family);
         }
     }
@@ -224,11 +237,11 @@ class UAParser extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, \UAParser\Result\Device $deviceRaw)
     {
-        if ($this->isRealResult($deviceRaw->model, $this->getDeviceModelDefaultValues()) === true) {
+        if ($this->isRealResult($deviceRaw->model, 'device', 'model') === true) {
             $device->setModel($deviceRaw->model);
         }
 
-        if ($this->isRealResult($deviceRaw->brand, $this->getDeviceBrandDefaultValues()) === true) {
+        if ($this->isRealResult($deviceRaw->brand, 'device', 'brand') === true) {
             $device->setBrand($deviceRaw->brand);
         }
     }

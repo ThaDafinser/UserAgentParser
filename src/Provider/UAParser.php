@@ -74,6 +74,7 @@ class UAParser extends AbstractProvider
             ],
 
             'model' => [
+                '/^generic$/i',
                 '/^Smartphone$/i',
                 '/^Feature Phone$/i',
                 '/^iOS-Device$/i',

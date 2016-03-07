@@ -112,10 +112,9 @@ class Wurfl extends AbstractProvider
         $version      = $this->getParser()->getWurflInfo()->version;
         $versionParts = explode(' - ', $version);
 
-        if (count($versionParts) === 2) {
+        if (count($versionParts) > 1) {
             $versionPart = $versionParts[0];
-            $versionPart = str_replace('for API', '', $versionPart);
-            $versionPart = str_replace(', db.scientiamobile.com', '', $versionPart);
+            $versionPart = str_replace('API', '', $versionPart);
 
             return trim($versionPart);
         }

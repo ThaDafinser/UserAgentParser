@@ -62,6 +62,10 @@
         }
     },
     
+    "conflict": {
+        "mobiledetect/mobiledetectlib": "<2.6.8,>=3",
+    },
+    
     "require": {
         "php": ">=5.5",
         "guzzlehttp/guzzle": "^6.1"

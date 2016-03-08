@@ -434,6 +434,12 @@ class UAParserTest extends AbstractProviderTestCase
              * deviceModel
              */
             [
+                'generic',
+                'device',
+                'model',
+                false,
+            ],
+            [
                 'Smartphone',
                 'device',
                 'model',

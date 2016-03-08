@@ -91,6 +91,6 @@
         "whichbrowser/parser": ">=2.0.10,<3.0",
         "woothee/woothee": "^1.2",
         "mimmi20/wurfl": "^1.6",
-        "zsxsoft/php-useragent": "^1.0"
+        "zsxsoft/php-useragent": "dev-master"
     }
 }

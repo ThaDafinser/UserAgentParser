@@ -62,10 +62,6 @@
         }
     },
     
-    "conflict": {
-        "mobiledetect/mobiledetectlib": "<2.6.8,>=3"
-    },
-    
     "require": {
         "php": ">=5.5",
         "guzzlehttp/guzzle": "^6.1"
@@ -90,6 +86,7 @@
         "browscap/browscap-php": "dev-master",
         "donatj/phpuseragentparser": "^0.5.0",
         "jenssegers/agent": "^2.3",
+        "mobiledetect/mobiledetectlib": ">2.6.8,<3",
         "piwik/device-detector": "^3.6",
         "sinergi/browser-detector": "^5.1",
         "ua-parser/uap-php": ">=3.4.3,<4.0",

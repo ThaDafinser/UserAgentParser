@@ -97,8 +97,8 @@
         
         "browscap/browscap-php": "dev-master",
         "donatj/phpuseragentparser": "^0.5.0",
-        "piwik/device-detector": "^3.5",
-        "sinergi/browser-detector": "^5.1",
+        "piwik/device-detector": "^3.6",
+        "sinergi/browser-detector": "^6.0",
         "ua-parser/uap-php": ">=3.4.3,<4.0",
         "whichbrowser/parser": ">=2.0.10,<3.0",
         "woothee/woothee": "^1.2",

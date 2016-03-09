@@ -79,16 +79,6 @@ class WhichBrowser extends AbstractProvider
         }
     }
 
-    public function getName()
-    {
-        return 'WhichBrowser';
-    }
-
-    public function getHomepage()
-    {
-        return 'https://github.com/WhichBrowser/Parser';
-    }
-
     /**
      *
      * @param  array              $headers

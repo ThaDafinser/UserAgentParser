@@ -19,6 +19,9 @@ class JenssegersAgentTest extends AbstractProviderTestCase
         return $parser;
     }
 
+    /**
+     * @expectedException \UserAgentParser\Exception\PackageNotLoadedException
+     */
     public function testPackageNotLoadedException()
     {
         $file     = 'vendor/jenssegers/agent/composer.json';
@@ -30,9 +33,10 @@ class JenssegersAgentTest extends AbstractProviderTestCase
             $provider = new JenssegersAgent();
         } catch (\Exception $ex) {
             // we need to catch the exception, since we need to rename the file again!
-        }
+            rename($tempFile, $file);
 
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
+            throw $ex;
+        }
 
         rename($tempFile, $file);
     }

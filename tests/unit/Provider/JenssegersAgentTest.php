@@ -76,6 +76,43 @@ class JenssegersAgentTest extends AbstractProviderTestCase
         $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
+    public function testDetectionCapabilities()
+    {
+        $provider = new JenssegersAgent();
+
+        $this->assertEquals([
+
+            'browser' => [
+                'name'    => true,
+                'version' => true,
+            ],
+
+            'renderingEngine' => [
+                'name'    => false,
+                'version' => false,
+            ],
+
+            'operatingSystem' => [
+                'name'    => true,
+                'version' => true,
+            ],
+
+            'device' => [
+                'model'    => false,
+                'brand'    => false,
+                'type'     => false,
+                'isMobile' => true,
+                'isTouch'  => false,
+            ],
+
+            'bot' => [
+                'isBot' => true,
+                'name'  => true,
+                'type'  => false,
+            ],
+        ], $provider->getDetectionCapabilities());
+    }
+
     public function testParser()
     {
         $provider = new JenssegersAgent();
@@ -223,9 +260,6 @@ class JenssegersAgentTest extends AbstractProviderTestCase
         $parser->expects($this->any())
             ->method('isMobile')
             ->will($this->returnValue(true));
-        $parser->expects($this->any())
-            ->method('device')
-            ->will($this->returnValue('iPhone'));
 
         $provider = new JenssegersAgent();
 
@@ -238,7 +272,7 @@ class JenssegersAgentTest extends AbstractProviderTestCase
 
         $expectedResult = [
             'device' => [
-                'model' => 'iPhone',
+                'model' => null,
                 'brand' => null,
                 'type'  => null,
 

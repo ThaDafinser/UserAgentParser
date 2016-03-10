@@ -29,16 +29,21 @@
         
         "get_browser",
         "browscap",
+        "donatj",
+        "jenssegers",
         "piwik",
         "sinergi",
+        "ua-parser",
         "whichbrowser",
         "woothee",
         "wurfl",
         
-        "udger",
-        "useragentapi",
-        "useragentstring",
-        "whatismybrowser"
+        "DeviceAtlas",
+        "NeutrinoApiCom",
+        "UdgerCom",
+        "UserAgentApiCom",
+        "UserAgentStringCom",
+        "WhatIsMyBrowserCom"
     ],
     
     "license": "MIT",

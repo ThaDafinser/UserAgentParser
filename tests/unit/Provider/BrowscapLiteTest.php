@@ -1,12 +1,13 @@
 <?php
 namespace UserAgentParserTest\Unit\Provider;
 
+use UserAgentParser\Provider\BrowscapLite;
 use UserAgentParser\Provider\BrowscapPhp;
 
 /**
- * @covers UserAgentParser\Provider\BrowscapPhp
+ * @covers UserAgentParser\Provider\BrowscapLite
  */
-class BrowscapPhpTest extends AbstractProviderTestCase
+class BrowscapLiteTest extends AbstractProviderTestCase
 {
     /**
      *
@@ -24,14 +25,14 @@ class BrowscapPhpTest extends AbstractProviderTestCase
 
     public function testName()
     {
-        $provider = new BrowscapPhp($this->getParser());
+        $provider = new BrowscapLite($this->getParser());
 
-        $this->assertEquals('BrowscapPhp', $provider->getName());
+        $this->assertEquals('BrowscapLite', $provider->getName());
     }
 
     public function testDetectionCapabilities()
     {
-        $provider = new BrowscapPhp($this->getParser());
+        $provider = new BrowscapLite($this->getParser());
 
         $this->assertEquals([
 
@@ -55,12 +56,12 @@ class BrowscapPhpTest extends AbstractProviderTestCase
                 'brand'    => false,
                 'type'     => true,
                 'isMobile' => true,
-                'isTouch'  => true,
+                'isTouch'  => false,
             ],
 
             'bot' => [
-                'isBot' => true,
-                'name'  => true,
+                'isBot' => false,
+                'name'  => false,
                 'type'  => false,
             ],
         ], $provider->getDetectionCapabilities());

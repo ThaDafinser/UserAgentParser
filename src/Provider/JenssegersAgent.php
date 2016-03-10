@@ -47,7 +47,7 @@ class JenssegersAgent extends AbstractProvider
         ],
 
         'device' => [
-            'model'    => true,
+            'model'    => false,
             'brand'    => false,
             'type'     => false,
             'isMobile' => true,
@@ -58,6 +58,17 @@ class JenssegersAgent extends AbstractProvider
             'isBot' => true,
             'name'  => true,
             'type'  => false,
+        ],
+    ];
+
+    protected $defaultValues = [
+
+        'general' => [],
+
+        'browser' => [
+            'name' => [
+                '/^GenericBrowser$/i',
+            ],
         ],
     ];
 
@@ -104,7 +115,7 @@ class JenssegersAgent extends AbstractProvider
             return true;
         }
 
-        if ($this->isRealResult($resultRaw['browserName']) === true || $this->isRealResult($resultRaw['osName']) === true || $this->isRealResult($resultRaw['deviceModel']) === true || $this->isRealResult($resultRaw['botName']) === true) {
+        if ($this->isRealResult($resultRaw['browserName']) === true || $this->isRealResult($resultRaw['osName']) === true || $this->isRealResult($resultRaw['botName']) === true) {
             return true;
         }
 
@@ -164,10 +175,6 @@ class JenssegersAgent extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, array $resultRaw)
     {
-        if ($this->isRealResult($resultRaw['deviceModel']) === true) {
-            $device->setModel($resultRaw['deviceModel']);
-        }
-
         if ($resultRaw['isMobile'] === true) {
             $device->setIsMobile(true);
         }

@@ -47,6 +47,7 @@ Temporary Items
 .buildpath
 build
 .project
+.idea
 .tmp
 .php_cs.cache
 composer.lock

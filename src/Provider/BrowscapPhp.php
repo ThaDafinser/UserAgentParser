@@ -2,6 +2,7 @@
 namespace UserAgentParser\Provider;
 
 use BrowscapPHP\Browscap;
+use DateTime;
 use stdClass;
 use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Model;
@@ -108,7 +109,9 @@ class BrowscapPhp extends AbstractProvider
 
     public function getUpdateDate()
     {
-        return;
+        $releaseDate = $this->getParser()->getCache()->getReleaseDate();
+
+        return DateTime::createFromFormat('D, d M Y H:i:s O', $releaseDate);
     }
 
     /**

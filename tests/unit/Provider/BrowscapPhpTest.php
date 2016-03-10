@@ -62,9 +62,24 @@ class BrowscapPhpTest extends AbstractProviderTestCase
 
     public function testUpdateDate()
     {
-        $provider = new BrowscapPhp($this->getParser());
+        $date = new \DateTime('2016-03-10 18:00:00');
 
-        $this->assertNull($provider->getUpdateDate());
+        $cache = $this->getMock('BrowscapPHP\Cache\BrowscapCache', [], [], '', false);
+        $cache->expects($this->any())
+            ->method('getReleaseDate')
+            ->will($this->returnValue($date->format('r')));
+
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('getCache')
+            ->will($this->returnValue($cache));
+
+        $provider = new BrowscapPhp($parser);
+
+        $actualDate = $provider->getUpdateDate();
+
+        $this->assertInstanceOf('DateTime', $actualDate);
+        $this->assertEquals($date->format('Y-m-d H:i:s'), $actualDate->format('Y-m-d H:i:s'));
     }
 
     public function testDetectionCapabilities()

@@ -40,6 +40,19 @@ class AbstractBrowscapTest extends AbstractProviderTestCase
         return $parser;
     }
 
+    /**
+     * Provider no result
+     *
+     * @expectedException \UserAgentParser\Exception\InvalidArgumentException
+     */
+    public function testConstructException()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractBrowscap', [
+            $this->getParser(),
+            'anotherExceptedType',
+        ]);
+    }
+
     public function testName()
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractBrowscap', [

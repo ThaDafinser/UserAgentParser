@@ -4,6 +4,7 @@ namespace UserAgentParser\Provider;
 use BrowscapPHP\Browscap;
 use DateTime;
 use stdClass;
+use UserAgentParser\Exception\InvalidArgumentException;
 use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Model;
 
@@ -60,7 +61,7 @@ abstract class AbstractBrowscap extends AbstractProvider
         $this->parser = $parser;
 
         if ($expectedType !== $parser->getCache()->getType()) {
-            throw new \InvalidArgumentException('Expected the "' . $expectedType . '" data file. Instead got the "' . $parser->getCache()->getType() . '" data file');
+            throw new InvalidArgumentException('Expected the "' . $expectedType . '" data file. Instead got the "' . $parser->getCache()->getType() . '" data file');
         }
     }
 

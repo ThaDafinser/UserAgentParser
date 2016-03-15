@@ -97,7 +97,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
     {
         $provider = new WhichBrowser();
 
-        $result = $provider->parse('Googlebot/2.1 (+http://www.googlebot.com/bot.html)');
+        $result = $provider->parse('Googlebot/2.1 (+http://www.google.com/bot.html)');
         $this->assertEquals([
             'browser' => [
                 'name'    => null,

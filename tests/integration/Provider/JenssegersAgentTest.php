@@ -6,7 +6,7 @@ use UserAgentParser\Provider\JenssegersAgent;
 /**
  * @coversNothing
  */
-class JenssegersAgentsTest extends AbstractProviderTestCase
+class JenssegersAgentTest extends AbstractProviderTestCase
 {
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
@@ -25,11 +25,57 @@ class JenssegersAgentsTest extends AbstractProviderTestCase
         $result = $provider->parse('Googlebot/2.1 (+http://www.googlebot.com/bot.html)');
 
         $this->assertInstanceOf('UserAgentParser\Model\UserAgent', $result);
-        $this->assertTrue($result->getBot()
-            ->getIsBot());
-        $this->assertEquals('Google', $result->getBot()
-            ->getName());
-        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'browser' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'renderingEngine' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'operatingSystem' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+            'bot' => [
+                'isBot' => true,
+                'name'  => 'Google',
+                'type'  => null,
+            ],
+        ], $result->toArray());
     }
 
     public function testRealResultDevice()

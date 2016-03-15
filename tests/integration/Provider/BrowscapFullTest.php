@@ -2,12 +2,12 @@
 namespace UserAgentParserTest\Integration\Provider;
 
 use BrowscapPHP\Browscap;
-use UserAgentParser\Provider\BrowscapPhp;
+use UserAgentParser\Provider\BrowscapFull;
 
 /**
  * @coversNothing
  */
-class BrowscapPhpTest extends AbstractProviderTestCase
+class BrowscapFullTest extends AbstractProviderTestCase
 {
     private function getParserWithWarmCache($type)
     {
@@ -30,14 +30,14 @@ class BrowscapPhpTest extends AbstractProviderTestCase
      */
     public function testNoResultFoundWithWarmCache()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new BrowscapFull($this->getParserWithWarmCache('full'));
 
         $result = $provider->parse('...');
     }
 
     public function testRealResultBot()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new BrowscapFull($this->getParserWithWarmCache('full'));
 
         $result = $provider->parse('Mozilla/2.0 (compatible; Ask Jeeves)');
 
@@ -46,8 +46,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
             ->getIsBot());
         $this->assertEquals('AskJeeves', $result->getBot()
             ->getName());
-        // only in full!
-        $this->assertNull($result->getBot()
+        $this->assertEquals('Bot/Crawler', $result->getBot()
             ->getType());
 
         $rawResult = $result->getProviderResultRaw();
@@ -56,7 +55,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
 
     public function testRealResultDevice()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new BrowscapFull($this->getParserWithWarmCache('full'));
 
         $result = $provider->parse('Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/48.0.1349.2 Chrome/25.0.1349.2 Safari/537.42');
 
@@ -67,7 +66,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
             ->getVersion()
             ->getComplete());
 
-        $this->assertEquals(null, $result->getRenderingEngine()
+        $this->assertEquals('Blink', $result->getRenderingEngine()
             ->getName());
         $this->assertEquals(null, $result->getRenderingEngine()
             ->getVersion()
@@ -79,9 +78,9 @@ class BrowscapPhpTest extends AbstractProviderTestCase
             ->getVersion()
             ->getComplete());
 
-        $this->assertEquals(null, $result->getDevice()
+        $this->assertEquals('Samsung', $result->getDevice()
             ->getBrand());
-        $this->assertEquals(null, $result->getDevice()
+        $this->assertEquals('Smart TV', $result->getDevice()
             ->getModel());
         $this->assertEquals('TV Device', $result->getDevice()
             ->getType());

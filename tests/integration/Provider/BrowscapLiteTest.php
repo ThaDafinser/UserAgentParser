@@ -2,12 +2,13 @@
 namespace UserAgentParserTest\Integration\Provider;
 
 use BrowscapPHP\Browscap;
-use UserAgentParser\Provider\BrowscapPhp;
+use BrowscapPHP\Helper\IniLoader;
+use UserAgentParser\Provider\BrowscapLite;
 
 /**
  * @coversNothing
  */
-class BrowscapPhpTest extends AbstractProviderTestCase
+class BrowscapLiteTest extends AbstractProviderTestCase
 {
     private function getParserWithWarmCache($type)
     {
@@ -25,38 +26,64 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         return $browscap;
     }
 
+    private function getParserWithColdCache($type)
+    {
+        $filename = 'php_browscap.ini';
+        if ($type != '') {
+            $filename = $type . '_' . $filename;
+        }
+
+        $loader = new IniLoader();
+        $loader->setLocalFile('tests/resources/browscap/' . $filename);
+
+        $cache = new \WurflCache\Adapter\Memory();
+
+        $browscap = new Browscap();
+        $browscap->setCache($cache);
+        $browscap->setLoader($loader);
+
+        return $browscap;
+    }
+
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
     public function testNoResultFoundWithWarmCache()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new BrowscapLite($this->getParserWithWarmCache('lite'));
 
         $result = $provider->parse('...');
     }
 
-    public function testRealResultBot()
+    /**
+     * @expectedException \UserAgentParser\Exception\InvalidArgumentException
+     * @expectedExceptionMessage You need to warm-up the cache first to use this provider
+     */
+    public function testNoResultFoundWithColdCache()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new BrowscapLite($this->getParserWithColdCache('lite'));
 
-        $result = $provider->parse('Mozilla/2.0 (compatible; Ask Jeeves)');
+        $result = $provider->parse('...');
+    }
 
-        $this->assertInstanceOf('UserAgentParser\Model\UserAgent', $result);
-        $this->assertTrue($result->getBot()
-            ->getIsBot());
-        $this->assertEquals('AskJeeves', $result->getBot()
-            ->getName());
-        // only in full!
-        $this->assertNull($result->getBot()
-            ->getType());
+    /**
+     * @expectedException \UserAgentParser\Exception\InvalidArgumentException
+     * @expectedExceptionMessage You need to warm-up the cache first to use this provider
+     */
+    public function testNoResultFoundWithColdCacheStillAfterGetBrowser()
+    {
+        $parser = $this->getParserWithColdCache('lite');
 
-        $rawResult = $result->getProviderResultRaw();
-        $this->assertInstanceOf('stdClass', $rawResult);
+        $result = $parser->getBrowser('something');
+
+        $provider = new BrowscapLite($parser);
+
+        $result = $provider->parse('...');
     }
 
     public function testRealResultDevice()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new BrowscapLite($this->getParserWithWarmCache('lite'));
 
         $result = $provider->parse('Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/48.0.1349.2 Chrome/25.0.1349.2 Safari/537.42');
 

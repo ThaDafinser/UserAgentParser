@@ -60,6 +60,10 @@ abstract class AbstractBrowscap extends AbstractProvider
     {
         $this->parser = $parser;
 
+        if ($parser->getCache()->getType() === null) {
+            throw new InvalidArgumentException('You need to warm-up the cache first to use this provider');
+        }
+
         if ($expectedType !== $parser->getCache()->getType()) {
             throw new InvalidArgumentException('Expected the "' . $expectedType . '" data file. Instead got the "' . $parser->getCache()->getType() . '" data file');
         }

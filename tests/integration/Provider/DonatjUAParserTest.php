@@ -22,9 +22,11 @@ class DonatjUAParserTest extends AbstractProviderTestCase
     {
         $provider = new DonatjUAParser();
 
-        $result = $provider->parse('Mozilla/5.0 (Nintendo 3DS; U; ; en) Version/1.7552.EU');
+        $result = $provider->parse('Mozilla/5.0 (X11; U; CrOS i686 0.9.128; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/8.0.552.339');
 
         $this->assertInstanceOf('UserAgentParser\Model\UserAgent', $result);
+        $this->assertEquals('Chrome', $result->getBrowser()->getName());
+        $this->assertEquals('8.0.552.339', $result->getBrowser()->getVersion()->getComplete());
 
         $rawResult = $result->getProviderResultRaw();
 
@@ -32,5 +34,9 @@ class DonatjUAParserTest extends AbstractProviderTestCase
         $this->assertArrayHasKey('platform', $rawResult);
         $this->assertArrayHasKey('browser', $rawResult);
         $this->assertArrayHasKey('version', $rawResult);
+
+        $this->assertEquals('Chrome OS', $rawResult['platform']);
+        $this->assertEquals('Chrome', $rawResult['browser']);
+        $this->assertEquals('8.0.552.339', $rawResult['version']);
     }
 }

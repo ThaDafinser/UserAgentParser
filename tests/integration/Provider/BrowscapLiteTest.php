@@ -59,7 +59,7 @@ class BrowscapLiteTest extends AbstractProviderTestCase
      * @expectedException \UserAgentParser\Exception\InvalidArgumentException
      * @expectedExceptionMessage You need to warm-up the cache first to use this provider
      */
-    public function testNoResultFoundWithColdCache()
+    public function testColdCacheException()
     {
         $provider = new BrowscapLite($this->getParserWithColdCache('lite'));
 
@@ -70,11 +70,14 @@ class BrowscapLiteTest extends AbstractProviderTestCase
      * @expectedException \UserAgentParser\Exception\InvalidArgumentException
      * @expectedExceptionMessage You need to warm-up the cache first to use this provider
      */
-    public function testNoResultFoundWithColdCacheStillAfterGetBrowser()
+    public function testColdCacheExceptionStillAfterGetBrowser()
     {
         $parser = $this->getParserWithColdCache('lite');
 
         $result = $parser->getBrowser('something');
+
+        //verify that browscap returned something
+        $this->assertInstanceOf('stdClass', $result);
 
         $provider = new BrowscapLite($parser);
 

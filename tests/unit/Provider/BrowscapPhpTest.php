@@ -18,7 +18,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $cache->expects($this->any())
             ->method('getType')
             ->will($this->returnValue(''));
-        
+
         $parser = $this->getMock('BrowscapPHP\Browscap');
         $parser->expects($this->any())
             ->method('getCache')

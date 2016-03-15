@@ -2,6 +2,7 @@
 namespace UserAgentParser\Provider;
 
 use BrowscapPHP\Browscap;
+
 class BrowscapFull extends AbstractBrowscap
 {
     /**
@@ -42,7 +43,7 @@ class BrowscapFull extends AbstractBrowscap
             'type'  => true,
         ],
     ];
-    
+
     public function __construct(Browscap $parser)
     {
         parent::__construct($parser, 'FULL');

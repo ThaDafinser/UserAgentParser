@@ -9,7 +9,6 @@ use UserAgentParser\Provider\BrowscapPhp;
  */
 class BrowscapLiteTest extends AbstractProviderTestCase
 {
-
     /**
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
@@ -20,7 +19,7 @@ class BrowscapLiteTest extends AbstractProviderTestCase
         $cache->expects($this->any())
             ->method('getType')
             ->will($this->returnValue('LITE'));
-        
+
         $parser = $this->getMock('BrowscapPHP\Browscap');
         $parser->expects($this->any())
             ->method('getCache')
@@ -28,51 +27,51 @@ class BrowscapLiteTest extends AbstractProviderTestCase
         $parser->expects($this->any())
             ->method('getBrowser')
             ->will($this->returnValue($result));
-        
+
         return $parser;
     }
 
     public function testName()
     {
         $provider = new BrowscapLite($this->getParser());
-        
+
         $this->assertEquals('BrowscapLite', $provider->getName());
     }
 
     public function testDetectionCapabilities()
     {
         $provider = new BrowscapLite($this->getParser());
-        
+
         $this->assertEquals([
-            
+
             'browser' => [
-                'name' => true,
-                'version' => true
+                'name'    => true,
+                'version' => true,
             ],
-            
+
             'renderingEngine' => [
-                'name' => false,
-                'version' => false
+                'name'    => false,
+                'version' => false,
             ],
-            
+
             'operatingSystem' => [
-                'name' => true,
-                'version' => false
+                'name'    => true,
+                'version' => false,
             ],
-            
+
             'device' => [
-                'model' => false,
-                'brand' => false,
-                'type' => true,
+                'model'    => false,
+                'brand'    => false,
+                'type'     => true,
                 'isMobile' => true,
-                'isTouch' => false
+                'isTouch'  => false,
             ],
-            
+
             'bot' => [
                 'isBot' => false,
-                'name' => false,
-                'type' => false
-            ]
+                'name'  => false,
+                'type'  => false,
+            ],
         ], $provider->getDetectionCapabilities());
     }
 }

@@ -14,7 +14,7 @@
 
 The target of this package is to make it less painful, by providing an abstract layer for many user agent parsers.
 
-Currently **8 local providers** and **6 HTTP providers** are available! [See the comparison list here](https://github.com/ThaDafinser/UserAgentParser#providers)
+Currently **10 local providers** and **6 HTTP providers** are available! [See the comparison list here](https://github.com/ThaDafinser/UserAgentParser#providers)
 
 So you can
 - use multiple providers at the same time with the `Chain` provider
@@ -104,14 +104,18 @@ See detailed documenation here
 
 | Name                   | Type | Browser | Engine | Operating system | Device model | Device brand | Device type | Is mobile | Is bot | Bot name | Bot type | Comment |
 | ---------------------- |----- | ------- | ------ | ---------------- | ------------ | ------------ | ----------- | --------- | ------ | -------- | -------- |-------- |
-| BrowscapPhp            | local | x | x | x | x | x | x | x | x | x | x |   |
+| BrowscapFull           | local | x | x | x | x | x | x | x | x | x | x |   |
+| BrowscapLite           | local | x |   | x |   |   | x | x |   |   |   |   |
+| BrowscapPhp            | local | x |   | x |   |   | x | x | x | x |   |   |
 | DonatjUAParser         | local | x |   |   |   |   |   |   |   |   |   |   |
+| JenssegersAgent        | local | x |   | x |   |   |   | x | x | x |   | Based on MobileDetect |
 | PiwikDeviceDetector    | local | x | x | x | x | x | x | x | x | x | x |   |
 | SinergiBrowserDetector | local | x |   | x | x |   |   | x | x |   |   |   |
 | UAParser               | local | x |   | x | x | x |   |   | x | x |   |   |
 | WhichBrowser           | local | x |   | x | x | x | x | x | x | x |   |   |
 | Woothee                | local | x |   |   |   |   | x |   | x | x |   |   |
 | Wurfl                  | local | x |   | x | x | x | x | x | x |   |   |   |
+| Zsxsoft                | local | x |   | x | x | x |   |   |   |   |   |   |
 | DeviceAtlasCom         | http  | x | x | x |   |   | x |   |   |   |   | free available |
 | NeutrinoApiCom         | http  | x |   | x | x | x | x | x | x | x |   | 25/day free |
 | UdgerCom               | http  | x | x | x |   |   | x |   | x |   |   | 500/month free (API key only for one month valid!) |

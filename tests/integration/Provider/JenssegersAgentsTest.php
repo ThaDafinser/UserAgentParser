@@ -1,39 +1,53 @@
 <?php
 namespace UserAgentParserTest\Integration\Provider;
 
-use UserAgentParser\Provider\DonatjUAParser;
+use UserAgentParser\Provider\JenssegersAgent;
 
 /**
  * @coversNothing
  */
-class DonatjUAParserTest extends AbstractProviderTestCase
+class JenssegersAgentsTest extends AbstractProviderTestCase
 {
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
     public function testNoResultFound()
     {
-        $provider = new DonatjUAParser();
+        $provider = new JenssegersAgent();
 
         $result = $provider->parse('...');
     }
 
-    public function testRealResult()
+    public function testRealResultBot()
     {
-        $provider = new DonatjUAParser();
+        $provider = new JenssegersAgent();
 
-        $result = $provider->parse('Mozilla/5.0 (X11; U; CrOS i686 0.9.128; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/8.0.552.339');
+        $result = $provider->parse('Googlebot/2.1 (+http://www.googlebot.com/bot.html)');
+
+        $this->assertInstanceOf('UserAgentParser\Model\UserAgent', $result);
+        $this->assertTrue($result->getBot()
+            ->getIsBot());
+        $this->assertEquals('Google', $result->getBot()
+            ->getName());
+        $rawResult = $result->getProviderResultRaw();
+    }
+
+    public function testRealResultDevice()
+    {
+        $provider = new JenssegersAgent();
+
+        $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Chrome',
+                'name'    => 'Safari',
                 'version' => [
-                    'major' => 8,
-                    'minor' => 0,
-                    'patch' => 552,
+                    'major' => 5,
+                    'minor' => 1,
+                    'patch' => null,
 
                     'alias' => null,
 
-                    'complete' => '8.0.552.339',
+                    'complete' => '5.1',
                 ],
             ],
             'renderingEngine' => [
@@ -49,15 +63,15 @@ class DonatjUAParserTest extends AbstractProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => null,
+                'name'    => 'iOS',
                 'version' => [
-                    'major' => null,
+                    'major' => 5,
                     'minor' => null,
                     'patch' => null,
 
-                    'alias' => null,
+                    'alias' => '_',
 
-                    'complete' => null,
+                    'complete' => '5_0',
                 ],
             ],
             'device' => [
@@ -65,7 +79,7 @@ class DonatjUAParserTest extends AbstractProviderTestCase
                 'brand' => null,
                 'type'  => null,
 
-                'isMobile' => null,
+                'isMobile' => true,
                 'isTouch'  => null,
             ],
             'bot' => [
@@ -74,11 +88,5 @@ class DonatjUAParserTest extends AbstractProviderTestCase
                 'type'  => null,
             ],
         ], $result->toArray());
-
-        $this->assertEquals([
-            'platform' => 'Chrome OS',
-            'browser'  => 'Chrome',
-            'version'  => '8.0.552.339',
-        ], $result->getProviderResultRaw());
     }
 }

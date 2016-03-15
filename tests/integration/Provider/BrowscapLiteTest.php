@@ -89,31 +89,56 @@ class BrowscapLiteTest extends AbstractProviderTestCase
         $provider = new BrowscapLite($this->getParserWithWarmCache('lite'));
 
         $result = $provider->parse('Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/48.0.1349.2 Chrome/25.0.1349.2 Safari/537.42');
+        $this->assertEquals([
+            'browser' => [
+                'name'    => 'Chromium',
+                'version' => [
+                    'major' => 48,
+                    'minor' => null,
+                    'patch' => null,
 
-        $this->assertInstanceOf('UserAgentParser\Model\UserAgent', $result);
-        $this->assertEquals('Chromium', $result->getBrowser()
-            ->getName());
-        $this->assertEquals('48.0', $result->getBrowser()
-            ->getVersion()
-            ->getComplete());
+                    'alias' => null,
 
-        $this->assertEquals(null, $result->getRenderingEngine()
-            ->getName());
-        $this->assertEquals(null, $result->getRenderingEngine()
-            ->getVersion()
-            ->getComplete());
+                    'complete' => '48.0',
+                ],
+            ],
+            'renderingEngine' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
 
-        $this->assertEquals('Linux', $result->getOperatingSystem()
-            ->getName());
-        $this->assertEquals(null, $result->getOperatingSystem()
-            ->getVersion()
-            ->getComplete());
+                    'alias' => null,
 
-        $this->assertEquals(null, $result->getDevice()
-            ->getBrand());
-        $this->assertEquals(null, $result->getDevice()
-            ->getModel());
-        $this->assertEquals('TV Device', $result->getDevice()
-            ->getType());
+                    'complete' => null,
+                ],
+            ],
+            'operatingSystem' => [
+                'name'    => 'Linux',
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => 'TV Device',
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+            'bot' => [
+                'isBot' => null,
+                'name'  => null,
+                'type'  => null,
+            ],
+        ], $result->toArray());
     }
 }

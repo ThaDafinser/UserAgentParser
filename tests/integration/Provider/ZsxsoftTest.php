@@ -1,39 +1,39 @@
 <?php
 namespace UserAgentParserTest\Integration\Provider;
 
-use UserAgentParser\Provider\DonatjUAParser;
+use UserAgentParser\Provider\Zsxsoft;
 
 /**
  * @coversNothing
  */
-class DonatjUAParserTest extends AbstractProviderTestCase
+class ZsxsoftTest extends AbstractProviderTestCase
 {
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFound()
+    public function testNoResultFoundWithWarmCache()
     {
-        $provider = new DonatjUAParser();
+        $provider = new Zsxsoft();
 
         $result = $provider->parse('...');
     }
 
-    public function testRealResult()
+    public function testRealResultDevice()
     {
-        $provider = new DonatjUAParser();
+        $provider = new Zsxsoft();
 
-        $result = $provider->parse('Mozilla/5.0 (X11; U; CrOS i686 0.9.128; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/8.0.552.339');
+        $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Chrome',
+                'name'    => 'Safari',
                 'version' => [
-                    'major' => 8,
-                    'minor' => 0,
-                    'patch' => 552,
+                    'major' => 5,
+                    'minor' => 1,
+                    'patch' => null,
 
                     'alias' => null,
 
-                    'complete' => '8.0.552.339',
+                    'complete' => '5.1',
                 ],
             ],
             'renderingEngine' => [
@@ -49,7 +49,7 @@ class DonatjUAParserTest extends AbstractProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => null,
+                'name'    => 'Mac OS X',
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -61,8 +61,8 @@ class DonatjUAParserTest extends AbstractProviderTestCase
                 ],
             ],
             'device' => [
-                'model' => null,
-                'brand' => null,
+                'model' => 'iPhone iOS 5.0',
+                'brand' => 'Apple',
                 'type'  => null,
 
                 'isMobile' => null,
@@ -74,11 +74,5 @@ class DonatjUAParserTest extends AbstractProviderTestCase
                 'type'  => null,
             ],
         ], $result->toArray());
-
-        $this->assertEquals([
-            'platform' => 'Chrome OS',
-            'browser'  => 'Chrome',
-            'version'  => '8.0.552.339',
-        ], $result->getProviderResultRaw());
     }
 }

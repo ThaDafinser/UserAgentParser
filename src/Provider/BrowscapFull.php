@@ -1,14 +1,16 @@
 <?php
 namespace UserAgentParser\Provider;
 
-class BrowscapPhp extends AbstractBrowscap
+use BrowscapPHP\Browscap;
+
+class BrowscapFull extends AbstractBrowscap
 {
     /**
      * Name of the provider
      *
      * @var string
      */
-    protected $name = 'BrowscapPhp';
+    protected $name = 'BrowscapFull';
 
     protected $detectionCapabilities = [
 
@@ -18,18 +20,18 @@ class BrowscapPhp extends AbstractBrowscap
         ],
 
         'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
+            'name'    => true,
+            'version' => true,
         ],
 
         'operatingSystem' => [
             'name'    => true,
-            'version' => false,
+            'version' => true,
         ],
 
         'device' => [
-            'model'    => false,
-            'brand'    => false,
+            'model'    => true,
+            'brand'    => true,
             'type'     => true,
             'isMobile' => true,
             'isTouch'  => true,
@@ -38,7 +40,12 @@ class BrowscapPhp extends AbstractBrowscap
         'bot' => [
             'isBot' => true,
             'name'  => true,
-            'type'  => false,
+            'type'  => true,
         ],
     ];
+
+    public function __construct(Browscap $parser)
+    {
+        parent::__construct($parser, 'FULL');
+    }
 }

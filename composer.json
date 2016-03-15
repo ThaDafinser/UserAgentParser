@@ -29,16 +29,21 @@
         
         "get_browser",
         "browscap",
+        "donatj",
+        "jenssegers",
         "piwik",
         "sinergi",
+        "ua-parser",
         "whichbrowser",
         "woothee",
         "wurfl",
         
-        "udger",
-        "useragentapi",
-        "useragentstring",
-        "whatismybrowser"
+        "DeviceAtlas",
+        "NeutrinoApiCom",
+        "UdgerCom",
+        "UserAgentApiCom",
+        "UserAgentStringCom",
+        "WhatIsMyBrowserCom"
     ],
     
     "license": "MIT",
@@ -63,7 +68,7 @@
     },
     
     "require": {
-        "php": ">=5.5",
+        "php": "~5.6|~7.0",
         "guzzlehttp/guzzle": "^6.1"
     },
     
@@ -80,19 +85,19 @@
     },
     
     "require-dev": {
-        "phpunit/PHPUnit": "^4.0|^5.0",
+        "phpunit/PHPUnit": "^5.0",
         "fabpot/php-cs-fixer": "^1.11",
         
         "browscap/browscap-php": "dev-master",
         "donatj/phpuseragentparser": "^0.5.0",
         "jenssegers/agent": "^2.3",
-        "mobiledetect/mobiledetectlib": ">2.6.8,<3",
+        "mobiledetect/mobiledetectlib": ">2.7.5,<3",
         "piwik/device-detector": "^3.6",
         "sinergi/browser-detector": "^5.1",
         "ua-parser/uap-php": ">=3.4.3,<4.0",
         "whichbrowser/parser": ">=2.0.10,<3.0",
         "woothee/woothee": "^1.2",
         "mimmi20/wurfl": "^1.6",
-        "zsxsoft/php-useragent": "dev-master"
+        "zsxsoft/php-useragent": ">=1.1,<1.2"
     }
 }

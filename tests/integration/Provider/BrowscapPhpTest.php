@@ -21,6 +21,8 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $browscap->setCache($cache);
         $browscap->setLoader($loader);
 
+        $browscap->getCache()->setItem('browscap.type', '', false);
+
         return $browscap;
     }
 

@@ -97,7 +97,7 @@
         "ua-parser/uap-php": ">=3.4.3,<4.0",
         "whichbrowser/parser": ">=2.0.10,<3.0",
         "woothee/woothee": "^1.2",
-        "mimmi20/wurfl": "^1.6",
+        "mimmi20/wurfl": "^1.6.4",
         "zsxsoft/php-useragent": ">=1.1,<1.2"
     }
 }

@@ -60,6 +60,8 @@ class DonatjUAParser extends AbstractProvider
         ],
     ];
 
+    private $functionName = '\parse_user_agent';
+
     public function __construct()
     {
         if (! file_exists('vendor/' . $this->getPackageName() . '/composer.json')) {
@@ -100,7 +102,9 @@ class DonatjUAParser extends AbstractProvider
 
     public function parse($userAgent, array $headers = [])
     {
-        $resultRaw = parse_user_agent($userAgent);
+        $functionName = $this->functionName;
+
+        $resultRaw = $functionName($userAgent);
 
         if ($this->hasResult($resultRaw) !== true) {
             throw new NoResultFoundException('No result found for user agent: ' . $userAgent);

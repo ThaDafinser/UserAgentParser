@@ -133,6 +133,11 @@ namespace UserAgentParserTest\Unit\Provider
 
             $provider = new DonatjUAParser();
 
+            $reflection = new \ReflectionClass($provider);
+            $property   = $reflection->getProperty('functionName');
+            $property->setAccessible(true);
+            $property->setValue($provider, '\UserAgentParser\Provider\parse_user_agent');
+
             $result = $provider->parse('A real user agent...');
         }
 
@@ -145,6 +150,11 @@ namespace UserAgentParserTest\Unit\Provider
             self::$version = '3.0.1';
 
             $provider = new DonatjUAParser();
+
+            $reflection = new \ReflectionClass($provider);
+            $property   = $reflection->getProperty('functionName');
+            $property->setAccessible(true);
+            $property->setValue($provider, '\UserAgentParser\Provider\parse_user_agent');
 
             $result = $provider->parse('A real user agent...');
 

@@ -82,4 +82,170 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $this->assertTrue($class->hasMethod('getModel'), 'method getModel() does not exist anymore');
         $this->assertTrue($class->hasMethod('getManufacturer'), 'method getManufacturer() does not exist anymore');
     }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFound()
+    {
+        $provider = new WhichBrowser();
+
+        $result = $provider->parse('...');
+    }
+
+    public function testRealResultBot()
+    {
+        $provider = new WhichBrowser();
+
+        $result = $provider->parse('Googlebot/2.1 (+http://www.google.com/bot.html)');
+        $this->assertEquals([
+            'browser' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'renderingEngine' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'operatingSystem' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+            'bot' => [
+                'isBot' => true,
+                'name'  => 'Googlebot',
+                'type'  => null,
+            ],
+        ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'browser'   => [
+                'name'    => 'Googlebot',
+                'version' => '2.1',
+            ],
+            'device'    => [
+                'type' => 'bot',
+            ],
+        ], $rawResult);
+    }
+
+    public function testRealResultDevice()
+    {
+        $provider = new WhichBrowser();
+
+        $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
+        $this->assertEquals([
+            'browser' => [
+                'name'    => 'Safari',
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'renderingEngine' => [
+                'name'    => 'Webkit',
+                'version' => [
+                    'major' => 534,
+                    'minor' => 46,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => '534.46',
+                ],
+            ],
+            'operatingSystem' => [
+                'name'    => 'iOS',
+                'version' => [
+                    'major' => 5,
+                    'minor' => 0,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => '5.0',
+                ],
+            ],
+            'device' => [
+                'model' => 'iPhone',
+                'brand' => 'Apple',
+                'type'  => 'mobile:smart',
+
+                'isMobile' => true,
+                'isTouch'  => null,
+            ],
+            'bot' => [
+                'isBot' => null,
+                'name'  => null,
+                'type'  => null,
+            ],
+        ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'browser'   => [
+                'name'    => 'Safari',
+                'version' => '5.1',
+                'type'    => 'browser',
+            ],
+            'engine' => [
+                'name'    => 'Webkit',
+                'version' => '534.46',
+            ],
+            'os' => [
+                'name'    => 'iOS',
+                'version' => '5.0',
+            ],
+            'device'    => [
+                'type'         => 'mobile',
+                'subtype'      => 'smart',
+                'manufacturer' => 'Apple',
+                'model'        => 'iPhone',
+            ],
+        ], $rawResult);
+    }
 }

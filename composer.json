@@ -75,6 +75,7 @@
     "suggest": {
         "browscap/browscap-php": "Needed to use Provider\\BrowscapPhp",
         "donatj/phpuseragentparser": "Needed to use Provider\\DonatjUAParser",
+        "jenssegers/agent": "Needed to use Provider\\JenssegersAgent",
         "piwik/device-detector": "Needed to use Provider\\PiwikDeviceDetector",
         "sinergi/browser-detector": "Needed to use Provider\\SinergiBrowserDetector",
         "ua-parser/uap-php": "Needed to use Provider\\UAParser",
@@ -93,11 +94,15 @@
         "jenssegers/agent": "^2.3",
         "mobiledetect/mobiledetectlib": ">2.7.5,<3",
         "piwik/device-detector": "^3.6",
-        "sinergi/browser-detector": "^5.1",
+        "sinergi/browser-detector": "^6.0",
         "ua-parser/uap-php": ">=3.4.3,<4.0",
         "whichbrowser/parser": ">=2.0.10,<3.0",
         "woothee/woothee": "^1.2",
-        "mimmi20/wurfl": "^1.6",
+        
+        "mimmi20/wurfl": "^1.6.4",
+        "mimmi20/wurfl-storage": "^1.0.3",
+        "mimmi20/wurfl-virtual-capability": "^1.6.4",
+        
         "zsxsoft/php-useragent": ">=1.1,<1.2"
     }
 }

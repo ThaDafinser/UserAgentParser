@@ -110,13 +110,11 @@ class Wurfl extends AbstractProvider
     public function getVersion()
     {
         $version      = $this->getParser()->getWurflInfo()->version;
-        $versionParts = explode(' - ', $version);
 
-        if (count($versionParts) > 1) {
-            $versionPart = $versionParts[0];
-            $versionPart = str_replace('API', '', $versionPart);
+        preg_match("/\d+(?:\.\d+)+/", $version, $result);
 
-            return trim($versionPart);
+        if (isset($result[0])) {
+            return $result[0];
         }
 
         return;

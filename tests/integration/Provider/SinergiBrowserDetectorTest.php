@@ -120,6 +120,29 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
                 'type'  => null,
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+
+        $this->assertInternalType('array', $rawResult);
+        $this->assertArrayHasKey('browser', $rawResult);
+        $this->assertArrayHasKey('operatingSystem', $rawResult);
+        $this->assertArrayHasKey('device', $rawResult);
+
+        $this->assertInstanceOf('Sinergi\BrowserDetector\Browser', $rawResult['browser']);
+        $this->assertObjectHasAttribute('name', $rawResult['browser']);
+        $this->assertObjectHasAttribute('version', $rawResult['browser']);
+        $this->assertObjectHasAttribute('isRobot', $rawResult['browser']);
+
+        $this->assertInstanceOf('Sinergi\BrowserDetector\Os', $rawResult['operatingSystem']);
+        $this->assertObjectHasAttribute('name', $rawResult['operatingSystem']);
+        $this->assertObjectHasAttribute('version', $rawResult['operatingSystem']);
+        $this->assertObjectHasAttribute('isMobile', $rawResult['operatingSystem']);
+
+        $this->assertInstanceOf('Sinergi\BrowserDetector\Device', $rawResult['device']);
+        $this->assertObjectHasAttribute('name', $rawResult['device']);
     }
 
     public function testRealResultDevice()

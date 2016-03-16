@@ -74,5 +74,51 @@ class ZsxsoftTest extends AbstractProviderTestCase
                 'type'  => null,
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'browser' => [
+                'link'    => 'http://www.apple.com/safari/',
+                'title'   => 'Safari 5.1',
+                'name'    => 'Safari',
+                'version' => '5.1',
+                'code'    => 'safari',
+                'image'   => 'img/16/browser/safari.png',
+            ],
+            'os' => [
+                'link'    => 'http://www.apple.com/macosx/',
+                'name'    => 'Mac OS X',
+                'version' => '',
+                'code'    => 'mac-3',
+                'x64'     => false,
+                'title'   => 'Mac OS X',
+                'type'    => 'os',
+                'dir'     => 'os',
+                'image'   => 'img/16/os/mac-3.png',
+            ],
+            'device' => [
+                'link'  => 'http://www.apple.com/iphone',
+                'title' => 'Apple iPhone iOS 5.0',
+                'model' => 'iPhone iOS 5.0',
+                'brand' => 'Apple',
+                'code'  => 'iphone',
+                'dir'   => 'device',
+                'type'  => 'device',
+                'image' => 'img/16/device/iphone.png',
+            ],
+            'platform' => [
+                'link'  => 'http://www.apple.com/iphone',
+                'title' => 'Apple iPhone iOS 5.0',
+                'model' => 'iPhone iOS 5.0',
+                'brand' => 'Apple',
+                'code'  => 'iphone',
+                'dir'   => 'device',
+                'type'  => 'device',
+                'image' => 'img/16/device/iphone.png',
+            ],
+        ], $rawResult);
     }
 }

@@ -80,5 +80,15 @@ class DonatjUAParserTest extends AbstractProviderTestCase
             'browser'  => 'Chrome',
             'version'  => '8.0.552.339',
         ], $result->getProviderResultRaw());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'platform' => 'Chrome OS',
+            'browser'  => 'Chrome',
+            'version'  => '8.0.552.339',
+        ], $rawResult);
     }
 }

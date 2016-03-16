@@ -1,28 +1,58 @@
 <?php
 namespace UserAgentParserTest\Integration\Provider;
 
-use BrowscapPHP\Browscap;
 use UserAgentParser\Provider\BrowscapFull;
 
 /**
  * @coversNothing
  */
-class BrowscapFullTest extends AbstractProviderTestCase
+class BrowscapFullTest extends AbstractBrowscapTestCase
 {
-    private function getParserWithWarmCache($type)
+    public function testMethodParse()
     {
-        $filename = 'php_browscap.ini';
-        if ($type != '') {
-            $filename = $type . '_' . $filename;
-        }
+        $provider = new BrowscapFull($this->getParserWithWarmCache('full'));
+        $parser   = $provider->getParser();
 
-        $cache = new \WurflCache\Adapter\Memory();
+        /*
+         * test method exists
+         */
+        $class = new \ReflectionClass($parser);
+        $this->assertTrue($class->hasMethod('getBrowser'), 'method getBrowser() does not exist anymore');
+        /*
+         * test paramters
+         */
+        $method     = $class->getMethod('getBrowser');
+        $parameters = $method->getParameters();
+        $this->assertEquals(1, count($parameters));
+    }
 
-        $browscap = new Browscap();
-        $browscap->setCache($cache);
-        $browscap->convertFile('tests/resources/browscap/' . $filename);
+    public function testMethodsResult()
+    {
+        $provider = new BrowscapFull($this->getParserWithWarmCache('full'));
+        $parser   = $provider->getParser();
 
-        return $browscap;
+        /* @var $result \stdClass */
+        $result = $parser->getBrowser('A real user agent...');
+
+        $this->assertInstanceOf('stdClass', $result);
+        $this->assertObjectHasAttribute('crawler', $result);
+        $this->assertObjectHasAttribute('issyndicationreader', $result);
+
+        $this->assertObjectHasAttribute('browser', $result);
+        $this->assertObjectHasAttribute('browser_type', $result);
+        $this->assertObjectHasAttribute('version', $result);
+
+        $this->assertObjectHasAttribute('renderingengine_name', $result);
+        $this->assertObjectHasAttribute('renderingengine_version', $result);
+
+        $this->assertObjectHasAttribute('platform', $result);
+        $this->assertObjectHasAttribute('platform_version', $result);
+
+        $this->assertObjectHasAttribute('device_name', $result);
+        $this->assertObjectHasAttribute('device_brand_name', $result);
+        $this->assertObjectHasAttribute('device_type', $result);
+        $this->assertObjectHasAttribute('ismobiledevice', $result);
+        $this->assertObjectHasAttribute('device_pointing_method', $result);
     }
 
     /**
@@ -94,6 +124,11 @@ class BrowscapFullTest extends AbstractProviderTestCase
 
         $rawResult = $result->getProviderResultRaw();
         $this->assertInstanceOf('stdClass', $rawResult);
+
+        $this->assertObjectHasAttribute('browser_name_regex', $rawResult);
+        $this->assertObjectHasAttribute('parent', $rawResult);
+        $this->assertObjectHasAttribute('browser', $rawResult);
+        $this->assertObjectHasAttribute('crawler', $rawResult);
     }
 
     public function testRealResultDevice()

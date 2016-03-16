@@ -2,49 +2,13 @@
 namespace UserAgentParserTest\Integration\Provider;
 
 use BrowscapPHP\Browscap;
-use BrowscapPHP\Helper\IniLoader;
 use UserAgentParser\Provider\BrowscapLite;
 
 /**
  * @coversNothing
  */
-class BrowscapLiteTest extends AbstractProviderTestCase
+class BrowscapLiteTest extends AbstractBrowscapTestCase
 {
-    private function getParserWithWarmCache($type)
-    {
-        $filename = 'php_browscap.ini';
-        if ($type != '') {
-            $filename = $type . '_' . $filename;
-        }
-
-        $cache = new \WurflCache\Adapter\Memory();
-
-        $browscap = new Browscap();
-        $browscap->setCache($cache);
-        $browscap->convertFile('tests/resources/browscap/' . $filename);
-
-        return $browscap;
-    }
-
-    private function getParserWithColdCache($type)
-    {
-        $filename = 'php_browscap.ini';
-        if ($type != '') {
-            $filename = $type . '_' . $filename;
-        }
-
-        $loader = new IniLoader();
-        $loader->setLocalFile('tests/resources/browscap/' . $filename);
-
-        $cache = new \WurflCache\Adapter\Memory();
-
-        $browscap = new Browscap();
-        $browscap->setCache($cache);
-        $browscap->setLoader($loader);
-
-        return $browscap;
-    }
-
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
@@ -74,10 +38,13 @@ class BrowscapLiteTest extends AbstractProviderTestCase
     {
         $parser = $this->getParserWithColdCache('lite');
 
-        $result = $parser->getBrowser('something');
+        $result = $parser->getBrowser('Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/48.0.1349.2 Chrome/25.0.1349.2 Safari/537.42');
 
-        //verify that browscap returned something
+        // verify that browscap returned something
         $this->assertInstanceOf('stdClass', $result);
+        // the return value is the default browser, since there is no cache
+        // https://github.com/browscap/browscap-php/issues/150#issuecomment-197197655
+        $this->assertEquals('Default Browser', $result->browser);
 
         $provider = new BrowscapLite($parser);
 
@@ -89,6 +56,7 @@ class BrowscapLiteTest extends AbstractProviderTestCase
         $provider = new BrowscapLite($this->getParserWithWarmCache('lite'));
 
         $result = $provider->parse('Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/48.0.1349.2 Chrome/25.0.1349.2 Safari/537.42');
+
         $this->assertEquals([
             'browser' => [
                 'name'    => 'Chromium',

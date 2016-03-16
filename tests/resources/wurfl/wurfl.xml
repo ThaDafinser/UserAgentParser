@@ -1,24 +1,1356 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wurfl>
-	<version>
-		<ver>for API 1.6.4, db.scientiamobile.com - 2015-12-03 14:33:12</ver>
-		<last_updated>2015-12-03 14:35:41 -0500</last_updated>
-		<official_url>http://wurfl.sourceforge.net/</official_url>
-		<maintainers>
-			<maintainer name="Luca Passani" email="luca at scientiamobile dot com"
-				home_page="http://www.scientiamobile.com" />
-			<maintainer name="Steve Kamerman" email="steve at scientiamobile dot com"
-				home_page="http://www.scientiamobile.com" />
-		</maintainers>
-		<authors>
-			<author name="Luca Passani" email="luca at scientiamobile dot com"
-				home_page="http://www.scientiamobile.com" />
-		</authors>
-		<statement>asdf</statement>
-	</version>
+<version>
+        <ver>for API 1.6.4, db.scientiamobile.com - 2015-12-03 14:33:12</ver>
+        <last_updated>2015-12-03 14:35:41 -0500</last_updated>
+        <official_url>http://wurfl.sourceforge.net/</official_url>
+        <maintainers>
+            <maintainer name="Luca Passani" email="luca at scientiamobile dot com" home_page="http://www.scientiamobile.com"/>
+            <maintainer name="Steve Kamerman" email="steve at scientiamobile dot com" home_page="http://www.scientiamobile.com"/>
+        </maintainers>
+        <authors>
+            <author name="Luca Passani" email="luca at scientiamobile dot com" home_page="http://www.scientiamobile.com"/>
+        </authors>
+ </version>
+    
+<devices>
+   <device id="generic" user_agent="" fall_back="root">
+    <group id="product_info">
+      <capability name="brand_name" value=""/>
+      <capability name="model_name" value=""/>
+      <capability name="unique" value="true"/>
+      <capability name="ununiqueness_handler" value=""/>
+      <capability name="is_wireless_device" value="false"/>
+      <capability name="device_claims_web_support" value="false"/>
+      <capability name="has_qwerty_keyboard" value="false"/>
+      <capability name="can_skip_aligned_link_row" value="false"/>
+      <capability name="uaprof" value=""/>
+      <capability name="uaprof2" value=""/>
+      <capability name="uaprof3" value=""/>
+      <capability name="nokia_series" value="0"/>
+      <capability name="nokia_edition" value="0"/>
+      <capability name="device_os" value=""/>
+      <capability name="mobile_browser" value=""/>
+      <capability name="mobile_browser_version" value=""/>
+      <capability name="device_os_version" value=""/>
+      <capability name="pointing_method" value=""/>
+      <capability name="release_date" value="2002_january"/>
+      <capability name="marketing_name" value=""/>
+      <capability name="model_extra_info" value=""/>
+      <capability name="nokia_feature_pack" value="0"/>
+      <capability name="can_assign_phone_number" value="false"/>
+      <capability name="is_tablet" value="false"/>
+      <capability name="manufacturer_name" value=""/>
+      <capability name="is_bot" value="false"/>
+      <capability name="is_google_glass" value="false"/>
+    </group>
+    <group id="wml_ui">
+      <capability name="proportional_font" value="false"/>
+      <capability name="built_in_back_button_support" value="false"/>
+      <capability name="card_title_support" value="true"/>
+      <capability name="softkey_support" value="false"/>
+      <capability name="table_support" value="true"/>
+      <capability name="numbered_menus" value="false"/>
+      <capability name="menu_with_select_element_recommended" value="false"/>
+      <capability name="menu_with_list_of_links_recommended" value="true"/>
+      <capability name="icons_on_menu_items_support" value="false"/>
+      <capability name="break_list_of_links_with_br_element_recommended" value="true"/>
+      <capability name="access_key_support" value="false"/>
+      <capability name="wrap_mode_support" value="false"/>
+      <capability name="times_square_mode_support" value="false"/>
+      <capability name="deck_prefetch_support" value="false"/>
+      <capability name="elective_forms_recommended" value="true"/>
+      <capability name="wizards_recommended" value="false"/>
+      <capability name="image_as_link_support" value="false"/>
+      <capability name="insert_br_element_after_widget_recommended" value="false"/>
+      <capability name="wml_can_display_images_and_text_on_same_line" value="false"/>
+      <capability name="wml_displays_image_in_center" value="false"/>
+      <capability name="opwv_wml_extensions_support" value="false"/>
+      <capability name="wml_make_phone_call_string" value="wtai://wp/mc;"/>
+    </group>
+    <group id="chtml_ui">
+      <capability name="chtml_display_accesskey" value="false"/>
+      <capability name="emoji" value="false"/>
+      <capability name="chtml_can_display_images_and_text_on_same_line" value="false"/>
+      <capability name="chtml_displays_image_in_center" value="false"/>
+      <capability name="imode_region" value="none"/>
+      <capability name="chtml_make_phone_call_string" value="tel:"/>
+      <capability name="chtml_table_support" value="false"/>
+    </group>
+    <group id="xhtml_ui">
+      <capability name="xhtml_honors_bgcolor" value="false"/>
+      <capability name="xhtml_supports_forms_in_table" value="false"/>
+      <capability name="xhtml_support_wml2_namespace" value="false"/>
+      <capability name="xhtml_autoexpand_select" value="false"/>
+      <capability name="xhtml_select_as_dropdown" value="false"/>
+      <capability name="xhtml_select_as_radiobutton" value="false"/>
+      <capability name="xhtml_select_as_popup" value="false"/>
+      <capability name="xhtml_display_accesskey" value="false"/>
+      <capability name="xhtml_supports_invisible_text" value="false"/>
+      <capability name="xhtml_supports_inline_input" value="false"/>
+      <capability name="xhtml_supports_monospace_font" value="false"/>
+      <capability name="xhtml_supports_table_for_layout" value="false"/>
+      <capability name="xhtml_supports_css_cell_table_coloring" value="false"/>
+      <capability name="xhtml_format_as_css_property" value="false"/>
+      <capability name="xhtml_format_as_attribute" value="false"/>
+      <capability name="xhtml_nowrap_mode" value="false"/>
+      <capability name="xhtml_marquee_as_css_property" value="false"/>
+      <capability name="xhtml_readable_background_color1" value="#FFFFFF"/>
+      <capability name="xhtml_readable_background_color2" value="#FFFFFF"/>
+      <capability name="xhtml_allows_disabled_form_elements" value="false"/>
+      <capability name="xhtml_document_title_support" value="true"/>
+      <capability name="xhtml_preferred_charset" value="utf8"/>
+      <capability name="opwv_xhtml_extensions_support" value="false"/>
+      <capability name="xhtml_make_phone_call_string" value="none"/>
+      <capability name="xhtmlmp_preferred_mime_type" value="application/vnd.wap.xhtml+xml"/>
+      <capability name="xhtml_table_support" value="false"/>
+      <capability name="xhtml_send_sms_string" value="none"/>
+      <capability name="xhtml_send_mms_string" value="none"/>
+      <capability name="xhtml_file_upload" value="supported"/>
+      <capability name="cookie_support" value="true"/>
+      <capability name="accept_third_party_cookie" value="true"/>
+      <capability name="xhtml_supports_iframe" value="full"/>
+      <capability name="xhtml_avoid_accesskeys" value="false"/>
+      <capability name="xhtml_can_embed_video" value="play_and_stop"/>
+    </group>
+    <group id="ajax">
+      <capability name="ajax_support_javascript" value="false"/>
+      <capability name="ajax_manipulate_css" value="true"/>
+      <capability name="ajax_support_getelementbyid" value="true"/>
+      <capability name="ajax_support_inner_html" value="true"/>
+      <capability name="ajax_xhr_type" value="standard"/>
+      <capability name="ajax_manipulate_dom" value="true"/>
+      <capability name="ajax_support_events" value="true"/>
+      <capability name="ajax_support_event_listener" value="true"/>
+      <capability name="ajax_preferred_geoloc_api" value="none"/>
+    </group>
+    <group id="markup">
+      <capability name="xhtml_support_level" value="4"/>
+      <capability name="preferred_markup" value="html_web_4_0"/>
+      <capability name="wml_1_1" value="false"/>
+      <capability name="wml_1_2" value="false"/>
+      <capability name="wml_1_3" value="false"/>
+      <capability name="html_wi_w3_xhtmlbasic" value="true"/>
+      <capability name="html_wi_oma_xhtmlmp_1_0" value="false"/>
+      <capability name="html_wi_imode_html_1" value="false"/>
+      <capability name="html_wi_imode_html_2" value="false"/>
+      <capability name="html_wi_imode_html_3" value="false"/>
+      <capability name="html_wi_imode_html_4" value="false"/>
+      <capability name="html_wi_imode_html_5" value="false"/>
+      <capability name="html_wi_imode_htmlx_1" value="false"/>
+      <capability name="html_wi_imode_htmlx_1_1" value="false"/>
+      <capability name="html_wi_imode_compact_generic" value="false"/>
+      <capability name="html_web_3_2" value="true"/>
+      <capability name="html_web_4_0" value="true"/>
+      <capability name="voicexml" value="false"/>
+      <capability name="multipart_support" value="false"/>
+    </group>
+    <group id="cache">
+      <capability name="total_cache_disable_support" value="false"/>
+      <capability name="time_to_live_support" value="false"/>
+    </group>
+    <group id="display">
+      <capability name="resolution_width" value="800"/>
+      <capability name="resolution_height" value="600"/>
+      <capability name="columns" value="600"/>
+      <capability name="max_image_width" value="600"/>
+      <capability name="max_image_height" value="120"/>
+      <capability name="rows" value="200"/>
+      <capability name="physical_screen_width" value="400"/>
+      <capability name="physical_screen_height" value="400"/>
+      <capability name="dual_orientation" value="false"/>
+      <capability name="density_class" value="1.0"/>
+    </group>
+    <group id="image_format">
+      <capability name="wbmp" value="false"/>
+      <capability name="bmp" value="true"/>
+      <capability name="epoc_bmp" value="false"/>
+      <capability name="gif_animated" value="true"/>
+      <capability name="jpg" value="true"/>
+      <capability name="png" value="true"/>
+      <capability name="tiff" value="false"/>
+      <capability name="transparent_png_alpha" value="false"/>
+      <capability name="transparent_png_index" value="false"/>
+      <capability name="svgt_1_1" value="true"/>
+      <capability name="svgt_1_1_plus" value="false"/>
+      <capability name="greyscale" value="false"/>
+      <capability name="gif" value="true"/>
+      <capability name="colors" value="65535"/>
+      <capability name="webp_lossy_support" value="false"/>
+      <capability name="webp_lossless_support" value="false"/>
+    </group>
+    <group id="bugs">
+      <capability name="post_method_support" value="true"/>
+      <capability name="basic_authentication_support" value="true"/>
+      <capability name="empty_option_value_support" value="true"/>
+      <capability name="emptyok" value="false"/>
+    </group>
+    <group id="wta">
+      <capability name="nokia_voice_call" value="false"/>
+      <capability name="wta_voice_call" value="false"/>
+      <capability name="wta_phonebook" value="false"/>
+      <capability name="wta_misc" value="false"/>
+      <capability name="wta_pdc" value="false"/>
+    </group>
+    <group id="security">
+      <capability name="https_support" value="true"/>
+      <capability name="phone_id_provided" value="false"/>
+    </group>
+    <group id="bearer">
+      <capability name="max_data_rate" value="3200"/>
+      <capability name="wifi" value="true"/>
+      <capability name="sdio" value="false"/>
+      <capability name="vpn" value="false"/>
+      <capability name="has_cellular_radio" value="true"/>
+    </group>
+    <group id="storage">
+      <capability name="max_deck_size" value="4000"/>
+      <capability name="max_url_length_in_requests" value="128"/>
+      <capability name="max_url_length_homepage" value="0"/>
+      <capability name="max_url_length_bookmark" value="0"/>
+      <capability name="max_url_length_cached_page" value="0"/>
+      <capability name="max_no_of_connection_settings" value="0"/>
+      <capability name="max_no_of_bookmarks" value="0"/>
+      <capability name="max_length_of_username" value="0"/>
+      <capability name="max_length_of_password" value="0"/>
+      <capability name="max_object_size" value="0"/>
+    </group>
+    <group id="object_download">
+      <capability name="downloadfun_support" value="false"/>
+      <capability name="directdownload_support" value="false"/>
+      <capability name="inline_support" value="false"/>
+      <capability name="oma_support" value="false"/>
+      <capability name="ringtone" value="false"/>
+      <capability name="ringtone_3gpp" value="false"/>
+      <capability name="ringtone_midi_monophonic" value="false"/>
+      <capability name="ringtone_midi_polyphonic" value="false"/>
+      <capability name="ringtone_imelody" value="false"/>
+      <capability name="ringtone_digiplug" value="false"/>
+      <capability name="ringtone_compactmidi" value="false"/>
+      <capability name="ringtone_mmf" value="false"/>
+      <capability name="ringtone_rmf" value="false"/>
+      <capability name="ringtone_xmf" value="false"/>
+      <capability name="ringtone_amr" value="false"/>
+      <capability name="ringtone_awb" value="false"/>
+      <capability name="ringtone_aac" value="false"/>
+      <capability name="ringtone_wav" value="false"/>
+      <capability name="ringtone_mp3" value="false"/>
+      <capability name="ringtone_spmidi" value="false"/>
+      <capability name="ringtone_qcelp" value="false"/>
+      <capability name="ringtone_voices" value="1"/>
+      <capability name="ringtone_df_size_limit" value="0"/>
+      <capability name="ringtone_directdownload_size_limit" value="0"/>
+      <capability name="ringtone_inline_size_limit" value="0"/>
+      <capability name="ringtone_oma_size_limit" value="0"/>
+      <capability name="wallpaper" value="false"/>
+      <capability name="wallpaper_max_width" value="0"/>
+      <capability name="wallpaper_max_height" value="0"/>
+      <capability name="wallpaper_preferred_width" value="0"/>
+      <capability name="wallpaper_preferred_height" value="0"/>
+      <capability name="wallpaper_resize" value="none"/>
+      <capability name="wallpaper_wbmp" value="false"/>
+      <capability name="wallpaper_bmp" value="false"/>
+      <capability name="wallpaper_gif" value="false"/>
+      <capability name="wallpaper_jpg" value="false"/>
+      <capability name="wallpaper_png" value="false"/>
+      <capability name="wallpaper_tiff" value="false"/>
+      <capability name="wallpaper_greyscale" value="false"/>
+      <capability name="wallpaper_colors" value="2"/>
+      <capability name="wallpaper_df_size_limit" value="0"/>
+      <capability name="wallpaper_directdownload_size_limit" value="0"/>
+      <capability name="wallpaper_inline_size_limit" value="0"/>
+      <capability name="wallpaper_oma_size_limit" value="0"/>
+      <capability name="screensaver" value="false"/>
+      <capability name="screensaver_max_width" value="0"/>
+      <capability name="screensaver_max_height" value="0"/>
+      <capability name="screensaver_preferred_width" value="0"/>
+      <capability name="screensaver_preferred_height" value="0"/>
+      <capability name="screensaver_resize" value="none"/>
+      <capability name="screensaver_wbmp" value="false"/>
+      <capability name="screensaver_bmp" value="false"/>
+      <capability name="screensaver_gif" value="false"/>
+      <capability name="screensaver_jpg" value="false"/>
+      <capability name="screensaver_png" value="false"/>
+      <capability name="screensaver_greyscale" value="false"/>
+      <capability name="screensaver_colors" value="2"/>
+      <capability name="screensaver_df_size_limit" value="0"/>
+      <capability name="screensaver_directdownload_size_limit" value="0"/>
+      <capability name="screensaver_inline_size_limit" value="0"/>
+      <capability name="screensaver_oma_size_limit" value="0"/>
+      <capability name="picture" value="false"/>
+      <capability name="picture_max_width" value="0"/>
+      <capability name="picture_max_height" value="0"/>
+      <capability name="picture_preferred_width" value="0"/>
+      <capability name="picture_preferred_height" value="0"/>
+      <capability name="picture_resize" value="none"/>
+      <capability name="picture_wbmp" value="false"/>
+      <capability name="picture_bmp" value="false"/>
+      <capability name="picture_gif" value="false"/>
+      <capability name="picture_jpg" value="false"/>
+      <capability name="picture_png" value="false"/>
+      <capability name="picture_greyscale" value="false"/>
+      <capability name="picture_colors" value="2"/>
+      <capability name="picture_df_size_limit" value="0"/>
+      <capability name="picture_directdownload_size_limit" value="0"/>
+      <capability name="picture_inline_size_limit" value="0"/>
+      <capability name="picture_oma_size_limit" value="0"/>
+      <capability name="video" value="false"/>
+    </group>
+    <group id="drm">
+      <capability name="oma_v_1_0_forwardlock" value="false"/>
+      <capability name="oma_v_1_0_combined_delivery" value="false"/>
+      <capability name="oma_v_1_0_separate_delivery" value="false"/>
+    </group>
+    <group id="streaming">
+      <capability name="streaming_video" value="false"/>
+      <capability name="streaming_3gpp" value="false"/>
+      <capability name="streaming_mp4" value="false"/>
+      <capability name="streaming_mov" value="false"/>
+      <capability name="streaming_video_size_limit" value="0"/>
+      <capability name="streaming_real_media" value="none"/>
+      <capability name="streaming_flv" value="false"/>
+      <capability name="streaming_3g2" value="false"/>
+      <capability name="streaming_vcodec_h263_0" value="-1"/>
+      <capability name="streaming_vcodec_h263_3" value="-1"/>
+      <capability name="streaming_vcodec_mpeg4_sp" value="-1"/>
+      <capability name="streaming_vcodec_mpeg4_asp" value="-1"/>
+      <capability name="streaming_vcodec_h264_bp" value="-1"/>
+      <capability name="streaming_acodec_amr" value="none"/>
+      <capability name="streaming_acodec_aac" value="none"/>
+      <capability name="streaming_wmv" value="none"/>
+      <capability name="streaming_preferred_protocol" value="rtsp"/>
+      <capability name="streaming_preferred_http_protocol" value="none"/>
+    </group>
+    <group id="wap_push">
+      <capability name="wap_push_support" value="false"/>
+      <capability name="connectionless_service_indication" value="false"/>
+      <capability name="connectionless_service_load" value="false"/>
+      <capability name="connectionless_cache_operation" value="false"/>
+      <capability name="connectionoriented_unconfirmed_service_indication" value="false"/>
+      <capability name="connectionoriented_unconfirmed_service_load" value="false"/>
+      <capability name="connectionoriented_unconfirmed_cache_operation" value="false"/>
+      <capability name="connectionoriented_confirmed_service_indication" value="false"/>
+      <capability name="connectionoriented_confirmed_service_load" value="false"/>
+      <capability name="connectionoriented_confirmed_cache_operation" value="false"/>
+      <capability name="utf8_support" value="false"/>
+      <capability name="ascii_support" value="false"/>
+      <capability name="iso8859_support" value="false"/>
+      <capability name="expiration_date" value="false"/>
+    </group>
+    <group id="j2me">
+      <capability name="j2me_cldc_1_0" value="false"/>
+      <capability name="j2me_cldc_1_1" value="false"/>
+      <capability name="j2me_midp_1_0" value="false"/>
+      <capability name="j2me_midp_2_0" value="false"/>
+      <capability name="doja_1_0" value="false"/>
+      <capability name="doja_1_5" value="false"/>
+      <capability name="doja_2_0" value="false"/>
+      <capability name="doja_2_1" value="false"/>
+      <capability name="doja_2_2" value="false"/>
+      <capability name="doja_3_0" value="false"/>
+      <capability name="doja_3_5" value="false"/>
+      <capability name="doja_4_0" value="false"/>
+      <capability name="j2me_jtwi" value="false"/>
+      <capability name="j2me_mmapi_1_0" value="false"/>
+      <capability name="j2me_mmapi_1_1" value="false"/>
+      <capability name="j2me_wmapi_1_0" value="false"/>
+      <capability name="j2me_wmapi_1_1" value="false"/>
+      <capability name="j2me_wmapi_2_0" value="false"/>
+      <capability name="j2me_btapi" value="false"/>
+      <capability name="j2me_3dapi" value="false"/>
+      <capability name="j2me_locapi" value="false"/>
+      <capability name="j2me_nokia_ui" value="false"/>
+      <capability name="j2me_motorola_lwt" value="false"/>
+      <capability name="j2me_siemens_color_game" value="false"/>
+      <capability name="j2me_siemens_extension" value="false"/>
+      <capability name="j2me_heap_size" value="0"/>
+      <capability name="j2me_max_jar_size" value="0"/>
+      <capability name="j2me_storage_size" value="0"/>
+      <capability name="j2me_max_record_store_size" value="0"/>
+      <capability name="j2me_screen_width" value="0"/>
+      <capability name="j2me_screen_height" value="0"/>
+      <capability name="j2me_canvas_width" value="0"/>
+      <capability name="j2me_canvas_height" value="0"/>
+      <capability name="j2me_bits_per_pixel" value="0"/>
+      <capability name="j2me_audio_capture_enabled" value="false"/>
+      <capability name="j2me_video_capture_enabled" value="false"/>
+      <capability name="j2me_photo_capture_enabled" value="false"/>
+      <capability name="j2me_capture_image_formats" value="none"/>
+      <capability name="j2me_http" value="false"/>
+      <capability name="j2me_https" value="false"/>
+      <capability name="j2me_socket" value="false"/>
+      <capability name="j2me_udp" value="false"/>
+      <capability name="j2me_serial" value="false"/>
+      <capability name="j2me_gif" value="false"/>
+      <capability name="j2me_gif89a" value="false"/>
+      <capability name="j2me_jpg" value="false"/>
+      <capability name="j2me_png" value="false"/>
+      <capability name="j2me_bmp" value="false"/>
+      <capability name="j2me_bmp3" value="false"/>
+      <capability name="j2me_wbmp" value="false"/>
+      <capability name="j2me_midi" value="false"/>
+      <capability name="j2me_wav" value="false"/>
+      <capability name="j2me_amr" value="false"/>
+      <capability name="j2me_mp3" value="false"/>
+      <capability name="j2me_mp4" value="false"/>
+      <capability name="j2me_imelody" value="false"/>
+      <capability name="j2me_rmf" value="false"/>
+      <capability name="j2me_au" value="false"/>
+      <capability name="j2me_aac" value="false"/>
+      <capability name="j2me_realaudio" value="false"/>
+      <capability name="j2me_xmf" value="false"/>
+      <capability name="j2me_wma" value="false"/>
+      <capability name="j2me_3gpp" value="false"/>
+      <capability name="j2me_h263" value="false"/>
+      <capability name="j2me_svgt" value="false"/>
+      <capability name="j2me_mpeg4" value="false"/>
+      <capability name="j2me_realvideo" value="false"/>
+      <capability name="j2me_real8" value="false"/>
+      <capability name="j2me_realmedia" value="false"/>
+      <capability name="j2me_left_softkey_code" value="0"/>
+      <capability name="j2me_right_softkey_code" value="0"/>
+      <capability name="j2me_middle_softkey_code" value="0"/>
+      <capability name="j2me_select_key_code" value="0"/>
+      <capability name="j2me_return_key_code" value="0"/>
+      <capability name="j2me_clear_key_code" value="0"/>
+      <capability name="j2me_datefield_no_accepts_null_date" value="false"/>
+      <capability name="j2me_datefield_broken" value="false"/>
+    </group>
+    <group id="mms">
+      <capability name="receiver" value="false"/>
+      <capability name="sender" value="false"/>
+      <capability name="mms_max_size" value="0"/>
+      <capability name="mms_max_height" value="0"/>
+      <capability name="mms_max_width" value="0"/>
+      <capability name="built_in_recorder" value="false"/>
+      <capability name="built_in_camera" value="false"/>
+      <capability name="mms_jpeg_baseline" value="false"/>
+      <capability name="mms_jpeg_progressive" value="false"/>
+      <capability name="mms_gif_static" value="false"/>
+      <capability name="mms_gif_animated" value="false"/>
+      <capability name="mms_png" value="false"/>
+      <capability name="mms_bmp" value="false"/>
+      <capability name="mms_wbmp" value="false"/>
+      <capability name="mms_amr" value="false"/>
+      <capability name="mms_wav" value="false"/>
+      <capability name="mms_midi_monophonic" value="false"/>
+      <capability name="mms_midi_polyphonic" value="false"/>
+      <capability name="mms_midi_polyphonic_voices" value="0"/>
+      <capability name="mms_spmidi" value="false"/>
+      <capability name="mms_mmf" value="false"/>
+      <capability name="mms_mp3" value="false"/>
+      <capability name="mms_evrc" value="false"/>
+      <capability name="mms_qcelp" value="false"/>
+      <capability name="mms_ota_bitmap" value="false"/>
+      <capability name="mms_nokia_wallpaper" value="false"/>
+      <capability name="mms_nokia_operatorlogo" value="false"/>
+      <capability name="mms_nokia_3dscreensaver" value="false"/>
+      <capability name="mms_nokia_ringingtone" value="false"/>
+      <capability name="mms_rmf" value="false"/>
+      <capability name="mms_xmf" value="false"/>
+      <capability name="mms_symbian_install" value="false"/>
+      <capability name="mms_jar" value="false"/>
+      <capability name="mms_jad" value="false"/>
+      <capability name="mms_vcard" value="false"/>
+      <capability name="mms_vcalendar" value="false"/>
+      <capability name="mms_wml" value="false"/>
+      <capability name="mms_wbxml" value="false"/>
+      <capability name="mms_wmlc" value="false"/>
+      <capability name="mms_video" value="false"/>
+      <capability name="mms_mp4" value="false"/>
+      <capability name="mms_3gpp" value="false"/>
+      <capability name="mms_3gpp2" value="false"/>
+      <capability name="mms_max_frame_rate" value="0"/>
+    </group>
+    <group id="sms">
+      <capability name="nokiaring" value="false"/>
+      <capability name="picturemessage" value="false"/>
+      <capability name="operatorlogo" value="false"/>
+      <capability name="largeoperatorlogo" value="false"/>
+      <capability name="callericon" value="false"/>
+      <capability name="nokiavcard" value="false"/>
+      <capability name="nokiavcal" value="false"/>
+      <capability name="sckl_ringtone" value="false"/>
+      <capability name="sckl_operatorlogo" value="false"/>
+      <capability name="sckl_groupgraphic" value="false"/>
+      <capability name="sckl_vcard" value="false"/>
+      <capability name="sckl_vcalendar" value="false"/>
+      <capability name="text_imelody" value="false"/>
+      <capability name="ems" value="false"/>
+      <capability name="ems_variablesizedpictures" value="false"/>
+      <capability name="ems_imelody" value="false"/>
+      <capability name="ems_odi" value="false"/>
+      <capability name="ems_upi" value="false"/>
+      <capability name="ems_version" value="0"/>
+      <capability name="siemens_ota" value="false"/>
+      <capability name="siemens_logo_width" value="101"/>
+      <capability name="siemens_logo_height" value="29"/>
+      <capability name="siemens_screensaver_width" value="101"/>
+      <capability name="siemens_screensaver_height" value="50"/>
+      <capability name="gprtf" value="false"/>
+      <capability name="sagem_v1" value="false"/>
+      <capability name="sagem_v2" value="false"/>
+      <capability name="panasonic" value="false"/>
+      <capability name="sms_enabled" value="true"/>
+    </group>
+    <group id="sound_format">
+      <capability name="wav" value="false"/>
+      <capability name="mmf" value="false"/>
+      <capability name="smf" value="false"/>
+      <capability name="mld" value="false"/>
+      <capability name="midi_monophonic" value="false"/>
+      <capability name="midi_polyphonic" value="false"/>
+      <capability name="sp_midi" value="false"/>
+      <capability name="rmf" value="false"/>
+      <capability name="xmf" value="false"/>
+      <capability name="compactmidi" value="false"/>
+      <capability name="digiplug" value="false"/>
+      <capability name="nokia_ringtone" value="false"/>
+      <capability name="imelody" value="false"/>
+      <capability name="au" value="false"/>
+      <capability name="amr" value="false"/>
+      <capability name="awb" value="false"/>
+      <capability name="aac" value="false"/>
+      <capability name="mp3" value="false"/>
+      <capability name="voices" value="1"/>
+      <capability name="qcelp" value="false"/>
+      <capability name="evrc" value="false"/>
+    </group>
+    <group id="flash_lite">
+      <capability name="flash_lite_version" value=""/>
+      <capability name="fl_wallpaper" value="false"/>
+      <capability name="fl_screensaver" value="false"/>
+      <capability name="fl_standalone" value="false"/>
+      <capability name="fl_browser" value="false"/>
+      <capability name="fl_sub_lcd" value="false"/>
+      <capability name="full_flash_support" value="true"/>
+    </group>
+    <group id="css">
+      <capability name="css_supports_width_as_percentage" value="true"/>
+      <capability name="css_border_image" value="none"/>
+      <capability name="css_rounded_corners" value="none"/>
+      <capability name="css_gradient" value="none"/>
+      <capability name="css_spriting" value="true"/>
+      <capability name="css_gradient_linear" value="none"/>
+    </group>
+    <group id="transcoding">
+      <capability name="is_transcoder" value="false"/>
+      <capability name="transcoder_ua_header" value="user-agent"/>
+    </group>
+    <group id="rss">
+      <capability name="rss_support" value="false"/>
+    </group>
+    <group id="pdf">
+      <capability name="pdf_support" value="true"/>
+    </group>
+    <group id="playback">
+      <capability name="progressive_download" value="true"/>
+      <capability name="playback_vcodec_h263_0" value="-1"/>
+      <capability name="playback_vcodec_h263_3" value="-1"/>
+      <capability name="playback_vcodec_mpeg4_sp" value="-1"/>
+      <capability name="playback_vcodec_mpeg4_asp" value="-1"/>
+      <capability name="playback_vcodec_h264_bp" value="-1"/>
+      <capability name="playback_real_media" value="none"/>
+      <capability name="playback_3gpp" value="false"/>
+      <capability name="playback_3g2" value="false"/>
+      <capability name="playback_mp4" value="false"/>
+      <capability name="playback_mov" value="false"/>
+      <capability name="playback_acodec_amr" value="none"/>
+      <capability name="playback_acodec_aac" value="none"/>
+      <capability name="playback_df_size_limit" value="0"/>
+      <capability name="playback_directdownload_size_limit" value="0"/>
+      <capability name="playback_inline_size_limit" value="0"/>
+      <capability name="playback_oma_size_limit" value="0"/>
+      <capability name="playback_acodec_qcelp" value="false"/>
+      <capability name="playback_wmv" value="none"/>
+      <capability name="hinted_progressive_download" value="false"/>
+    </group>
+    <group id="html_ui">
+      <capability name="html_preferred_dtd" value="html4"/>
+      <capability name="viewport_supported" value="false"/>
+      <capability name="viewport_width" value=""/>
+      <capability name="viewport_userscalable" value=""/>
+      <capability name="viewport_initial_scale" value=""/>
+      <capability name="viewport_maximum_scale" value=""/>
+      <capability name="viewport_minimum_scale" value=""/>
+      <capability name="mobileoptimized" value="false"/>
+      <capability name="handheldfriendly" value="false"/>
+      <capability name="canvas_support" value="none"/>
+      <capability name="image_inlining" value="false"/>
+    </group>
+    <group id="smarttv">
+      <capability name="is_smarttv" value="false"/>
+      <capability name="is_console" value="false"/>
+    </group>
+    <group id="chips">
+      <capability name="nfc_support" value="false"/>
+    </group>
+    <group id="user_experience">
+      <capability name="ux_full_desktop" value="true"/>
+    </group>
+    <group id="third_party">
+      <capability name="jqm_grade" value="A"/>
+      <capability name="is_sencha_touch_ok" value="true"/>
+    </group>
+    <group id="virtual">
+      <capability name="controlcap_is_smartphone" value="default"/>
+      <capability name="controlcap_is_ios" value="default"/>
+      <capability name="controlcap_is_android" value="default"/>
+      <capability name="controlcap_is_robot" value="default"/>
+      <capability name="controlcap_is_app" value="default"/>
+      <capability name="controlcap_advertised_device_os" value="default"/>
+      <capability name="controlcap_advertised_device_os_version" value="default"/>
+      <capability name="controlcap_advertised_browser" value="default"/>
+      <capability name="controlcap_advertised_browser_version" value="default"/>
+      <capability name="controlcap_is_windows_phone" value="default"/>
+      <capability name="controlcap_is_full_desktop" value="default"/>
+      <capability name="controlcap_is_largescreen" value="default"/>
+      <capability name="controlcap_is_mobile" value="default"/>
+      <capability name="controlcap_is_touchscreen" value="default"/>
+      <capability name="controlcap_is_wml_preferred" value="default"/>
+      <capability name="controlcap_is_xhtmlmp_preferred" value="default"/>
+      <capability name="controlcap_is_html_preferred" value="default"/>
+      <capability name="controlcap_form_factor" value="default"/>
+      <capability name="controlcap_complete_device_name" value="default"/>
+    </group>
+  </device>
+  <device id="generic_mobile" user_agent="DO_NOT_MATCH_GENERIC_MOBILE" fall_back="generic">
+    <group id="product_info">
+      <capability name="is_wireless_device" value="true"/>
+      <capability name="can_skip_aligned_link_row" value="false"/>
+      <capability name="pointing_method" value=""/>
+      <capability name="unique" value="true"/>
+      <capability name="device_claims_web_support" value="false"/>
+      <capability name="release_date" value="2002_january"/>
+      <capability name="can_assign_phone_number" value="true"/>
+    </group>
+    <group id="wml_ui">
+      <capability name="card_title_support" value="true"/>
+      <capability name="table_support" value="true"/>
+      <capability name="break_list_of_links_with_br_element_recommended" value="true"/>
+      <capability name="menu_with_list_of_links_recommended" value="true"/>
+      <capability name="elective_forms_recommended" value="true"/>
+    </group>
+    <group id="xhtml_ui">
+      <capability name="accept_third_party_cookie" value="true"/>
+      <capability name="xhtml_make_phone_call_string" value="tel:"/>
+      <capability name="xhtmlmp_preferred_mime_type" value="application/vnd.wap.xhtml+xml"/>
+      <capability name="xhtml_file_upload" value="not_supported"/>
+      <capability name="xhtml_supports_iframe" value="none"/>
+      <capability name="xhtml_can_embed_video" value="none"/>
+    </group>
+    <group id="html_ui">
+      <capability name="canvas_support" value="none"/>
+      <capability name="viewport_supported" value="false"/>
+      <capability name="mobileoptimized" value="false"/>
+      <capability name="viewport_userscalable" value=""/>
+      <capability name="image_inlining" value="false"/>
+      <capability name="handheldfriendly" value="false"/>
+      <capability name="html_preferred_dtd" value="xhtml_mp1"/>
+    </group>
+    <group id="css">
+      <capability name="css_gradient" value="none"/>
+      <capability name="css_border_image" value="none"/>
+      <capability name="css_rounded_corners" value="none"/>
+      <capability name="css_spriting" value="false"/>
+      <capability name="css_supports_width_as_percentage" value="true"/>
+      <capability name="css_gradient_linear" value="none"/>
+    </group>
+    <group id="ajax">
+      <capability name="ajax_xhr_type" value="none"/>
+      <capability name="ajax_support_getelementbyid" value="false"/>
+      <capability name="ajax_preferred_geoloc_api" value="none"/>
+      <capability name="ajax_support_event_listener" value="false"/>
+      <capability name="ajax_support_javascript" value="false"/>
+      <capability name="ajax_manipulate_dom" value="false"/>
+      <capability name="ajax_manipulate_css" value="false"/>
+      <capability name="ajax_support_inner_html" value="false"/>
+      <capability name="ajax_support_events" value="false"/>
+    </group>
+    <group id="markup">
+      <capability name="html_wi_oma_xhtmlmp_1_0" value="true"/>
+      <capability name="html_wi_w3_xhtmlbasic" value="true"/>
+      <capability name="wml_1_1" value="true"/>
+      <capability name="preferred_markup" value="html_wi_oma_xhtmlmp_1_0"/>
+      <capability name="xhtml_support_level" value="1"/>
+      <capability name="html_web_3_2" value="false"/>
+      <capability name="html_web_4_0" value="false"/>
+    </group>
+    <group id="image_format">
+      <capability name="gif" value="true"/>
+      <capability name="wbmp" value="true"/>
+      <capability name="colors" value="256"/>
+      <capability name="greyscale" value="false"/>
+      <capability name="jpg" value="false"/>
+      <capability name="transparent_png_index" value="false"/>
+      <capability name="bmp" value="false"/>
+      <capability name="epoc_bmp" value="false"/>
+      <capability name="gif_animated" value="false"/>
+      <capability name="svgt_1_1_plus" value="false"/>
+      <capability name="transparent_png_alpha" value="false"/>
+      <capability name="png" value="false"/>
+      <capability name="svgt_1_1" value="false"/>
+      <capability name="tiff" value="false"/>
+    </group>
+    <group id="bearer">
+      <capability name="max_data_rate" value="9"/>
+      <capability name="has_cellular_radio" value="true"/>
+      <capability name="sdio" value="false"/>
+      <capability name="wifi" value="false"/>
+      <capability name="vpn" value="false"/>
+    </group>
+    <group id="storage">
+      <capability name="max_deck_size" value="4000"/>
+      <capability name="max_url_length_in_requests" value="128"/>
+    </group>
+    <group id="object_download">
+      <capability name="video" value="false"/>
+      <capability name="picture" value="false"/>
+      <capability name="wallpaper_df_size_limit" value="0"/>
+      <capability name="picture_preferred_width" value="0"/>
+      <capability name="picture_bmp" value="false"/>
+      <capability name="inline_support" value="false"/>
+      <capability name="screensaver_oma_size_limit" value="0"/>
+      <capability name="ringtone_qcelp" value="false"/>
+      <capability name="screensaver_wbmp" value="false"/>
+      <capability name="picture_greyscale" value="false"/>
+      <capability name="picture_preferred_height" value="0"/>
+      <capability name="ringtone_rmf" value="false"/>
+      <capability name="wallpaper_wbmp" value="false"/>
+      <capability name="screensaver_bmp" value="false"/>
+      <capability name="wallpaper_jpg" value="false"/>
+      <capability name="ringtone_midi_polyphonic" value="false"/>
+      <capability name="picture_colors" value="2"/>
+      <capability name="ringtone_midi_monophonic" value="false"/>
+      <capability name="picture_inline_size_limit" value="0"/>
+      <capability name="ringtone_voices" value="1"/>
+      <capability name="ringtone_3gpp" value="false"/>
+      <capability name="oma_support" value="false"/>
+      <capability name="ringtone_inline_size_limit" value="0"/>
+      <capability name="wallpaper_preferred_width" value="0"/>
+      <capability name="wallpaper_greyscale" value="false"/>
+      <capability name="wallpaper_preferred_height" value="0"/>
+      <capability name="picture_max_width" value="0"/>
+      <capability name="ringtone_aac" value="false"/>
+      <capability name="ringtone_oma_size_limit" value="0"/>
+      <capability name="screensaver_inline_size_limit" value="0"/>
+      <capability name="picture_jpg" value="false"/>
+      <capability name="ringtone_xmf" value="false"/>
+      <capability name="picture_max_height" value="0"/>
+      <capability name="ringtone_mp3" value="false"/>
+      <capability name="wallpaper_png" value="false"/>
+      <capability name="screensaver_jpg" value="false"/>
+      <capability name="ringtone_directdownload_size_limit" value="0"/>
+      <capability name="wallpaper_max_width" value="0"/>
+      <capability name="wallpaper_max_height" value="0"/>
+      <capability name="screensaver" value="false"/>
+      <capability name="ringtone_wav" value="false"/>
+      <capability name="wallpaper_gif" value="false"/>
+      <capability name="screensaver_directdownload_size_limit" value="0"/>
+      <capability name="wallpaper_tiff" value="false"/>
+      <capability name="screensaver_df_size_limit" value="0"/>
+      <capability name="picture_df_size_limit" value="0"/>
+      <capability name="ringtone_awb" value="false"/>
+      <capability name="ringtone" value="false"/>
+      <capability name="picture_png" value="false"/>
+      <capability name="wallpaper_bmp" value="false"/>
+      <capability name="picture_directdownload_size_limit" value="0"/>
+      <capability name="picture_wbmp" value="false"/>
+      <capability name="ringtone_df_size_limit" value="0"/>
+      <capability name="ringtone_digiplug" value="false"/>
+      <capability name="ringtone_mmf" value="false"/>
+      <capability name="wallpaper" value="false"/>
+      <capability name="ringtone_amr" value="false"/>
+      <capability name="screensaver_png" value="false"/>
+      <capability name="wallpaper_resize" value="none"/>
+      <capability name="picture_oma_size_limit" value="0"/>
+      <capability name="picture_gif" value="false"/>
+      <capability name="screensaver_greyscale" value="false"/>
+      <capability name="downloadfun_support" value="false"/>
+      <capability name="directdownload_support" value="false"/>
+      <capability name="ringtone_compactmidi" value="false"/>
+      <capability name="ringtone_spmidi" value="false"/>
+      <capability name="ringtone_imelody" value="false"/>
+      <capability name="screensaver_gif" value="false"/>
+      <capability name="screensaver_colors" value="2"/>
+      <capability name="wallpaper_oma_size_limit" value="0"/>
+      <capability name="picture_resize" value="none"/>
+      <capability name="screensaver_max_width" value="0"/>
+      <capability name="screensaver_preferred_height" value="0"/>
+      <capability name="screensaver_preferred_width" value="0"/>
+      <capability name="wallpaper_directdownload_size_limit" value="0"/>
+      <capability name="screensaver_max_height" value="0"/>
+      <capability name="wallpaper_inline_size_limit" value="0"/>
+      <capability name="wallpaper_colors" value="2"/>
+      <capability name="screensaver_resize" value="none"/>
+    </group>
+    <group id="playback">
+      <capability name="playback_vcodec_h263_3" value="-1"/>
+      <capability name="playback_acodec_aac" value="none"/>
+      <capability name="playback_oma_size_limit" value="0"/>
+      <capability name="playback_vcodec_mpeg4_asp" value="-1"/>
+      <capability name="playback_mp4" value="false"/>
+      <capability name="playback_3gpp" value="false"/>
+      <capability name="playback_acodec_amr" value="none"/>
+      <capability name="playback_df_size_limit" value="0"/>
+      <capability name="playback_mov" value="false"/>
+      <capability name="playback_acodec_qcelp" value="false"/>
+      <capability name="progressive_download" value="false"/>
+      <capability name="playback_wmv" value="none"/>
+      <capability name="playback_directdownload_size_limit" value="0"/>
+      <capability name="playback_real_media" value="none"/>
+      <capability name="playback_3g2" value="false"/>
+      <capability name="playback_vcodec_mpeg4_sp" value="-1"/>
+      <capability name="playback_vcodec_h263_0" value="-1"/>
+      <capability name="playback_inline_size_limit" value="0"/>
+      <capability name="playback_vcodec_h264_bp" value="-1"/>
+      <capability name="hinted_progressive_download" value="false"/>
+    </group>
+    <group id="streaming">
+      <capability name="streaming_mov" value="false"/>
+      <capability name="streaming_vcodec_mpeg4_asp" value="-1"/>
+      <capability name="streaming_video_size_limit" value="0"/>
+      <capability name="streaming_wmv" value="none"/>
+      <capability name="streaming_real_media" value="none"/>
+      <capability name="streaming_acodec_aac" value="none"/>
+      <capability name="streaming_vcodec_h263_0" value="-1"/>
+      <capability name="streaming_3g2" value="false"/>
+      <capability name="streaming_3gpp" value="false"/>
+      <capability name="streaming_vcodec_h263_3" value="-1"/>
+      <capability name="streaming_acodec_amr" value="none"/>
+      <capability name="streaming_vcodec_h264_bp" value="-1"/>
+      <capability name="streaming_video" value="false"/>
+      <capability name="streaming_flv" value="false"/>
+      <capability name="streaming_vcodec_mpeg4_sp" value="-1"/>
+      <capability name="streaming_preferred_protocol" value="rtsp"/>
+      <capability name="streaming_mp4" value="false"/>
+    </group>
+    <group id="drm">
+      <capability name="oma_v_1_0_combined_delivery" value="false"/>
+      <capability name="oma_v_1_0_forwardlock" value="false"/>
+      <capability name="oma_v_1_0_separate_delivery" value="false"/>
+    </group>
+    <group id="wap_push">
+      <capability name="expiration_date" value="false"/>
+      <capability name="utf8_support" value="false"/>
+      <capability name="connectionless_cache_operation" value="false"/>
+      <capability name="connectionless_service_load" value="false"/>
+      <capability name="connectionless_service_indication" value="false"/>
+      <capability name="connectionoriented_confirmed_service_indication" value="false"/>
+      <capability name="iso8859_support" value="false"/>
+      <capability name="ascii_support" value="false"/>
+      <capability name="connectionoriented_confirmed_service_load" value="false"/>
+      <capability name="connectionoriented_confirmed_cache_operation" value="false"/>
+      <capability name="wap_push_support" value="false"/>
+      <capability name="connectionoriented_unconfirmed_cache_operation" value="false"/>
+      <capability name="connectionoriented_unconfirmed_service_load" value="false"/>
+      <capability name="connectionoriented_unconfirmed_service_indication" value="false"/>
+    </group>
+    <group id="security">
+      <capability name="phone_id_provided" value="false"/>
+      <capability name="https_support" value="true"/>
+    </group>
+    <group id="sms">
+      <capability name="sms_enabled" value="true"/>
+    </group>
+    <group id="sound_format">
+      <capability name="rmf" value="false"/>
+      <capability name="qcelp" value="false"/>
+      <capability name="wav" value="false"/>
+      <capability name="smf" value="false"/>
+      <capability name="awb" value="false"/>
+      <capability name="nokia_ringtone" value="false"/>
+      <capability name="aac" value="false"/>
+      <capability name="digiplug" value="false"/>
+      <capability name="sp_midi" value="false"/>
+      <capability name="compactmidi" value="false"/>
+      <capability name="mld" value="false"/>
+      <capability name="mp3" value="false"/>
+      <capability name="voices" value="1"/>
+      <capability name="evrc" value="false"/>
+      <capability name="mmf" value="false"/>
+      <capability name="xmf" value="false"/>
+      <capability name="amr" value="false"/>
+      <capability name="imelody" value="false"/>
+      <capability name="midi_monophonic" value="false"/>
+      <capability name="midi_polyphonic" value="false"/>
+      <capability name="au" value="false"/>
+    </group>
+    <group id="flash_lite">
+      <capability name="flash_lite_version" value=""/>
+      <capability name="fl_wallpaper" value="false"/>
+      <capability name="fl_browser" value="false"/>
+      <capability name="fl_screensaver" value="false"/>
+      <capability name="fl_standalone" value="false"/>
+      <capability name="full_flash_support" value="false"/>
+      <capability name="fl_sub_lcd" value="false"/>
+    </group>
+    <group id="rss">
+      <capability name="rss_support" value="false"/>
+    </group>
+    <group id="pdf">
+      <capability name="pdf_support" value="false"/>
+    </group>
+    <group id="transcoding">
+      <capability name="is_transcoder" value="false"/>
+      <capability name="transcoder_ua_header" value="user-agent"/>
+    </group>
+    <group id="smarttv">
+      <capability name="is_smarttv" value="false"/>
+    </group>
+    <group id="chips">
+      <capability name="nfc_support" value="false"/>
+    </group>
+    <group id="display">
+      <capability name="columns" value="11"/>
+      <capability name="physical_screen_height" value="27"/>
+      <capability name="dual_orientation" value="false"/>
+      <capability name="physical_screen_width" value="27"/>
+      <capability name="rows" value="6"/>
+      <capability name="max_image_width" value="90"/>
+      <capability name="resolution_height" value="90"/>
+      <capability name="resolution_width" value="90"/>
+      <capability name="max_image_height" value="35"/>
+    </group>
+    <group id="user_experience">
+      <capability name="ux_full_desktop" value="false"/>
+    </group>
+    <group id="third_party">
+      <capability name="jqm_grade" value="none"/>
+      <capability name="is_sencha_touch_ok" value="false"/>
+    </group>
+  </device>
+  <device id="generic_xhtml" user_agent="DO_NOT_MATCH_MOZILLA" fall_back="generic_mobile">
+    <group id="markup">
+      <capability name="xhtml_support_level" value="1"/>
+      <capability name="preferred_markup" value="html_wi_oma_xhtmlmp_1_0"/>
+      <capability name="html_wi_oma_xhtmlmp_1_0" value="true"/>
+      <capability name="html_wi_w3_xhtmlbasic" value="true"/>
+    </group>
+    <group id="xhtml_ui">
+      <capability name="xhtml_make_phone_call_string" value="tel:"/>
+      <capability name="xhtmlmp_preferred_mime_type" value="application/vnd.wap.xhtml+xml"/>
+      <capability name="xhtml_table_support" value="true"/>
+      <capability name="cookie_support" value="true"/>
+    </group>
+    <group id="display">
+      <capability name="resolution_width" value="128"/>
+      <capability name="resolution_height" value="92"/>
+      <capability name="max_image_width" value="120"/>
+      <capability name="max_image_height" value="92"/>
+    </group>
+    <group id="image_format">
+      <capability name="colors" value="256"/>
+      <capability name="gif" value="true"/>
+      <capability name="jpg" value="true"/>
+      <capability name="gif_animated" value="true"/>
+      <capability name="png" value="true"/>
+    </group>
+    <group id="storage">
+      <capability name="max_url_length_in_requests" value="256"/>
+      <capability name="max_deck_size" value="10000"/>
+    </group>
+    <group id="product_info">
+      <capability name="can_skip_aligned_link_row" value="true"/>
+      <capability name="release_date" value="2002_july"/>
+    </group>
+    <group id="html_ui">
+      <capability name="html_preferred_dtd" value="xhtml_mp1"/>
+    </group>
+  </device>
+  <device id="generic_web_browser" user_agent="DO_NOT_MATCH_GENERIC_WEB_BROWSER" fall_back="generic">
+    <group id="product_info">
+      <capability name="is_wireless_device" value="false"/>
+      <capability name="device_claims_web_support" value="true"/>
+      <capability name="has_qwerty_keyboard" value="true"/>
+      <capability name="can_skip_aligned_link_row" value="true"/>
+      <capability name="model_name" value=""/>
+      <capability name="brand_name" value="generic web browser"/>
+      <capability name="pointing_method" value="mouse"/>
+      <capability name="release_date" value="1994_january"/>
+      <capability name="can_assign_phone_number" value="false"/>
+    </group>
+    <group id="display">
+      <capability name="resolution_width" value="800"/>
+      <capability name="resolution_height" value="600"/>
+      <capability name="max_image_width" value="800"/>
+      <capability name="max_image_height" value="600"/>
+      <capability name="rows" value="200"/>
+      <capability name="columns" value="120"/>
+      <capability name="physical_screen_height" value="400"/>
+      <capability name="physical_screen_width" value="400"/>
+    </group>
+    <group id="markup">
+      <capability name="preferred_markup" value="html_web_4_0"/>
+      <capability name="wml_1_1" value="false"/>
+      <capability name="html_web_3_2" value="true"/>
+      <capability name="html_web_4_0" value="true"/>
+      <capability name="xhtml_support_level" value="4"/>
+      <capability name="html_wi_oma_xhtmlmp_1_0" value="false"/>
+    </group>
+    <group id="chtml_ui">
+      <capability name="chtml_table_support" value="true"/>
+    </group>
+    <group id="xhtml_ui">
+      <capability name="xhtml_file_upload" value="supported"/>
+      <capability name="xhtmlmp_preferred_mime_type" value="text/html"/>
+      <capability name="xhtml_select_as_radiobutton" value="true"/>
+      <capability name="xhtml_select_as_dropdown" value="true"/>
+      <capability name="xhtml_supports_forms_in_table" value="true"/>
+      <capability name="xhtml_select_as_popup" value="true"/>
+      <capability name="xhtml_honors_bgcolor" value="true"/>
+      <capability name="xhtml_supports_iframe" value="full"/>
+      <capability name="xhtml_avoid_accesskeys" value="true"/>
+      <capability name="xhtml_make_phone_call_string" value="none"/>
+      <capability name="xhtml_can_embed_video" value="play_and_stop"/>
+    </group>
+    <group id="image_format">
+      <capability name="wbmp" value="false"/>
+      <capability name="bmp" value="true"/>
+      <capability name="gif" value="true"/>
+      <capability name="gif_animated" value="true"/>
+      <capability name="jpg" value="true"/>
+      <capability name="png" value="true"/>
+      <capability name="colors" value="65536"/>
+    </group>
+    <group id="security">
+      <capability name="https_support" value="true"/>
+    </group>
+    <group id="storage">
+      <capability name="max_deck_size" value="100000"/>
+    </group>
+    <group id="ajax">
+      <capability name="ajax_xhr_type" value="standard"/>
+      <capability name="ajax_support_getelementbyid" value="true"/>
+      <capability name="ajax_manipulate_dom" value="true"/>
+      <capability name="ajax_support_javascript" value="true"/>
+      <capability name="ajax_manipulate_css" value="true"/>
+      <capability name="ajax_support_inner_html" value="true"/>
+      <capability name="ajax_support_event_listener" value="true"/>
+      <capability name="ajax_support_events" value="true"/>
+    </group>
+    <group id="wml_ui">
+      <capability name="card_title_support" value="false"/>
+      <capability name="wml_make_phone_call_string" value="none"/>
+      <capability name="table_support" value="false"/>
+      <capability name="break_list_of_links_with_br_element_recommended" value="false"/>
+      <capability name="menu_with_list_of_links_recommended" value="false"/>
+      <capability name="elective_forms_recommended" value="false"/>
+    </group>
+    <group id="sms">
+      <capability name="sms_enabled" value="false"/>
+    </group>
+    <group id="bearer">
+      <capability name="has_cellular_radio" value="false"/>
+    </group>
+    <group id="pdf">
+      <capability name="pdf_support" value="true"/>
+    </group>
+    <group id="flash_lite">
+      <capability name="full_flash_support" value="true"/>
+    </group>
+    <group id="user_experience">
+      <capability name="ux_full_desktop" value="true"/>
+    </group>
+    <group id="third_party">
+      <capability name="jqm_grade" value="A"/>
+      <capability name="is_sencha_touch_ok" value="true"/>
+    </group>
+    <group id="html_ui">
+      <capability name="image_inlining" value="true"/>
+    </group>
+    <group id="css">
+      <capability name="css_spriting" value="true"/>
+    </group>
+    <group id="playback">
+      <capability name="progressive_download" value="true"/>
+    </group>
+    <group id="wap_push">
+      <capability name="utf8_support" value="true"/>
+    </group>
+  </device>
+  
+  <device id="generic_web_crawler" user_agent="DO_NOT_MATCH_GENERIC_WEB_CRAWLER" fall_back="generic_web_browser">
+    <group id="product_info">
+      <capability name="model_name" value="Bot or Crawler"/>
+      <capability name="brand_name" value="Robot"/>
+      <capability name="release_date" value="2000_january"/>
+      <capability name="is_bot" value="true"/>
+    </group>
+    <group id="virtual">
+      <capability name="controlcap_is_robot" value="force_true"/>
+    </group>
+  </device>
+  
+    <device id="google_news_bot" user_agent="Googlebot-News" fall_back="generic_web_crawler">
+    <group id="product_info">
+      <capability name="model_name" value="News Bot"/>
+      <capability name="brand_name" value="Google"/>
+    </group>
+  </device>
+  <device id="google_image_bot" user_agent="Googlebot-Image/1.0" fall_back="generic_web_crawler">
+    <group id="product_info">
+      <capability name="model_name" value="Image Bot"/>
+      <capability name="brand_name" value="Google"/>
+    </group>
+  </device>
+  <device id="google_video_bot" user_agent="Googlebot-Video/1.0" fall_back="generic_web_crawler">
+    <group id="product_info">
+      <capability name="model_name" value="Video Bot"/>
+      <capability name="brand_name" value="Google"/>
+    </group>
+  </device>
+  
+  
+  
+  
+  
+  
+  <device id="generic_xhtml" user_agent="DO_NOT_MATCH_MOZILLA" fall_back="generic_mobile">
+    <group id="markup">
+      <capability name="xhtml_support_level" value="1"/>
+      <capability name="preferred_markup" value="html_wi_oma_xhtmlmp_1_0"/>
+      <capability name="html_wi_oma_xhtmlmp_1_0" value="true"/>
+      <capability name="html_wi_w3_xhtmlbasic" value="true"/>
+    </group>
+    <group id="xhtml_ui">
+      <capability name="xhtml_make_phone_call_string" value="tel:"/>
+      <capability name="xhtmlmp_preferred_mime_type" value="application/vnd.wap.xhtml+xml"/>
+      <capability name="xhtml_table_support" value="true"/>
+      <capability name="cookie_support" value="true"/>
+    </group>
+    <group id="display">
+      <capability name="resolution_width" value="128"/>
+      <capability name="resolution_height" value="92"/>
+      <capability name="max_image_width" value="120"/>
+      <capability name="max_image_height" value="92"/>
+    </group>
+    <group id="image_format">
+      <capability name="colors" value="256"/>
+      <capability name="gif" value="true"/>
+      <capability name="jpg" value="true"/>
+      <capability name="gif_animated" value="true"/>
+      <capability name="png" value="true"/>
+    </group>
+    <group id="storage">
+      <capability name="max_url_length_in_requests" value="256"/>
+      <capability name="max_deck_size" value="10000"/>
+    </group>
+    <group id="product_info">
+      <capability name="can_skip_aligned_link_row" value="true"/>
+      <capability name="release_date" value="2002_july"/>
+    </group>
+    <group id="html_ui">
+      <capability name="html_preferred_dtd" value="xhtml_mp1"/>
+    </group>
+  </device>
+  
+  <device id="apple_generic" user_agent="DO_NOT_MATCH_APPLE_GENERIC" fall_back="generic_xhtml">
+    <group id="product_info">
+      <capability name="brand_name" value="Apple"/>
+      <capability name="has_qwerty_keyboard" value="true"/>
+      <capability name="can_skip_aligned_link_row" value="true"/>
+      <capability name="device_claims_web_support" value="true"/>
+      <capability name="mobile_browser" value="Safari"/>
+      <capability name="device_os" value="iOS"/>
+      <capability name="model_name" value="iPhone"/>
+      <capability name="pointing_method" value="touchscreen"/>
+      <capability name="release_date" value="2007_june"/>
+    </group>
+    <group id="markup">
+      <capability name="xhtml_support_level" value="4"/>
+      <capability name="preferred_markup" value="html_web_4_0"/>
+      <capability name="wml_1_1" value="false"/>
+      <capability name="html_wi_imode_compact_generic" value="true"/>
+      <capability name="html_wi_w3_xhtmlbasic" value="true"/>
+      <capability name="html_wi_oma_xhtmlmp_1_0" value="true"/>
+      <capability name="html_web_3_2" value="true"/>
+      <capability name="html_web_4_0" value="true"/>
+    </group>
+    <group id="xhtml_ui">
+      <capability name="xhtml_format_as_css_property" value="true"/>
+      <capability name="xhtml_supports_table_for_layout" value="true"/>
+      <capability name="xhtml_display_accesskey" value="false"/>
+      <capability name="xhtml_supports_css_cell_table_coloring" value="true"/>
+      <capability name="xhtml_readable_background_color1" value="#D9EFFF"/>
+      <capability name="xhtml_make_phone_call_string" value="tel:"/>
+      <capability name="xhtml_table_support" value="true"/>
+      <capability name="xhtmlmp_preferred_mime_type" value="text/html"/>
+      <capability name="xhtml_format_as_attribute" value="false"/>
+      <capability name="xhtml_honors_bgcolor" value="true"/>
+      <capability name="xhtml_supports_iframe" value="full"/>
+    </group>
+    <group id="image_format">
+      <capability name="gif" value="true"/>
+      <capability name="gif_animated" value="true"/>
+      <capability name="jpg" value="true"/>
+      <capability name="png" value="true"/>
+      <capability name="bmp" value="true"/>
+      <capability name="colors" value="65536"/>
+      <capability name="wbmp" value="false"/>
+    </group>
+    <group id="object_download">
+      <capability name="ringtone" value="true"/>
+      <capability name="ringtone_midi_monophonic" value="true"/>
+      <capability name="ringtone_midi_polyphonic" value="true"/>
+      <capability name="ringtone_amr" value="true"/>
+      <capability name="ringtone_wav" value="true"/>
+      <capability name="ringtone_mp3" value="true"/>
+      <capability name="ringtone_aac" value="true"/>
+      <capability name="ringtone_voices" value="12"/>
+      <capability name="video" value="true"/>
+    </group>
+    <group id="ajax">
+      <capability name="ajax_support_javascript" value="true"/>
+      <capability name="ajax_manipulate_css" value="true"/>
+      <capability name="ajax_support_getelementbyid" value="true"/>
+      <capability name="ajax_support_inner_html" value="true"/>
+      <capability name="ajax_xhr_type" value="standard"/>
+      <capability name="ajax_manipulate_dom" value="true"/>
+      <capability name="ajax_support_event_listener" value="true"/>
+      <capability name="ajax_support_events" value="true"/>
+      <capability name="ajax_preferred_geoloc_api" value="w3c_api"/>
+    </group>
+    <group id="display">
+      <capability name="columns" value="20"/>
+      <capability name="rows" value="20"/>
+      <capability name="max_image_width" value="300"/>
+      <capability name="resolution_height" value="480"/>
+      <capability name="resolution_width" value="320"/>
+      <capability name="max_image_height" value="320"/>
+      <capability name="physical_screen_height" value="100"/>
+      <capability name="physical_screen_width" value="50"/>
+      <capability name="dual_orientation" value="true"/>
+    </group>
+    <group id="bearer">
+      <capability name="wifi" value="true"/>
+      <capability name="max_data_rate" value="384"/>
+    </group>
+    <group id="css">
+      <capability name="css_supports_width_as_percentage" value="true"/>
+      <capability name="css_border_image" value="webkit"/>
+      <capability name="css_rounded_corners" value="webkit"/>
+      <capability name="css_spriting" value="true"/>
+    </group>
+    <group id="rss">
+      <capability name="rss_support" value="true"/>
+    </group>
+    <group id="playback">
+      <capability name="playback_vcodec_h264_bp" value="1.2"/>
+    </group>
+    <group id="storage">
+      <capability name="max_deck_size" value="100000"/>
+      <capability name="max_url_length_in_requests" value="512"/>
+    </group>
+    <group id="wml_ui">
+      <capability name="card_title_support" value="false"/>
+      <capability name="wml_make_phone_call_string" value="none"/>
+      <capability name="table_support" value="false"/>
+      <capability name="break_list_of_links_with_br_element_recommended" value="false"/>
+      <capability name="menu_with_list_of_links_recommended" value="false"/>
+      <capability name="elective_forms_recommended" value="false"/>
+    </group>
+    <group id="html_ui">
+      <capability name="viewport_supported" value="true"/>
+      <capability name="viewport_userscalable" value="no"/>
+      <capability name="viewport_width" value="device_width_token"/>
+      <capability name="canvas_support" value="full"/>
+      <capability name="image_inlining" value="true"/>
+      <capability name="html_preferred_dtd" value="html4"/>
+    </group>
+    <group id="streaming">
+      <capability name="streaming_preferred_protocol" value="http"/>
+      <capability name="streaming_preferred_http_protocol" value="progressive_download"/>
+    </group>
+    <group id="wap_push">
+      <capability name="utf8_support" value="true"/>
+    </group>
+  </device>
+  
+  <device id="apple_iphone_ver1" user_agent="Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A538a Safari/419.3" fall_back="apple_generic" actual_device_root="true">
+    <group id="product_info">
+      <capability name="mobile_browser" value="Safari"/>
+      <capability name="pointing_method" value="touchscreen"/>
+      <capability name="device_os_version" value="1.0"/>
+      <capability name="can_assign_phone_number" value="true"/>
+    </group>
+    <group id="display">
+      <capability name="resolution_width" value="320"/>
+      <capability name="resolution_height" value="480"/>
+      <capability name="max_image_width" value="320"/>
+      <capability name="max_image_height" value="360"/>
+      <capability name="physical_screen_width" value="50"/>
+      <capability name="physical_screen_height" value="74"/>
+      <capability name="dual_orientation" value="true"/>
+    </group>
+    <group id="object_download">
+      <capability name="video" value="true"/>
+      <capability name="wallpaper_preferred_width" value="320"/>
+      <capability name="wallpaper_preferred_height" value="480"/>
+      <capability name="wallpaper_max_width" value="320"/>
+      <capability name="wallpaper_max_height" value="480"/>
+    </group>
+    <group id="bearer">
+      <capability name="wifi" value="true"/>
+      <capability name="max_data_rate" value="200"/>
+      <capability name="vpn" value="true"/>
+    </group>
+    <group id="sound_format">
+      <capability name="aac" value="true"/>
+      <capability name="mp3" value="true"/>
+    </group>
+    <group id="xhtml_ui">
+      <capability name="xhtml_send_mms_string" value="none"/>
+      <capability name="xhtml_send_sms_string" value="sms:"/>
+      <capability name="xhtml_file_upload" value="not_supported"/>
+      <capability name="accept_third_party_cookie" value="false"/>
+      <capability name="xhtml_honors_bgcolor" value="true"/>
+      <capability name="xhtml_can_embed_video" value="none"/>
+    </group>
+    <group id="pdf">
+      <capability name="pdf_support" value="true"/>
+    </group>
+    <group id="rss">
+      <capability name="rss_support" value="true"/>
+    </group>
+    <group id="playback">
+      <capability name="playback_vcodec_h263_0" value="-1"/>
+      <capability name="playback_3g2" value="true"/>
+      <capability name="playback_3gpp" value="true"/>
+      <capability name="playback_mp4" value="true"/>
+      <capability name="playback_vcodec_h264_bp" value="1.2"/>
+      <capability name="playback_mov" value="true"/>
+      <capability name="playback_vcodec_mpeg4_sp" value="0"/>
+      <capability name="playback_acodec_amr" value="nb"/>
+      <capability name="playback_acodec_aac" value="lc"/>
+      <capability name="progressive_download" value="true"/>
+    </group>
+    <group id="streaming">
+      <capability name="streaming_real_media" value="none"/>
+      <capability name="streaming_3gpp" value="true"/>
+      <capability name="streaming_preferred_protocol" value="http"/>
+      <capability name="streaming_vcodec_mpeg4_sp" value="0"/>
+      <capability name="streaming_acodec_aac" value="lc"/>
+      <capability name="streaming_acodec_amr" value="nb"/>
+      <capability name="streaming_preferred_http_protocol" value="progressive_download"/>
+    </group>
+    <group id="flash_lite">
+      <capability name="flash_lite_version" value=""/>
+      <capability name="fl_wallpaper" value="false"/>
+      <capability name="fl_browser" value="false"/>
+      <capability name="fl_screensaver" value="false"/>
+      <capability name="fl_standalone" value="false"/>
+      <capability name="fl_sub_lcd" value="false"/>
+    </group>
+    <group id="third_party">
+      <capability name="jqm_grade" value="B"/>
+      <capability name="is_sencha_touch_ok" value="true"/>
+    </group>
+    <group id="mms">
+      <capability name="built_in_camera" value="true"/>
+    </group>
+  </device>
+  
+</devices>
 
-	<devices>
-		<device id="generic" user_agent="" fall_back="root">
-		</device>
-	</devices>
 </wurfl>

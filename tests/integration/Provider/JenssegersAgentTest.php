@@ -23,8 +23,6 @@ class JenssegersAgentTest extends AbstractProviderTestCase
         $provider = new JenssegersAgent();
 
         $result = $provider->parse('Googlebot/2.1 (+http://www.googlebot.com/bot.html)');
-
-        $this->assertInstanceOf('UserAgentParser\Model\UserAgent', $result);
         $this->assertEquals([
             'browser' => [
                 'name'    => null,
@@ -76,6 +74,24 @@ class JenssegersAgentTest extends AbstractProviderTestCase
                 'type'  => null,
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'browserName'    => false,
+            'browserVersion' => false,
+
+            'osName'    => false,
+            'osVersion' => false,
+
+            'deviceModel' => 'Bot',
+            'isMobile'    => false,
+
+            'isRobot' => true,
+            'botName' => 'Google',
+        ], $rawResult);
     }
 
     public function testRealResultDevice()

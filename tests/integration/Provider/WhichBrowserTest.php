@@ -149,6 +149,20 @@ class WhichBrowserTest extends AbstractProviderTestCase
                 'type'  => null,
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'browser'   => [
+                'name'    => 'Googlebot',
+                'version' => '2.1',
+            ],
+            'device'    => [
+                'type' => 'bot',
+            ],
+        ], $rawResult);
     }
 
     public function testRealResultDevice()
@@ -207,5 +221,31 @@ class WhichBrowserTest extends AbstractProviderTestCase
                 'type'  => null,
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'browser'   => [
+                'name'    => 'Safari',
+                'version' => '5.1',
+                'type'    => 'browser',
+            ],
+            'engine' => [
+                'name'    => 'Webkit',
+                'version' => '534.46',
+            ],
+            'os' => [
+                'name'    => 'iOS',
+                'version' => '5.0',
+            ],
+            'device'    => [
+                'type'         => 'mobile',
+                'subtype'      => 'smart',
+                'manufacturer' => 'Apple',
+                'model'        => 'iPhone',
+            ],
+        ], $rawResult);
     }
 }

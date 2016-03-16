@@ -1,30 +1,13 @@
 <?php
 namespace UserAgentParserTest\Integration\Provider;
 
-use BrowscapPHP\Browscap;
 use UserAgentParser\Provider\BrowscapPhp;
 
 /**
  * @coversNothing
  */
-class BrowscapPhpTest extends AbstractProviderTestCase
+class BrowscapPhpTest extends AbstractBrowscapTestCase
 {
-    private function getParserWithWarmCache($type)
-    {
-        $filename = 'php_browscap.ini';
-        if ($type != '') {
-            $filename = $type . '_' . $filename;
-        }
-
-        $cache = new \WurflCache\Adapter\Memory();
-
-        $browscap = new Browscap();
-        $browscap->setCache($cache);
-        $browscap->convertFile('tests/resources/browscap/' . $filename);
-
-        return $browscap;
-    }
-
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */

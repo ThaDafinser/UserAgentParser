@@ -100,6 +100,64 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
                 'type'  => 'Search bot',
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'client'          => null,
+            'operatingSystem' => null,
+
+            'device' => [
+                'brand'     => null,
+                'brandName' => null,
+
+                'model' => null,
+
+                'device'     => null,
+                'deviceName' => null,
+            ],
+
+            'bot' => [
+                'name'     => 'Googlebot',
+                'category' => 'Search bot',
+                'url'      => 'http://www.google.com/bot.html',
+                'producer' => [
+                    'name' => 'Google Inc.',
+                    'url'  => 'http://www.google.com',
+                ],
+            ],
+
+            'extra' => [
+                'isBot' => true,
+
+                // client
+                'isBrowser'     => false,
+                'isFeedReader'  => false,
+                'isMobileApp'   => false,
+                'isPIM'         => false,
+                'isLibrary'     => false,
+                'isMediaPlayer' => false,
+
+                // deviceType
+                'isCamera'              => false,
+                'isCarBrowser'          => false,
+                'isConsole'             => false,
+                'isFeaturePhone'        => false,
+                'isPhablet'             => false,
+                'isPortableMediaPlayer' => false,
+                'isSmartDisplay'        => false,
+                'isSmartphone'          => false,
+                'isTablet'              => false,
+                'isTV'                  => false,
+
+                // other special
+                'isDesktop'      => false,
+                'isMobile'       => false,
+                'isTouchEnabled' => false,
+            ],
+        ], $rawResult);
     }
 
     public function testRealResultDevice()

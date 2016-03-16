@@ -157,7 +157,40 @@ class UAParserTest extends AbstractProviderTestCase
             ],
         ], $result->toArray());
 
+        /*
+         * Test the raw result
+         */
         $rawResult = $result->getProviderResultRaw();
+
+        $this->assertInstanceOf('UAParser\Result\Client', $rawResult);
+        $this->assertObjectHasAttribute('ua', $rawResult);
+        $this->assertObjectHasAttribute('os', $rawResult);
+        $this->assertObjectHasAttribute('device', $rawResult);
+        $this->assertObjectHasAttribute('originalUserAgent', $rawResult);
+
+        //ua
+        $ua = $rawResult->ua;
+        $this->assertInstanceOf('UAParser\Result\UserAgent', $ua);
+        $this->assertObjectHasAttribute('major', $ua);
+        $this->assertObjectHasAttribute('minor', $ua);
+        $this->assertObjectHasAttribute('patch', $ua);
+        $this->assertObjectHasAttribute('family', $ua);
+
+        //os
+        $os = $rawResult->os;
+        $this->assertInstanceOf('UAParser\Result\OperatingSystem', $os);
+        $this->assertObjectHasAttribute('major', $os);
+        $this->assertObjectHasAttribute('minor', $os);
+        $this->assertObjectHasAttribute('patch', $os);
+        $this->assertObjectHasAttribute('patchMinor', $os);
+        $this->assertObjectHasAttribute('family', $os);
+
+        //os
+        $device = $rawResult->device;
+        $this->assertInstanceOf('UAParser\Result\Device', $device);
+        $this->assertObjectHasAttribute('brand', $device);
+        $this->assertObjectHasAttribute('model', $device);
+        $this->assertObjectHasAttribute('family', $device);
     }
 
     public function testRealResultDevice()

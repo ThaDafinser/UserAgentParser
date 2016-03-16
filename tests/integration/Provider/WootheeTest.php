@@ -29,24 +29,6 @@ class WootheeTest extends AbstractProviderTestCase
         $this->assertEquals(1, count($parameters));
     }
 
-    public function testParseResult()
-    {
-        $provider = new Woothee();
-        $parser   = $provider->getParser();
-
-        /* @var $result \UAParser\Result\Result */
-        $result = $parser->parse('A real user agent...');
-
-        $this->assertInternalType('array', $result);
-
-        $this->assertArrayHasKey('name', $result);
-        $this->assertArrayHasKey('version', $result);
-        $this->assertArrayHasKey('os', $result);
-        $this->assertArrayHasKey('os_version', $result);
-        $this->assertArrayHasKey('vendor', $result);
-        $this->assertArrayHasKey('category', $result);
-    }
-
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
@@ -113,6 +95,19 @@ class WootheeTest extends AbstractProviderTestCase
                 'type'  => null,
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'name'       => 'misc crawler',
+            'category'   => 'crawler',
+            'os'         => 'UNKNOWN',
+            'version'    => 'UNKNOWN',
+            'vendor'     => 'UNKNOWN',
+            'os_version' => 'UNKNOWN',
+        ], $rawResult);
     }
 
     public function testRealResultDevice()

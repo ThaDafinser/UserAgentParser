@@ -115,7 +115,7 @@ class JenssegersAgent extends AbstractProvider
             return true;
         }
 
-        if ($this->isRealResult($resultRaw['browserName']) === true || $this->isRealResult($resultRaw['osName']) === true || $this->isRealResult($resultRaw['botName']) === true) {
+        if ($this->isRealResult($resultRaw['browserName'], 'browser', 'name') === true || $this->isRealResult($resultRaw['osName']) === true || $this->isRealResult($resultRaw['botName']) === true) {
             return true;
         }
 
@@ -143,7 +143,7 @@ class JenssegersAgent extends AbstractProvider
      */
     private function hydrateBrowser(Model\Browser $browser, array $resultRaw)
     {
-        if ($this->isRealResult($resultRaw['browserName']) === true) {
+        if ($this->isRealResult($resultRaw['browserName'], 'browser', 'name') === true) {
             $browser->setName($resultRaw['browserName']);
 
             if ($this->isRealResult($resultRaw['browserVersion']) === true) {

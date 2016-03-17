@@ -65,12 +65,14 @@ class UAParser extends AbstractProvider
 
         'general' => [
             '/^Other$/i',
+
         ],
 
         'device' => [
 
             'brand' => [
                 '/^Generic/i',
+                '/^unknown$/i',
             ],
 
             'model' => [

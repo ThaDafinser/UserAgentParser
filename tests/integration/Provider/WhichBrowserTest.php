@@ -169,10 +169,22 @@ class WhichBrowserTest extends AbstractProviderTestCase
     {
         $provider = new WhichBrowser();
 
-        $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
+        $result = $provider->parse('Mozilla/5.0 (Linux; Android 4.3; SCH-R970C Build/JSS15J) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Safari',
+                'name'    => 'Chrome',
+                'version' => [
+                    'major' => 34,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => '34',
+                ],
+            ],
+            'renderingEngine' => [
+                'name'    => 'Blink',
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -183,33 +195,21 @@ class WhichBrowserTest extends AbstractProviderTestCase
                     'complete' => null,
                 ],
             ],
-            'renderingEngine' => [
-                'name'    => 'Webkit',
-                'version' => [
-                    'major' => 534,
-                    'minor' => 46,
-                    'patch' => null,
-
-                    'alias' => null,
-
-                    'complete' => '534.46',
-                ],
-            ],
             'operatingSystem' => [
-                'name'    => 'iOS',
+                'name'    => 'Android',
                 'version' => [
-                    'major' => 5,
-                    'minor' => 0,
+                    'major' => 4,
+                    'minor' => 3,
                     'patch' => null,
 
                     'alias' => null,
 
-                    'complete' => '5.0',
+                    'complete' => '4.3',
                 ],
             ],
             'device' => [
-                'model' => 'iPhone',
-                'brand' => 'Apple',
+                'model' => 'Galaxy S4',
+                'brand' => 'Samsung',
                 'type'  => 'mobile:smart',
 
                 'isMobile' => true,
@@ -228,23 +228,22 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $rawResult = $result->getProviderResultRaw();
         $this->assertEquals([
             'browser'   => [
-                'name'    => 'Safari',
-                'version' => '5.1',
+                'name'    => 'Chrome',
+                'version' => '34',
                 'type'    => 'browser',
             ],
             'engine' => [
-                'name'    => 'Webkit',
-                'version' => '534.46',
+                'name'    => 'Blink',
             ],
             'os' => [
-                'name'    => 'iOS',
-                'version' => '5.0',
+                'name'    => 'Android',
+                'version' => '4.3',
             ],
             'device'    => [
                 'type'         => 'mobile',
                 'subtype'      => 'smart',
-                'manufacturer' => 'Apple',
-                'model'        => 'iPhone',
+                'manufacturer' => 'Samsung',
+                'model'        => 'Galaxy S4',
             ],
         ], $rawResult);
     }

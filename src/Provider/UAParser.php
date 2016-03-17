@@ -84,6 +84,7 @@ class UAParser extends AbstractProvider
                 '/^Touch$/i',
                 '/^Windows$/i',
                 '/^Windows Phone$/i',
+                '/^Android$/i',
             ],
         ],
 

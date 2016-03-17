@@ -66,11 +66,19 @@ class Zsxsoft extends AbstractProvider
         'general' => [
             '/^Unknown$/i',
         ],
+
+        'device' => [
+            'model' => [
+                '/^Browser$/i',
+                '/^Android$/i',
+            ],
+        ],
     ];
 
     private $parser;
 
     /**
+     *
      * @param  UserAgent                 $parser
      * @throws PackageNotLoadedException
      */
@@ -120,7 +128,7 @@ class Zsxsoft extends AbstractProvider
             return true;
         }
 
-        if (isset($device['model']) && $this->isRealResult($device['model'])) {
+        if (isset($device['model']) && $this->isRealResult($device['model'], 'device', 'model')) {
             return true;
         }
 
@@ -166,7 +174,7 @@ class Zsxsoft extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, array $deviceRaw)
     {
-        if (isset($deviceRaw['model']) && $this->isRealResult($deviceRaw['model']) === true) {
+        if (isset($deviceRaw['model']) && $this->isRealResult($deviceRaw['model'], 'device', 'model') === true) {
             $device->setModel($deviceRaw['model']);
         }
 

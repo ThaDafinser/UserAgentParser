@@ -42,7 +42,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-/vendor/
+vendor/
 .settings
 .buildpath
 build
@@ -50,3 +50,5 @@ build
 .tmp
 .php_cs.cache
 composer.lock
+tests/client.php
+tests/credentials.php

@@ -85,6 +85,7 @@ class DonatjUAParserTest extends AbstractProviderTestCase
          * Test the raw result
          */
         $rawResult = $result->getProviderResultRaw();
+
         $this->assertEquals([
             'platform' => 'Chrome OS',
             'browser'  => 'Chrome',

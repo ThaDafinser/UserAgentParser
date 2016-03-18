@@ -122,8 +122,13 @@ class BrowscapFullTest extends AbstractBrowscapTestCase
             ],
         ], $result->toArray());
 
+        /*
+         * Test the raw result
+         */
         $rawResult = $result->getProviderResultRaw();
+
         $this->assertInstanceOf('stdClass', $rawResult);
+        $this->assertCount(50, (array) $rawResult);
 
         $this->assertObjectHasAttribute('browser_name_regex', $rawResult);
         $this->assertObjectHasAttribute('parent', $rawResult);
@@ -187,5 +192,13 @@ class BrowscapFullTest extends AbstractBrowscapTestCase
                 'type'  => null,
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+
+        $this->assertInstanceOf('stdClass', $rawResult);
+        $this->assertCount(50, (array) $rawResult);
     }
 }

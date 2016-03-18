@@ -43,7 +43,7 @@ abstract class AbstractHttpProviderTestCase extends AbstractProviderTestCase
 
             $this->client = new Client([
                 'handler' => $stack,
-                'timeout' => 3,
+                'timeout' => 5,
 
                 'curl' => [
                     CURLOPT_SSL_VERIFYHOST => false,

@@ -139,9 +139,6 @@ class NeutrinoApiCom extends AbstractHttpProvider
             if ($prevEx->hasResponse() === true && $prevEx->getResponse()->getStatusCode() === 403) {
                 throw new Exception\InvalidCredentialsException('Your API userId "' . $this->apiUserId . '" and key "' . $this->apiKey . '" is not valid for ' . $this->getName(), null, $ex);
             }
-            
-            var_dump($ex);
-            exit();
 
             throw $ex;
         }

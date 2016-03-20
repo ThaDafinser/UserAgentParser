@@ -20,7 +20,6 @@ matrix:
 before_script:
   - composer self-update
   - composer update -o --prefer-source $DEPENDENCIES
-  - curl -v 'https://neutrinoapi.com/user-agent-info?user-id=YOURID&api-key=YOURKEY&user-agent=TEST'
 
 script:
   - vendor/bin/phpunit --coverage-clover ./clover.xml

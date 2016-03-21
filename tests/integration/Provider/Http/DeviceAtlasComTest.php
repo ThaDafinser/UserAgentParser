@@ -14,10 +14,6 @@ class DeviceAtlasComTest extends AbstractHttpProviderTestCase
      */
     public function testInvalidCredentials()
     {
-        if (! defined('CREDENTIALS_DEVICE_ATLAS_COM_KEY')) {
-            $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
-        }
-        
         $provider = new DeviceAtlasCom($this->getClient(), 'invalid_api_key');
 
         $result = $provider->parse('...');

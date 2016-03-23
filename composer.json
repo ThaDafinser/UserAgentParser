@@ -75,13 +75,15 @@
     "conflict": {
         "browscap/browscap-php": "<3.0.0-rc.1,>=4",
         "donatj/phpuseragentparser": "<0.5,>=1",
+        "jenssegers/agent": "<2.3,>=3",
+        "mobiledetect/mobiledetectlib": "<2.7.5,>3",
         "piwik/device-detector": "<3.6,>=4",
         "sinergi/browser-detector": "<6,>7",
-        "ua-parser/uap-php": "<3.4.4,>=4",
+        "ua-parser/uap-php": "<3.4.3,>=4",
         "whichbrowser/parser": "<2.0.10,>=3",
         "woothee/woothee": "<1.2,>=2",
-        "mimmi20/wurfl": "<1.6,>=2",
-        "zsxsoft/php-useragent": "<0.2,>=1"
+        "mimmi20/wurfl": "<1.6.4,>=2",
+        "zsxsoft/php-useragent": "<1.2,>=2"
     },
     
     "suggest": {

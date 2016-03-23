@@ -119,7 +119,7 @@ class UserAgentApiCom extends AbstractHttpProvider
                 }
 
                 if (isset($content->error->code) && $content->error->code == 'useragent_invalid') {
-                    throw new Exception\RequestException('User agent is invalid ' . $userAgent);
+                    throw new Exception\RequestException('User agent is invalid "' . $userAgent . '"');
                 }
             }
 

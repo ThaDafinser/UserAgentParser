@@ -22,6 +22,9 @@ So you can
 - switch between different parsers, without changing your code
 - compare the result of the different parsers
 - get always the same result model, regardless of which parser you use currently
+- be sure that it will work
+  - we got over 350 unit tests and over 70 integration tests
+  - plus we test the lowest and highest dependency
 
 
 ## Try it out

@@ -127,6 +127,8 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInternalType('array', $rawResult);
+        $this->assertCount(3, $rawResult);
+
         $this->assertArrayHasKey('browser', $rawResult);
         $this->assertArrayHasKey('operatingSystem', $rawResult);
         $this->assertArrayHasKey('device', $rawResult);

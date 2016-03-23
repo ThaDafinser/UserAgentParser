@@ -143,15 +143,20 @@ class WurflTest extends AbstractProviderTestCase
          * Test the raw result
          */
         $rawResult = $result->getProviderResultRaw();
+
+        $this->assertInternalType('array', $rawResult);
+        $this->assertCount(2, $rawResult);
         $this->assertArrayHasKey('virtual', $rawResult);
         $this->assertArrayHasKey('all', $rawResult);
 
         $virtual = $rawResult['virtual'];
+        $this->assertGreaterThan(21, $virtual);
         $this->assertArrayHasKey('is_robot', $virtual);
         $this->assertArrayHasKey('is_smartphone', $virtual);
         $this->assertArrayHasKey('complete_device_name', $virtual);
 
         $all = $rawResult['all'];
+        $this->assertCount(530, $all);
         $this->assertArrayHasKey('is_wireless_device', $all);
         $this->assertArrayHasKey('table_support', $all);
         $this->assertArrayHasKey('resolution_width', $all);

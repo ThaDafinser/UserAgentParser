@@ -533,7 +533,7 @@ class AbstractBrowscapTest extends AbstractProviderTestCase
      */
     public function testRealResult($value, $group, $part, $expectedResult)
     {
-        $class  = new \ReflectionClass('UserAgentParser\Provider\BrowscapPhp');
+        $class  = new \ReflectionClass('UserAgentParser\Provider\AbstractBrowscap');
         $method = $class->getMethod('isRealResult');
         $method->setAccessible(true);
 

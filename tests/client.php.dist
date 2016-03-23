@@ -1,0 +1,25 @@
+<?php
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\HandlerStack;
+
+$handler = new CurlHandler();
+$stack = HandlerStack::create($handler);
+
+$client = new Client([
+    'handler' => $stack,
+    
+    'timeout' => 10,
+    
+    'curl' => [
+        CURLOPT_PROXY => 'YOUR_PROXY',
+        CURLOPT_PROXYUSERPWD => '...',
+        CURLOPT_PROXYAUTH => CURLAUTH_NTLM,
+        CURLOPT_PROXYTYPE => CURLPROXY_HTTP,
+        
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_SSL_VERIFYPEER => false
+    ]
+]);
+
+return $client;

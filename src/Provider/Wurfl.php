@@ -110,14 +110,11 @@ class Wurfl extends AbstractProvider
     public function getVersion()
     {
         $version      = $this->getParser()->getWurflInfo()->version;
-        $versionParts = explode(' - ', $version);
 
-        if (count($versionParts) === 2) {
-            $versionPart = $versionParts[0];
-            $versionPart = str_replace('for API', '', $versionPart);
-            $versionPart = str_replace(', db.scientiamobile.com', '', $versionPart);
+        preg_match("/\d+(?:\.\d+)+/", $version, $result);
 
-            return trim($versionPart);
+        if (isset($result[0])) {
+            return $result[0];
         }
 
         return;
@@ -196,7 +193,7 @@ class Wurfl extends AbstractProvider
         // @see the list of all types http://web.wurfl.io/
         $device->setType($deviceRaw->getVirtualCapability('form_factor'));
 
-        if ($deviceRaw->getVirtualCapability('is_full_desktop') === 'true') {
+        if ($deviceRaw->getVirtualCapability('is_full_desktop') === 'true' || $deviceRaw->getVirtualCapability('is_full_desktop') === true) {
             return;
         }
 
@@ -208,11 +205,11 @@ class Wurfl extends AbstractProvider
             $device->setBrand($deviceRaw->getCapability('brand_name'));
         }
 
-        if ($deviceRaw->getVirtualCapability('is_mobile') === 'true') {
+        if ($deviceRaw->getVirtualCapability('is_mobile') === 'true' || $deviceRaw->getVirtualCapability('is_mobile') === true) {
             $device->setIsMobile(true);
         }
 
-        if ($deviceRaw->getVirtualCapability('is_touchscreen') === 'true') {
+        if ($deviceRaw->getVirtualCapability('is_touchscreen') === 'true' || $deviceRaw->getVirtualCapability('is_touchscreen') === true) {
             $device->setIsTouch(true);
         }
     }
@@ -242,7 +239,7 @@ class Wurfl extends AbstractProvider
         /*
          * Bot detection
          */
-        if ($deviceRaw->getVirtualCapability('is_robot') === 'true') {
+        if ($deviceRaw->getVirtualCapability('is_robot') === 'true' || $deviceRaw->getVirtualCapability('is_robot') === true) {
             $bot = $result->getBot();
             $bot->setIsBot(true);
 

@@ -1,12 +1,13 @@
 <?php
 namespace UserAgentParserTest\Unit\Provider;
 
+use UserAgentParser\Provider\BrowscapFull;
 use UserAgentParser\Provider\BrowscapPhp;
 
 /**
- * @covers UserAgentParser\Provider\BrowscapPhp
+ * @covers UserAgentParser\Provider\BrowscapFull
  */
-class BrowscapPhpTest extends AbstractProviderTestCase
+class BrowscapFullTest extends AbstractProviderTestCase
 {
     /**
      *
@@ -17,7 +18,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $cache = $this->getMock('BrowscapPHP\Cache\BrowscapCache', [], [], '', false);
         $cache->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue(''));
+            ->will($this->returnValue('FULL'));
 
         $parser = $this->getMock('BrowscapPHP\Browscap');
         $parser->expects($this->any())
@@ -32,14 +33,14 @@ class BrowscapPhpTest extends AbstractProviderTestCase
 
     public function testName()
     {
-        $provider = new BrowscapPhp($this->getParser());
+        $provider = new BrowscapFull($this->getParser());
 
-        $this->assertEquals('BrowscapPhp', $provider->getName());
+        $this->assertEquals('BrowscapFull', $provider->getName());
     }
 
     public function testDetectionCapabilities()
     {
-        $provider = new BrowscapPhp($this->getParser());
+        $provider = new BrowscapFull($this->getParser());
 
         $this->assertEquals([
 
@@ -49,18 +50,18 @@ class BrowscapPhpTest extends AbstractProviderTestCase
             ],
 
             'renderingEngine' => [
-                'name'    => false,
-                'version' => false,
+                'name'    => true,
+                'version' => true,
             ],
 
             'operatingSystem' => [
                 'name'    => true,
-                'version' => false,
+                'version' => true,
             ],
 
             'device' => [
-                'model'    => false,
-                'brand'    => false,
+                'model'    => true,
+                'brand'    => true,
                 'type'     => true,
                 'isMobile' => true,
                 'isTouch'  => true,
@@ -69,7 +70,7 @@ class BrowscapPhpTest extends AbstractProviderTestCase
             'bot' => [
                 'isBot' => true,
                 'name'  => true,
-                'type'  => false,
+                'type'  => true,
             ],
         ], $provider->getDetectionCapabilities());
     }

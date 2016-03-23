@@ -36,7 +36,7 @@ class WurflTest extends AbstractProviderTestCase
         $this->assertEquals('mimmi20/wurfl', $provider->getPackageName());
     }
 
-    public function testVersion()
+    public function testVersionOld()
     {
         $return          = new \stdClass();
         $return->version = 'for API 1.6.4, db.scientiamobile.com - 2015-12-03 14:33:12';
@@ -50,6 +50,22 @@ class WurflTest extends AbstractProviderTestCase
 
         $this->assertInternalType('string', $provider->getVersion());
         $this->assertEquals('1.6.4', $provider->getVersion());
+    }
+
+    public function testVersion()
+    {
+        $return          = new \stdClass();
+        $return->version = 'API 1.7.0 - data.scientiamobile.com - 2016-01-28 00:30:29';
+
+        $manager = $this->getManager();
+        $manager->expects($this->any())
+            ->method('getWurflInfo')
+            ->will($this->returnValue($return));
+
+        $provider = new Wurfl($manager);
+
+        $this->assertInternalType('string', $provider->getVersion());
+        $this->assertEquals('1.7.0', $provider->getVersion());
     }
 
     public function testVersionNull()

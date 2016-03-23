@@ -65,15 +65,18 @@ class UAParser extends AbstractProvider
 
         'general' => [
             '/^Other$/i',
+
         ],
 
         'device' => [
 
             'brand' => [
                 '/^Generic/i',
+                '/^unknown$/i',
             ],
 
             'model' => [
+                '/^generic$/i',
                 '/^Smartphone$/i',
                 '/^Feature Phone$/i',
                 '/^iOS-Device$/i',
@@ -81,6 +84,7 @@ class UAParser extends AbstractProvider
                 '/^Touch$/i',
                 '/^Windows$/i',
                 '/^Windows Phone$/i',
+                '/^Android$/i',
             ],
         ],
 

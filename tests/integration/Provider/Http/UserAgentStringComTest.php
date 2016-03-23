@@ -1,28 +1,28 @@
 <?php
-namespace UserAgentParserTest\Integration\Provider;
+namespace UserAgentParserTest\Integration\Provider\Http;
 
-use UserAgentParser\Provider\BrowscapPhp;
+use UserAgentParser\Provider\Http\UserAgentStringCom;
 
 /**
  * @coversNothing
  */
-class BrowscapPhpTest extends AbstractBrowscapTestCase
+class UserAgentStringComTest extends AbstractHttpProviderTestCase
 {
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundWithWarmCache()
+    public function testNoResultFound()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new UserAgentStringCom($this->getClient());
 
         $result = $provider->parse('...');
     }
 
     public function testRealResultBot()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new UserAgentStringCom($this->getClient());
 
-        $result = $provider->parse('Mozilla/2.0 (compatible; Ask Jeeves)');
+        $result = $provider->parse('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)');
         $this->assertEquals([
             'browser' => [
                 'name'    => null,
@@ -70,28 +70,49 @@ class BrowscapPhpTest extends AbstractBrowscapTestCase
             ],
             'bot' => [
                 'isBot' => true,
-                'name'  => 'AskJeeves',
-                'type'  => null,
+                'name'  => 'Googlebot',
+                'type'  => 'Crawler',
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+
+        $this->assertInstanceOf('stdClass', $rawResult);
+        $this->assertCount(12, (array) $rawResult);
+
+        $this->assertObjectHasAttribute('agent_type', $rawResult);
+        $this->assertObjectHasAttribute('agent_name', $rawResult);
+        $this->assertObjectHasAttribute('agent_version', $rawResult);
+        $this->assertObjectHasAttribute('os_type', $rawResult);
+        $this->assertObjectHasAttribute('os_name', $rawResult);
+        $this->assertObjectHasAttribute('os_versionName', $rawResult);
+        $this->assertObjectHasAttribute('os_versionNumber', $rawResult);
+        $this->assertObjectHasAttribute('os_producer', $rawResult);
+        $this->assertObjectHasAttribute('os_producerURL', $rawResult);
+        $this->assertObjectHasAttribute('linux_distibution', $rawResult);
+        $this->assertObjectHasAttribute('agent_language', $rawResult);
+        $this->assertObjectHasAttribute('agent_languageTag', $rawResult);
     }
 
     public function testRealResultDevice()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new UserAgentStringCom($this->getClient());
 
-        $result = $provider->parse('Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/48.0.1349.2 Chrome/25.0.1349.2 Safari/537.42');
+        $result = $provider->parse('Mozilla/5.0 (iPod; U; CPU iPhone OS 4_3_3 like Mac OS X; ja-jp) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Chromium',
+                'name'    => 'Safari',
                 'version' => [
-                    'major' => 48,
-                    'minor' => null,
-                    'patch' => null,
+                    'major' => 5,
+                    'minor' => 0,
+                    'patch' => 2,
 
                     'alias' => null,
 
-                    'complete' => '48.0',
+                    'complete' => '5.0.2',
                 ],
             ],
             'renderingEngine' => [
@@ -107,21 +128,21 @@ class BrowscapPhpTest extends AbstractBrowscapTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'Linux',
+                'name'    => 'iPhone OS',
                 'version' => [
-                    'major' => null,
-                    'minor' => null,
-                    'patch' => null,
+                    'major' => 4,
+                    'minor' => 3,
+                    'patch' => 3,
 
                     'alias' => null,
 
-                    'complete' => null,
+                    'complete' => '4.3.3',
                 ],
             ],
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => 'TV Device',
+                'type'  => null,
 
                 'isMobile' => null,
                 'isTouch'  => null,
@@ -132,5 +153,13 @@ class BrowscapPhpTest extends AbstractBrowscapTestCase
                 'type'  => null,
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+
+        $this->assertInstanceOf('stdClass', $rawResult);
+        $this->assertCount(12, (array) $rawResult);
     }
 }

@@ -1,86 +1,62 @@
 <?php
 namespace UserAgentParserTest\Integration\Provider;
 
-use UserAgentParser\Provider\BrowscapPhp;
+use BrowscapPHP\Browscap;
+use UserAgentParser\Provider\BrowscapLite;
 
 /**
  * @coversNothing
  */
-class BrowscapPhpTest extends AbstractBrowscapTestCase
+class BrowscapLiteTest extends AbstractBrowscapTestCase
 {
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
     public function testNoResultFoundWithWarmCache()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new BrowscapLite($this->getParserWithWarmCache('lite'));
 
         $result = $provider->parse('...');
     }
 
-    public function testRealResultBot()
+    /**
+     * @expectedException \UserAgentParser\Exception\InvalidArgumentException
+     * @expectedExceptionMessage You need to warm-up the cache first to use this provider
+     */
+    public function testColdCacheException()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new BrowscapLite($this->getParserWithColdCache('lite'));
 
-        $result = $provider->parse('Mozilla/2.0 (compatible; Ask Jeeves)');
-        $this->assertEquals([
-            'browser' => [
-                'name'    => null,
-                'version' => [
-                    'major' => null,
-                    'minor' => null,
-                    'patch' => null,
+        $result = $provider->parse('...');
+    }
 
-                    'alias' => null,
+    /**
+     * @expectedException \UserAgentParser\Exception\InvalidArgumentException
+     * @expectedExceptionMessage You need to warm-up the cache first to use this provider
+     */
+    public function testColdCacheExceptionStillAfterGetBrowser()
+    {
+        $parser = $this->getParserWithColdCache('lite');
 
-                    'complete' => null,
-                ],
-            ],
-            'renderingEngine' => [
-                'name'    => null,
-                'version' => [
-                    'major' => null,
-                    'minor' => null,
-                    'patch' => null,
+        $result = $parser->getBrowser('Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/48.0.1349.2 Chrome/25.0.1349.2 Safari/537.42');
 
-                    'alias' => null,
+        // verify that browscap returned something
+        $this->assertInstanceOf('stdClass', $result);
+        // the return value is the default browser, since there is no cache
+        // https://github.com/browscap/browscap-php/issues/150#issuecomment-197197655
+        $this->assertEquals('Default Browser', $result->browser);
 
-                    'complete' => null,
-                ],
-            ],
-            'operatingSystem' => [
-                'name'    => null,
-                'version' => [
-                    'major' => null,
-                    'minor' => null,
-                    'patch' => null,
+        $provider = new BrowscapLite($parser);
 
-                    'alias' => null,
-
-                    'complete' => null,
-                ],
-            ],
-            'device' => [
-                'model' => null,
-                'brand' => null,
-                'type'  => null,
-
-                'isMobile' => null,
-                'isTouch'  => null,
-            ],
-            'bot' => [
-                'isBot' => true,
-                'name'  => 'AskJeeves',
-                'type'  => null,
-            ],
-        ], $result->toArray());
+        $result = $provider->parse('...');
     }
 
     public function testRealResultDevice()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new BrowscapLite($this->getParserWithWarmCache('lite'));
 
         $result = $provider->parse('Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/48.0.1349.2 Chrome/25.0.1349.2 Safari/537.42');
+
         $this->assertEquals([
             'browser' => [
                 'name'    => 'Chromium',

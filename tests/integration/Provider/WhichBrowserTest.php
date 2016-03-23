@@ -82,4 +82,169 @@ class WhichBrowserTest extends AbstractProviderTestCase
         $this->assertTrue($class->hasMethod('getModel'), 'method getModel() does not exist anymore');
         $this->assertTrue($class->hasMethod('getManufacturer'), 'method getManufacturer() does not exist anymore');
     }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFound()
+    {
+        $provider = new WhichBrowser();
+
+        $result = $provider->parse('...');
+    }
+
+    public function testRealResultBot()
+    {
+        $provider = new WhichBrowser();
+
+        $result = $provider->parse('Googlebot/2.1 (+http://www.google.com/bot.html)');
+        $this->assertEquals([
+            'browser' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'renderingEngine' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'operatingSystem' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+            'bot' => [
+                'isBot' => true,
+                'name'  => 'Googlebot',
+                'type'  => null,
+            ],
+        ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'browser'   => [
+                'name'    => 'Googlebot',
+                'version' => '2.1',
+            ],
+            'device'    => [
+                'type' => 'bot',
+            ],
+        ], $rawResult);
+    }
+
+    public function testRealResultDevice()
+    {
+        $provider = new WhichBrowser();
+
+        $result = $provider->parse('Mozilla/5.0 (Linux; Android 4.3; SCH-R970C Build/JSS15J) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.3');
+        $this->assertEquals([
+            'browser' => [
+                'name'    => 'Chrome',
+                'version' => [
+                    'major' => 34,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => '34',
+                ],
+            ],
+            'renderingEngine' => [
+                'name'    => 'Blink',
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'operatingSystem' => [
+                'name'    => 'Android',
+                'version' => [
+                    'major' => 4,
+                    'minor' => 3,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => '4.3',
+                ],
+            ],
+            'device' => [
+                'model' => 'Galaxy S4',
+                'brand' => 'Samsung',
+                'type'  => 'mobile:smart',
+
+                'isMobile' => true,
+                'isTouch'  => null,
+            ],
+            'bot' => [
+                'isBot' => null,
+                'name'  => null,
+                'type'  => null,
+            ],
+        ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'browser'   => [
+                'name'    => 'Chrome',
+                'version' => '34',
+                'type'    => 'browser',
+            ],
+            'engine' => [
+                'name'    => 'Blink',
+            ],
+            'os' => [
+                'name'    => 'Android',
+                'version' => '4.3',
+            ],
+            'device'    => [
+                'type'         => 'mobile',
+                'subtype'      => 'smart',
+                'manufacturer' => 'Samsung',
+                'model'        => 'Galaxy S4',
+            ],
+        ], $rawResult);
+    }
 }

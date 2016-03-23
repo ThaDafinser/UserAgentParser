@@ -1,28 +1,28 @@
 <?php
 namespace UserAgentParserTest\Integration\Provider;
 
-use UserAgentParser\Provider\BrowscapPhp;
+use UserAgentParser\Provider\JenssegersAgent;
 
 /**
  * @coversNothing
  */
-class BrowscapPhpTest extends AbstractBrowscapTestCase
+class JenssegersAgentTest extends AbstractProviderTestCase
 {
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundWithWarmCache()
+    public function testNoResultFound()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new JenssegersAgent();
 
         $result = $provider->parse('...');
     }
 
     public function testRealResultBot()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new JenssegersAgent();
 
-        $result = $provider->parse('Mozilla/2.0 (compatible; Ask Jeeves)');
+        $result = $provider->parse('Googlebot/2.1 (+http://www.googlebot.com/bot.html)');
         $this->assertEquals([
             'browser' => [
                 'name'    => null,
@@ -70,28 +70,46 @@ class BrowscapPhpTest extends AbstractBrowscapTestCase
             ],
             'bot' => [
                 'isBot' => true,
-                'name'  => 'AskJeeves',
+                'name'  => 'Google',
                 'type'  => null,
             ],
         ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+        $this->assertEquals([
+            'browserName'    => false,
+            'browserVersion' => false,
+
+            'osName'    => false,
+            'osVersion' => false,
+
+            'deviceModel' => 'Bot',
+            'isMobile'    => false,
+
+            'isRobot' => true,
+            'botName' => 'Google',
+        ], $rawResult);
     }
 
     public function testRealResultDevice()
     {
-        $provider = new BrowscapPhp($this->getParserWithWarmCache(''));
+        $provider = new JenssegersAgent();
 
-        $result = $provider->parse('Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/48.0.1349.2 Chrome/25.0.1349.2 Safari/537.42');
+        $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Chromium',
+                'name'    => 'Safari',
                 'version' => [
-                    'major' => 48,
-                    'minor' => null,
+                    'major' => 5,
+                    'minor' => 1,
                     'patch' => null,
 
                     'alias' => null,
 
-                    'complete' => '48.0',
+                    'complete' => '5.1',
                 ],
             ],
             'renderingEngine' => [
@@ -107,23 +125,23 @@ class BrowscapPhpTest extends AbstractBrowscapTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'Linux',
+                'name'    => 'iOS',
                 'version' => [
-                    'major' => null,
+                    'major' => 5,
                     'minor' => null,
                     'patch' => null,
 
-                    'alias' => null,
+                    'alias' => '_',
 
-                    'complete' => null,
+                    'complete' => '5_0',
                 ],
             ],
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => 'TV Device',
+                'type'  => null,
 
-                'isMobile' => null,
+                'isMobile' => true,
                 'isTouch'  => null,
             ],
             'bot' => [

@@ -150,7 +150,7 @@ class WurflTest extends AbstractProviderTestCase
         $this->assertArrayHasKey('all', $rawResult);
 
         $virtual = $rawResult['virtual'];
-        $this->assertCount(22, $virtual);
+        $this->assertGreaterThan(21, $virtual);
         $this->assertArrayHasKey('is_robot', $virtual);
         $this->assertArrayHasKey('is_smartphone', $virtual);
         $this->assertArrayHasKey('complete_device_name', $virtual);

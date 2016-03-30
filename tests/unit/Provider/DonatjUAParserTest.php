@@ -5,7 +5,6 @@
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  */
-
 namespace UserAgentParser\Provider
 {
 

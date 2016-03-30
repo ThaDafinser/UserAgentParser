@@ -91,7 +91,7 @@ class Zsxsoft extends AbstractProvider
      */
     public function __construct(UserAgent $parser = null)
     {
-        if (! file_exists('vendor/' . $this->getPackageName() . '/composer.json')) {
+        if ($parser === null && ! file_exists('vendor/' . $this->getPackageName() . '/composer.json')) {
             throw new PackageNotLoadedException('You need to install the package ' . $this->getPackageName() . ' to use this provider');
         }
 

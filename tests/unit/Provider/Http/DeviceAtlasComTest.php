@@ -6,6 +6,11 @@ use stdClass;
 use UserAgentParser\Provider\Http\DeviceAtlasCom;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\Http\DeviceAtlasCom
  */
 class DeviceAtlasComTest extends AbstractProviderTestCase

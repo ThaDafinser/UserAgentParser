@@ -8,7 +8,10 @@ use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
 /**
+ * Abstraction of useragentstring.com
  *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
  * @see https://developers.whatismybrowser.com/reference
  */
 class WhatIsMyBrowserCom extends AbstractHttpProvider

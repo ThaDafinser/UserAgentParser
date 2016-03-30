@@ -4,6 +4,11 @@ namespace UserAgentParserTest\Unit\Provider;
 use UserAgentParser\Provider\WhichBrowser;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\WhichBrowser
  */
 class WhichBrowserTest extends AbstractProviderTestCase

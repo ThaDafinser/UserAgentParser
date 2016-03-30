@@ -8,6 +8,12 @@ use Psr\Http\Message\RequestInterface;
 use UserAgentParser\Exception;
 use UserAgentParser\Provider\AbstractProvider;
 
+/**
+ * Abstraction for all HTTP providers
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 abstract class AbstractHttpProvider extends AbstractProvider
 {
     /**

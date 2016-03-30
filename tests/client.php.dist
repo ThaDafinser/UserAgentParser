@@ -3,6 +3,12 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
 
+/**
+ * The HTTP client
+ * 
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 $handler = new CurlHandler();
 $stack = HandlerStack::create($handler);
 

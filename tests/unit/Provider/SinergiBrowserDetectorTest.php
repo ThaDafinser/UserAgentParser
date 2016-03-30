@@ -4,6 +4,11 @@ namespace UserAgentParserTest\Unit\Provider;
 use UserAgentParser\Provider\SinergiBrowserDetector;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\SinergiBrowserDetector
  */
 class SinergiBrowserDetectorTest extends AbstractProviderTestCase

@@ -6,6 +6,11 @@ use stdClass;
 use UserAgentParser\Provider\Http\UdgerCom;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\Http\UdgerCom
  */
 class UdgerComTest extends AbstractProviderTestCase

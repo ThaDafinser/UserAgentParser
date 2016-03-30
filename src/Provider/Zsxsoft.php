@@ -6,6 +6,13 @@ use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
+/**
+ * Abstraction for zsxsoft/php-useragent
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://github.com/zsxsoft/php-useragent
+ */
 class Zsxsoft extends AbstractProvider
 {
     /**
@@ -84,7 +91,7 @@ class Zsxsoft extends AbstractProvider
      */
     public function __construct(UserAgent $parser = null)
     {
-        if (! file_exists('vendor/' . $this->getPackageName() . '/composer.json')) {
+        if ($parser === null && ! file_exists('vendor/' . $this->getPackageName() . '/composer.json')) {
             throw new PackageNotLoadedException('You need to install the package ' . $this->getPackageName() . ' to use this provider');
         }
 

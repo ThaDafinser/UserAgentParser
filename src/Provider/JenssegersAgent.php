@@ -6,6 +6,13 @@ use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
+/**
+ * Abstraction for jenssegers/agent
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://github.com/jenssegers/agent
+ */
 class JenssegersAgent extends AbstractProvider
 {
     /**

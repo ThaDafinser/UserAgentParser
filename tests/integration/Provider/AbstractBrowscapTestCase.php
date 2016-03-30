@@ -4,6 +4,12 @@ namespace UserAgentParserTest\Integration\Provider;
 use BrowscapPHP\Browscap;
 use BrowscapPHP\Helper\IniLoader;
 
+/**
+ * 
+ * 
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 class AbstractBrowscapTestCase extends AbstractProviderTestCase
 {
     protected function getParserWithWarmCache($type)

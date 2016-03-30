@@ -7,6 +7,13 @@ use UserAgentParser\Model;
 use Woothee\Classifier;
 use Woothee\DataSet;
 
+/**
+ * Abstraction for woothee/woothee
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://github.com/woothee/woothee-php
+ */
 class Woothee extends AbstractProvider
 {
     /**

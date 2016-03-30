@@ -6,6 +6,11 @@ use stdClass;
 use UserAgentParser\Provider\Http\WhatIsMyBrowserCom;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\Http\WhatIsMyBrowserCom
  */
 class WhatIsMyBrowserComTest extends AbstractProviderTestCase

@@ -1,6 +1,12 @@
 <?php
 namespace UserAgentParser\Model;
 
+/**
+ * Browser model
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 class Browser
 {
     /**

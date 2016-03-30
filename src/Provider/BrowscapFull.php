@@ -3,6 +3,13 @@ namespace UserAgentParser\Provider;
 
 use BrowscapPHP\Browscap;
 
+/**
+ * Abstraction for Browscap full type
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://github.com/browscap/browscap-php
+ */
 class BrowscapFull extends AbstractBrowscap
 {
     /**

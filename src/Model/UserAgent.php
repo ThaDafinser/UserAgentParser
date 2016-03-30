@@ -1,6 +1,12 @@
 <?php
 namespace UserAgentParser\Model;
 
+/**
+ * User agent model
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 class UserAgent
 {
     /**

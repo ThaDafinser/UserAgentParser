@@ -4,6 +4,11 @@ namespace UserAgentParserTest\Integration\Provider;
 use UserAgentParser\Provider\DonatjUAParser;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * 
  * @coversNothing
  */
 class DonatjUAParserTest extends AbstractProviderTestCase

@@ -2,7 +2,10 @@
 namespace UserAgentParser\Exception;
 
 /**
- * More requests reached
+ * Limitation reached
+ * 
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
  */
 class LimitationExceededException extends \Exception implements ExceptionInterface
 {

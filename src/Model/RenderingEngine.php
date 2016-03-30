@@ -1,6 +1,12 @@
 <?php
 namespace UserAgentParser\Model;
 
+/**
+ * Rendering engine model
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 class RenderingEngine
 {
     /**

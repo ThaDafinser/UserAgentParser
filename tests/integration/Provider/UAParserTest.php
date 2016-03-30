@@ -4,6 +4,11 @@ namespace UserAgentParserTest\Integration\Provider;
 use UserAgentParser\Provider\UAParser;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * 
  * @coversNothing
  */
 class UAParserTest extends AbstractProviderTestCase

@@ -8,9 +8,11 @@ use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
 /**
+ * Abstraction of udger.com
  *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
  * @see https://udger.com/support/documentation/?doc=38
- *
  */
 class UdgerCom extends AbstractHttpProvider
 {

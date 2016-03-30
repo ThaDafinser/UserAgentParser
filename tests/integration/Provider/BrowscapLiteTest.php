@@ -5,6 +5,11 @@ use BrowscapPHP\Browscap;
 use UserAgentParser\Provider\BrowscapLite;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * 
  * @coversNothing
  */
 class BrowscapLiteTest extends AbstractBrowscapTestCase

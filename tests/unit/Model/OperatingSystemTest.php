@@ -6,6 +6,11 @@ use UserAgentParser\Model\OperatingSystem;
 use UserAgentParser\Model\Version;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Model\OperatingSystem
  */
 class OperatingSystemTest extends PHPUnit_Framework_TestCase

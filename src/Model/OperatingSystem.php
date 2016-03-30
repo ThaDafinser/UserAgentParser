@@ -1,6 +1,12 @@
 <?php
 namespace UserAgentParser\Model;
 
+/**
+ * Operating system model
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 class OperatingSystem
 {
     /**

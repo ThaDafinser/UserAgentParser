@@ -6,6 +6,13 @@ use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
+/**
+ * Abstraction for piwik/device-detector
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://github.com/piwik/device-detector
+ */
 class PiwikDeviceDetector extends AbstractProvider
 {
     /**

@@ -6,6 +6,13 @@ use UserAgentParser\Model;
 use Wurfl\CustomDevice;
 use Wurfl\Manager as WurflManager;
 
+/**
+ * Abstraction for mimmi20/wurfl
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://github.com/mimmi20/Wurfl
+ */
 class Wurfl extends AbstractProvider
 {
     /**

@@ -6,6 +6,11 @@ use stdClass;
 use UserAgentParser\Provider\Http\UserAgentApiCom;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\Http\UserAgentApiCom
  */
 class UserAgentApiComTest extends AbstractProviderTestCase

@@ -5,6 +5,11 @@ use UserAgentParser\Provider\BrowscapFull;
 use UserAgentParser\Provider\BrowscapPhp;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\BrowscapFull
  */
 class BrowscapFullTest extends AbstractProviderTestCase

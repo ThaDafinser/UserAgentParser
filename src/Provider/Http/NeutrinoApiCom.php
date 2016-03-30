@@ -7,6 +7,13 @@ use stdClass;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
+/**
+ * Abstraction of neutrinoapi.com
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://www.neutrinoapi.com/api/user-agent-info/
+ */
 class NeutrinoApiCom extends AbstractHttpProvider
 {
     /**

@@ -5,6 +5,11 @@ use PHPUnit_Framework_TestCase;
 use UserAgentParser\Model\Bot;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Model\Bot
  */
 class BotTest extends PHPUnit_Framework_TestCase

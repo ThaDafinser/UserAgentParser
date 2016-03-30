@@ -6,6 +6,11 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\Http\AbstractHttpProvider
  */
 class AbstractHttpProviderTest extends AbstractProviderTestCase

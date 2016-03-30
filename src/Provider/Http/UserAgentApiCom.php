@@ -8,9 +8,11 @@ use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
 /**
+ * Abstraction of useragentapi.com
  *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
  * @see https://useragentapi.com/docs
- *
  */
 class UserAgentApiCom extends AbstractHttpProvider
 {

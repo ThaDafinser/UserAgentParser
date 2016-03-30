@@ -3,6 +3,12 @@ namespace UserAgentParser\Provider;
 
 use UserAgentParser\Exception;
 
+/**
+ * A chain provider, to use multiple providers at the same time
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 class Chain extends AbstractProvider
 {
     /**

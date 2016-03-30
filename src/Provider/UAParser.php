@@ -6,6 +6,13 @@ use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
+/**
+ * Abstraction for ua-parser/uap-php
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://github.com/ua-parser/uap-php
+ */
 class UAParser extends AbstractProvider
 {
     /**

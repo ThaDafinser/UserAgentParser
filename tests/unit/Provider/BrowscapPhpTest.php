@@ -4,6 +4,11 @@ namespace UserAgentParserTest\Unit\Provider;
 use UserAgentParser\Provider\BrowscapPhp;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\BrowscapPhp
  */
 class BrowscapPhpTest extends AbstractProviderTestCase

@@ -1,6 +1,12 @@
 <?php
 namespace UserAgentParser\Model;
 
+/**
+ * Bot model
+ * 
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 class Bot
 {
     /**

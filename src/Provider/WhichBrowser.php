@@ -6,6 +6,14 @@ use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 use WhichBrowser\Parser as WhichBrowserParser;
 
+/**
+ * Abstraction for whichbrowser/parser
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @author Niels Leenheer <niels@leenheer.nl>
+ * @license MIT
+ * @see https://github.com/WhichBrowser/Parser
+ */
 class WhichBrowser extends AbstractProvider
 {
     /**

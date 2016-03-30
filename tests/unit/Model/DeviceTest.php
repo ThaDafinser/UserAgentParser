@@ -5,6 +5,11 @@ use PHPUnit_Framework_TestCase;
 use UserAgentParser\Model\Device;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Model\Device
  */
 class DeviceTest extends PHPUnit_Framework_TestCase

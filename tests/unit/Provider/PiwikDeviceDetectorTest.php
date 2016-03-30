@@ -5,6 +5,11 @@ use DeviceDetector\DeviceDetector;
 use UserAgentParser\Provider\PiwikDeviceDetector;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\PiwikDeviceDetector
  */
 class PiwikDeviceDetectorTest extends AbstractProviderTestCase

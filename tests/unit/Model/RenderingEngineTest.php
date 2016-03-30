@@ -6,6 +6,11 @@ use UserAgentParser\Model\RenderingEngine;
 use UserAgentParser\Model\Version;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Model\RenderingEngine
  */
 class RenderingEngineTest extends PHPUnit_Framework_TestCase

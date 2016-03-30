@@ -7,7 +7,10 @@ use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
 /**
+ * Abstraction of useragentstring.com
  *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
  * @see http://www.useragentstring.com/pages/api.php
  */
 class UserAgentStringCom extends AbstractHttpProvider

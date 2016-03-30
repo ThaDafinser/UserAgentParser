@@ -4,6 +4,11 @@ namespace UserAgentParserTest\Integration\Provider;
 use UserAgentParser\Provider\Woothee;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * 
  * @coversNothing
  */
 class WootheeTest extends AbstractProviderTestCase

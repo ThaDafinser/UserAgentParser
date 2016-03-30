@@ -2,6 +2,11 @@
 namespace UserAgentParserTest\Unit\Provider;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\AbstractProvider
  */
 class AbstractProviderTest extends AbstractProviderTestCase

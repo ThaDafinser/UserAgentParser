@@ -8,6 +8,13 @@ use UserAgentParser\Exception\InvalidArgumentException;
 use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Model;
 
+/**
+ * Abstraction for all browscap types
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://github.com/browscap/browscap-php
+ */
 abstract class AbstractBrowscap extends AbstractProvider
 {
     /**

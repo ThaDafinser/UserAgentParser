@@ -7,6 +7,11 @@ use UserAgentParser\Model\OperatingSystem;
 use UserAgentParser\Model\UserAgent;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Model\UserAgent
  */
 class UserAgentTest extends PHPUnit_Framework_TestCase

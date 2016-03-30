@@ -7,6 +7,13 @@ use stdClass;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
+/**
+ * Abstraction of deviceatlas.com
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://deviceatlas.com/resources/enterprise-api-documentation
+ */
 class DeviceAtlasCom extends AbstractHttpProvider
 {
     /**

@@ -6,6 +6,11 @@ use stdClass;
 use UserAgentParser\Provider\Http\NeutrinoApiCom;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Provider\Http\NeutrinoApiCom
  */
 class NeutrinoApiComTest extends AbstractProviderTestCase

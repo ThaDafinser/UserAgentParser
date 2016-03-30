@@ -5,6 +5,13 @@ use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
+/**
+ * Abstraction for donatj/PhpUserAgent
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ * @see https://github.com/donatj/PhpUserAgent
+ */
 class DonatjUAParser extends AbstractProvider
 {
     /**

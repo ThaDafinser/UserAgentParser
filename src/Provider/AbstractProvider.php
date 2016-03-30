@@ -6,6 +6,12 @@ use DateTimeZone;
 use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
+/**
+ * Abstraction for all providers
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 abstract class AbstractProvider
 {
     /**

@@ -7,6 +7,12 @@ use GuzzleHttp\HandlerStack;
 use PHPUnit_Framework_TestCase;
 use UserAgentParser\Model\UserAgent;
 
+/**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ */
 abstract class AbstractProviderTestCase extends PHPUnit_Framework_TestCase
 {
     public function assertProviderResult($result, array $expectedResult)

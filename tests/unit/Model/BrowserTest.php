@@ -6,6 +6,11 @@ use UserAgentParser\Model\Browser;
 use UserAgentParser\Model\Version;
 
 /**
+ *
+ *
+ * @author Martin Keckeis <martin.keckeis1@gmail.com>
+ * @license MIT
+ *
  * @covers UserAgentParser\Model\Browser
  */
 class BrowserTest extends PHPUnit_Framework_TestCase

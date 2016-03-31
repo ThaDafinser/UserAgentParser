@@ -193,4 +193,19 @@ class NeutrinoApiComTest extends AbstractHttpProviderTestCase
         $this->assertInstanceOf('stdClass', $rawResult);
         $this->assertCount(15, (array) $rawResult);
     }
+
+    public function testEncodeIsCorrect()
+    {
+        if (! defined('CREDENTIALS_NEUTRINO_API_COM_USER_ID') || ! defined('CREDENTIALS_NEUTRINO_API_COM_KEY')) {
+            $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
+        }
+
+        $provider = new NeutrinoApiCom($this->getClient(), CREDENTIALS_NEUTRINO_API_COM_USER_ID, CREDENTIALS_NEUTRINO_API_COM_KEY);
+
+        $userAgent = 'Mozilla/5.0 (Linux; U; Android 3.0.1; en-us; HTC T9299+ For AT&T Build/GRJ22) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1';
+        $result    = $provider->parse($userAgent);
+
+        $this->assertEquals('HTC', $result->getDevice()
+            ->getBrand());
+    }
 }

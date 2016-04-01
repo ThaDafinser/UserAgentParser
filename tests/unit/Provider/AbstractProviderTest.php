@@ -11,7 +11,7 @@ namespace UserAgentParserTest\Unit\Provider;
  */
 class AbstractProviderTest extends AbstractProviderTestCase
 {
-    public function testName()
+    public function testGetName()
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
@@ -25,7 +25,7 @@ class AbstractProviderTest extends AbstractProviderTestCase
         $this->assertEquals('MyName', $provider->getName());
     }
 
-    public function testHomepage()
+    public function testGetHomepage()
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
@@ -39,7 +39,7 @@ class AbstractProviderTest extends AbstractProviderTestCase
         $this->assertEquals('https://github.com/vendor/package', $provider->getHomepage());
     }
 
-    public function testPackageName()
+    public function testGetPackageName()
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 

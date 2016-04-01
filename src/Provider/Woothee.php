@@ -75,6 +75,12 @@ class Woothee extends AbstractProvider
             '/^UNKNOWN$/i',
         ],
 
+        'device' => [
+            'type' => [
+                '/^misc$/i',
+            ],
+        ],
+
         'bot' => [
             'name' => [
                 '/^misc crawler$/i',
@@ -118,7 +124,7 @@ class Woothee extends AbstractProvider
      */
     private function hasResult(array $resultRaw)
     {
-        if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category'])) {
+        if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category'], 'device', 'type')) {
             return true;
         }
 
@@ -180,7 +186,7 @@ class Woothee extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, array $resultRaw)
     {
-        if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category']) === true) {
+        if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category'], 'device', 'type') === true) {
             $device->setType($resultRaw['category']);
         }
     }

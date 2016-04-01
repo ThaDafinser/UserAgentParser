@@ -13,9 +13,9 @@ use UserAgentParser\Provider\Http\NeutrinoApiCom;
  *
  * @covers UserAgentParser\Provider\Http\NeutrinoApiCom
  */
-class NeutrinoApiComTest extends AbstractProviderTestCase
+class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    public function testName()
+    public function testGetName()
     {
         $provider = new NeutrinoApiCom($this->getClient(), 'apiUser', 'apiKey123');
 
@@ -41,6 +41,13 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
         $provider = new NeutrinoApiCom($this->getClient(), 'apiUser', 'apiKey123');
 
         $this->assertNull($provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new NeutrinoApiCom($this->getClient(), 'apiUser', 'apiKey123');
+
+        $this->assertNull($provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()
@@ -80,12 +87,66 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new NeutrinoApiCom($this->getClient(), 'apiUser', 'apiKey123');
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, false, 'unknown');
+        $this->assertIsRealResult($provider, true, 'unknown something');
+        $this->assertIsRealResult($provider, true, 'something unknown');
+
+        /*
+         * device brand
+         */
+        $this->assertIsRealResult($provider, false, 'Generic', 'device', 'brand');
+        $this->assertIsRealResult($provider, true, 'Generic something', 'device', 'brand');
+        $this->assertIsRealResult($provider, true, 'something Generic', 'device', 'brand');
+
+        $this->assertIsRealResult($provider, false, 'generic web browser', 'device', 'brand');
+        $this->assertIsRealResult($provider, true, 'generic web browser something', 'device', 'brand');
+        $this->assertIsRealResult($provider, true, 'something generic web browser', 'device', 'brand');
+
+        /*
+         * device model
+         */
+        $this->assertIsRealResult($provider, false, 'Android', 'device', 'model');
+        $this->assertIsRealResult($provider, false, 'Android something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Android', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Windows Phone', 'device', 'model');
+        $this->assertIsRealResult($provider, false, 'Windows Phone something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Windows Phone', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Windows Mobile', 'device', 'model');
+        $this->assertIsRealResult($provider, false, 'Windows Mobile something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Windows Mobile', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Firefox', 'device', 'model');
+        $this->assertIsRealResult($provider, false, 'Firefox something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Firefox', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Generic', 'device', 'model');
+        $this->assertIsRealResult($provider, false, 'Generic something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something AndGenericroid', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Tablet on Android', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Tablet on Android something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Tablet on Android', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Tablet', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Tablet something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Tablet', 'device', 'model');
+    }
+
     /**
      * Empty user agent
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testGetResultNoResultFoundExceptionEmptyUserAgent()
+    public function testParseNoResultFoundExceptionEmptyUserAgent()
     {
         $responseQueue = [
             new Response(200),
@@ -101,7 +162,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\InvalidCredentialsException
      */
-    public function testGetResultInvalidCredentialsException()
+    public function testParseInvalidCredentialsException()
     {
         $responseQueue = [
             new Response(403),
@@ -117,7 +178,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestException()
+    public function testParseRequestException()
     {
         $responseQueue = [
             new Response(500),
@@ -133,7 +194,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionContentType()
+    public function testParseRequestExceptionContentType()
     {
         $responseQueue = [
             new Response(200, [
@@ -151,7 +212,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionCode1()
+    public function testParseRequestExceptionCode1()
     {
         $rawResult                = new stdClass();
         $rawResult->api_error     = 1;
@@ -173,7 +234,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\LimitationExceededException
      */
-    public function testGetResultLimitationExceededExceptionCode2()
+    public function testParseLimitationExceededExceptionCode2()
     {
         $rawResult                = new stdClass();
         $rawResult->api_error     = 2;
@@ -195,7 +256,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionCodeSomething()
+    public function testParseRequestExceptionCodeSomething()
     {
         $rawResult                = new stdClass();
         $rawResult->api_error     = 1337;
@@ -217,7 +278,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionNoData()
+    public function testParseRequestExceptionNoData()
     {
         $responseQueue = [
             new Response(200, [
@@ -235,7 +296,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $rawResult       = new stdClass();
         $rawResult->type = 'unknown';
@@ -417,7 +478,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
     {
         $rawResult               = new stdClass();
         $rawResult->type         = 'mobile-browser';
-        $rawResult->mobile_model = 'SmartTV';
+        $rawResult->mobile_model = 'Android';
         $rawResult->mobile_brand = 'Generic';
 
         $responseQueue = [
@@ -442,102 +503,5 @@ class NeutrinoApiComTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
-    }
-
-    /**
-     * @dataProvider isRealResult
-     */
-    public function testRealResult($value, $group, $part, $expectedResult)
-    {
-        $class  = new \ReflectionClass('UserAgentParser\Provider\Http\NeutrinoApiCom');
-        $method = $class->getMethod('isRealResult');
-        $method->setAccessible(true);
-
-        $provider = new NeutrinoApiCom($this->getClient([]), 'apiUser', 'apiKey123');
-
-        $actualResult = $method->invokeArgs($provider, [
-            $value,
-            $group,
-            $part,
-        ]);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function isRealResult()
-    {
-        return [
-            /*
-             * general
-             */
-            [
-                'unknown',
-                null,
-                null,
-                false,
-            ],
-
-            /*
-             * deviceBrand
-             */
-            [
-                'Generic',
-                'device',
-                'brand',
-                false,
-            ],
-
-            /*
-             * deviceModel
-             */
-            [
-                'Android',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'SmartTV',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Windows Phone',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Windows Mobile',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Firefox',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Generic',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Tablet on Android',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Tablet',
-                'device',
-                'model',
-                false,
-            ],
-        ];
     }
 }

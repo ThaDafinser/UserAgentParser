@@ -190,7 +190,7 @@ class UdgerCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->ua_family) && $this->isRealResult($resultRaw->ua_family) === true) {
+        if (isset($resultRaw->ua_family) && $this->isRealResult($resultRaw->ua_family, 'browser', 'name') === true) {
             $browser->setName($resultRaw->ua_family);
         }
 

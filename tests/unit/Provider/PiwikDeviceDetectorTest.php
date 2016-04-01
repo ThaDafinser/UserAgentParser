@@ -12,7 +12,7 @@ use UserAgentParser\Provider\PiwikDeviceDetector;
  *
  * @covers UserAgentParser\Provider\PiwikDeviceDetector
  */
-class PiwikDeviceDetectorTest extends AbstractProviderTestCase
+class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     /**
      *
@@ -43,7 +43,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
         rename($tempFile, $file);
     }
 
-    public function testName()
+    public function testGetName()
     {
         $provider = new PiwikDeviceDetector();
 
@@ -115,6 +115,29 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new PiwikDeviceDetector();
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, false, 'UNK');
+        $this->assertIsRealResult($provider, true, 'UNK something');
+        $this->assertIsRealResult($provider, true, 'something UNK');
+
+        /*
+         * bot name
+         */
+        $this->assertIsRealResult($provider, false, 'Bot', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'Bot something', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'something Bot', 'bot', 'name');
+
+        $this->assertIsRealResult($provider, false, 'Generic Bot', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'Generic Bot something', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'something Generic Bot', 'bot', 'name');
+    }
+
     public function testParser()
     {
         $provider = new PiwikDeviceDetector();
@@ -130,7 +153,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $parser = $this->getParser();
 
@@ -142,7 +165,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundExceptionDefaultValue()
+    public function testParseNoResultFoundExceptionDefaultValue()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
@@ -390,72 +413,5 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
-    }
-
-    /**
-     * @dataProvider isRealResult
-     */
-    public function testRealResult($value, $group, $part, $expectedResult)
-    {
-        $class  = new \ReflectionClass('UserAgentParser\Provider\PiwikDeviceDetector');
-        $method = $class->getMethod('isRealResult');
-        $method->setAccessible(true);
-
-        $parser   = $this->getParser();
-        $provider = new PiwikDeviceDetector($parser);
-
-        $actualResult = $method->invokeArgs($provider, [
-            $value,
-            $group,
-            $part,
-        ]);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function isRealResult()
-    {
-        return [
-            /*
-             * general
-             */
-            [
-                DeviceDetector::UNKNOWN,
-                'browser',
-                'name',
-                false,
-            ],
-
-            [
-                'UNKNOWN',
-                'browser',
-                'name',
-                true,
-            ],
-
-            /*
-             * botName
-             */
-            [
-                'Bot',
-                'bot',
-                'name',
-                false,
-            ],
-
-            [
-                'Bot123',
-                'bot',
-                'name',
-                true,
-            ],
-
-            [
-                'Generic bot',
-                'bot',
-                'name',
-                false,
-            ],
-        ];
     }
 }

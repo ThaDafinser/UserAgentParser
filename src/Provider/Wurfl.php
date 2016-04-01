@@ -75,6 +75,11 @@ class Wurfl extends AbstractProvider
         'operatingSystem' => [
             'name' => [
                 '/^Unknown$/i',
+                '/^en$/i',
+                '/^en_US$/i',
+                '/^Desktop$/i',
+                '/^Mobile$/i',
+                '/^Randomized by FreeSafeIP.com$/i',
             ],
         ],
 
@@ -86,7 +91,6 @@ class Wurfl extends AbstractProvider
 
             'model' => [
                 '/^Android/i',
-                '/^SmartTV$/i',
                 '/^Windows Phone/i',
                 '/^Windows Mobile/i',
                 '/^Firefox/i',

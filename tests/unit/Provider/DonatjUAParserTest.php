@@ -33,7 +33,7 @@ namespace UserAgentParserTest\Unit\Provider
     /**
      * @covers UserAgentParser\Provider\DonatjUAParser
      */
-    class DonatjUAParserTest extends AbstractProviderTestCase
+    class DonatjUAParserTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
     {
         public static $browser = null;
 
@@ -57,7 +57,7 @@ namespace UserAgentParserTest\Unit\Provider
             rename($tempFile, $file);
         }
 
-        public function testName()
+        public function testGetName()
         {
             $provider = new DonatjUAParser();
 
@@ -129,10 +129,20 @@ namespace UserAgentParserTest\Unit\Provider
             ], $provider->getDetectionCapabilities());
         }
 
+        public function testIsRealResult()
+        {
+            $provider = new DonatjUAParser();
+
+            /*
+             * general
+             */
+            $this->assertIsRealResult($provider, true, 'UNKNOWN something');
+        }
+
         /**
          * @expectedException \UserAgentParser\Exception\NoResultFoundException
          */
-        public function testNoResultFoundException()
+        public function testParseNoResultFoundException()
         {
             self::$browser = null;
             self::$version = null;

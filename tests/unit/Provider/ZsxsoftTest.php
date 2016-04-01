@@ -5,13 +5,12 @@ use UserAgentParser\Provider\Zsxsoft;
 
 /**
  *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *
- * @covers UserAgentParser\Provider\Zsxsoft
+ *         
+ *          @covers UserAgentParser\Provider\Zsxsoft
  */
-class ZsxsoftTest extends AbstractProviderTestCase
+class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     /**
      *
@@ -55,7 +54,7 @@ class ZsxsoftTest extends AbstractProviderTestCase
         rename($tempFile, $file);
     }
 
-    public function testName()
+    public function testGetName()
     {
         $provider = new Zsxsoft();
 
@@ -127,6 +126,24 @@ class ZsxsoftTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new Zsxsoft();
+
+        $this->assertIsRealResult($provider, false, 'unknown');
+        $this->assertIsRealResult($provider, false, 'UnKnown');
+        $this->assertIsRealResult($provider, true, 'Unknown thing');
+
+        $this->assertIsRealResult($provider, false, 'Mozilla Compatible', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'Mozilla', 'browser', 'name');
+
+        $this->assertIsRealResult($provider, false, 'Browser', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Browser model name', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Android', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Android model name', 'device', 'model');
+    }
+
     public function testParser()
     {
         $provider = new Zsxsoft();
@@ -142,9 +159,48 @@ class ZsxsoftTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $provider = new Zsxsoft($this->getParser());
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testParseNoResultFoundExceptionDefaultBrowserName()
+    {
+        $result = [
+            'browser' => [
+                'name'    => 'Mozilla Compatible',
+                'version' => '3.2.1',
+            ],
+            'os'       => [],
+            'device'   => [],
+            'platform' => [],
+        ];
+
+        $provider = new Zsxsoft($this->getParser($result));
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testParseNoResultFoundExceptionDefaultDeviceModel()
+    {
+        $result = [
+            'browser' => [],
+            'os'      => [],
+            'device'  => [
+                'model' => 'Android',
+            ],
+            'platform' => [],
+        ];
+
+        $provider = new Zsxsoft($this->getParser($result));
 
         $result = $provider->parse('A real user agent...');
     }

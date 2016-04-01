@@ -13,9 +13,9 @@ use UserAgentParser\Provider\Http\UdgerCom;
  *
  * @covers UserAgentParser\Provider\Http\UdgerCom
  */
-class UdgerComTest extends AbstractProviderTestCase
+class UdgerComTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    public function testName()
+    public function testGetName()
     {
         $provider = new UdgerCom($this->getClient(), 'apiKey123');
 
@@ -41,6 +41,13 @@ class UdgerComTest extends AbstractProviderTestCase
         $provider = new UdgerCom($this->getClient(), 'apiKey123');
 
         $this->assertNull($provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new UdgerCom($this->getClient(), 'apiKey123');
+
+        $this->assertNull($provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()
@@ -80,12 +87,24 @@ class UdgerComTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new UdgerCom($this->getClient(), 'apiKey123');
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, false, 'unknown');
+        $this->assertIsRealResult($provider, true, 'unknown something');
+        $this->assertIsRealResult($provider, true, 'something unknown');
+    }
+
     /**
      * Empty user agent
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testGetResultNoResultFoundExceptionEmptyUserAgent()
+    public function testParseNoResultFoundExceptionEmptyUserAgent()
     {
         $responseQueue = [
             new Response(200),
@@ -101,7 +120,7 @@ class UdgerComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\InvalidCredentialsException
      */
-    public function testGetResultInvalidCredentialsException()
+    public function testParseInvalidCredentialsException()
     {
         $rawResult       = new stdClass();
         $rawResult->flag = 4;
@@ -122,7 +141,7 @@ class UdgerComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\LimitationExceededException
      */
-    public function testGetResultLimitationExceededException()
+    public function testParseLimitationExceededException()
     {
         $rawResult       = new stdClass();
         $rawResult->flag = 6;
@@ -143,7 +162,7 @@ class UdgerComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestException1()
+    public function testParseRequestException1()
     {
         $rawResult       = new stdClass();
         $rawResult->flag = 99;
@@ -164,7 +183,7 @@ class UdgerComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestException2()
+    public function testParseRequestException2()
     {
         $responseQueue = [
             new Response(500),
@@ -180,7 +199,7 @@ class UdgerComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionContentType()
+    public function testParseRequestExceptionContentType()
     {
         $responseQueue = [
             new Response(200, [
@@ -198,7 +217,7 @@ class UdgerComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testGetResultNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $rawResult       = new stdClass();
         $rawResult->flag = 3;
@@ -219,7 +238,7 @@ class UdgerComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionNoData()
+    public function testParseRequestExceptionNoData()
     {
         $rawResult = new stdClass();
 
@@ -418,37 +437,5 @@ class UdgerComTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
-    }
-
-    /**
-     * @dataProvider isRealResult
-     */
-    public function testRealResult($value, $group, $part, $expectedResult)
-    {
-        $class  = new \ReflectionClass('UserAgentParser\Provider\Http\UdgerCom');
-        $method = $class->getMethod('isRealResult');
-        $method->setAccessible(true);
-
-        $provider = new UdgerCom($this->getClient([]), 'apiUser', 'apiKey123');
-
-        $actualResult = $method->invokeArgs($provider, [
-            $value,
-            $group,
-            $part,
-        ]);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function isRealResult()
-    {
-        return [
-            [
-                'unknown',
-                null,
-                null,
-                false,
-            ],
-        ];
     }
 }

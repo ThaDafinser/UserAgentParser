@@ -13,9 +13,9 @@ use UserAgentParser\Provider\Http\UserAgentApiCom;
  *
  * @covers UserAgentParser\Provider\Http\UserAgentApiCom
  */
-class UserAgentApiComTest extends AbstractProviderTestCase
+class UserAgentApiComTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    public function testName()
+    public function testGetName()
     {
         $provider = new UserAgentApiCom($this->getClient(), 'apiKey123');
 
@@ -41,6 +41,13 @@ class UserAgentApiComTest extends AbstractProviderTestCase
         $provider = new UserAgentApiCom($this->getClient(), 'apiKey123');
 
         $this->assertNull($provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new UserAgentApiCom($this->getClient(), 'apiKey123');
+
+        $this->assertNull($provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()
@@ -80,12 +87,22 @@ class UserAgentApiComTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new UserAgentApiCom($this->getClient(), 'apiKey123');
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, true, 'something UNKNOWN');
+    }
+
     /**
      * Empty user agent
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testGetResultNoResultFoundExceptionEmptyUserAgent()
+    public function testParseNoResultFoundExceptionEmptyUserAgent()
     {
         $responseQueue = [
             new Response(200),
@@ -101,7 +118,7 @@ class UserAgentApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\InvalidCredentialsException
      */
-    public function testGetResultInvalidCredentialsException()
+    public function testParseInvalidCredentialsException()
     {
         $rawResult              = new stdClass();
         $rawResult->error       = new stdClass();
@@ -121,7 +138,7 @@ class UserAgentApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionUserAgentInvalid()
+    public function testParseRequestExceptionUserAgentInvalid()
     {
         $rawResult              = new stdClass();
         $rawResult->error       = new stdClass();
@@ -141,7 +158,7 @@ class UserAgentApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestException()
+    public function testParseRequestException()
     {
         $responseQueue = [
             new Response(500),
@@ -157,7 +174,7 @@ class UserAgentApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionContentType()
+    public function testParseRequestExceptionContentType()
     {
         $responseQueue = [
             new Response(200, [
@@ -175,7 +192,7 @@ class UserAgentApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testGetResultNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $rawResult              = new stdClass();
         $rawResult->error       = new stdClass();
@@ -197,7 +214,7 @@ class UserAgentApiComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionNoData()
+    public function testParseRequestExceptionNoData()
     {
         $rawResult = new stdClass();
 

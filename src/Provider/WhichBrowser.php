@@ -122,7 +122,7 @@ class WhichBrowser extends AbstractProvider
      */
     private function hydrateBrowser(Model\Browser $browser, \WhichBrowser\Model\Browser $browserRaw)
     {
-        if ($this->isRealResult($browserRaw->getName()) === true) {
+        if ($this->isRealResult($browserRaw->getName(), 'browser', 'name') === true) {
             $browser->setName($browserRaw->getName());
 
             if ($this->isRealResult($browserRaw->getVersion()) === true) {

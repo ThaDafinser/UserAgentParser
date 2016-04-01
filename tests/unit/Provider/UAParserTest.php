@@ -6,13 +6,12 @@ use UserAgentParser\Provider\UAParser;
 
 /**
  *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *
- * @covers UserAgentParser\Provider\UAParser
+ *         
+ *          @covers UserAgentParser\Provider\UAParser
  */
-class UAParserTest extends AbstractProviderTestCase
+class UAParserTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     /**
      *
@@ -64,7 +63,7 @@ class UAParserTest extends AbstractProviderTestCase
         rename($tempFile, $file);
     }
 
-    public function testName()
+    public function testGetName()
     {
         $provider = new UAParser();
 
@@ -136,6 +135,91 @@ class UAParserTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new UAParser();
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, false, 'Other');
+        $this->assertIsRealResult($provider, true, 'Other something');
+        $this->assertIsRealResult($provider, true, 'something Other');
+
+        /*
+         * device brand
+         */
+        $this->assertIsRealResult($provider, false, 'Generic', 'device', 'brand');
+        $this->assertIsRealResult($provider, false, 'Generic something', 'device', 'brand');
+        $this->assertIsRealResult($provider, true, 'something Generic', 'device', 'brand');
+
+        $this->assertIsRealResult($provider, false, 'unknown', 'device', 'brand');
+        $this->assertIsRealResult($provider, true, 'unknown something', 'device', 'brand');
+        $this->assertIsRealResult($provider, true, 'something unknown', 'device', 'brand');
+
+        /*
+         * device model
+         */
+        $this->assertIsRealResult($provider, false, 'generic', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'generic something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something generic', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Smartphone', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Smartphone something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Smartphone', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Feature Phone', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Feature Phone something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Feature Phone', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'iOS-Device', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'iOS-Device something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something iOS-Device', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Tablet', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Tablet something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Tablet', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Touch', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Touch something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Touch', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Windows', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Windows something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Windows', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Windows Phone', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Windows Phone something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Windows Phone', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Android', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Android something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Android', 'device', 'model');
+
+        /*
+         * bot name
+         */
+        $this->assertIsRealResult($provider, false, 'Other', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'Other something', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'something Other', 'bot', 'name');
+
+        $this->assertIsRealResult($provider, false, 'crawler', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'crawler something', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'something crawler', 'bot', 'name');
+
+        $this->assertIsRealResult($provider, false, 'robot', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'robot something', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'something robot', 'bot', 'name');
+
+        $this->assertIsRealResult($provider, false, 'crawl', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'crawl something', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'something crawl', 'bot', 'name');
+
+        $this->assertIsRealResult($provider, false, 'Spider', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'Spider something', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'something Spider', 'bot', 'name');
+    }
+
     public function testParser()
     {
         $provider = new UAParser();
@@ -151,7 +235,7 @@ class UAParserTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $parser = $this->getParser($this->getResultMock());
 
@@ -163,7 +247,7 @@ class UAParserTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundExceptionDefaultValue()
+    public function testParseNoResultFoundExceptionDefaultValue()
     {
         $result             = $this->getResultMock();
         $result->ua->family = 'Other';
@@ -178,7 +262,7 @@ class UAParserTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundExceptionDefaultValueDeviceModel()
+    public function testParseNoResultFoundExceptionDefaultValueDeviceModel()
     {
         $result                = $this->getResultMock();
         $result->device->model = 'Smartphone';
@@ -384,142 +468,5 @@ class UAParserTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
-    }
-
-    /**
-     * @dataProvider isRealResult
-     */
-    public function testRealResult($value, $group, $part, $expectedResult)
-    {
-        $class  = new \ReflectionClass('UserAgentParser\Provider\UAParser');
-        $method = $class->getMethod('isRealResult');
-        $method->setAccessible(true);
-
-        $provider = new UAParser($this->getParser($this->getResultMock()));
-
-        $actualResult = $method->invokeArgs($provider, [
-            $value,
-            $group,
-            $part,
-        ]);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function isRealResult()
-    {
-        return [
-            /*
-             * general
-             */
-            [
-                'Other',
-                null,
-                null,
-                false,
-            ],
-
-            /*
-             * deviceBrand
-             */
-            [
-                'Generic',
-                'device',
-                'brand',
-                false,
-            ],
-            [
-                'Generic',
-                null,
-                null,
-                true,
-            ],
-
-            /*
-             * deviceModel
-             */
-            [
-                'generic',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Smartphone',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Feature Phone',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'iOS-Device',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Tablet',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Touch',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Windows',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Windows Phone',
-                'device',
-                'model',
-                false,
-            ],
-
-            /*
-             * botName
-             */
-            [
-                'Other',
-                'bot',
-                'name',
-                false,
-            ],
-            [
-                'crawler',
-                'bot',
-                'name',
-                false,
-            ],
-            [
-                'robot',
-                'bot',
-                'name',
-                false,
-            ],
-            [
-                'crawl',
-                'bot',
-                'name',
-                false,
-            ],
-            [
-                'Spider',
-                'bot',
-                'name',
-                false,
-            ],
-        ];
     }
 }

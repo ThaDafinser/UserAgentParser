@@ -5,13 +5,12 @@ use UserAgentParser\Provider\Chain;
 
 /**
  *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *
+ *         
  * @covers UserAgentParser\Provider\Chain
  */
-class ChainTest extends AbstractProviderTestCase
+class ChainTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     /**
      *
@@ -51,7 +50,7 @@ class ChainTest extends AbstractProviderTestCase
         ], $chain->getProviders());
     }
 
-    public function testName()
+    public function testGetName()
     {
         $chain = new Chain();
 
@@ -65,6 +64,13 @@ class ChainTest extends AbstractProviderTestCase
         $this->assertNull($provider->getHomepage());
     }
 
+    public function testGetPackageName()
+    {
+        $provider = new Chain();
+
+        $this->assertNull($provider->getPackageName());
+    }
+
     public function testVersion()
     {
         $provider = new Chain();
@@ -72,7 +78,62 @@ class ChainTest extends AbstractProviderTestCase
         $this->assertNull($provider->getVersion());
     }
 
+    public function testUpdateDate()
+    {
+        $provider = new Chain();
+
+        $this->assertNull($provider->getUpdateDate());
+    }
+
+    public function testDetectionCapabilities()
+    {
+        $provider = new Chain();
+
+        $this->assertEquals([
+
+            'browser' => [
+                'name'    => false,
+                'version' => false,
+            ],
+
+            'renderingEngine' => [
+                'name'    => false,
+                'version' => false,
+            ],
+
+            'operatingSystem' => [
+                'name'    => false,
+                'version' => false,
+            ],
+
+            'device' => [
+                'model'    => false,
+                'brand'    => false,
+                'type'     => false,
+                'isMobile' => false,
+                'isTouch'  => false,
+            ],
+
+            'bot' => [
+                'isBot' => false,
+                'name'  => false,
+                'type'  => false,
+            ],
+        ], $provider->getDetectionCapabilities());
+    }
+
+    public function testIsRealResult()
+    {
+        $provider = new Chain();
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, true, 'something UNKNOWN');
+    }
+
     /**
+     * @todo should throw another exception! since no provider was provided!
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
     public function testParseNoProviderNoResultFoundException()
@@ -87,7 +148,7 @@ class ChainTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testParseWithProviderNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $provider = $this->provider;
         $provider->expects($this->any())

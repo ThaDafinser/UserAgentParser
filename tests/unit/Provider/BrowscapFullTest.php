@@ -36,7 +36,7 @@ class BrowscapFullTest extends AbstractProviderTestCase
         return $parser;
     }
 
-    public function testName()
+    public function testGetName()
     {
         $provider = new BrowscapFull($this->getParser());
 

@@ -11,7 +11,7 @@ use UserAgentParser\Provider\WhichBrowser;
  *
  * @covers UserAgentParser\Provider\WhichBrowser
  */
-class WhichBrowserTest extends AbstractProviderTestCase
+class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     /**
      *
@@ -47,7 +47,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
         rename($tempFile, $file);
     }
 
-    public function testName()
+    public function testGetName()
     {
         $provider = new WhichBrowser();
 
@@ -119,6 +119,16 @@ class WhichBrowserTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new WhichBrowser();
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, true, 'something');
+    }
+
     public function testParser()
     {
         $provider = new WhichBrowser();
@@ -129,7 +139,7 @@ class WhichBrowserTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $parser = $this->getParser();
 

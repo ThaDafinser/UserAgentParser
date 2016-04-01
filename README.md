@@ -26,6 +26,10 @@ So you can
   - we got over 350 unit tests and over 70 integration tests
   - plus we test the lowest and highest dependency
 
+The quality of this package is currently covered by
+- ***unit tests*** (345 tests, 719 assertions)
+- ***integration tests*** (78 tests, 308 assertions)
+- ***regular real result testing*** (the results of ***over 30.000 user agents*** are compared [here](http://thadafinser.github.io/UserAgentParserComparison/))
 
 ## Try it out
 

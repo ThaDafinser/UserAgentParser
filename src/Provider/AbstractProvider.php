@@ -254,6 +254,15 @@ abstract class AbstractProvider
         return true;
     }
 
+    protected function getRealResult($value, $group = null, $part = null)
+    {
+        if ($this->isRealResult($value, $group, $part) === true) {
+            return $value;
+        }
+
+        return;
+    }
+
     /**
      * Parse the given user agent and return a result if possible
      *

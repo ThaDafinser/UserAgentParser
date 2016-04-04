@@ -64,6 +64,7 @@ class UserAgentStringCom extends AbstractHttpProvider
     protected $defaultValues = [
         'general' => [
             '/^unknown$/i',
+            '/^--$/i',
         ],
     ];
 
@@ -98,7 +99,7 @@ class UserAgentStringCom extends AbstractHttpProvider
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
-        $parameters = 'uas=' . urlencode($userAgent);
+        $parameters = 'uas=' . rawurlencode($userAgent);
         $parameters .= '&getJSON=all';
 
         $uri = self::$uri . '?' . $parameters;

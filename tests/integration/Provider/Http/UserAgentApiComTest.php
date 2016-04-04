@@ -19,20 +19,18 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
         $result = $provider->parse('...');
     }
 
-    // /**
-    // * @expectedException \UserAgentParser\Exception\RequestException
-    // * @expectedExceptionMessage User agent is invalid ""
-    // */
-    // public function testInvalidUserAgent()
-    // {
-    // if (! defined('CREDENTIALS_USER_AGENT_API_COM_KEY')) {
-    // $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
-    // }
-
-    // $provider = new UserAgentApiCom($this->getClient(), CREDENTIALS_USER_AGENT_API_COM_KEY);
-
-    // $result = $provider->parse('');
-    // }
+    /**
+     * @expectedException \UserAgentParser\Exception\RequestException
+     * @expectedExceptionMessage User agent is invalid ""
+     */
+    public function testInvalidUserAgent()
+    {
+        // rawurlencode() prevents us from this error
+        // examples for useragent_invalid
+        // https://useragentapi.com/api/v3/json/APIKEY/
+        // https://useragentapi.com/api/v3/json/APIKEY//
+        $this->markTestIncomplete('User agent is invalid only occure if the USERAGENT is not given or a wrong character.');
+    }
 
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
@@ -199,5 +197,20 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
         $this->assertObjectHasAttribute('browser_version', $rawResult);
         $this->assertObjectHasAttribute('engine_name', $rawResult);
         $this->assertObjectHasAttribute('engine_version', $rawResult);
+    }
+
+    public function testEncodeIsCorrect()
+    {
+        if (! defined('CREDENTIALS_USER_AGENT_API_COM_KEY')) {
+            $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
+        }
+
+        $provider = new UserAgentApiCom($this->getClient(), CREDENTIALS_USER_AGENT_API_COM_KEY);
+
+        $userAgent = 'Mozilla/5.0 (Linux; U; Android 3.0.1; en-us; HTC T9299+ For AT&T Build/GRJ22) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1';
+        $result    = $provider->parse($userAgent);
+
+        $this->assertEquals('WebKit', $result->getRenderingEngine()
+            ->getName());
     }
 }

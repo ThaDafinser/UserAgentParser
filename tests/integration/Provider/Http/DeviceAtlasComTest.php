@@ -109,4 +109,19 @@ class DeviceAtlasComTest extends AbstractHttpProviderTestCase
         $this->assertObjectHasAttribute('browserRenderingEngine', $rawResult);
         $this->assertObjectHasAttribute('osName', $rawResult);
     }
+
+    public function testEncodeIsCorrect()
+    {
+        if (! defined('CREDENTIALS_DEVICE_ATLAS_COM_KEY')) {
+            $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
+        }
+
+        $provider = new DeviceAtlasCom($this->getClient(), CREDENTIALS_DEVICE_ATLAS_COM_KEY);
+
+        $userAgent = 'Mozilla/5.0 (Linux; U; Android 3.0.1; en-us; HTC T9299+ For AT&T Build/GRJ22) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1';
+        $result    = $provider->parse($userAgent);
+
+        $this->assertEquals('WebKit', $result->getRenderingEngine()
+            ->getName());
+    }
 }

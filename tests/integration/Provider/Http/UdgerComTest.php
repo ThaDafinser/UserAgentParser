@@ -19,17 +19,19 @@ class UdgerComTest extends AbstractHttpProviderTestCase
         $result = $provider->parse('...');
     }
 
-//     /**
-//      * @expectedException \UserAgentParser\Exception\NoResultFoundException
-//      */
-//     public function testNoResultFound()
-//     {
-//         if (! defined('CREDENTIALS_UDGER_COM_KEY')) {
-//             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
-//         }
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testNoResultFound()
+    {
+        if (! defined('CREDENTIALS_UDGER_COM_KEY')) {
+            $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
+        }
 
-//         $provider = new UdgerCom($this->getClient(), CREDENTIALS_UDGER_COM_KEY);
+        $this->markTestIncomplete('Currently i have no valid API key to create more integration tests');
 
-//         $result = $provider->parse('...');
-//     }
+        $provider = new UdgerCom($this->getClient(), CREDENTIALS_UDGER_COM_KEY);
+
+        $result = $provider->parse('...');
+    }
 }

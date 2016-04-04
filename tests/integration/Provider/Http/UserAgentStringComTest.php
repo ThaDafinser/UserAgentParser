@@ -162,4 +162,14 @@ class UserAgentStringComTest extends AbstractHttpProviderTestCase
         $this->assertInstanceOf('stdClass', $rawResult);
         $this->assertCount(12, (array) $rawResult);
     }
+
+    public function testEncodeIsCorrect()
+    {
+        $provider = new UserAgentStringCom($this->getClient());
+
+        $userAgent = 'JUC (Linux; U; 4.0.1; zh-cn; HTC_HD7_4G_T9399+_For_AT&T; 480*800) UCWEB7.9.4.145/139/800';
+        $result    = $provider->parse($userAgent);
+
+        $this->assertEquals('UC Browser', $result->getBrowser()->getName());
+    }
 }

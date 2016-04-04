@@ -95,7 +95,7 @@ class UserAgentApiCom extends AbstractHttpProvider
         }
 
         $parameters = '/' . $this->apiKey;
-        $parameters .= '/' . urlencode($userAgent);
+        $parameters .= '/' . rawurlencode($userAgent);
 
         $uri = self::$uri . $parameters;
 

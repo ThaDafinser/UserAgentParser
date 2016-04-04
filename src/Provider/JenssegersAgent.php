@@ -132,7 +132,7 @@ class JenssegersAgent extends AbstractProvider
     /**
      *
      * @param Model\Bot $bot
-     * @param array     $browserRaw
+     * @param array     $resultRaw
      */
     private function hydrateBot(Model\Bot $bot, array $resultRaw)
     {

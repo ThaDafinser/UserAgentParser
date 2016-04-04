@@ -136,4 +136,18 @@ class WhatIsMyBrowserComTest extends AbstractHttpProviderTestCase
         $this->assertObjectHasAttribute('browser_version_full', $rawResult);
         $this->assertObjectHasAttribute('browser', $rawResult);
     }
+
+    public function testEncodeIsCorrect()
+    {
+        if (! defined('CREDENTIALS_WHAT_IS_MY_BROWSER_COM_KEY')) {
+            $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
+        }
+
+        $provider = new WhatIsMyBrowserCom($this->getClient(), CREDENTIALS_WHAT_IS_MY_BROWSER_COM_KEY);
+
+        $userAgent = 'Mozilla/5.0 (Linux; U; Android 3.0.1; en-us; HTC T9299+ For AT&T Build/GRJ22) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1';
+        $result    = $provider->parse($userAgent);
+
+        $this->assertEquals($userAgent, $result->getProviderResultRaw()->user_agent);
+    }
 }

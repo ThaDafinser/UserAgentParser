@@ -82,8 +82,8 @@ class DeviceAtlasCom extends AbstractHttpProvider
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
-        $parameters = '?licencekey=' . urlencode($this->apiKey);
-        $parameters .= '&useragent=' . urlencode($userAgent);
+        $parameters = '?licencekey=' . rawurlencode($this->apiKey);
+        $parameters .= '&useragent=' . rawurlencode($userAgent);
 
         $uri = self::$uri . $parameters;
 

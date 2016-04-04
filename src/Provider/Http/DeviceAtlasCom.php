@@ -143,11 +143,11 @@ class DeviceAtlasCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->browserName) && $this->isRealResult($resultRaw->browserName) === true) {
+        if (isset($resultRaw->browserName) && $this->isRealResult($resultRaw->browserName, 'browser', 'name') === true) {
             $browser->setName($resultRaw->browserName);
         }
 
-        if (isset($resultRaw->browserVersion) && $this->isRealResult($resultRaw->browserVersion) === true) {
+        if (isset($resultRaw->browserVersion) && $this->isRealResult($resultRaw->browserVersion, 'browser', 'version') === true) {
             $browser->getVersion()->setComplete($resultRaw->browserVersion);
         }
     }

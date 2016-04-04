@@ -11,7 +11,7 @@ use UserAgentParser\Provider\Woothee;
  *
  * @covers UserAgentParser\Provider\Woothee
  */
-class WootheeTest extends AbstractProviderTestCase
+class WootheeTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     /**
      *
@@ -44,7 +44,7 @@ class WootheeTest extends AbstractProviderTestCase
         rename($tempFile, $file);
     }
 
-    public function testName()
+    public function testGetName()
     {
         $provider = new Woothee();
 
@@ -116,6 +116,32 @@ class WootheeTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new Woothee();
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, false, 'UNKNOWN');
+        $this->assertIsRealResult($provider, true, 'UNKNOWN something');
+        $this->assertIsRealResult($provider, true, 'something UNKNOWN');
+
+        /*
+         * device type
+         */
+        $this->assertIsRealResult($provider, false, 'misc', 'device', 'type');
+        $this->assertIsRealResult($provider, true, 'misc something', 'device', 'type');
+        $this->assertIsRealResult($provider, true, 'something misc', 'device', 'type');
+
+        /*
+         * bot name
+         */
+        $this->assertIsRealResult($provider, false, 'misc crawler', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'misc crawler something', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'something misc crawler', 'bot', 'name');
+    }
+
     public function testParser()
     {
         $provider = new Woothee();
@@ -126,7 +152,7 @@ class WootheeTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $parser = $this->getParser();
 
@@ -143,10 +169,29 @@ class WootheeTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundExceptionDefaultValue()
+    public function testParseNoResultFoundExceptionDefaultBrowserName()
     {
         $parser = $this->getParser([
             'name' => 'UNKNOWN',
+        ]);
+
+        $provider = new Woothee();
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     */
+    public function testParseNoResultFoundExceptionDefaultDeviceType()
+    {
+        $parser = $this->getParser([
+            'category' => 'misc',
         ]);
 
         $provider = new Woothee();
@@ -332,50 +377,5 @@ class WootheeTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
-    }
-
-    /**
-     * @dataProvider isRealResult
-     */
-    public function testRealResult($value, $group, $part, $expectedResult)
-    {
-        $class  = new \ReflectionClass('UserAgentParser\Provider\Woothee');
-        $method = $class->getMethod('isRealResult');
-        $method->setAccessible(true);
-
-        $provider = new Woothee();
-
-        $actualResult = $method->invokeArgs($provider, [
-            $value,
-            $group,
-            $part,
-        ]);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function isRealResult()
-    {
-        return [
-            /*
-             * general
-             */
-            [
-                'UNKNOWN',
-                null,
-                null,
-                false,
-            ],
-
-            /*
-             * botName
-             */
-            [
-                'misc crawler',
-                'bot',
-                'name',
-                false,
-            ],
-        ];
     }
 }

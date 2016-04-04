@@ -11,7 +11,7 @@ use UserAgentParser\Provider\BrowscapPhp;
  *
  * @covers UserAgentParser\Provider\AbstractBrowscap
  */
-class AbstractBrowscapTest extends AbstractProviderTestCase
+class AbstractBrowscapTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     /**
      *
@@ -58,7 +58,7 @@ class AbstractBrowscapTest extends AbstractProviderTestCase
         ]);
     }
 
-    public function testName()
+    public function testGetName()
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractBrowscap', [
             $this->getParser(),
@@ -149,6 +149,45 @@ class AbstractBrowscapTest extends AbstractProviderTestCase
                 'type'  => false,
             ],
         ], $provider->getDetectionCapabilities());
+    }
+
+    public function testIsRealResult()
+    {
+        $parser = $this->getParser();
+
+        $provider = new BrowscapPhp($parser);
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, false, 'unknown');
+        $this->assertIsRealResult($provider, true, 'unknown something');
+        $this->assertIsRealResult($provider, true, 'something unknown');
+
+        /*
+         * browser name
+         */
+        $this->assertIsRealResult($provider, false, 'Default Browser', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'Default Browser something', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'something Default Browser', 'browser', 'name');
+
+        /*
+         * device model
+         */
+        $this->assertIsRealResult($provider, false, 'general', 'device', 'model');
+        $this->assertIsRealResult($provider, false, 'general something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something general', 'device', 'model');
+
+        /*
+         * bot name
+         */
+        $this->assertIsRealResult($provider, false, 'General Crawlers', 'bot', 'name');
+        $this->assertIsRealResult($provider, false, 'General Crawlers something', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'something General Crawlers', 'bot', 'name');
+
+        $this->assertIsRealResult($provider, false, 'Generic', 'bot', 'name');
+        $this->assertIsRealResult($provider, false, 'Generic something', 'bot', 'name');
+        $this->assertIsRealResult($provider, true, 'something Generic', 'bot', 'name');
     }
 
     public function testParser()
@@ -531,92 +570,5 @@ class AbstractBrowscapTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
-    }
-
-    /**
-     * @dataProvider isRealResult
-     */
-    public function testRealResult($value, $group, $part, $expectedResult)
-    {
-        $class  = new \ReflectionClass('UserAgentParser\Provider\AbstractBrowscap');
-        $method = $class->getMethod('isRealResult');
-        $method->setAccessible(true);
-
-        $result = new \stdClass();
-
-        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractBrowscap', [
-            $this->getParser($result),
-        ]);
-
-        $actualResult = $method->invokeArgs($provider, [
-            $value,
-            $group,
-            $part,
-        ]);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function isRealResult()
-    {
-        return [
-            /*
-             * general
-             */
-            [
-                'unknown',
-                null,
-                null,
-                false,
-            ],
-
-            /*
-             * browserName
-             */
-            [
-                'Default Browser',
-                'browser',
-                'name',
-                false,
-            ],
-
-            /*
-             * deviceModel
-             */
-            [
-                'general',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'general Mobile Device',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Linux Desktop',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Windows Desktop',
-                'device',
-                'model',
-                false,
-            ],
-
-            /*
-             * botName
-             */
-            [
-                'General Crawlers',
-                'bot',
-                'name',
-                false,
-            ],
-        ];
     }
 }

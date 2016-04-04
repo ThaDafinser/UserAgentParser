@@ -13,9 +13,9 @@ use UserAgentParser\Provider\Http\UserAgentStringCom;
  *
  * @covers UserAgentParser\Provider\Http\UserAgentStringCom
  */
-class UserAgentStringComTest extends AbstractProviderTestCase
+class UserAgentStringComTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    public function testName()
+    public function testGetName()
     {
         $provider = new UserAgentStringCom($this->getClient());
 
@@ -41,6 +41,12 @@ class UserAgentStringComTest extends AbstractProviderTestCase
         $provider = new UserAgentStringCom($this->getClient());
 
         $this->assertNull($provider->getVersion());
+    }
+    public function testUpdateDate()
+    {
+        $provider = new UserAgentStringCom($this->getClient());
+
+        $this->assertNull($provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()
@@ -80,12 +86,24 @@ class UserAgentStringComTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new UserAgentStringCom($this->getClient());
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, false, 'unknown');
+        $this->assertIsRealResult($provider, true, 'unknown something');
+        $this->assertIsRealResult($provider, true, 'something unknown');
+    }
+
     /**
      * Empty user agent
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testGetResultNoResultFoundExceptionEmptyUserAgent()
+    public function testParseNoResultFoundExceptionEmptyUserAgent()
     {
         $responseQueue = [
             new Response(200),
@@ -101,7 +119,7 @@ class UserAgentStringComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionContentType()
+    public function testParseRequestExceptionContentType()
     {
         $responseQueue = [
             new Response(200, [
@@ -119,7 +137,7 @@ class UserAgentStringComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionNoData()
+    public function testParseRequestExceptionNoData()
     {
         $rawResult = 'something';
 
@@ -324,37 +342,5 @@ class UserAgentStringComTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
-    }
-
-    /**
-     * @dataProvider isRealResult
-     */
-    public function testRealResult($value, $group, $part, $expectedResult)
-    {
-        $class  = new \ReflectionClass('UserAgentParser\Provider\Http\UserAgentStringCom');
-        $method = $class->getMethod('isRealResult');
-        $method->setAccessible(true);
-
-        $provider = new UserAgentStringCom($this->getClient([]), 'apiUser', 'apiKey123');
-
-        $actualResult = $method->invokeArgs($provider, [
-            $value,
-            $group,
-            $part,
-        ]);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function isRealResult()
-    {
-        return [
-            [
-                'unknown',
-                null,
-                null,
-                false,
-            ],
-        ];
     }
 }

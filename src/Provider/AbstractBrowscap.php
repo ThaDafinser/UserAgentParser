@@ -53,6 +53,7 @@ abstract class AbstractBrowscap extends AbstractProvider
         'bot' => [
             'name' => [
                 '/^General Crawlers/i',
+                '/^Generic/i',
             ],
         ],
     ];

@@ -74,6 +74,12 @@ class Zsxsoft extends AbstractProvider
             '/^Unknown$/i',
         ],
 
+        'browser' => [
+            'name' => [
+                '/^Mozilla Compatible$/i',
+            ],
+        ],
+
         'device' => [
             'model' => [
                 '/^Browser$/i',
@@ -123,7 +129,7 @@ class Zsxsoft extends AbstractProvider
      */
     private function hasResult(array $browser, array $os, array $device)
     {
-        if (isset($browser['name']) && $this->isRealResult($browser['name'])) {
+        if (isset($browser['name']) && $this->isRealResult($browser['name'], 'browser', 'name')) {
             return true;
         }
 
@@ -149,7 +155,7 @@ class Zsxsoft extends AbstractProvider
      */
     private function hydrateBrowser(Model\Browser $browser, array $browserRaw)
     {
-        if (isset($browserRaw['name']) && $this->isRealResult($browserRaw['name']) === true) {
+        if (isset($browserRaw['name']) && $this->isRealResult($browserRaw['name'], 'browser', 'name') === true) {
             $browser->setName($browserRaw['name']);
         }
 

@@ -13,9 +13,9 @@ use UserAgentParser\Provider\Http\WhatIsMyBrowserCom;
  *
  * @covers UserAgentParser\Provider\Http\WhatIsMyBrowserCom
  */
-class WhatIsMyBrowserComTest extends AbstractProviderTestCase
+class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    public function testName()
+    public function testGetName()
     {
         $provider = new WhatIsMyBrowserCom($this->getClient(), 'apiKey123');
 
@@ -41,6 +41,13 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
         $provider = new WhatIsMyBrowserCom($this->getClient(), 'apiKey123');
 
         $this->assertNull($provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new WhatIsMyBrowserCom($this->getClient(), 'apiKey123');
+
+        $this->assertNull($provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()
@@ -80,12 +87,66 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new WhatIsMyBrowserCom($this->getClient(), 'apiKey123');
+
+        /*
+         * browser name
+         */
+        $this->assertIsRealResult($provider, false, 'Unknown Mobile Browser', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'Unknown Mobile Browser something', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'something Unknown Mobile Browser', 'browser', 'name');
+
+        $this->assertIsRealResult($provider, false, 'Unknown browser', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'Unknown browser something', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'something Unknown browser', 'browser', 'name');
+
+        $this->assertIsRealResult($provider, false, 'Webkit based browser', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'Webkit based browser something', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'something Webkit based browser', 'browser', 'name');
+
+        $this->assertIsRealResult($provider, false, 'a UNIX based OS', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'a UNIX based OS something', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'something a UNIX based OS', 'browser', 'name');
+
+        /*
+         * OS name
+         */
+        $this->assertIsRealResult($provider, false, 'Smart TV', 'operatingSystem', 'name');
+        $this->assertIsRealResult($provider, true, 'Smart TV something', 'operatingSystem', 'name');
+        $this->assertIsRealResult($provider, true, 'something Smart TV', 'operatingSystem', 'name');
+
+        /*
+         * device model
+         */
+        $this->assertIsRealResult($provider, false, 'HTC', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'HTC something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something HTC', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Mobile', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Mobile something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Mobile', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Android Phone', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Android Phone something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Android Phone', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Android Tablet', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Android Tablet something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Android Tablet', 'device', 'model');
+
+        $this->assertIsRealResult($provider, false, 'Tablet', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Tablet something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Tablet', 'device', 'model');
+    }
+
     /**
      * Empty user agent
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testGetResultNoResultFoundExceptionEmptyUserAgent()
+    public function testParseNoResultFoundExceptionEmptyUserAgent()
     {
         $responseQueue = [
             new Response(200),
@@ -101,7 +162,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionContentType()
+    public function testParseRequestExceptionContentType()
     {
         $responseQueue = [
             new Response(200, [
@@ -138,7 +199,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\LimitationExceededException
      */
-    public function testGetResultLimitationExceededException()
+    public function testParseLimitationExceededException()
     {
         $rawResult               = new stdClass();
         $rawResult->message_code = 'usage_limit_exceeded';
@@ -159,7 +220,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\InvalidCredentialsException
      */
-    public function testGetResultInvalidCredentialsExceptionNoKey()
+    public function testParseInvalidCredentialsExceptionNoKey()
     {
         $rawResult               = new stdClass();
         $rawResult->message_code = 'no_api_user_key';
@@ -180,7 +241,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\InvalidCredentialsException
      */
-    public function testGetResultInvalidCredentialsExceptionInvalidKey()
+    public function testParseInvalidCredentialsExceptionInvalidKey()
     {
         $rawResult               = new stdClass();
         $rawResult->message_code = 'user_key_invalid';
@@ -201,7 +262,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionUnknown()
+    public function testParseRequestExceptionUnknown()
     {
         $rawResult         = new stdClass();
         $rawResult->result = 'unknown';
@@ -222,7 +283,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionMissingData()
+    public function testParseRequestExceptionMissingData()
     {
         $rawResult         = new stdClass();
         $rawResult->result = 'success';
@@ -585,100 +646,5 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
-    }
-
-    /**
-     * @dataProvider isRealResult
-     */
-    public function testRealResult($value, $group, $part, $expectedResult)
-    {
-        $class  = new \ReflectionClass('UserAgentParser\Provider\Http\WhatIsMyBrowserCom');
-        $method = $class->getMethod('isRealResult');
-        $method->setAccessible(true);
-
-        $provider = new WhatIsMyBrowserCom($this->getClient([]), 'apiUser', 'apiKey123');
-
-        $actualResult = $method->invokeArgs($provider, [
-            $value,
-            $group,
-            $part,
-        ]);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function isRealResult()
-    {
-        return [
-            /*
-             * general
-             */
-            [
-                'Unknown',
-                null,
-                null,
-                true,
-            ],
-            /*
-             * browserName
-             */
-            [
-                'Unknown Mobile Browser',
-                'browser',
-                'name',
-                false,
-            ],
-            [
-                'Unknown browser',
-                'browser',
-                'name',
-                false,
-            ],
-            [
-                'Webkit based browser',
-                'browser',
-                'name',
-                false,
-            ],
-            /*
-             * deviceModel
-             */
-            [
-                'HTC',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'HTC one',
-                'device',
-                'model',
-                true,
-            ],
-            [
-                'Mobile',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Android Phone',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Android Tablet',
-                'device',
-                'model',
-                false,
-            ],
-            [
-                'Tablet',
-                'device',
-                'model',
-                false,
-            ],
-        ];
     }
 }

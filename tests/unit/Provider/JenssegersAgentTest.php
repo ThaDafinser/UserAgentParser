@@ -11,7 +11,7 @@ use UserAgentParser\Provider\JenssegersAgent;
  *
  * @covers UserAgentParser\Provider\JenssegersAgent
  */
-class JenssegersAgentTest extends AbstractProviderTestCase
+class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     /**
      *
@@ -46,7 +46,7 @@ class JenssegersAgentTest extends AbstractProviderTestCase
         rename($tempFile, $file);
     }
 
-    public function testName()
+    public function testGetName()
     {
         $provider = new JenssegersAgent();
 
@@ -118,6 +118,18 @@ class JenssegersAgentTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new JenssegersAgent();
+
+        /*
+         * browser name
+         */
+        $this->assertIsRealResult($provider, false, 'GenericBrowser', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'GenericBrowser something', 'browser', 'name');
+        $this->assertIsRealResult($provider, true, 'something GenericBrowser', 'browser', 'name');
+    }
+
     public function testParser()
     {
         $provider = new JenssegersAgent();
@@ -128,7 +140,7 @@ class JenssegersAgentTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $parser = $this->getParser();
 

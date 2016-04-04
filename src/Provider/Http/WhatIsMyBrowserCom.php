@@ -72,6 +72,13 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
                 '/^Unknown Mobile Browser$/i',
                 '/^Unknown browser$/i',
                 '/^Webkit based browser$/i',
+                '/^a UNIX based OS$/i',
+            ],
+        ],
+
+        'operatingSystem' => [
+            'name' => [
+                '/^Smart TV$/i',
             ],
         ],
 
@@ -195,7 +202,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
             return true;
         }
 
-        if (isset($resultRaw->operating_system_name) && $this->isRealResult($resultRaw->operating_system_name) === true) {
+        if (isset($resultRaw->operating_system_name) && $this->isRealResult($resultRaw->operating_system_name, 'operatingSystem', 'name') === true) {
             return true;
         }
 
@@ -249,7 +256,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
-        if (isset($resultRaw->operating_system_name) && $this->isRealResult($resultRaw->operating_system_name) === true) {
+        if (isset($resultRaw->operating_system_name) && $this->isRealResult($resultRaw->operating_system_name, 'operatingSystem', 'name') === true) {
             $os->setName($resultRaw->operating_system_name);
         }
 

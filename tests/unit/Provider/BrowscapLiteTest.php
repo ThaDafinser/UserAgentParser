@@ -36,7 +36,7 @@ class BrowscapLiteTest extends AbstractProviderTestCase
         return $parser;
     }
 
-    public function testName()
+    public function testGetName()
     {
         $provider = new BrowscapLite($this->getParser());
 

@@ -72,11 +72,11 @@ class NeutrinoApiCom extends AbstractHttpProvider
 
             'brand' => [
                 '/^Generic$/i',
+                '/^generic web browser$/i',
             ],
 
             'model' => [
                 '/^Android/i',
-                '/^SmartTV$/i',
                 '/^Windows Phone/i',
                 '/^Windows Mobile/i',
                 '/^Firefox/i',
@@ -240,7 +240,7 @@ class NeutrinoApiCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
+        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name, 'browser', 'name') === true) {
             $browser->setName($resultRaw->browser_name);
         }
 

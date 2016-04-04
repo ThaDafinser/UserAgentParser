@@ -11,7 +11,7 @@ use UserAgentParser\Provider\SinergiBrowserDetector;
  *
  * @covers UserAgentParser\Provider\SinergiBrowserDetector
  */
-class SinergiBrowserDetectorTest extends AbstractProviderTestCase
+class SinergiBrowserDetectorTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     /**
      *
@@ -64,7 +64,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         rename($tempFile, $file);
     }
 
-    public function testName()
+    public function testGetName()
     {
         $provider = new SinergiBrowserDetector();
 
@@ -136,6 +136,25 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new SinergiBrowserDetector();
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, false, 'unknown');
+        $this->assertIsRealResult($provider, true, 'unknown something');
+        $this->assertIsRealResult($provider, true, 'something unknown');
+
+        /*
+         * device model
+         */
+        $this->assertIsRealResult($provider, false, 'Windows Phone', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'Windows Phone something', 'device', 'model');
+        $this->assertIsRealResult($provider, true, 'something Windows Phone', 'device', 'model');
+    }
+
     public function testProvider()
     {
         $provider = new SinergiBrowserDetector();
@@ -148,7 +167,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $provider = new SinergiBrowserDetector();
 
@@ -171,7 +190,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundExceptionDefaultValue()
+    public function testParseNoResultFoundExceptionDefaultValue()
     {
         $browserParser = $this->getBrowserParser();
         $browserParser->expects($this->any())
@@ -202,7 +221,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundExceptionDefaultValue2()
+    public function testParseNoResultFoundExceptionDefaultValue2()
     {
         $browserParser = $this->getBrowserParser();
         $browserParser->expects($this->any())
@@ -479,56 +498,5 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         ];
 
         $this->assertProviderResult($result, $expectedResult);
-    }
-
-    /**
-     * @dataProvider isRealResult
-     */
-    public function testRealResult($value, $group, $part, $expectedResult)
-    {
-        $class  = new \ReflectionClass('UserAgentParser\Provider\SinergiBrowserDetector');
-        $method = $class->getMethod('isRealResult');
-        $method->setAccessible(true);
-
-        $provider = new SinergiBrowserDetector();
-
-        $actualResult = $method->invokeArgs($provider, [
-            $value,
-            $group,
-            $part,
-        ]);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function isRealResult()
-    {
-        return [
-            /*
-             * general
-             */
-            [
-                'unknown',
-                null,
-                null,
-                false,
-            ],
-            [
-                'Not unknown',
-                null,
-                null,
-                true,
-            ],
-
-            /*
-             * deviceModel
-             */
-            [
-                'Windows Phone',
-                'device',
-                'model',
-                false,
-            ],
-        ];
     }
 }

@@ -13,9 +13,9 @@ use UserAgentParser\Provider\Http\DeviceAtlasCom;
  *
  * @covers UserAgentParser\Provider\Http\DeviceAtlasCom
  */
-class DeviceAtlasComTest extends AbstractProviderTestCase
+class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    public function testName()
+    public function testGetName()
     {
         $provider = new DeviceAtlasCom($this->getClient(), 'apiKey123');
 
@@ -41,6 +41,13 @@ class DeviceAtlasComTest extends AbstractProviderTestCase
         $provider = new DeviceAtlasCom($this->getClient(), 'apiKey123');
 
         $this->assertNull($provider->getVersion());
+    }
+
+    public function testUpdateDate()
+    {
+        $provider = new DeviceAtlasCom($this->getClient(), 'apiKey123');
+
+        $this->assertNull($provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()
@@ -80,12 +87,22 @@ class DeviceAtlasComTest extends AbstractProviderTestCase
         ], $provider->getDetectionCapabilities());
     }
 
+    public function testIsRealResult()
+    {
+        $provider = new DeviceAtlasCom($this->getClient(), 'apiKey123');
+
+        /*
+         * general
+         */
+        $this->assertIsRealResult($provider, true, 'something UNKNOWN');
+    }
+
     /**
      * Empty user agent
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testGetResultNoResultFoundExceptionEmptyUserAgent()
+    public function testParseNoResultFoundExceptionEmptyUserAgent()
     {
         $responseQueue = [
             new Response(200),
@@ -101,7 +118,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\InvalidCredentialsException
      */
-    public function testGetResultInvalidCredentialsException()
+    public function testParseInvalidCredentialsException()
     {
         $responseQueue = [
             new Response(403),
@@ -119,7 +136,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestException()
+    public function testParseRequestException()
     {
         $responseQueue = [
             new Response(500),
@@ -135,7 +152,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionContentType()
+    public function testParseRequestExceptionContentType()
     {
         $responseQueue = [
             new Response(200, [
@@ -153,7 +170,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
-    public function testGetResultRequestExceptionNoData()
+    public function testParseRequestExceptionNoData()
     {
         $responseQueue = [
             new Response(200, [
@@ -171,7 +188,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
-    public function testNoResultFoundException()
+    public function testParseNoResultFoundException()
     {
         $rawResult             = new stdClass();
         $rawResult->properties = new stdClass();

@@ -80,12 +80,16 @@ class UserAgentApiCom extends AbstractHttpProvider
 
     /**
      *
-     * @param  string                     $userAgent
-     * @param  array                      $headers
+     * @param string $userAgent
+     * @param array  $headers
+     *
      * @return stdClass
+     * @throws Exception\InvalidCredentialsException
+     * @throws Exception\NoResultFoundException
      * @throws Exception\RequestException
+     * @throws \Exception
      */
-    protected function getResult($userAgent, array $headers)
+    public function getResult($userAgent, array $headers)
     {
         /*
          * an empty UserAgent makes no sense
@@ -217,8 +221,8 @@ class UserAgentApiCom extends AbstractHttpProvider
 
     /**
      *
-     * @param Model\UserAgent $device
-     * @param stdClass        $resultRaw
+     * @param Model\Device $device
+     * @param stdClass     $resultRaw
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {

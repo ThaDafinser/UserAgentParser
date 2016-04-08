@@ -86,12 +86,16 @@ class UdgerCom extends AbstractHttpProvider
 
     /**
      *
-     * @param  string                     $userAgent
-     * @param  array                      $headers
+     * @param string $userAgent
+     * @param array  $headers
+     *
      * @return stdClass
+     * @throws Exception\InvalidCredentialsException
+     * @throws Exception\LimitationExceededException
+     * @throws Exception\NoResultFoundException
      * @throws Exception\RequestException
      */
-    protected function getResult($userAgent, array $headers)
+    public function getResult($userAgent, array $headers)
     {
         /*
          * an empty UserAgent makes no sense
@@ -225,8 +229,8 @@ class UdgerCom extends AbstractHttpProvider
 
     /**
      *
-     * @param Model\UserAgent $device
-     * @param stdClass        $resultRaw
+     * @param Model\Device $device
+     * @param stdClass     $resultRaw
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {

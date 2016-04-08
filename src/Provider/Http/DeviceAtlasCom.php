@@ -73,7 +73,18 @@ class DeviceAtlasCom extends AbstractHttpProvider
         $this->apiKey = $apiKey;
     }
 
-    protected function getResult($userAgent, array $headers)
+    /**
+     *
+     * @param string $userAgent
+     * @param array  $headers
+     *
+     * @return stdClass
+     * @throws Exception\InvalidCredentialsException
+     * @throws Exception\NoResultFoundException
+     * @throws Exception\RequestException
+     * @throws \Exception
+     */
+    public function getResult($userAgent, array $headers)
     {
         /*
          * an empty UserAgent makes no sense
@@ -182,8 +193,8 @@ class DeviceAtlasCom extends AbstractHttpProvider
 
     /**
      *
-     * @param Model\UserAgent $device
-     * @param stdClass        $resultRaw
+     * @param Model\Device $device
+     * @param stdClass     $resultRaw
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {

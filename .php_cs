@@ -14,7 +14,6 @@ $config->finder($finder);
 $config->level(Symfony\CS\FixerInterface::PSR2_LEVEL);
 $config->fixers([
 	//symfony
-	'concat_without_spaces',
 	'double_arrow_multiline_whitespaces',
 	'duplicate_semicolon',
 	'empty_return',
@@ -39,7 +38,7 @@ $config->fixers([
 	'ternary_spaces',
 	'unused_use',
 	'whitespacy_lines',
-	
+
 	//contrib
 	'align_double_arrow',
 	'align_equals',

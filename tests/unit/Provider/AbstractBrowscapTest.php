@@ -5,11 +5,10 @@ use UserAgentParser\Provider\BrowscapPhp;
 
 /**
  *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *
- * @covers UserAgentParser\Provider\AbstractBrowscap
+ *         
+ *          @covers UserAgentParser\Provider\AbstractBrowscap
  */
 class AbstractBrowscapTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
@@ -46,9 +45,31 @@ class AbstractBrowscapTest extends AbstractProviderTestCase implements RequiredP
     }
 
     /**
-     * Provider no result
+     * Warm cache is missing!
      *
      * @expectedException \UserAgentParser\Exception\InvalidArgumentException
+     * @expectedExceptionMessage You need to warm-up the cache first to use this provider
+     */
+    public function testConstructExceptionNOWarmCache()
+    {
+        $cache = $this->getMock('BrowscapPHP\Cache\BrowscapCache', [], [], '', false);
+
+        $parser = $this->getMock('BrowscapPHP\Browscap');
+        $parser->expects($this->any())
+            ->method('getCache')
+            ->will($this->returnValue($cache));
+
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractBrowscap', [
+            $parser,
+            'anotherExceptedType',
+        ]);
+    }
+
+    /**
+     * Different type
+     *
+     * @expectedException \UserAgentParser\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Expected the "anotherExceptedType" data file. Instead got the "" data file
      */
     public function testConstructException()
     {

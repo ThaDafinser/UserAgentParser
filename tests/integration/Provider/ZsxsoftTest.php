@@ -27,18 +27,18 @@ class ZsxsoftTest extends AbstractProviderTestCase
     {
         $provider = new Zsxsoft();
 
-        $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
+        $result = $provider->parse('Mozilla/5.0 (Linux; Android 4.3; SCH-R970C Build/JSS15J) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Safari',
+                'name'    => 'Google Chrome',
                 'version' => [
-                    'major' => 5,
-                    'minor' => 1,
-                    'patch' => null,
+                    'major' => 34,
+                    'minor' => 0,
+                    'patch' => 1847,
 
                     'alias' => null,
 
-                    'complete' => '5.1',
+                    'complete' => '34.0.1847.114',
                 ],
             ],
             'renderingEngine' => [
@@ -54,20 +54,20 @@ class ZsxsoftTest extends AbstractProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'Mac OS X',
+                'name'    => 'Android',
                 'version' => [
-                    'major' => null,
-                    'minor' => null,
+                    'major' => 4,
+                    'minor' => 3,
                     'patch' => null,
 
                     'alias' => null,
 
-                    'complete' => null,
+                    'complete' => '4.3',
                 ],
             ],
             'device' => [
-                'model' => 'iPhone iOS 5.0',
-                'brand' => 'Apple',
+                'model' => 'R970C',
+                'brand' => 'Samsung',
                 'type'  => null,
 
                 'isMobile' => null,
@@ -86,43 +86,43 @@ class ZsxsoftTest extends AbstractProviderTestCase
         $rawResult = $result->getProviderResultRaw();
         $this->assertEquals([
             'browser' => [
-                'link'    => 'http://www.apple.com/safari/',
-                'title'   => 'Safari 5.1',
-                'name'    => 'Safari',
-                'version' => '5.1',
-                'code'    => 'safari',
-                'image'   => 'img/16/browser/safari.png',
+                'link'    => 'http://google.com/chrome/',
+                'title'   => 'Google Chrome 34.0.1847.114',
+                'name'    => 'Google Chrome',
+                'version' => '34.0.1847.114',
+                'code'    => 'chrome',
+                'image'   => 'img/16/browser/chrome.png',
             ],
             'os' => [
-                'link'    => 'http://www.apple.com/macosx/',
-                'name'    => 'Mac OS X',
-                'version' => '',
-                'code'    => 'mac-3',
+                'link'    => 'http://www.android.com/',
+                'name'    => 'Android',
+                'version' => '4.3',
+                'code'    => 'android',
                 'x64'     => false,
-                'title'   => 'Mac OS X',
+                'title'   => 'Android 4.3',
                 'type'    => 'os',
                 'dir'     => 'os',
-                'image'   => 'img/16/os/mac-3.png',
+                'image'   => 'img/16/os/android.png',
             ],
             'device' => [
-                'link'  => 'http://www.apple.com/iphone',
-                'title' => 'Apple iPhone iOS 5.0',
-                'model' => 'iPhone iOS 5.0',
-                'brand' => 'Apple',
-                'code'  => 'iphone',
+                'link'  => 'http://www.samsungmobile.com/',
+                'title' => 'Samsung R970C',
+                'model' => 'R970C',
+                'brand' => 'Samsung',
+                'code'  => 'samsung',
                 'dir'   => 'device',
                 'type'  => 'device',
-                'image' => 'img/16/device/iphone.png',
+                'image' => 'img/16/device/samsung.png',
             ],
             'platform' => [
-                'link'  => 'http://www.apple.com/iphone',
-                'title' => 'Apple iPhone iOS 5.0',
-                'model' => 'iPhone iOS 5.0',
-                'brand' => 'Apple',
-                'code'  => 'iphone',
+                'link'  => 'http://www.samsungmobile.com/',
+                'title' => 'Samsung R970C',
+                'model' => 'R970C',
+                'brand' => 'Samsung',
+                'code'  => 'samsung',
                 'dir'   => 'device',
                 'type'  => 'device',
-                'image' => 'img/16/device/iphone.png',
+                'image' => 'img/16/device/samsung.png',
             ],
         ], $rawResult);
     }

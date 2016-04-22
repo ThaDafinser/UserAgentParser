@@ -27,18 +27,18 @@ class ZsxsoftTest extends AbstractProviderTestCase
     {
         $provider = new Zsxsoft();
 
-        $result = $provider->parse('Mozilla/5.0 (Linux; Android 4.3; SCH-R970C Build/JSS15J) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.3');
+        $result = $provider->parse('Mozilla/5.0 (Linux; Android 5.0.1; Nexus 7 Build/LRX22C) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.59 Safari/537.36 OPR/26.0.1656.87080');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Google Chrome',
+                'name'    => 'Opera',
                 'version' => [
-                    'major' => 34,
+                    'major' => 26,
                     'minor' => 0,
-                    'patch' => 1847,
+                    'patch' => 1656,
 
                     'alias' => null,
 
-                    'complete' => '34.0.1847.114',
+                    'complete' => '26.0.1656.87080',
                 ],
             ],
             'renderingEngine' => [
@@ -56,18 +56,18 @@ class ZsxsoftTest extends AbstractProviderTestCase
             'operatingSystem' => [
                 'name'    => 'Android',
                 'version' => [
-                    'major' => 4,
-                    'minor' => 3,
-                    'patch' => null,
+                    'major' => 5,
+                    'minor' => 0,
+                    'patch' => 1,
 
                     'alias' => null,
 
-                    'complete' => '4.3',
+                    'complete' => '5.0.1',
                 ],
             ],
             'device' => [
-                'model' => 'R970C',
-                'brand' => 'Samsung',
+                'model' => 'Nexus 7',
+                'brand' => 'Google',
                 'type'  => null,
 
                 'isMobile' => null,
@@ -86,43 +86,43 @@ class ZsxsoftTest extends AbstractProviderTestCase
         $rawResult = $result->getProviderResultRaw();
         $this->assertEquals([
             'browser' => [
-                'link'    => 'http://google.com/chrome/',
-                'title'   => 'Google Chrome 34.0.1847.114',
-                'name'    => 'Google Chrome',
-                'version' => '34.0.1847.114',
-                'code'    => 'chrome',
-                'image'   => 'img/16/browser/chrome.png',
+                'link'    => 'http://www.opera.com/',
+                'title'   => 'Opera 26.0.1656.87080',
+                'name'    => 'Opera',
+                'version' => '26.0.1656.87080',
+                'code'    => 'opera-1',
+                'image'   => 'img/16/browser/opera-1.png',
             ],
             'os' => [
                 'link'    => 'http://www.android.com/',
                 'name'    => 'Android',
-                'version' => '4.3',
+                'version' => '5.0.1',
                 'code'    => 'android',
                 'x64'     => false,
-                'title'   => 'Android 4.3',
+                'title'   => 'Android 5.0.1',
                 'type'    => 'os',
                 'dir'     => 'os',
                 'image'   => 'img/16/os/android.png',
             ],
             'device' => [
-                'link'  => 'http://www.samsungmobile.com/',
-                'title' => 'Samsung R970C',
-                'model' => 'R970C',
-                'brand' => 'Samsung',
-                'code'  => 'samsung',
+                'link'  => 'https://www.google.com/nexus/',
+                'title' => 'Google Nexus 7',
+                'model' => 'Nexus 7',
+                'brand' => 'Google',
+                'code'  => 'google-nexusone',
                 'dir'   => 'device',
                 'type'  => 'device',
-                'image' => 'img/16/device/samsung.png',
+                'image' => 'img/16/device/google-nexusone.png',
             ],
             'platform' => [
-                'link'  => 'http://www.samsungmobile.com/',
-                'title' => 'Samsung R970C',
-                'model' => 'R970C',
-                'brand' => 'Samsung',
-                'code'  => 'samsung',
+                'link'  => 'https://www.google.com/nexus/',
+                'title' => 'Google Nexus 7',
+                'model' => 'Nexus 7',
+                'brand' => 'Google',
+                'code'  => 'google-nexusone',
                 'dir'   => 'device',
                 'type'  => 'device',
-                'image' => 'img/16/device/samsung.png',
+                'image' => 'img/16/device/google-nexusone.png',
             ],
         ], $rawResult);
     }

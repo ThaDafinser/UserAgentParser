@@ -593,7 +593,7 @@
       <capability name="is_sencha_touch_ok" value="true"/>
     </group>
     <group id="virtual">
-      <capability name="controlcap_is_smartphone" value="default"/>
+     <capability name="controlcap_is_smartphone" value="default"/>
       <capability name="controlcap_is_ios" value="default"/>
       <capability name="controlcap_is_android" value="default"/>
       <capability name="controlcap_is_robot" value="default"/>
@@ -612,6 +612,9 @@
       <capability name="controlcap_is_html_preferred" value="default"/>
       <capability name="controlcap_form_factor" value="default"/>
       <capability name="controlcap_complete_device_name" value="default"/>
+      <capability name="controlcap_is_phone" value="default"/>
+      <capability name="controlcap_is_app_webview" value="default"/>
+      <capability name="controlcap_device_name" value="default"/>
     </group>
   </device>
   <device id="generic_mobile" user_agent="DO_NOT_MATCH_GENERIC_MOBILE" fall_back="generic">

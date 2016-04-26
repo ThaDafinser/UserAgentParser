@@ -74,7 +74,7 @@ class DeviceAtlasComTest extends AbstractHttpProviderTestCase
                     'minor' => 0,
                     'patch' => null,
 
-                    'alias' => '_',
+                    'alias' => null,
 
                     'complete' => '5_0',
                 ],

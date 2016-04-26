@@ -66,8 +66,16 @@ class VersionTest extends PHPUnit_Framework_TestCase
     {
         $version = new Version();
 
+        // 0 gets filtered
+        $version->setComplete('0');
+        $this->assertNull($version->getComplete());
+
         // 0.0 gets filtered
         $version->setComplete('0.0');
+        $this->assertNull($version->getComplete());
+
+        // 0_0 gets filtered
+        $version->setComplete('0_0');
         $this->assertNull($version->getComplete());
     }
 
@@ -120,6 +128,19 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, $version->getMajor());
         $this->assertEquals(6, $version->getMinor());
         $this->assertEquals(3, $version->getPatch());
+        $this->assertNull($version->getAlias());
+    }
+
+    public function testCompleteWithUnderscore()
+    {
+        $version = new Version();
+
+        $version->setComplete('6_5_4');
+
+        $this->assertEquals('6_5_4', $version->getComplete());
+        $this->assertEquals(6, $version->getMajor());
+        $this->assertEquals(5, $version->getMinor());
+        $this->assertEquals(4, $version->getPatch());
         $this->assertNull($version->getAlias());
     }
 

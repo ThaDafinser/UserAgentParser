@@ -612,6 +612,9 @@
       <capability name="controlcap_is_html_preferred" value="default"/>
       <capability name="controlcap_form_factor" value="default"/>
       <capability name="controlcap_complete_device_name" value="default"/>
+      <capability name="controlcap_is_phone" value="default"/>
+      <capability name="controlcap_is_app_webview" value="default"/>
+      <capability name="controlcap_device_name" value="default"/>
     </group>
   </device>
   <device id="generic_mobile" user_agent="DO_NOT_MATCH_GENERIC_MOBILE" fall_back="generic">
@@ -1058,6 +1061,7 @@
     </group>
     <group id="html_ui">
       <capability name="image_inlining" value="true"/>
+      <capability name="viewport_width" value="width_equals_max_image_width"/>
     </group>
     <group id="css">
       <capability name="css_spriting" value="true"/>
@@ -1070,6 +1074,8 @@
     </group>
   </device>
   
+  
+  
   <device id="generic_web_crawler" user_agent="DO_NOT_MATCH_GENERIC_WEB_CRAWLER" fall_back="generic_web_browser">
     <group id="product_info">
       <capability name="model_name" value="Bot or Crawler"/>
@@ -1081,8 +1087,7 @@
       <capability name="controlcap_is_robot" value="force_true"/>
     </group>
   </device>
-  
-    <device id="google_news_bot" user_agent="Googlebot-News" fall_back="generic_web_crawler">
+  <device id="google_news_bot" user_agent="Googlebot-News" fall_back="generic_web_crawler">
     <group id="product_info">
       <capability name="model_name" value="News Bot"/>
       <capability name="brand_name" value="Google"/>
@@ -1102,254 +1107,58 @@
   </device>
   
   
-  
-  
-  
-  
-  <device id="generic_xhtml" user_agent="DO_NOT_MATCH_MOZILLA" fall_back="generic_mobile">
-    <group id="markup">
-      <capability name="xhtml_support_level" value="1"/>
-      <capability name="preferred_markup" value="html_wi_oma_xhtmlmp_1_0"/>
-      <capability name="html_wi_oma_xhtmlmp_1_0" value="true"/>
-      <capability name="html_wi_w3_xhtmlbasic" value="true"/>
-    </group>
-    <group id="xhtml_ui">
-      <capability name="xhtml_make_phone_call_string" value="tel:"/>
-      <capability name="xhtmlmp_preferred_mime_type" value="application/vnd.wap.xhtml+xml"/>
-      <capability name="xhtml_table_support" value="true"/>
-      <capability name="cookie_support" value="true"/>
+  <device id="generic_smarttv_browser" user_agent="DO_NOT_MATCH_GENERIC_SMARTTV" fall_back="generic_web_browser">
+    <group id="product_info">
+      <capability name="pointing_method" value=""/>
+      <capability name="model_name" value="SmartTV"/>
+      <capability name="brand_name" value="Generic"/>
+      <capability name="release_date" value="2011_january"/>
     </group>
     <group id="display">
-      <capability name="resolution_width" value="128"/>
-      <capability name="resolution_height" value="92"/>
-      <capability name="max_image_width" value="120"/>
-      <capability name="max_image_height" value="92"/>
+      <capability name="max_image_width" value="650"/>
+      <capability name="resolution_width" value="685"/>
     </group>
-    <group id="image_format">
-      <capability name="colors" value="256"/>
-      <capability name="gif" value="true"/>
-      <capability name="jpg" value="true"/>
-      <capability name="gif_animated" value="true"/>
-      <capability name="png" value="true"/>
+    <group id="smarttv">
+      <capability name="is_smarttv" value="true"/>
     </group>
-    <group id="storage">
-      <capability name="max_url_length_in_requests" value="256"/>
-      <capability name="max_deck_size" value="10000"/>
+    <group id="user_experience">
+      <capability name="ux_full_desktop" value="false"/>
     </group>
+  </device>
+  <device id="generic_smarttv_googletv_browser" user_agent="DO_NOT_MATCH_GENERIC_GOOGLETV" fall_back="generic_smarttv_browser">
     <group id="product_info">
-      <capability name="can_skip_aligned_link_row" value="true"/>
-      <capability name="release_date" value="2002_july"/>
+      <capability name="model_name" value="GoogleTV"/>
     </group>
-    <group id="html_ui">
-      <capability name="html_preferred_dtd" value="xhtml_mp1"/>
+  </device>
+  <device id="generic_tv_console_browser" user_agent="DO_NOT_MATCH_GENERIC_TV_CONSOLE" fall_back="generic_smarttv_browser">
+    <group id="smarttv">
+      <capability name="is_console" value="true"/>
+    </group>
+  </device>
+  <device id="microsoft_xbox360_ver1" user_agent="Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; Xbox)" fall_back="generic_tv_console_browser" actual_device_root="true">
+    <group id="product_info">
+      <capability name="brand_name" value="Microsoft"/>
+      <capability name="release_date" value="2012_october"/>
+      <capability name="model_name" value="Xbox 360"/>
+      <capability name="mobile_browser" value="MSIE"/>
+      <capability name="mobile_browser_version" value="9.0"/>
+    </group>
+  </device>
+  <device id="microsoft_xbox360_ver1_subie10" user_agent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0; Xbox)" fall_back="microsoft_xbox360_ver1">
+    <group id="product_info">
+      <capability name="mobile_browser_version" value="10.0"/>
+    </group>
+  </device>
+  <device id="microsoft_xboxone_ver1" user_agent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0; Xbox; Xbox One)" fall_back="generic_tv_console_browser" actual_device_root="true">
+    <group id="product_info">
+      <capability name="model_name" value="Xbox One"/>
+      <capability name="brand_name" value="Microsoft"/>
+      <capability name="release_date" value="2013_november"/>
+      <capability name="mobile_browser" value="MSIE"/>
+      <capability name="mobile_browser_version" value="10"/>
     </group>
   </device>
   
-  <device id="apple_generic" user_agent="DO_NOT_MATCH_APPLE_GENERIC" fall_back="generic_xhtml">
-    <group id="product_info">
-      <capability name="brand_name" value="Apple"/>
-      <capability name="has_qwerty_keyboard" value="true"/>
-      <capability name="can_skip_aligned_link_row" value="true"/>
-      <capability name="device_claims_web_support" value="true"/>
-      <capability name="mobile_browser" value="Safari"/>
-      <capability name="device_os" value="iOS"/>
-      <capability name="model_name" value="iPhone"/>
-      <capability name="pointing_method" value="touchscreen"/>
-      <capability name="release_date" value="2007_june"/>
-    </group>
-    <group id="markup">
-      <capability name="xhtml_support_level" value="4"/>
-      <capability name="preferred_markup" value="html_web_4_0"/>
-      <capability name="wml_1_1" value="false"/>
-      <capability name="html_wi_imode_compact_generic" value="true"/>
-      <capability name="html_wi_w3_xhtmlbasic" value="true"/>
-      <capability name="html_wi_oma_xhtmlmp_1_0" value="true"/>
-      <capability name="html_web_3_2" value="true"/>
-      <capability name="html_web_4_0" value="true"/>
-    </group>
-    <group id="xhtml_ui">
-      <capability name="xhtml_format_as_css_property" value="true"/>
-      <capability name="xhtml_supports_table_for_layout" value="true"/>
-      <capability name="xhtml_display_accesskey" value="false"/>
-      <capability name="xhtml_supports_css_cell_table_coloring" value="true"/>
-      <capability name="xhtml_readable_background_color1" value="#D9EFFF"/>
-      <capability name="xhtml_make_phone_call_string" value="tel:"/>
-      <capability name="xhtml_table_support" value="true"/>
-      <capability name="xhtmlmp_preferred_mime_type" value="text/html"/>
-      <capability name="xhtml_format_as_attribute" value="false"/>
-      <capability name="xhtml_honors_bgcolor" value="true"/>
-      <capability name="xhtml_supports_iframe" value="full"/>
-    </group>
-    <group id="image_format">
-      <capability name="gif" value="true"/>
-      <capability name="gif_animated" value="true"/>
-      <capability name="jpg" value="true"/>
-      <capability name="png" value="true"/>
-      <capability name="bmp" value="true"/>
-      <capability name="colors" value="65536"/>
-      <capability name="wbmp" value="false"/>
-    </group>
-    <group id="object_download">
-      <capability name="ringtone" value="true"/>
-      <capability name="ringtone_midi_monophonic" value="true"/>
-      <capability name="ringtone_midi_polyphonic" value="true"/>
-      <capability name="ringtone_amr" value="true"/>
-      <capability name="ringtone_wav" value="true"/>
-      <capability name="ringtone_mp3" value="true"/>
-      <capability name="ringtone_aac" value="true"/>
-      <capability name="ringtone_voices" value="12"/>
-      <capability name="video" value="true"/>
-    </group>
-    <group id="ajax">
-      <capability name="ajax_support_javascript" value="true"/>
-      <capability name="ajax_manipulate_css" value="true"/>
-      <capability name="ajax_support_getelementbyid" value="true"/>
-      <capability name="ajax_support_inner_html" value="true"/>
-      <capability name="ajax_xhr_type" value="standard"/>
-      <capability name="ajax_manipulate_dom" value="true"/>
-      <capability name="ajax_support_event_listener" value="true"/>
-      <capability name="ajax_support_events" value="true"/>
-      <capability name="ajax_preferred_geoloc_api" value="w3c_api"/>
-    </group>
-    <group id="display">
-      <capability name="columns" value="20"/>
-      <capability name="rows" value="20"/>
-      <capability name="max_image_width" value="300"/>
-      <capability name="resolution_height" value="480"/>
-      <capability name="resolution_width" value="320"/>
-      <capability name="max_image_height" value="320"/>
-      <capability name="physical_screen_height" value="100"/>
-      <capability name="physical_screen_width" value="50"/>
-      <capability name="dual_orientation" value="true"/>
-    </group>
-    <group id="bearer">
-      <capability name="wifi" value="true"/>
-      <capability name="max_data_rate" value="384"/>
-    </group>
-    <group id="css">
-      <capability name="css_supports_width_as_percentage" value="true"/>
-      <capability name="css_border_image" value="webkit"/>
-      <capability name="css_rounded_corners" value="webkit"/>
-      <capability name="css_spriting" value="true"/>
-    </group>
-    <group id="rss">
-      <capability name="rss_support" value="true"/>
-    </group>
-    <group id="playback">
-      <capability name="playback_vcodec_h264_bp" value="1.2"/>
-    </group>
-    <group id="storage">
-      <capability name="max_deck_size" value="100000"/>
-      <capability name="max_url_length_in_requests" value="512"/>
-    </group>
-    <group id="wml_ui">
-      <capability name="card_title_support" value="false"/>
-      <capability name="wml_make_phone_call_string" value="none"/>
-      <capability name="table_support" value="false"/>
-      <capability name="break_list_of_links_with_br_element_recommended" value="false"/>
-      <capability name="menu_with_list_of_links_recommended" value="false"/>
-      <capability name="elective_forms_recommended" value="false"/>
-    </group>
-    <group id="html_ui">
-      <capability name="viewport_supported" value="true"/>
-      <capability name="viewport_userscalable" value="no"/>
-      <capability name="viewport_width" value="device_width_token"/>
-      <capability name="canvas_support" value="full"/>
-      <capability name="image_inlining" value="true"/>
-      <capability name="html_preferred_dtd" value="html4"/>
-    </group>
-    <group id="streaming">
-      <capability name="streaming_preferred_protocol" value="http"/>
-      <capability name="streaming_preferred_http_protocol" value="progressive_download"/>
-    </group>
-    <group id="wap_push">
-      <capability name="utf8_support" value="true"/>
-    </group>
-  </device>
-  
-  <device id="apple_iphone_ver1" user_agent="Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A538a Safari/419.3" fall_back="apple_generic" actual_device_root="true">
-    <group id="product_info">
-      <capability name="mobile_browser" value="Safari"/>
-      <capability name="pointing_method" value="touchscreen"/>
-      <capability name="device_os_version" value="1.0"/>
-      <capability name="can_assign_phone_number" value="true"/>
-    </group>
-    <group id="display">
-      <capability name="resolution_width" value="320"/>
-      <capability name="resolution_height" value="480"/>
-      <capability name="max_image_width" value="320"/>
-      <capability name="max_image_height" value="360"/>
-      <capability name="physical_screen_width" value="50"/>
-      <capability name="physical_screen_height" value="74"/>
-      <capability name="dual_orientation" value="true"/>
-    </group>
-    <group id="object_download">
-      <capability name="video" value="true"/>
-      <capability name="wallpaper_preferred_width" value="320"/>
-      <capability name="wallpaper_preferred_height" value="480"/>
-      <capability name="wallpaper_max_width" value="320"/>
-      <capability name="wallpaper_max_height" value="480"/>
-    </group>
-    <group id="bearer">
-      <capability name="wifi" value="true"/>
-      <capability name="max_data_rate" value="200"/>
-      <capability name="vpn" value="true"/>
-    </group>
-    <group id="sound_format">
-      <capability name="aac" value="true"/>
-      <capability name="mp3" value="true"/>
-    </group>
-    <group id="xhtml_ui">
-      <capability name="xhtml_send_mms_string" value="none"/>
-      <capability name="xhtml_send_sms_string" value="sms:"/>
-      <capability name="xhtml_file_upload" value="not_supported"/>
-      <capability name="accept_third_party_cookie" value="false"/>
-      <capability name="xhtml_honors_bgcolor" value="true"/>
-      <capability name="xhtml_can_embed_video" value="none"/>
-    </group>
-    <group id="pdf">
-      <capability name="pdf_support" value="true"/>
-    </group>
-    <group id="rss">
-      <capability name="rss_support" value="true"/>
-    </group>
-    <group id="playback">
-      <capability name="playback_vcodec_h263_0" value="-1"/>
-      <capability name="playback_3g2" value="true"/>
-      <capability name="playback_3gpp" value="true"/>
-      <capability name="playback_mp4" value="true"/>
-      <capability name="playback_vcodec_h264_bp" value="1.2"/>
-      <capability name="playback_mov" value="true"/>
-      <capability name="playback_vcodec_mpeg4_sp" value="0"/>
-      <capability name="playback_acodec_amr" value="nb"/>
-      <capability name="playback_acodec_aac" value="lc"/>
-      <capability name="progressive_download" value="true"/>
-    </group>
-    <group id="streaming">
-      <capability name="streaming_real_media" value="none"/>
-      <capability name="streaming_3gpp" value="true"/>
-      <capability name="streaming_preferred_protocol" value="http"/>
-      <capability name="streaming_vcodec_mpeg4_sp" value="0"/>
-      <capability name="streaming_acodec_aac" value="lc"/>
-      <capability name="streaming_acodec_amr" value="nb"/>
-      <capability name="streaming_preferred_http_protocol" value="progressive_download"/>
-    </group>
-    <group id="flash_lite">
-      <capability name="flash_lite_version" value=""/>
-      <capability name="fl_wallpaper" value="false"/>
-      <capability name="fl_browser" value="false"/>
-      <capability name="fl_screensaver" value="false"/>
-      <capability name="fl_standalone" value="false"/>
-      <capability name="fl_sub_lcd" value="false"/>
-    </group>
-    <group id="third_party">
-      <capability name="jqm_grade" value="B"/>
-      <capability name="is_sencha_touch_ok" value="true"/>
-    </group>
-    <group id="mms">
-      <capability name="built_in_camera" value="true"/>
-    </group>
-  </device>
   
 </devices>
 

@@ -2,13 +2,16 @@
 namespace UserAgentParserTest\Integration\Provider;
 
 use UserAgentParser\Provider\Wurfl;
+use Wurfl\Handlers;
+use Wurfl\Handlers\Chain\UserAgentHandlerChain;
+use Wurfl\Handlers\Normalizer\Generic;
+use Wurfl\Handlers\Normalizer\UserAgentNormalizer;
 
 /**
  *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- * 
+ *         
  * @coversNothing
  */
 class WurflTest extends AbstractProviderTestCase
@@ -29,7 +32,39 @@ class WurflTest extends AbstractProviderTestCase
         // cache
         $cacheStorage = \Wurfl\Storage\Factory::create($wurflConfig->cache);
 
-        return new \Wurfl\Manager($wurflConfig, $persistenceStorage, $cacheStorage);
+        // chain
+        $genericNormalizers = new UserAgentNormalizer([
+            new Generic\UCWEB(),
+            new Generic\UPLink(),
+            new Generic\SerialNumbers(),
+            new Generic\LocaleRemover(),
+            new Generic\CFNetwork(),
+            new Generic\BlackBerry(),
+            new Generic\Android(),
+            new Generic\TransferEncoding(),
+        ]);
+
+        $userAgentHandlerChain = new UserAgentHandlerChain();
+        $userAgentHandlerChain->addUserAgentHandler(new Handlers\XboxHandler($genericNormalizers));
+        $userAgentHandlerChain->addUserAgentHandler(new Handlers\BotCrawlerTranscoderHandler($genericNormalizers));
+        // $userAgentHandlerChain->addUserAgentHandler(new Handlers\CatchAllMozillaHandler($genericNormalizers));
+        $userAgentHandlerChain->addUserAgentHandler(new Handlers\CatchAllRisHandler($genericNormalizers));
+
+        $userAgentHandlerChain->setLogger($wurflConfig->getLogger());
+        foreach ($userAgentHandlerChain->getHandlers() as $handler) {
+            /* @var $handler \Wurfl\Handlers\AbstractHandler */
+            $handler->setLogger($wurflConfig->getLogger())
+                ->setPersistenceProvider($persistenceStorage);
+        }
+
+        $manager = new \Wurfl\Manager($wurflConfig, $persistenceStorage, $cacheStorage);
+
+        $reflection = new \ReflectionClass($manager);
+        $property   = $reflection->getProperty('userAgentHandlerChain');
+        $property->setAccessible(true);
+        $property->setValue($manager, $userAgentHandlerChain);
+
+        return $manager;
     }
 
     public function testMethodParse()
@@ -59,7 +94,7 @@ class WurflTest extends AbstractProviderTestCase
         $parser   = $provider->getParser();
 
         /* @var $result \Wurfl\CustomDevice */
-        $result = $parser->getDeviceForUserAgent('A real user agent...');
+        $result = $parser->getDeviceForUserAgent('A real user agent...maybe we need the complete file?');
 
         $this->assertInstanceOf('Wurfl\CustomDevice', $result);
 
@@ -155,13 +190,13 @@ class WurflTest extends AbstractProviderTestCase
         $this->assertArrayHasKey('all', $rawResult);
 
         $virtual = $rawResult['virtual'];
-        $this->assertGreaterThan(21, $virtual);
+        $this->assertCount(22, $virtual);
         $this->assertArrayHasKey('is_robot', $virtual);
         $this->assertArrayHasKey('is_smartphone', $virtual);
         $this->assertArrayHasKey('complete_device_name', $virtual);
 
         $all = $rawResult['all'];
-        $this->assertCount(530, $all);
+        $this->assertCount(511, $all);
         $this->assertArrayHasKey('is_wireless_device', $all);
         $this->assertArrayHasKey('table_support', $all);
         $this->assertArrayHasKey('resolution_width', $all);
@@ -171,18 +206,18 @@ class WurflTest extends AbstractProviderTestCase
     {
         $provider = new Wurfl($this->getWurfl());
 
-        $result = $provider->parse('Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A538a Safari/419.3');
+        $result = $provider->parse('Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; Xbox)');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Mobile Safari',
+                'name'    => 'IE',
                 'version' => [
-                    'major' => 3,
+                    'major' => 9,
                     'minor' => 0,
                     'patch' => null,
 
                     'alias' => null,
 
-                    'complete' => '3.0',
+                    'complete' => '9.0',
                 ],
             ],
             'renderingEngine' => [
@@ -198,24 +233,24 @@ class WurflTest extends AbstractProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'iOS',
+                'name'    => 'Windows',
                 'version' => [
-                    'major' => null,
+                    'major' => 7,
                     'minor' => null,
                     'patch' => null,
 
                     'alias' => null,
 
-                    'complete' => null,
+                    'complete' => '7',
                 ],
             ],
             'device' => [
-                'model' => 'iPhone',
-                'brand' => 'Apple',
-                'type'  => 'Feature Phone',
+                'model' => 'Xbox 360',
+                'brand' => 'Microsoft',
+                'type'  => 'Smart-TV',
 
-                'isMobile' => true,
-                'isTouch'  => true,
+                'isMobile' => null,
+                'isTouch'  => null,
             ],
             'bot' => [
                 'isBot' => null,

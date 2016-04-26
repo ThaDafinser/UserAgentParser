@@ -133,10 +133,10 @@ class JenssegersAgentTest extends AbstractProviderTestCase
                 'name'    => 'iOS',
                 'version' => [
                     'major' => 5,
-                    'minor' => null,
+                    'minor' => 0,
                     'patch' => null,
 
-                    'alias' => '_',
+                    'alias' => null,
 
                     'complete' => '5_0',
                 ],

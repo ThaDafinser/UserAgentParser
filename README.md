@@ -163,7 +163,7 @@ But they require (always) a working internet connection.
 Here is a comparison matrix, with many analyzed UserAgent strings, to help you device which provider fits your needs.
 Every provider has it's strengh and weakness, so it will depend on your need, which one you should use.
 
-[Go to the matrix](https://github.com/ThaDafinser/UserAgentParserMatrix)
+[Go to the comparison](http://thadafinser.github.io/UserAgentParserComparison/)
 
 ### Overview
 

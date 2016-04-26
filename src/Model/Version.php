@@ -152,7 +152,7 @@ class Version
     {
         // check if the version has only 0 -> so no real result
         // maybe move this out to the Providers itself?
-        $left = preg_replace('/[0.]/', '', $complete);
+        $left = preg_replace('/[0._]/', '', $complete);
         if ($left === '') {
             $complete = null;
         }
@@ -240,9 +240,9 @@ class Version
         ];
 
         // only digits
-        preg_match("/\d+(?:\.*\d*)*/", $complete, $result);
+        preg_match("/\d+(?:[._]*\d*)*/", $complete, $result);
         if (count($result) > 0) {
-            $parts = explode('.', $result[0]);
+            $parts = preg_split("/[._]/", $result[0]);
 
             if (isset($parts[0]) && $parts[0] != '') {
                 $versionParts['major'] = (int) $parts[0];
@@ -256,7 +256,7 @@ class Version
         }
 
         // grab alias
-        $result = preg_split("/\d+(?:\.*\d*)*/", $complete);
+        $result = preg_split("/\d+(?:[._]*\d*)*/", $complete);
         foreach ($result as $row) {
             $row = trim($row);
 

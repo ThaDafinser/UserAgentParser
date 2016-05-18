@@ -323,7 +323,7 @@ class UserAgentStringComTest extends AbstractProviderTestCase implements Require
 
                     'alias' => null,
 
-                    'complete' => '6.0.2',
+                    'complete' => '6_0_2',
                 ],
             ],
 
@@ -336,7 +336,7 @@ class UserAgentStringComTest extends AbstractProviderTestCase implements Require
 
                     'alias' => null,
 
-                    'complete' => '6.5.4',
+                    'complete' => '6_5_4',
                 ],
             ],
         ];

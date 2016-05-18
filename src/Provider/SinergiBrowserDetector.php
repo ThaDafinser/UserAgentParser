@@ -191,13 +191,8 @@ class SinergiBrowserDetector extends AbstractProvider
      */
     private function hydrateBrowser(Model\Browser $browser, BrowserDetector\Browser $browserRaw)
     {
-        if ($this->isRealResult($browserRaw->getName()) === true) {
-            $browser->setName($browserRaw->getName());
-        }
-
-        if ($this->isRealResult($browserRaw->getVersion()) === true) {
-            $browser->getVersion()->setComplete($browserRaw->getVersion());
-        }
+        $browser->setName($this->getRealResult($browserRaw->getName()));
+        $browser->getVersion()->setComplete($this->getRealResult($browserRaw->getVersion()));
     }
 
     /**
@@ -207,13 +202,8 @@ class SinergiBrowserDetector extends AbstractProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, BrowserDetector\Os $osRaw)
     {
-        if ($this->isRealResult($osRaw->getName()) === true) {
-            $os->setName($osRaw->getName());
-        }
-
-        if ($this->isRealResult($osRaw->getVersion()) === true) {
-            $os->getVersion()->setComplete($osRaw->getVersion());
-        }
+        $os->setName($this->getRealResult($osRaw->getName()));
+        $os->getVersion()->setComplete($this->getRealResult($osRaw->getVersion()));
     }
 
     /**
@@ -224,9 +214,7 @@ class SinergiBrowserDetector extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, BrowserDetector\Os $osRaw, BrowserDetector\Device $deviceRaw)
     {
-        if ($this->isRealResult($deviceRaw->getName(), 'device', 'model') === true) {
-            $device->setModel($deviceRaw->getName());
-        }
+        $device->setModel($this->getRealResult($deviceRaw->getName(), 'device', 'model'));
 
         if ($osRaw->isMobile() === true) {
             $device->setIsMobile(true);

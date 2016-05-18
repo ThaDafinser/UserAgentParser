@@ -109,10 +109,7 @@ class WhichBrowser extends AbstractProvider
     private function hydrateBot(Model\Bot $bot, \WhichBrowser\Model\Browser $browserRaw)
     {
         $bot->setIsBot(true);
-
-        if ($this->isRealResult($browserRaw->getName()) === true) {
-            $bot->setName($browserRaw->getName());
-        }
+        $bot->setName($this->getRealResult($browserRaw->getName()));
     }
 
     /**
@@ -124,10 +121,7 @@ class WhichBrowser extends AbstractProvider
     {
         if ($this->isRealResult($browserRaw->getName(), 'browser', 'name') === true) {
             $browser->setName($browserRaw->getName());
-
-            if ($this->isRealResult($browserRaw->getVersion()) === true) {
-                $browser->getVersion()->setComplete($browserRaw->getVersion());
-            }
+            $browser->getVersion()->setComplete($this->getRealResult($browserRaw->getVersion()));
 
             return;
         }
@@ -139,9 +133,7 @@ class WhichBrowser extends AbstractProvider
             if ($this->isRealResult($usingRaw->getName()) === true) {
                 $browser->setName($usingRaw->getName());
 
-                if ($this->isRealResult($usingRaw->getVersion()) === true) {
-                    $browser->getVersion()->setComplete($usingRaw->getVersion());
-                }
+                $browser->getVersion()->setComplete($this->getRealResult($usingRaw->getVersion()));
             }
         }
     }
@@ -153,13 +145,8 @@ class WhichBrowser extends AbstractProvider
      */
     private function hydrateRenderingEngine(Model\RenderingEngine $engine, \WhichBrowser\Model\Engine $engineRaw)
     {
-        if ($this->isRealResult($engineRaw->getName()) === true) {
-            $engine->setName($engineRaw->getName());
-        }
-
-        if ($this->isRealResult($engineRaw->getVersion()) === true) {
-            $engine->getVersion()->setComplete($engineRaw->getVersion());
-        }
+        $engine->setName($this->getRealResult($engineRaw->getName()));
+        $engine->getVersion()->setComplete($this->getRealResult($engineRaw->getVersion()));
     }
 
     /**
@@ -169,13 +156,8 @@ class WhichBrowser extends AbstractProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, \WhichBrowser\Model\Os $osRaw)
     {
-        if ($this->isRealResult($osRaw->getName()) === true) {
-            $os->setName($osRaw->getName());
-        }
-
-        if ($this->isRealResult($osRaw->getVersion()) === true) {
-            $os->getVersion()->setComplete($osRaw->getVersion());
-        }
+        $os->setName($this->getRealResult($osRaw->getName()));
+        $os->getVersion()->setComplete($this->getRealResult($osRaw->getVersion()));
     }
 
     /**
@@ -186,17 +168,9 @@ class WhichBrowser extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, \WhichBrowser\Model\Device $deviceRaw, WhichBrowserParser $parser)
     {
-        if ($this->isRealResult($deviceRaw->getModel()) === true) {
-            $device->setModel($deviceRaw->getModel());
-        }
-
-        if ($this->isRealResult($deviceRaw->getManufacturer()) === true) {
-            $device->setBrand($deviceRaw->getManufacturer());
-        }
-
-        if ($this->isRealResult($parser->getType()) === true) {
-            $device->setType($parser->getType());
-        }
+        $device->setModel($this->getRealResult($deviceRaw->getModel()));
+        $device->setBrand($this->getRealResult($deviceRaw->getManufacturer()));
+        $device->setType($this->getRealResult($parser->getType()));
 
         if ($parser->isMobile() === true) {
             $device->setIsMobile(true);

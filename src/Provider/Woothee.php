@@ -158,8 +158,8 @@ class Woothee extends AbstractProvider
     {
         $bot->setIsBot(true);
 
-        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name'], 'bot', 'name') === true) {
-            $bot->setName($resultRaw['name']);
+        if (isset($resultRaw['name'])) {
+            $bot->setName($this->getRealResult($resultRaw['name'], 'bot', 'name'));
         }
     }
 
@@ -170,12 +170,12 @@ class Woothee extends AbstractProvider
      */
     private function hydrateBrowser(Model\Browser $browser, array $resultRaw)
     {
-        if (isset($resultRaw['name']) && $this->isRealResult($resultRaw['name']) === true) {
-            $browser->setName($resultRaw['name']);
+        if (isset($resultRaw['name'])) {
+            $browser->setName($this->getRealResult($resultRaw['name']));
         }
 
-        if (isset($resultRaw['version']) && $this->isRealResult($resultRaw['version']) === true) {
-            $browser->getVersion()->setComplete($resultRaw['version']);
+        if (isset($resultRaw['version'])) {
+            $browser->getVersion()->setComplete($this->getRealResult($resultRaw['version']));
         }
     }
 
@@ -186,8 +186,8 @@ class Woothee extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, array $resultRaw)
     {
-        if (isset($resultRaw['category']) && $this->isRealResult($resultRaw['category'], 'device', 'type') === true) {
-            $device->setType($resultRaw['category']);
+        if (isset($resultRaw['category'])) {
+            $device->setType($this->getRealResult($resultRaw['category'], 'device', 'type'));
         }
     }
 

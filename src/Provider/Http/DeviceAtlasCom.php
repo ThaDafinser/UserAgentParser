@@ -143,12 +143,12 @@ class DeviceAtlasCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->browserName) && $this->isRealResult($resultRaw->browserName, 'browser', 'name') === true) {
-            $browser->setName($resultRaw->browserName);
+        if (isset($resultRaw->browserName)) {
+            $browser->setName($this->getRealResult($resultRaw->browserName, 'browser', 'name'));
         }
 
-        if (isset($resultRaw->browserVersion) && $this->isRealResult($resultRaw->browserVersion, 'browser', 'version') === true) {
-            $browser->getVersion()->setComplete($resultRaw->browserVersion);
+        if (isset($resultRaw->browserVersion)) {
+            $browser->getVersion()->setComplete($this->getRealResult($resultRaw->browserVersion, 'browser', 'version'));
         }
     }
 
@@ -159,8 +159,8 @@ class DeviceAtlasCom extends AbstractHttpProvider
      */
     private function hydrateRenderingEngine(Model\RenderingEngine $engine, stdClass $resultRaw)
     {
-        if (isset($resultRaw->browserRenderingEngine) && $this->isRealResult($resultRaw->browserRenderingEngine) === true) {
-            $engine->setName($resultRaw->browserRenderingEngine);
+        if (isset($resultRaw->browserRenderingEngine)) {
+            $engine->setName($this->getRealResult($resultRaw->browserRenderingEngine));
         }
     }
 
@@ -171,12 +171,12 @@ class DeviceAtlasCom extends AbstractHttpProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
-        if (isset($resultRaw->osName) && $this->isRealResult($resultRaw->osName) === true) {
-            $os->setName($resultRaw->osName);
+        if (isset($resultRaw->osName)) {
+            $os->setName($this->getRealResult($resultRaw->osName));
         }
 
-        if (isset($resultRaw->osVersion) && $this->isRealResult($resultRaw->osVersion) === true) {
-            $os->getVersion()->setComplete($resultRaw->osVersion);
+        if (isset($resultRaw->osVersion)) {
+            $os->getVersion()->setComplete($this->getRealResult($resultRaw->osVersion));
         }
     }
 
@@ -187,8 +187,8 @@ class DeviceAtlasCom extends AbstractHttpProvider
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
-        if (isset($resultRaw->primaryHardwareType) && $this->isRealResult($resultRaw->primaryHardwareType) === true) {
-            $device->setType($resultRaw->primaryHardwareType);
+        if (isset($resultRaw->primaryHardwareType)) {
+            $device->setType($this->getRealResult($resultRaw->primaryHardwareType));
         }
     }
 

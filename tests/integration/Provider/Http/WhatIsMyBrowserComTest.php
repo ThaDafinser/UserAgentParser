@@ -82,7 +82,7 @@ class WhatIsMyBrowserComTest extends AbstractHttpProviderTestCase
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => null,
+                'type'  => 'mobile',
 
                 'isMobile' => null,
                 'isTouch'  => null,
@@ -100,7 +100,7 @@ class WhatIsMyBrowserComTest extends AbstractHttpProviderTestCase
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInstanceOf('stdClass', $rawResult);
-        $this->assertCount(28, (array) $rawResult);
+        $this->assertCount(32, (array) $rawResult);
 
         $this->assertObjectHasAttribute('operating_system_name', $rawResult);
         $this->assertObjectHasAttribute('simple_sub_description_string', $rawResult);
@@ -118,23 +118,90 @@ class WhatIsMyBrowserComTest extends AbstractHttpProviderTestCase
         $this->assertObjectHasAttribute('operating_system_flavour', $rawResult);
         $this->assertObjectHasAttribute('operating_system_frameworks', $rawResult);
         $this->assertObjectHasAttribute('browser_name_code', $rawResult);
-        $this->assertObjectHasAttribute('operating_system_version', $rawResult);
+        $this->assertObjectHasAttribute('simple_minor', $rawResult);
 
+        $this->assertObjectHasAttribute('operating_system_version', $rawResult);
         $this->assertObjectHasAttribute('simple_operating_platform_string', $rawResult);
         $this->assertObjectHasAttribute('is_abusive', $rawResult);
+        $this->assertObjectHasAttribute('simple_medium', $rawResult);
         $this->assertObjectHasAttribute('layout_engine_version', $rawResult);
+
         $this->assertObjectHasAttribute('browser_capabilities', $rawResult);
         $this->assertObjectHasAttribute('operating_platform_vendor_name', $rawResult);
-
         $this->assertObjectHasAttribute('operating_system', $rawResult);
         $this->assertObjectHasAttribute('operating_system_version_full', $rawResult);
         $this->assertObjectHasAttribute('operating_platform_code', $rawResult);
+
         $this->assertObjectHasAttribute('browser_name', $rawResult);
         $this->assertObjectHasAttribute('operating_system_name_code', $rawResult);
-
         $this->assertObjectHasAttribute('user_agent', $rawResult);
+        $this->assertObjectHasAttribute('simple_major', $rawResult);
         $this->assertObjectHasAttribute('browser_version_full', $rawResult);
+
+        $this->assertObjectHasAttribute('user_agent_type', $rawResult);
         $this->assertObjectHasAttribute('browser', $rawResult);
+    }
+
+    public function testRealResultBot()
+    {
+        if (! defined('CREDENTIALS_WHAT_IS_MY_BROWSER_COM_KEY')) {
+            $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
+        }
+
+        $provider = new WhatIsMyBrowserCom($this->getClient(), CREDENTIALS_WHAT_IS_MY_BROWSER_COM_KEY);
+
+        $result = $provider->parse('Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0); 360Spider(compatible; HaosouSpider; http://www.haosou.com/help/help_3_2.html)');
+        $this->assertEquals([
+            'browser' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'renderingEngine' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'operatingSystem' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'device' => [
+                'model' => null,
+                'brand' => null,
+                'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+            'bot' => [
+                'isBot' => true,
+                'name'  => '360Spider',
+                'type'  => 'crawler',
+            ],
+        ], $result->toArray());
     }
 
     public function testEncodeIsCorrect()

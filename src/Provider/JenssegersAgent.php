@@ -137,10 +137,7 @@ class JenssegersAgent extends AbstractProvider
     private function hydrateBot(Model\Bot $bot, array $resultRaw)
     {
         $bot->setIsBot(true);
-
-        if ($this->isRealResult($resultRaw['botName']) === true) {
-            $bot->setName($resultRaw['botName']);
-        }
+        $bot->setName($this->getRealResult($resultRaw['botName']));
     }
 
     /**
@@ -152,10 +149,7 @@ class JenssegersAgent extends AbstractProvider
     {
         if ($this->isRealResult($resultRaw['browserName'], 'browser', 'name') === true) {
             $browser->setName($resultRaw['browserName']);
-
-            if ($this->isRealResult($resultRaw['browserVersion']) === true) {
-                $browser->getVersion()->setComplete($resultRaw['browserVersion']);
-            }
+            $browser->getVersion()->setComplete($this->getRealResult($resultRaw['browserVersion']));
         }
     }
 
@@ -168,10 +162,7 @@ class JenssegersAgent extends AbstractProvider
     {
         if ($this->isRealResult($resultRaw['osName']) === true) {
             $os->setName($resultRaw['osName']);
-
-            if ($this->isRealResult($resultRaw['osVersion']) === true) {
-                $os->getVersion()->setComplete($resultRaw['osVersion']);
-            }
+            $os->getVersion()->setComplete($this->getRealResult($resultRaw['osVersion']));
         }
     }
 

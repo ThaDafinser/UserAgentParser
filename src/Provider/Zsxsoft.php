@@ -155,12 +155,12 @@ class Zsxsoft extends AbstractProvider
      */
     private function hydrateBrowser(Model\Browser $browser, array $browserRaw)
     {
-        if (isset($browserRaw['name']) && $this->isRealResult($browserRaw['name'], 'browser', 'name') === true) {
-            $browser->setName($browserRaw['name']);
+        if (isset($browserRaw['name'])) {
+            $browser->setName($this->getRealResult($browserRaw['name'], 'browser', 'name'));
         }
 
-        if (isset($browserRaw['version']) && $this->isRealResult($browserRaw['version']) === true) {
-            $browser->getVersion()->setComplete($browserRaw['version']);
+        if (isset($browserRaw['version'])) {
+            $browser->getVersion()->setComplete($this->getRealResult($browserRaw['version']));
         }
     }
 
@@ -171,12 +171,12 @@ class Zsxsoft extends AbstractProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, array $osRaw)
     {
-        if (isset($osRaw['name']) && $this->isRealResult($osRaw['name']) === true) {
-            $os->setName($osRaw['name']);
+        if (isset($osRaw['name'])) {
+            $os->setName($this->getRealResult($osRaw['name']));
         }
 
-        if (isset($osRaw['version']) && $this->isRealResult($osRaw['version']) === true) {
-            $os->getVersion()->setComplete($osRaw['version']);
+        if (isset($osRaw['version'])) {
+            $os->getVersion()->setComplete($this->getRealResult($osRaw['version']));
         }
     }
 
@@ -187,12 +187,12 @@ class Zsxsoft extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, array $deviceRaw)
     {
-        if (isset($deviceRaw['model']) && $this->isRealResult($deviceRaw['model'], 'device', 'model') === true) {
-            $device->setModel($deviceRaw['model']);
+        if (isset($deviceRaw['model'])) {
+            $device->setModel($this->getRealResult($deviceRaw['model'], 'device', 'model'));
         }
 
-        if (isset($deviceRaw['brand']) && $this->isRealResult($deviceRaw['brand']) === true) {
-            $device->setBrand($deviceRaw['brand']);
+        if (isset($deviceRaw['brand'])) {
+            $device->setBrand($this->getRealResult($deviceRaw['brand']));
         }
     }
 

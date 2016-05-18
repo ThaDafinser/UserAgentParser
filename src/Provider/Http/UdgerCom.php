@@ -178,8 +178,8 @@ class UdgerCom extends AbstractHttpProvider
     {
         $bot->setIsBot(true);
 
-        if (isset($resultRaw->ua_family) && $this->isRealResult($resultRaw->ua_family) === true) {
-            $bot->setName($resultRaw->ua_family);
+        if (isset($resultRaw->ua_family)) {
+            $bot->setName($this->getRealResult($resultRaw->ua_family));
         }
     }
 
@@ -190,12 +190,12 @@ class UdgerCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->ua_family) && $this->isRealResult($resultRaw->ua_family, 'browser', 'name') === true) {
-            $browser->setName($resultRaw->ua_family);
+        if (isset($resultRaw->ua_family)) {
+            $browser->setName($this->getRealResult($resultRaw->ua_family, 'browser', 'name'));
         }
 
-        if (isset($resultRaw->ua_ver) && $this->isRealResult($resultRaw->ua_ver) === true) {
-            $browser->getVersion()->setComplete($resultRaw->ua_ver);
+        if (isset($resultRaw->ua_ver)) {
+            $browser->getVersion()->setComplete($this->getRealResult($resultRaw->ua_ver));
         }
     }
 
@@ -206,8 +206,8 @@ class UdgerCom extends AbstractHttpProvider
      */
     private function hydrateRenderingEngine(Model\RenderingEngine $engine, stdClass $resultRaw)
     {
-        if (isset($resultRaw->ua_engine) && $this->isRealResult($resultRaw->ua_engine) === true) {
-            $engine->setName($resultRaw->ua_engine);
+        if (isset($resultRaw->ua_engine)) {
+            $engine->setName($this->getRealResult($resultRaw->ua_engine));
         }
     }
 
@@ -218,8 +218,8 @@ class UdgerCom extends AbstractHttpProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
-        if (isset($resultRaw->os_family) && $this->isRealResult($resultRaw->os_family) === true) {
-            $os->setName($resultRaw->os_family);
+        if (isset($resultRaw->os_family)) {
+            $os->setName($this->getRealResult($resultRaw->os_family));
         }
     }
 
@@ -230,8 +230,8 @@ class UdgerCom extends AbstractHttpProvider
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
-        if (isset($resultRaw->device_name) && $this->isRealResult($resultRaw->device_name) === true) {
-            $device->setType($resultRaw->device_name);
+        if (isset($resultRaw->device_name)) {
+            $device->setType($this->getRealResult($resultRaw->device_name));
         }
     }
 

@@ -212,11 +212,11 @@ class PiwikDeviceDetector extends AbstractProvider
     {
         $bot->setIsBot(true);
 
-        if (isset($botRaw['name']) && $this->isRealResult($botRaw['name'], 'bot', 'name')) {
-            $bot->setName($botRaw['name']);
+        if (isset($botRaw['name'])) {
+            $bot->setName($this->getRealResult($botRaw['name'], 'bot', 'name'));
         }
-        if (isset($botRaw['category']) && $this->isRealResult($botRaw['category'])) {
-            $bot->setType($botRaw['category']);
+        if (isset($botRaw['category'])) {
+            $bot->setType($this->getRealResult($botRaw['category']));
         }
     }
 
@@ -227,12 +227,12 @@ class PiwikDeviceDetector extends AbstractProvider
      */
     private function hydrateBrowser(Model\Browser $browser, $clientRaw)
     {
-        if (isset($clientRaw['name']) && $this->isRealResult($clientRaw['name']) === true) {
-            $browser->setName($clientRaw['name']);
+        if (isset($clientRaw['name'])) {
+            $browser->setName($this->getRealResult($clientRaw['name']));
         }
 
-        if (isset($clientRaw['version']) && $this->isRealResult($clientRaw['version']) === true) {
-            $browser->getVersion()->setComplete($clientRaw['version']);
+        if (isset($clientRaw['version'])) {
+            $browser->getVersion()->setComplete($this->getRealResult($clientRaw['version']));
         }
     }
 
@@ -243,8 +243,8 @@ class PiwikDeviceDetector extends AbstractProvider
      */
     private function hydrateRenderingEngine(Model\RenderingEngine $engine, $clientRaw)
     {
-        if (isset($clientRaw['engine']) && $this->isRealResult($clientRaw['engine']) === true) {
-            $engine->setName($clientRaw['engine']);
+        if (isset($clientRaw['engine'])) {
+            $engine->setName($this->getRealResult($clientRaw['engine']));
         }
     }
 
@@ -255,12 +255,12 @@ class PiwikDeviceDetector extends AbstractProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, $osRaw)
     {
-        if (isset($osRaw['name']) && $this->isRealResult($osRaw['name']) === true) {
-            $os->setName($osRaw['name']);
+        if (isset($osRaw['name'])) {
+            $os->setName($this->getRealResult($osRaw['name']));
         }
 
-        if (isset($osRaw['version']) && $this->isRealResult($osRaw['version']) === true) {
-            $os->getVersion()->setComplete($osRaw['version']);
+        if (isset($osRaw['version'])) {
+            $os->getVersion()->setComplete($this->getRealResult($osRaw['version']));
         }
     }
 
@@ -271,17 +271,9 @@ class PiwikDeviceDetector extends AbstractProvider
      */
     private function hydrateDevice(Model\Device $device, DeviceDetector $dd)
     {
-        if ($this->isRealResult($dd->getModel()) === true) {
-            $device->setModel($dd->getModel());
-        }
-
-        if ($this->isRealResult($dd->getBrandName()) === true) {
-            $device->setBrand($dd->getBrandName());
-        }
-
-        if ($this->isRealResult($dd->getDeviceName()) === true) {
-            $device->setType($dd->getDeviceName());
-        }
+        $device->setModel($this->getRealResult($dd->getModel()));
+        $device->setBrand($this->getRealResult($dd->getBrandName()));
+        $device->setType($this->getRealResult($dd->getDeviceName()));
 
         if ($dd->isMobile() === true) {
             $device->setIsMobile(true);

@@ -163,12 +163,12 @@ class UserAgentStringCom extends AbstractHttpProvider
     {
         $bot->setIsBot(true);
 
-        if (isset($resultRaw->agent_name) && $this->isRealResult($resultRaw->agent_name) === true) {
-            $bot->setName($resultRaw->agent_name);
+        if (isset($resultRaw->agent_name)) {
+            $bot->setName($this->getRealResult($resultRaw->agent_name));
         }
 
-        if (isset($resultRaw->agent_type) && $this->isRealResult($resultRaw->agent_type) === true) {
-            $bot->setType($resultRaw->agent_type);
+        if (isset($resultRaw->agent_type)) {
+            $bot->setType($this->getRealResult($resultRaw->agent_type));
         }
     }
 
@@ -179,14 +179,12 @@ class UserAgentStringCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->agent_name) && $this->isRealResult($resultRaw->agent_name) === true) {
-            $browser->setName($resultRaw->agent_name);
+        if (isset($resultRaw->agent_name)) {
+            $browser->setName($this->getRealResult($resultRaw->agent_name));
         }
 
-        if (isset($resultRaw->agent_version) && $this->isRealResult($resultRaw->agent_version) === true) {
-            $version = preg_replace('/(\d*)_(\d*)/', '$1.$2', $resultRaw->agent_version);
-
-            $browser->getVersion()->setComplete($version);
+        if (isset($resultRaw->agent_version)) {
+            $browser->getVersion()->setComplete($this->getRealResult($resultRaw->agent_version));
         }
     }
 
@@ -197,14 +195,12 @@ class UserAgentStringCom extends AbstractHttpProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
-        if (isset($resultRaw->os_name) && $this->isRealResult($resultRaw->os_name) === true) {
-            $os->setName($resultRaw->os_name);
+        if (isset($resultRaw->os_name)) {
+            $os->setName($this->getRealResult($resultRaw->os_name));
         }
 
-        if (isset($resultRaw->os_versionNumber) && $this->isRealResult($resultRaw->os_versionNumber) === true) {
-            $version = preg_replace('/(\d*)_(\d*)/', '$1.$2', $resultRaw->os_versionNumber);
-
-            $os->getVersion()->setComplete($version);
+        if (isset($resultRaw->os_versionNumber)) {
+            $os->getVersion()->setComplete($this->getRealResult($resultRaw->os_versionNumber));
         }
     }
 

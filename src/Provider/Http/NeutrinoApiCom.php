@@ -228,8 +228,8 @@ class NeutrinoApiCom extends AbstractHttpProvider
     {
         $bot->setIsBot(true);
 
-        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
-            $bot->setName($resultRaw->browser_name);
+        if (isset($resultRaw->browser_name)) {
+            $bot->setName($this->getRealResult($resultRaw->browser_name));
         }
     }
 
@@ -240,12 +240,12 @@ class NeutrinoApiCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name, 'browser', 'name') === true) {
-            $browser->setName($resultRaw->browser_name);
+        if (isset($resultRaw->browser_name)) {
+            $browser->setName($this->getRealResult($resultRaw->browser_name, 'browser', 'name'));
         }
 
-        if (isset($resultRaw->version) && $this->isRealResult($resultRaw->version) === true) {
-            $browser->getVersion()->setComplete($resultRaw->version);
+        if (isset($resultRaw->version)) {
+            $browser->getVersion()->setComplete($this->getRealResult($resultRaw->version));
         }
     }
 
@@ -256,12 +256,12 @@ class NeutrinoApiCom extends AbstractHttpProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
-        if (isset($resultRaw->operating_system_family) && $this->isRealResult($resultRaw->operating_system_family) === true) {
-            $os->setName($resultRaw->operating_system_family);
+        if (isset($resultRaw->operating_system_family)) {
+            $os->setName($this->getRealResult($resultRaw->operating_system_family));
         }
 
-        if (isset($resultRaw->operating_system_version) && $this->isRealResult($resultRaw->operating_system_version) === true) {
-            $os->getVersion()->setComplete($resultRaw->operating_system_version);
+        if (isset($resultRaw->operating_system_version)) {
+            $os->getVersion()->setComplete($this->getRealResult($resultRaw->operating_system_version));
         }
     }
 
@@ -272,16 +272,16 @@ class NeutrinoApiCom extends AbstractHttpProvider
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
-        if (isset($resultRaw->mobile_model) && $this->isRealResult($resultRaw->mobile_model, 'device', 'model') === true) {
-            $device->setModel($resultRaw->mobile_model);
+        if (isset($resultRaw->mobile_model)) {
+            $device->setModel($this->getRealResult($resultRaw->mobile_model, 'device', 'model'));
         }
 
-        if (isset($resultRaw->mobile_brand) && $this->isRealResult($resultRaw->mobile_brand, 'device', 'brand') === true) {
-            $device->setBrand($resultRaw->mobile_brand);
+        if (isset($resultRaw->mobile_brand)) {
+            $device->setBrand($this->getRealResult($resultRaw->mobile_brand, 'device', 'brand'));
         }
 
-        if (isset($resultRaw->type) && $this->isRealResult($resultRaw->type) === true) {
-            $device->setType($resultRaw->type);
+        if (isset($resultRaw->type)) {
+            $device->setType($this->getRealResult($resultRaw->type));
         }
 
         if (isset($resultRaw->is_mobile) && $resultRaw->is_mobile === true) {

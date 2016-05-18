@@ -187,10 +187,7 @@ class Wurfl extends AbstractProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, CustomDevice $deviceRaw)
     {
-        if ($this->isRealResult($deviceRaw->getVirtualCapability('advertised_device_os'), 'operatingSystem', 'name')) {
-            $os->setName($deviceRaw->getVirtualCapability('advertised_device_os'));
-        }
-
+        $os->setName($this->getRealResult($deviceRaw->getVirtualCapability('advertised_device_os'), 'operatingSystem', 'name'));
         $os->getVersion()->setComplete($deviceRaw->getVirtualCapability('advertised_device_os_version'));
     }
 
@@ -208,13 +205,8 @@ class Wurfl extends AbstractProvider
             return;
         }
 
-        if ($this->isRealResult($deviceRaw->getCapability('model_name'), 'device', 'model') === true) {
-            $device->setModel($deviceRaw->getCapability('model_name'));
-        }
-
-        if ($this->isRealResult($deviceRaw->getCapability('brand_name'), 'device', 'brand') === true) {
-            $device->setBrand($deviceRaw->getCapability('brand_name'));
-        }
+        $device->setModel($this->getRealResult($deviceRaw->getCapability('model_name'), 'device', 'model'));
+        $device->setBrand($this->getRealResult($deviceRaw->getCapability('brand_name'), 'device', 'brand'));
 
         if ($deviceRaw->getVirtualCapability('is_mobile') === 'true' || $deviceRaw->getVirtualCapability('is_mobile') === true) {
             $device->setIsMobile(true);

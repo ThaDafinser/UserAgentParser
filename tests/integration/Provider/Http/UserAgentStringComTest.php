@@ -136,7 +136,7 @@ class UserAgentStringComTest extends AbstractHttpProviderTestCase
 
                     'alias' => null,
 
-                    'complete' => '4.3.3',
+                    'complete' => '4_3_3',
                 ],
             ],
             'device' => [

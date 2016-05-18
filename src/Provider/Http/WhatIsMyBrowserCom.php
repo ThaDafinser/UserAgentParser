@@ -51,15 +51,15 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
             'model' => true,
             'brand' => true,
 
-            'type'     => false,
+            'type'     => true,
             'isMobile' => false,
             'isTouch'  => false,
         ],
 
         'bot' => [
-            'isBot' => false,
-            'name'  => false,
-            'type'  => false,
+            'isBot' => true,
+            'name'  => true,
+            'type'  => true,
         ],
     ];
 
@@ -219,6 +219,38 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
 
     /**
      *
+     * @param  stdClass $resultRaw
+     * @return boolean
+     */
+    private function isBot(stdClass $resultRaw)
+    {
+        if (isset($resultRaw->user_agent_type) && ($resultRaw->user_agent_type === 'crawler' || $resultRaw->user_agent_type === 'analyser')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param Model\Bot $bot
+     * @param stdClass  $resultRaw
+     */
+    private function hydrateBot(Model\Bot $bot, stdClass $resultRaw)
+    {
+        $bot->setIsBot(true);
+
+        if (isset($resultRaw->browser_name) && $this->isRealResult($resultRaw->browser_name) === true) {
+            $bot->setName($resultRaw->browser_name);
+        }
+
+        if (isset($resultRaw->user_agent_type) && $this->isRealResult($resultRaw->user_agent_type) === true) {
+            $bot->setType($resultRaw->user_agent_type);
+        }
+    }
+
+    /**
+     *
      * @param Model\Browser $browser
      * @param stdClass      $resultRaw
      */
@@ -279,6 +311,10 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
         if (isset($resultRaw->operating_platform_vendor_name) && $this->isRealResult($resultRaw->operating_platform_vendor_name) === true) {
             $device->setBrand($resultRaw->operating_platform_vendor_name);
         }
+
+        if (isset($resultRaw->user_agent_type) && $this->isRealResult($resultRaw->user_agent_type) === true) {
+            $device->setType($resultRaw->user_agent_type);
+        }
     }
 
     public function parse($userAgent, array $headers = [])
@@ -297,6 +333,15 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
          */
         $result = new Model\UserAgent();
         $result->setProviderResultRaw($resultRaw);
+
+        /*
+         * Bot detection
+         */
+        if ($this->isBot($resultRaw) === true) {
+            $this->hydrateBot($result->getBot(), $resultRaw);
+
+            return $result;
+        }
 
         /*
          * hydrate the result

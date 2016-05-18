@@ -7,11 +7,10 @@ use UserAgentParser\Provider\Http\WhatIsMyBrowserCom;
 
 /**
  *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *
- * @covers UserAgentParser\Provider\Http\WhatIsMyBrowserCom
+ *         
+ *          @covers UserAgentParser\Provider\Http\WhatIsMyBrowserCom
  */
 class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
@@ -74,15 +73,15 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements Require
             'device' => [
                 'model'    => true,
                 'brand'    => true,
-                'type'     => false,
+                'type'     => true,
                 'isMobile' => false,
                 'isTouch'  => false,
             ],
 
             'bot' => [
-                'isBot' => false,
-                'name'  => false,
-                'type'  => false,
+                'isBot' => true,
+                'name'  => true,
+                'type'  => true,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -368,6 +367,41 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements Require
     }
 
     /**
+     * Bot
+     */
+    public function testParseBot()
+    {
+        $parseResult                  = new stdClass();
+        $parseResult->user_agent      = 'A real user agent...';
+        $parseResult->user_agent_type = 'crawler';
+        $parseResult->browser_name    = '360Spider';
+
+        $rawResult         = new stdClass();
+        $rawResult->result = 'success';
+        $rawResult->parse  = $parseResult;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new WhatIsMyBrowserCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $expectedResult = [
+            'bot' => [
+                'isBot' => true,
+                'name'  => '360Spider',
+                'type'  => 'crawler',
+            ],
+        ];
+
+        $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
      * Browser only
      */
     public function testParseBrowser()
@@ -581,6 +615,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements Require
         $parseResult->user_agent                     = 'A real user agent...';
         $parseResult->operating_platform             = 'Galaxy Note';
         $parseResult->operating_platform_vendor_name = 'Dell';
+        $parseResult->user_agent_type                = 'mobile';
 
         $rawResult         = new stdClass();
         $rawResult->result = 'success';
@@ -600,7 +635,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements Require
             'device' => [
                 'model' => 'Galaxy Note',
                 'brand' => 'Dell',
-                'type'  => null,
+                'type'  => 'mobile',
 
                 'isMobile' => null,
                 'isTouch'  => null,

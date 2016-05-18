@@ -217,8 +217,8 @@ class UserAgentApiCom extends AbstractHttpProvider
 
     /**
      *
-     * @param Model\UserAgent $device
-     * @param stdClass        $resultRaw
+     * @param Model\Device $device
+     * @param stdClass     $resultRaw
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {

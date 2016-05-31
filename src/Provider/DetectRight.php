@@ -1,6 +1,7 @@
 <?php
 namespace UserAgentParser\Provider;
 
+use UserAgentParser\Exception\InvalidArgumentException;
 use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
@@ -28,13 +29,6 @@ class DetectRight extends AbstractProvider
      */
     protected $homepage = 'http://www.detectright.com/';
 
-    /**
-     * Composer package name
-     *
-     * @var string
-     */
-//     protected $packageName = 'donatj/phpuseragentparser';
-
     protected $detectionCapabilities = [
 
         'browser' => [
@@ -48,45 +42,67 @@ class DetectRight extends AbstractProvider
         ],
 
         'operatingSystem' => [
-            'name'    => false,
-            'version' => false,
+            'name'    => true,
+            'version' => true,
         ],
 
         'device' => [
-            'model'    => false,
-            'brand'    => false,
-            'type'     => false,
+            'model'    => true,
+            'brand'    => true,
+            'type'     => true,
             'isMobile' => false,
-            'isTouch'  => false,
+            'isTouch'  => true,
         ],
 
         'bot' => [
-            'isBot' => false,
-            'name'  => false,
+            'isBot' => true,
+            'name'  => true,
             'type'  => false,
         ],
     ];
 
-    public function __construct()
+    private $dataFile;
+
+    /**
+     *
+     * @param  string                    $dataFile
+     * @throws PackageNotLoadedException
+     * @throws InvalidArgumentException
+     */
+    public function __construct($dataFile)
     {
-//         if (! file_exists('vendor/' . $this->getPackageName() . '/composer.json')) {
-//             throw new PackageNotLoadedException('You need to install the package ' . $this->getPackageName() . ' to use this provider');
-//         }
+        if (! class_exists('\DetectRight')) {
+            throw new PackageNotLoadedException('You need to download and include the package by hand from ' . $this->getHomepage() . ' to use this provider');
+        }
+
+        if (! file_exists($dataFile)) {
+            throw new InvalidArgumentException('Data file not found ' . $dataFile);
+        }
+
+        $this->dataFile = $dataFile;
     }
 
     /**
      *
-     * @param array $resultRaw
-     *
-     * @return bool
+     * @return string
      */
-    private function hasResult(array $resultRaw)
+    public function getDataFile()
     {
-        if ($this->isRealResult($resultRaw['browser'])) {
-            return true;
-        }
+        return $this->dataFile;
+    }
 
-        return false;
+    /**
+     *
+     * @param Model\Bot $bot
+     * @param array     $resultRaw
+     */
+    private function hydrateBot(Model\Bot $bot, $resultRaw)
+    {
+        $bot->setIsBot(true);
+
+        if (isset($resultRaw['model_name'])) {
+            $bot->setName($this->getRealResult($resultRaw['model_name']));
+        }
     }
 
     /**
@@ -96,52 +112,89 @@ class DetectRight extends AbstractProvider
      */
     private function hydrateBrowser(Model\Browser $browser, array $resultRaw)
     {
-        $browser->setName($this->getRealResult($resultRaw['browser']));
-        $browser->getVersion()->setComplete($this->getRealResult($resultRaw['version']));
+        if (isset($resultRaw['mobile_browser'])) {
+            $browser->setName($this->getRealResult($resultRaw['mobile_browser']));
+        }
+        if (isset($resultRaw['mobile_browser_version'])) {
+            $browser->getVersion()->setComplete($this->getRealResult($resultRaw['mobile_browser_version']));
+        }
+    }
+
+    /**
+     *
+     * @param Model\OperatingSystem $os
+     * @param array                 $resultRaw
+     */
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, array $resultRaw)
+    {
+        if (isset($resultRaw['device_os'])) {
+            $os->setName($this->getRealResult($resultRaw['device_os']));
+        }
+        if (isset($resultRaw['device_os_version'])) {
+            $os->getVersion()->setComplete($this->getRealResult($resultRaw['device_os_version']));
+        }
+    }
+
+    /**
+     *
+     * @param Model\Device $device
+     * @param array        $resultRaw
+     */
+    private function hydrateDevice(Model\Device $device, array $resultRaw)
+    {
+        if (isset($resultRaw['model_name'])) {
+            $device->setModel($this->getRealResult($resultRaw['model_name']));
+        }
+        if (isset($resultRaw['brand_name'])) {
+            $device->setBrand($this->getRealResult($resultRaw['brand_name']));
+        }
+        if (isset($resultRaw['device_type'])) {
+            $device->setType($this->getRealResult($resultRaw['device_type']));
+        }
+
+        if (isset($resultRaw['has_touchscreen']) && $resultRaw['has_touchscreen'] === 1) {
+            $device->setIsTouch(true);
+        }
     }
 
     public function parse($userAgent, array $headers = [])
     {
-        require_once '../../detectright/detectright.php';
-        
-        $path = realpath('../../detectright/detectright.data');
-        
-        \DetectRight::initialize('DRSQLite//'.$path);
-        
-        // DO CLEVER LIFE-ENHANCING STUFF HERE
-//         $profile = DetectRight::getProfileFromHeaders($_SERVER);
-        // or
-        $profile = \DetectRight::getProfileFromUA($userAgent);
-        \Detectright::close();
-        
-        var_dump($profile);
-        exit();
-        
-        
-//         $resultRaw = $functionName($userAgent);
+        /*
+         * Some settings
+         */
+        \DetectRight::generateExceptionOnDeviceNotFound();
+        \DetectRight::initialize('DRSQLite//' . realpath($this->getDataFile()));
 
-//         if ($this->hasResult($resultRaw) !== true) {
-//             throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
-//         }
+        $headers['User-Agent'] = $userAgent;
 
-//         /*
-//          * Hydrate the model
-//          */
-//         $result = new Model\UserAgent();
-//         $result->setProviderResultRaw($resultRaw);
+        try {
+            $resultRaw = \DetectRight::getProfileFromHeaders($headers);
+        } catch (\DeviceNotFoundException $ex) {
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
+        }
 
-//         /*
-//          * Bot detection - is currently not possible!
-//          */
+        /*
+         * Hydrate the model
+         */
+        $result = new Model\UserAgent();
+        $result->setProviderResultRaw($resultRaw);
 
-//         /*
-//          * hydrate the result
-//          */
-//         $this->hydrateBrowser($result->getBrowser(), $resultRaw);
-//         // renderingEngine not available
-//         // os is mixed with device informations
-//         // device is mixed with os
+        /*
+         * Bot detection
+         */
+        if (isset($resultRaw['device_type']) && $resultRaw['device_type'] === 'Bot') {
+            $this->hydrateBot($result->getBot(), $resultRaw);
 
-//         return $result;
+            return $result;
+        }
+
+        /*
+         * hydrate the result
+         */
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
+        $this->hydrateDevice($result->getDevice(), $resultRaw);
+
+        return $result;
     }
 }

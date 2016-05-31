@@ -38,8 +38,8 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
         ],
 
         'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
+            'name'    => true,
+            'version' => true,
         ],
 
         'operatingSystem' => [
@@ -48,17 +48,23 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
         ],
 
         'device' => [
-            'model'    => true,
-            'brand'    => true,
+            'model'    => false,
+            'brand'    => false,
             'type'     => true,
-            'isMobile' => true,
+            'isMobile' => false,
             'isTouch'  => false,
         ],
 
         'bot' => [
-            'isBot' => true,
-            'name'  => true,
+            'isBot' => false,
+            'name'  => false,
             'type'  => false,
+        ],
+    ];
+    
+    protected $defaultValues = [
+        'general' => [
+            '/^Unknown$/i',
         ],
     ];
 

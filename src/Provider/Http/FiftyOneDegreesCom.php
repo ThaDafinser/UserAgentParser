@@ -62,48 +62,15 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
         ],
     ];
 
-    protected $defaultValues = [
-
-        'general' => [
-            '/^unknown$/i',
-        ],
-
-        'device' => [
-
-            'brand' => [
-                '/^Generic$/i',
-                '/^generic web browser$/i',
-            ],
-
-            'model' => [
-                '/^Android/i',
-                '/^Windows Phone/i',
-                '/^Windows Mobile/i',
-                '/^Firefox/i',
-                '/^Generic/i',
-                '/^Tablet on Android$/i',
-                '/^Tablet$/i',
-            ],
-        ],
-    ];
-
-    private static $uri = 'https://neutrinoapi.com/user-agent-info';
-
-    private $apiUserId;
+    private static $uri = 'https://cloud.51degrees.com/api/v1';
 
     private $apiKey;
 
-    public function __construct(Client $client, $apiUserId, $apiKey)
+    public function __construct(Client $client, $apiKey)
     {
         parent::__construct($client);
 
-        $this->apiUserId = $apiUserId;
-        $this->apiKey    = $apiKey;
-    }
-
-    public function getVersion()
-    {
-        return;
+        $this->apiKey = $apiKey;
     }
 
     /**
@@ -122,20 +89,21 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
-        $params = [
-            'user-id'       => $this->apiUserId,
-            'api-key'       => $this->apiKey,
-            'output-format' => 'json',
-            'output-case'   => 'snake',
+        $headers['User-Agent'] = $userAgent;
 
-            'user-agent' => $userAgent,
-        ];
+        $parameters = '/' . $this->apiKey;
+        $parameters .= '/match?';
 
-        $body = http_build_query($params, null, '&');
+        $headerString = [];
+        foreach ($headers as $key => $value) {
+            $headerString[] = $key . '=' . rawurlencode($value);
+        }
 
-        $request = new Request('POST', self::$uri, [
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        ], $body);
+        $parameters .= implode('&', $headerString);
+
+        $uri = self::$uri . $parameters;
+
+        $request = new Request('GET', $uri);
 
         try {
             $response = $this->getResponse($request);
@@ -144,7 +112,7 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
             $prevEx = $ex->getPrevious();
 
             if ($prevEx->hasResponse() === true && $prevEx->getResponse()->getStatusCode() === 403) {
-                throw new Exception\InvalidCredentialsException('Your API userId "' . $this->apiUserId . '" and key "' . $this->apiKey . '" is not valid for ' . $this->getName(), null, $ex);
+                throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName(), null, $ex);
             }
 
             throw $ex;
@@ -154,83 +122,49 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
          * no json returned?
          */
         $contentType = $response->getHeader('Content-Type');
-        if (! isset($contentType[0]) || $contentType[0] != 'application/json;charset=UTF-8') {
-            throw new Exception\RequestException('Could not get valid "application/json" response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
+        if (! isset($contentType[0]) || $contentType[0] != 'application/json; charset=utf-8') {
+            throw new Exception\RequestException('Could not get valid "application/json; charset=utf-8" response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
         }
 
         $content = json_decode($response->getBody()->getContents());
 
         /*
-         * errors
+         * No result
          */
-        if (isset($content->api_error)) {
-            switch ($content->api_error) {
-
-                case 1:
-                    throw new Exception\RequestException('"' . $content->api_error_msg . '" response from "' . $request->getUri() . '". Response is "' . print_r($content, true) . '"');
-                    break;
-
-                case 2:
-                    throw new Exception\LimitationExceededException('Exceeded the maximum number of request with API userId "' . $this->apiUserId . '" and key "' . $this->apiKey . '" for ' . $this->getName());
-                    break;
-
-                default:
-                    throw new Exception\RequestException('"' . $content->api_error_msg . '" response from "' . $request->getUri() . '". Response is "' . print_r($content, true) . '"');
-                    break;
-            }
+        if (isset($content->MatchMethod) && $content->MatchMethod == 'None') {
+            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
         /*
          * Missing data?
          */
-        if (! $content instanceof stdClass) {
-            throw new Exception\RequestException('Could not get valid response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
+        if (! $content instanceof stdClass || ! isset($content->Values)) {
+            throw new Exception\RequestException('Could not get valid response from "' . $request->getUri() . '". Data is missing "' . $response->getBody()->getContents() . '"');
         }
 
-        return $content;
-    }
-
-    /**
-     *
-     * @param stdClass $resultRaw
-     *
-     * @return bool
-     */
-    private function hasResult(stdClass $resultRaw)
-    {
-        if (isset($resultRaw->type) && $this->isRealResult($resultRaw->type)) {
-            return true;
+        /*
+         * Convert the values, to something useable
+         */
+        $values = new \stdClass();
+        foreach ($content->Values as $key => $value) {
+            if (is_array($value) && count($value) === 1 && isset($value[0])) {
+                $values->{$key} = $value[0];
+            }
         }
 
-        return false;
-    }
-
-    /**
-     *
-     * @param  stdClass $resultRaw
-     * @return boolean
-     */
-    private function isBot(stdClass $resultRaw)
-    {
-        if (isset($resultRaw->type) && $resultRaw->type === 'robot') {
-            return true;
+        foreach ($values as $key => $value) {
+            if ($value === 'True') {
+                $values->{$key} = true;
+            } elseif ($value === 'False') {
+                $values->{$key} = false;
+            }
         }
 
-        return false;
-    }
+        $values->MatchMethod = $content->MatchMethod;
 
-    /**
-     *
-     * @param Model\Bot $bot
-     * @param stdClass  $resultRaw
-     */
-    private function hydrateBot(Model\Bot $bot, stdClass $resultRaw)
-    {
-        $bot->setIsBot(true);
+        unset($values->JavascriptImageOptimiser);
 
-        if (isset($resultRaw->browser_name)) {
-            $bot->setName($this->getRealResult($resultRaw->browser_name));
-        }
+        return $values;
     }
 
     /**
@@ -240,12 +174,28 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
      */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
-        if (isset($resultRaw->browser_name)) {
-            $browser->setName($this->getRealResult($resultRaw->browser_name, 'browser', 'name'));
+        if (isset($resultRaw->BrowserName)) {
+            $browser->setName($this->getRealResult($resultRaw->BrowserName));
         }
 
-        if (isset($resultRaw->version)) {
-            $browser->getVersion()->setComplete($this->getRealResult($resultRaw->version));
+        if (isset($resultRaw->BrowserVersion)) {
+            $browser->getVersion()->setComplete($this->getRealResult($resultRaw->BrowserVersion));
+        }
+    }
+
+    /**
+     *
+     * @param Model\RenderingEngine $engine
+     * @param stdClass              $resultRaw
+     */
+    private function hydrateRenderingEngine(Model\RenderingEngine $engine, stdClass $resultRaw)
+    {
+        if (isset($resultRaw->LayoutEngine)) {
+            $engine->setName($this->getRealResult($resultRaw->LayoutEngine));
+        }
+
+        if (isset($resultRaw->engine_version)) {
+            $engine->getVersion()->setComplete($this->getRealResult($resultRaw->engine_version));
         }
     }
 
@@ -256,12 +206,12 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
-        if (isset($resultRaw->operating_system_family)) {
-            $os->setName($this->getRealResult($resultRaw->operating_system_family));
+        if (isset($resultRaw->PlatformName)) {
+            $os->setName($this->getRealResult($resultRaw->PlatformName));
         }
 
-        if (isset($resultRaw->operating_system_version)) {
-            $os->getVersion()->setComplete($this->getRealResult($resultRaw->operating_system_version));
+        if (isset($resultRaw->PlatformVersion)) {
+            $os->getVersion()->setComplete($this->getRealResult($resultRaw->PlatformVersion));
         }
     }
 
@@ -272,20 +222,8 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
-        if (isset($resultRaw->mobile_model)) {
-            $device->setModel($this->getRealResult($resultRaw->mobile_model, 'device', 'model'));
-        }
-
-        if (isset($resultRaw->mobile_brand)) {
-            $device->setBrand($this->getRealResult($resultRaw->mobile_brand, 'device', 'brand'));
-        }
-
-        if (isset($resultRaw->type)) {
-            $device->setType($this->getRealResult($resultRaw->type));
-        }
-
-        if (isset($resultRaw->is_mobile) && $resultRaw->is_mobile === true) {
-            $device->setIsMobile(true);
+        if (isset($resultRaw->DeviceType)) {
+            $device->setType($this->getRealResult($resultRaw->DeviceType));
         }
     }
 
@@ -294,31 +232,16 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
         $resultRaw = $this->getResult($userAgent, $headers);
 
         /*
-         * No result found?
-         */
-        if ($this->hasResult($resultRaw) !== true) {
-            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
-        }
-
-        /*
          * Hydrate the model
          */
         $result = new Model\UserAgent();
         $result->setProviderResultRaw($resultRaw);
 
         /*
-         * Bot detection
-         */
-        if ($this->isBot($resultRaw) === true) {
-            $this->hydrateBot($result->getBot(), $resultRaw);
-
-            return $result;
-        }
-
-        /*
          * hydrate the result
          */
         $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        $this->hydrateRenderingEngine($result->getRenderingEngine(), $resultRaw);
         $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
         $this->hydrateDevice($result->getDevice(), $resultRaw);
 

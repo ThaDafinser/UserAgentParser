@@ -61,6 +61,12 @@ class DetectRight extends AbstractProvider
         ],
     ];
 
+    protected $defaultValues = [
+        'general' => [
+            '/^UserAgent$/',
+        ],
+    ];
+    
     private $dataFile;
 
     /**
@@ -140,9 +146,9 @@ class DetectRight extends AbstractProvider
      * @param Model\Device $device
      * @param array        $resultRaw
      */
-    private function hydrateDevice(Model\Device $device, array $resultRaw)
+    private function hydrateDevice(Model\Device $device, array $resultRaw, $userAgent)
     {
-        if (isset($resultRaw['model_name'])) {
+        if (isset($resultRaw['model_name']) && $resultRaw['model_name'] !== $userAgent) {
             $device->setModel($this->getRealResult($resultRaw['model_name']));
         }
         if (isset($resultRaw['brand_name'])) {
@@ -162,7 +168,7 @@ class DetectRight extends AbstractProvider
         /*
          * Some settings
          */
-        \DetectRight::generateExceptionOnDeviceNotFound();
+        //\DetectRight::generateExceptionOnDeviceNotFound();
         \DetectRight::initialize('DRSQLite//' . realpath($this->getDataFile()));
 
         $headers['User-Agent'] = $userAgent;
@@ -193,7 +199,7 @@ class DetectRight extends AbstractProvider
          */
         $this->hydrateBrowser($result->getBrowser(), $resultRaw);
         $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
-        $this->hydrateDevice($result->getDevice(), $resultRaw);
+        $this->hydrateDevice($result->getDevice(), $resultRaw, $userAgent);
 
         return $result;
     }

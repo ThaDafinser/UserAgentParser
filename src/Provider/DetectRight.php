@@ -15,6 +15,7 @@ use UserAgentParser\Model;
  */
 class DetectRight extends AbstractProvider
 {
+
     /**
      * Name of the provider
      *
@@ -30,48 +31,48 @@ class DetectRight extends AbstractProvider
     protected $homepage = 'http://www.detectright.com/';
 
     protected $detectionCapabilities = [
-
+        
         'browser' => [
-            'name'    => true,
-            'version' => true,
+            'name' => true,
+            'version' => true
         ],
-
+        
         'renderingEngine' => [
-            'name'    => false,
-            'version' => false,
+            'name' => false,
+            'version' => false
         ],
-
+        
         'operatingSystem' => [
-            'name'    => true,
-            'version' => true,
+            'name' => true,
+            'version' => true
         ],
-
+        
         'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => true,
+            'model' => true,
+            'brand' => true,
+            'type' => true,
             'isMobile' => false,
-            'isTouch'  => true,
+            'isTouch' => true
         ],
-
+        
         'bot' => [
             'isBot' => true,
-            'name'  => true,
-            'type'  => false,
-        ],
+            'name' => true,
+            'type' => false
+        ]
     ];
 
     protected $defaultValues = [
         'general' => [
-            '/^UserAgent$/',
-        ],
+            '/^UserAgent$/'
+        ]
     ];
-    
+
     private $dataFile;
 
     /**
      *
-     * @param  string                    $dataFile
+     * @param string $dataFile            
      * @throws PackageNotLoadedException
      * @throws InvalidArgumentException
      */
@@ -80,11 +81,11 @@ class DetectRight extends AbstractProvider
         if (! class_exists('\DetectRight')) {
             throw new PackageNotLoadedException('You need to download and include the package by hand from ' . $this->getHomepage() . ' to use this provider');
         }
-
+        
         if (! file_exists($dataFile)) {
             throw new InvalidArgumentException('Data file not found ' . $dataFile);
         }
-
+        
         $this->dataFile = $dataFile;
     }
 
@@ -99,13 +100,13 @@ class DetectRight extends AbstractProvider
 
     /**
      *
-     * @param Model\Bot $bot
-     * @param array     $resultRaw
+     * @param Model\Bot $bot            
+     * @param array $resultRaw            
      */
     private function hydrateBot(Model\Bot $bot, $resultRaw)
     {
         $bot->setIsBot(true);
-
+        
         if (isset($resultRaw['model_name'])) {
             $bot->setName($this->getRealResult($resultRaw['model_name']));
         }
@@ -113,8 +114,8 @@ class DetectRight extends AbstractProvider
 
     /**
      *
-     * @param Model\Browser $browser
-     * @param array         $resultRaw
+     * @param Model\Browser $browser            
+     * @param array $resultRaw            
      */
     private function hydrateBrowser(Model\Browser $browser, array $resultRaw)
     {
@@ -128,8 +129,8 @@ class DetectRight extends AbstractProvider
 
     /**
      *
-     * @param Model\OperatingSystem $os
-     * @param array                 $resultRaw
+     * @param Model\OperatingSystem $os            
+     * @param array $resultRaw            
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, array $resultRaw)
     {
@@ -143,8 +144,8 @@ class DetectRight extends AbstractProvider
 
     /**
      *
-     * @param Model\Device $device
-     * @param array        $resultRaw
+     * @param Model\Device $device            
+     * @param array $resultRaw            
      */
     private function hydrateDevice(Model\Device $device, array $resultRaw, $userAgent)
     {
@@ -157,7 +158,7 @@ class DetectRight extends AbstractProvider
         if (isset($resultRaw['device_type'])) {
             $device->setType($this->getRealResult($resultRaw['device_type']));
         }
-
+        
         if (isset($resultRaw['has_touchscreen']) && $resultRaw['has_touchscreen'] === 1) {
             $device->setIsTouch(true);
         }
@@ -165,42 +166,50 @@ class DetectRight extends AbstractProvider
 
     public function parse($userAgent, array $headers = [])
     {
-        /*
-         * Some settings
-         */
-        //\DetectRight::generateExceptionOnDeviceNotFound();
-        \DetectRight::initialize('DRSQLite//' . realpath($this->getDataFile()));
-
         $headers['User-Agent'] = $userAgent;
-
+        
+        \DetectRight::initialize('DRSQLite//' . realpath($this->getDataFile()));
+        
         try {
+            \DetectRight::generateExceptionOnDeviceNotFound();
             $resultRaw = \DetectRight::getProfileFromHeaders($headers);
         } catch (\DeviceNotFoundException $ex) {
-            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
+            // throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
+            
+            /*
+             * If no device found -> 2nd try
+             * otherwise model_name and brand_name is filled with the UA like string
+             */
+            \DetectRight::adaptiveProfileOnDeviceNotFound();
+            $resultRaw = \DetectRight::getProfileFromHeaders($headers);
+            
+            if (isset($resultRaw['model_name'])) {
+                unset($resultRaw['model_name']);
+            }
         }
-
+        
         /*
          * Hydrate the model
          */
         $result = new Model\UserAgent();
         $result->setProviderResultRaw($resultRaw);
-
+        
         /*
          * Bot detection
          */
         if (isset($resultRaw['device_type']) && $resultRaw['device_type'] === 'Bot') {
             $this->hydrateBot($result->getBot(), $resultRaw);
-
+            
             return $result;
         }
-
+        
         /*
          * hydrate the result
          */
         $this->hydrateBrowser($result->getBrowser(), $resultRaw);
         $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
         $this->hydrateDevice($result->getDevice(), $resultRaw, $userAgent);
-
+        
         return $result;
     }
 }

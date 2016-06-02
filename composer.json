@@ -90,6 +90,7 @@
     "suggest": {
         "browscap/browscap-php": "Needed to use Provider\\BrowscapPhp",
         "donatj/phpuseragentparser": "Needed to use Provider\\DonatjUAParser",
+        "endorphin-studio/browser-detector": "Needed to use Provider\\Endorphin",
         "jenssegers/agent": "Needed to use Provider\\JenssegersAgent",
         "piwik/device-detector": "Needed to use Provider\\PiwikDeviceDetector",
         "sinergi/browser-detector": "Needed to use Provider\\SinergiBrowserDetector",
@@ -102,10 +103,11 @@
     
     "require-dev": {
         "phpunit/PHPUnit": "^5.0",
-        "fabpot/php-cs-fixer": "^1.11",
+        "friendsofphp/php-cs-fixer": "^1.11",
         
         "browscap/browscap-php": "dev-master",
         "donatj/phpuseragentparser": "^0.5.0",
+        "endorphin-studio/browser-detector": "^2.0",
         "jenssegers/agent": "^2.3",
         "mobiledetect/mobiledetectlib": "^2.7.5",
         "piwik/device-detector": "^3.6",

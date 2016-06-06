@@ -1,7 +1,7 @@
 <?php
 namespace UserAgentParser\Provider;
 
-use DeviceDetector\DeviceDetector;
+use EndorphinStudio\Detector;
 use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
@@ -15,7 +15,6 @@ use UserAgentParser\Model;
  */
 class Endorphin extends AbstractProvider
 {
-
     /**
      * Name of the provider
      *
@@ -38,35 +37,42 @@ class Endorphin extends AbstractProvider
     protected $packageName = 'endorphin-studio/browser-detector';
 
     protected $detectionCapabilities = [
-        
+
         'browser' => [
-            'name' => true,
-            'version' => true
+            'name'    => true,
+            'version' => true,
         ],
-        
+
         'renderingEngine' => [
-            'name' => true,
-            'version' => false
+            'name'    => true,
+            'version' => false,
         ],
-        
+
         'operatingSystem' => [
-            'name' => true,
-            'version' => true
+            'name'    => true,
+            'version' => true,
         ],
-        
+
         'device' => [
-            'model' => true,
-            'brand' => true,
-            'type' => true,
+            'model'    => true,
+            'brand'    => true,
+            'type'     => true,
             'isMobile' => true,
-            'isTouch' => true
+            'isTouch'  => true,
         ],
-        
+
         'bot' => [
             'isBot' => true,
-            'name' => true,
-            'type' => true
-        ]
+            'name'  => true,
+            'type'  => true,
+        ],
+    ];
+
+    protected $defaultValues = [
+
+        'general' => [
+            '/^N\\\\A$/i',
+        ],
     ];
 
     /**
@@ -80,43 +86,116 @@ class Endorphin extends AbstractProvider
         }
     }
 
+    /**
+     *
+     * @param Detector\DetectorResult $resultRaw
+     *
+     * @return bool
+     */
+    private function hasResult(Detector\DetectorResult $resultRaw)
+    {
+        if ($resultRaw->OS instanceof Detector\OS) {
+            return true;
+        }
+
+        if ($resultRaw->Browser instanceof Detector\Browser) {
+            return true;
+        }
+
+        if ($resultRaw->Device instanceof Detector\Device) {
+            return true;
+        }
+
+        if ($resultRaw->Robot instanceof Detector\Robot) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param Model\Bot      $bot
+     * @param Detector\Robot $resultRaw
+     */
+    private function hydrateBot(Model\Bot $bot, Detector\Robot $resultRaw)
+    {
+        $bot->setIsBot(true);
+        $bot->setName($this->getRealResult($resultRaw->getName()));
+    }
+
+    /**
+     *
+     * @param Model\Browser    $browser
+     * @param Detector\Browser $resultRaw
+     */
+    private function hydrateBrowser(Model\Browser $browser, Detector\Browser $resultRaw)
+    {
+        $browser->setName($this->getRealResult($resultRaw->getName()));
+        $browser->getVersion()->setComplete($this->getRealResult($resultRaw->getVersion()));
+    }
+
+    /**
+     *
+     * @param Model\OperatingSystem $os
+     * @param Detector\OS           $resultRaw
+     */
+    private function hydrateOperatingSystem(Model\OperatingSystem $os, Detector\OS $resultRaw)
+    {
+        $os->setName($this->getRealResult($resultRaw->getName()));
+        $os->getVersion()->setComplete($this->getRealResult($resultRaw->getVersion()));
+    }
+
+    /**
+     *
+     * @param Model\Device    $device
+     * @param Detector\Device $resultRaw
+     */
+    private function hydrateDevice(Model\Device $device, Detector\Device $resultRaw)
+    {
+        $device->setModel($this->getRealResult($resultRaw->ModelName));
+        $device->setType($this->getRealResult($resultRaw->getType()));
+    }
+
     public function parse($userAgent, array $headers = [])
     {
-        $resultRaw = \EndorphinStudio\Detector\Detector::Analyse($userAgent);
-        
-        var_dump($resultRaw);
-        exit();
-        
+        $resultRaw = \EndorphinStudio\Detector\Detector::analyse($userAgent);
+
         /*
          * No result found?
          */
-        if ($parser->isDetected() !== true) {
+        if ($this->hasResult($resultRaw) !== true) {
             throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
-        
+
         /*
          * Hydrate the model
          */
         $result = new Model\UserAgent();
-        $result->setProviderResultRaw($parser->toArray());
-        
+        $result->setProviderResultRaw($resultRaw);
+
         /*
          * Bot detection
          */
-        if ($parser->getType() === 'bot') {
-            $this->hydrateBot($result->getBot(), $parser->browser);
-            
+        if ($resultRaw->Robot instanceof Detector\Robot) {
+            $this->hydrateBot($result->getBot(), $resultRaw->Robot);
+
             return $result;
         }
-        
+
         /*
          * hydrate the result
          */
-        $this->hydrateBrowser($result->getBrowser(), $parser->browser);
-        $this->hydrateRenderingEngine($result->getRenderingEngine(), $parser->engine);
-        $this->hydrateOperatingSystem($result->getOperatingSystem(), $parser->os);
-        $this->hydrateDevice($result->getDevice(), $parser->device, $parser);
-        
+        if ($resultRaw->Browser instanceof Detector\Browser) {
+            $this->hydrateBrowser($result->getBrowser(), $resultRaw->Browser);
+        }
+        if ($resultRaw->OS instanceof Detector\OS) {
+            $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw->OS);
+        }
+        if ($resultRaw->Device instanceof Detector\Device) {
+            $this->hydrateDevice($result->getDevice(), $resultRaw->Device);
+        }
+
         return $result;
     }
 }

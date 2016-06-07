@@ -39,7 +39,7 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
 
         'renderingEngine' => [
             'name'    => true,
-            'version' => true,
+            'version' => false,
         ],
 
         'operatingSystem' => [
@@ -48,20 +48,20 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
         ],
 
         'device' => [
-            'model'    => false,
-            'brand'    => false,
+            'model'    => true,
+            'brand'    => true,
             'type'     => true,
-            'isMobile' => false,
+            'isMobile' => true,
             'isTouch'  => false,
         ],
 
         'bot' => [
-            'isBot' => false,
+            'isBot' => true,
             'name'  => false,
             'type'  => false,
         ],
     ];
-    
+
     protected $defaultValues = [
         'general' => [
             '/^Unknown$/i',
@@ -151,7 +151,9 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
         /*
          * Convert the values, to something useable
          */
-        $values = new \stdClass();
+        $values              = new \stdClass();
+        $values->MatchMethod = $content->MatchMethod;
+
         foreach ($content->Values as $key => $value) {
             if (is_array($value) && count($value) === 1 && isset($value[0])) {
                 $values->{$key} = $value[0];
@@ -166,11 +168,17 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
             }
         }
 
-        $values->MatchMethod = $content->MatchMethod;
-
-        unset($values->JavascriptImageOptimiser);
-
         return $values;
+    }
+
+    /**
+     *
+     * @param Model\Bot $bot
+     * @param stdClass  $resultRaw
+     */
+    private function hydrateBot(Model\Bot $bot, stdClass $resultRaw)
+    {
+        $bot->setIsBot(true);
     }
 
     /**
@@ -199,10 +207,6 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
         if (isset($resultRaw->LayoutEngine)) {
             $engine->setName($this->getRealResult($resultRaw->LayoutEngine));
         }
-
-        if (isset($resultRaw->engine_version)) {
-            $engine->getVersion()->setComplete($this->getRealResult($resultRaw->engine_version));
-        }
     }
 
     /**
@@ -228,8 +232,17 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
+        if (isset($resultRaw->HardwareVendor)) {
+            $device->setBrand($this->getRealResult($resultRaw->HardwareVendor));
+        }
+        if (isset($resultRaw->HardwareFamily)) {
+            $device->setModel($this->getRealResult($resultRaw->HardwareFamily));
+        }
         if (isset($resultRaw->DeviceType)) {
             $device->setType($this->getRealResult($resultRaw->DeviceType));
+        }
+        if (isset($resultRaw->IsMobile)) {
+            $device->setIsMobile($this->getRealResult($resultRaw->IsMobile));
         }
     }
 
@@ -242,6 +255,15 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
          */
         $result = new Model\UserAgent();
         $result->setProviderResultRaw($resultRaw);
+
+        /*
+         * Bot detection
+         */
+        if (isset($resultRaw->IsCrawler) && $resultRaw->IsCrawler === true) {
+            $this->hydrateBot($result->getBot(), $resultRaw);
+
+            return $result;
+        }
 
         /*
          * hydrate the result

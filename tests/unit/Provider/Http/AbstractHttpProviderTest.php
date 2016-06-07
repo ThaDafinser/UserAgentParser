@@ -1,9 +1,10 @@
 <?php
-namespace UserAgentParserTest\Unit\Provider;
+namespace UserAgentParserTest\Unit\Provider\Http;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use UserAgentParserTest\Unit\Provider\AbstractProviderTestCase;
 
 /**
  *

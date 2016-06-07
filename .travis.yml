@@ -22,7 +22,7 @@ before_script:
   - composer update -o --prefer-source $DEPENDENCIES
 
 script:
-  - vendor/bin/phpunit --testsuite IntegrationTests --coverage-clover ./clover.xml
+  - vendor/bin/phpunit --coverage-clover ./clover.xml
   - vendor/bin/php-cs-fixer fix --dry-run -vv
 
 after_script:

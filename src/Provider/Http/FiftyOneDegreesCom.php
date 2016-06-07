@@ -118,10 +118,12 @@ class FiftyOneDegreesCom extends AbstractHttpProvider
             $prevEx = $ex->getPrevious();
 
             if ($prevEx->hasResponse() === true && $prevEx->getResponse()->getStatusCode() === 403) {
+                var_dump($prevEx->getRequest());
+                exit();
+
                 throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName(), null, $ex);
-            } elseif($prevEx->hasResponse() !== true){
-                var_dump($prevEx->getRequest()->getHeaders());
-                var_dump($prevEx->getRequest()->getBody());
+            } elseif ($prevEx->hasResponse() !== true) {
+                var_dump($prevEx->getRequest());
                 exit();
             }
 

@@ -19,7 +19,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase implements Req
      */
     private function getBrowserParser()
     {
-        $parser = $this->getMock('Sinergi\BrowserDetector\Browser', [], [], '', false);
+        $parser = self::createMock('Sinergi\BrowserDetector\Browser');
 
         return $parser;
     }
@@ -30,7 +30,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase implements Req
      */
     private function getOsParser()
     {
-        $parser = $this->getMock('Sinergi\BrowserDetector\Os', [], [], '', false);
+        $parser = self::createMock('Sinergi\BrowserDetector\Os');
 
         return $parser;
     }
@@ -41,7 +41,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase implements Req
      */
     private function getDeviceParser()
     {
-        $parser = $this->getMock('Sinergi\BrowserDetector\Device', [], [], '', false);
+        $parser = self::createMock('Sinergi\BrowserDetector\Device');
 
         return $parser;
     }

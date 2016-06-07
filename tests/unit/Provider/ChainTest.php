@@ -166,7 +166,7 @@ class ChainTest extends AbstractProviderTestCase implements RequiredProviderTest
 
     public function testParseWithProviderAndValidResult()
     {
-        $resultMock = $this->getMock('UserAgentParser\Model\UserAgent');
+        $resultMock = self::createMock('UserAgentParser\Model\UserAgent');
 
         $provider = $this->provider;
         $provider->expects($this->any())

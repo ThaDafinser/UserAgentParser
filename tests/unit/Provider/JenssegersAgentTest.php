@@ -19,7 +19,7 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
      */
     private function getParser()
     {
-        $parser = $this->getMock('Jenssegers\Agent\Agent', [], [], '', false);
+        $parser = self::createMock('Jenssegers\Agent\Agent');
 
         return $parser;
     }

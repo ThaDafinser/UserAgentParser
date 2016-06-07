@@ -22,7 +22,7 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('UserAgentParser\Model\Browser', $ua->getBrowser());
 
-        $mock = $this->getMock('UserAgentParser\Model\Browser');
+        $mock = self::createMock('UserAgentParser\Model\Browser');
         $ua->setBrowser($mock);
         $this->assertSame($mock, $ua->getBrowser());
     }
@@ -33,7 +33,7 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('UserAgentParser\Model\RenderingEngine', $ua->getRenderingEngine());
 
-        $mock = $this->getMock('UserAgentParser\Model\RenderingEngine');
+        $mock = self::createMock('UserAgentParser\Model\RenderingEngine');
         $ua->setRenderingEngine($mock);
         $this->assertSame($mock, $ua->getRenderingEngine());
     }
@@ -44,7 +44,7 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('UserAgentParser\Model\OperatingSystem', $ua->getOperatingSystem());
 
-        $mock = $this->getMock('UserAgentParser\Model\OperatingSystem');
+        $mock = self::createMock('UserAgentParser\Model\OperatingSystem');
         $ua->setOperatingSystem($mock);
         $this->assertSame($mock, $ua->getOperatingSystem());
     }
@@ -55,7 +55,7 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('UserAgentParser\Model\Device', $ua->getDevice());
 
-        $mock = $this->getMock('UserAgentParser\Model\Device');
+        $mock = self::createMock('UserAgentParser\Model\Device');
         $ua->setDevice($mock);
         $this->assertSame($mock, $ua->getDevice());
     }
@@ -66,7 +66,7 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('UserAgentParser\Model\Bot', $ua->getBot());
 
-        $mock = $this->getMock('UserAgentParser\Model\Bot');
+        $mock = self::createMock('UserAgentParser\Model\Bot');
         $ua->setBot($mock);
         $this->assertSame($mock, $ua->getBot());
     }

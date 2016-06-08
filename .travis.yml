@@ -18,12 +18,12 @@ matrix:
     - php: hhvm
   
 before_script:
+  - openssl version
+  - curl --version
   - composer self-update
   - composer update -o --prefer-source $DEPENDENCIES
 
 script:
-  - openssl -v
-  - curl --version
   - vendor/bin/phpunit --coverage-clover ./clover.xml
   - vendor/bin/php-cs-fixer fix --dry-run -vv
 

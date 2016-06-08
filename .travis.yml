@@ -1,5 +1,6 @@
-## Run on container environment
-sudo: false
+## Run on Ubuntu 14.04 LTS Server 
+sudo: required
+dist: trusty
 
 language: php
 

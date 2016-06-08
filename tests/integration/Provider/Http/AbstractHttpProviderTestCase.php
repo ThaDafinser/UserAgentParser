@@ -47,8 +47,7 @@ abstract class AbstractHttpProviderTestCase extends AbstractProviderTestCase
 
                 'curl' => [
                     CURLOPT_SSL_VERIFYHOST => false,
-                    CURLOPT_SSL_VERIFYPEER => false,
-                    CURLOPT_SSLVERSION     => CURL_SSLVERSION_TLSv1_0,
+                    CURLOPT_SSL_VERIFYPEER => false
                 ],
             ]);
         }

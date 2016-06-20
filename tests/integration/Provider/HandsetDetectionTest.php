@@ -44,6 +44,13 @@ class HandsetDetectionTest extends AbstractProviderTestCase
     {
         $provider = new HandsetDetection($this->getParser());
 
+        var_dump($provider->getParser()->deviceVendors());
+        var_dump($resultRaw = $provider->getParser()->getReply());
+        
+        var_dump($provider->getParser()->deviceModels('Apple'));
+        var_dump($resultRaw = $provider->getParser()->getReply());
+        exit();
+        
         $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [

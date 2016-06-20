@@ -18,12 +18,7 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
      */
     private function getParser()
     {
-        $parser = $this->getMock('HandsetDetection\HD4', [], [], '', false);
-
-        // $parser->browser = new \WhichBrowser\Model\Browser();
-        // $parser->engine = new \WhichBrowser\Model\Engine();
-        // $parser->os = new \WhichBrowser\Model\Os();
-        // $parser->device = new \WhichBrowser\Model\Device();
+        $parser = self::createMock('HandsetDetection\HD4');
 
         return $parser;
     }

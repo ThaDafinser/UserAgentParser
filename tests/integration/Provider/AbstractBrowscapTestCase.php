@@ -2,6 +2,7 @@
 namespace UserAgentParserTest\Integration\Provider;
 
 use BrowscapPHP\Browscap;
+use BrowscapPHP\BrowscapUpdater;
 use BrowscapPHP\Helper\IniLoader;
 
 /**
@@ -23,7 +24,10 @@ class AbstractBrowscapTestCase extends AbstractProviderTestCase
 
         $browscap = new Browscap();
         $browscap->setCache($cache);
-        $browscap->convertFile('tests/resources/browscap/' . $filename);
+
+        $updater = new BrowscapUpdater();
+        $updater->setCache($cache);
+        $updater->convertFile('tests/resources/browscap/' . $filename);
 
         return $browscap;
     }
@@ -42,7 +46,7 @@ class AbstractBrowscapTestCase extends AbstractProviderTestCase
 
         $browscap = new Browscap();
         $browscap->setCache($cache);
-        $browscap->setLoader($loader);
+//         $browscap->setLoader($loader);
 
         return $browscap;
     }

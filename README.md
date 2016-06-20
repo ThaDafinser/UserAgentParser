@@ -14,7 +14,7 @@
 
 The target of this package is to make it less painful, by providing an abstract layer for many user agent parsers.
 
-Currently **10 local providers** and **6 HTTP providers** are available! [See the comparison list here](https://github.com/ThaDafinser/UserAgentParser#providers)
+Currently **10 local providers** and **7 HTTP providers** are available! [See the comparison list here](https://github.com/ThaDafinser/UserAgentParser#providers)
 
 So you can
 - use multiple providers at the same time with the `Chain` provider
@@ -22,14 +22,11 @@ So you can
 - switch between different parsers, without changing your code
 - compare the result of the different parsers
 - get always the same result model, regardless of which parser you use currently
-- be sure that it will work
-  - we got over 350 unit tests and over 70 integration tests
-  - plus we test the lowest and highest dependency
 
 The quality of this package is currently covered by
-- ***unit tests*** (345 tests, 719 assertions)
-- ***integration tests*** (78 tests, 308 assertions)
-- ***regular real result testing*** (the results of ***over 30.000 user agents*** are compared [here](http://thadafinser.github.io/UserAgentParserComparison/))
+- ***unit tests*** (366 tests, 756 assertions)
+- ***integration tests*** (90 tests, 336 assertions)
+- ***regular real result testing*** (the results of ***over 33.000 user agents*** are compared [here](http://thadafinser.github.io/UserAgentParserComparison/))
 
 ## Try it out
 
@@ -124,6 +121,7 @@ See detailed documenation here
 | Wurfl                  | local | x |   | x | x | x | x | x | x |   |   |   |
 | Zsxsoft                | local | x |   | x | x | x |   |   |   |   |   |   |
 | DeviceAtlasCom         | http  | x | x | x |   |   | x |   |   |   |   | free available |
+| FiftyOneDegreesCom     | http  | x | x | x | x | x | x | x | x |   |   | free unlimited |
 | NeutrinoApiCom         | http  | x |   | x | x | x | x | x | x | x |   | 25/day free |
 | UdgerCom               | http  | x | x | x |   |   | x |   | x |   |   | 500/month free (API key only for one month valid!) |
 | UserAgentApiCom        | http  | x | x |   |   |   | x |   | x | x |   | 1000/day free |
@@ -135,14 +133,18 @@ See detailed documenation here
 Local providers are (most time) faster then HTTP providers and dont require a working internet connection.
 But you need to update them yourself from time to time, to make sure you detect the latest UAs
 
+- BrowscapFull
+- BrowscapLite
 - BrowscapPhp
 - DonatjUAParser
+- JenssegersAgent
 - PiwikDeviceDetector
 - SinergiBrowserDetector
 - UAParser
 - WhichBrowser
 - Woothee
 - Wurfl
+- Zsxsoft
 
 
 ### HTTP providers (API)
@@ -151,6 +153,7 @@ HTTP providers are simple to use, since you need only an API key to get started.
 But they require (always) a working internet connection.
 
 - Http\DeviceAtlasCom
+- Http\FiftyOneDegreesCom
 - Http\NeutrinoApiCom
 - Http\UdgerCom
 - Http\UserAgentApiCom

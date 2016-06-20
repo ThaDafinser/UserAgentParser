@@ -5,17 +5,16 @@ use UserAgentParser\Provider\Wurfl;
 
 /**
  *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *
- * @covers UserAgentParser\Provider\Wurfl
+ *         
+ *          @covers UserAgentParser\Provider\Wurfl
  */
 class WurflTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     private function getManager()
     {
-        $mock = $this->getMock('Wurfl\Manager', [], [], '', false);
+        $mock = self::createMock('Wurfl\Manager');
 
         return $mock;
     }
@@ -249,7 +248,7 @@ class WurflTest extends AbstractProviderTestCase implements RequiredProviderTest
      */
     public function testParseNoResultFoundException()
     {
-        $return = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return = self::createMock('Wurfl\CustomDevice');
 
         $manager = $this->getManager();
         $manager->expects($this->any())
@@ -266,7 +265,7 @@ class WurflTest extends AbstractProviderTestCase implements RequiredProviderTest
      */
     public function testParseBot()
     {
-        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return     = self::createMock('Wurfl\CustomDevice');
         $return->id = 'some_id';
         $return->expects($this->any())
             ->method('getVirtualCapability')
@@ -298,7 +297,7 @@ class WurflTest extends AbstractProviderTestCase implements RequiredProviderTest
      */
     public function testParseBrowser()
     {
-        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return     = self::createMock('Wurfl\CustomDevice');
         $return->id = 'some_id';
 
         $map = [
@@ -352,7 +351,7 @@ class WurflTest extends AbstractProviderTestCase implements RequiredProviderTest
      */
     public function testParseOperatingSystem()
     {
-        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return     = self::createMock('Wurfl\CustomDevice');
         $return->id = 'some_id';
 
         $map = [
@@ -406,7 +405,7 @@ class WurflTest extends AbstractProviderTestCase implements RequiredProviderTest
      */
     public function testParseOperatingSystemDefaultValue()
     {
-        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return     = self::createMock('Wurfl\CustomDevice');
         $return->id = 'some_id';
 
         $map = [
@@ -456,7 +455,7 @@ class WurflTest extends AbstractProviderTestCase implements RequiredProviderTest
      */
     public function testParseDevice()
     {
-        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return     = self::createMock('Wurfl\CustomDevice');
         $return->id = 'some_id';
 
         $map = [
@@ -529,7 +528,7 @@ class WurflTest extends AbstractProviderTestCase implements RequiredProviderTest
      */
     public function testParseDeviceDefaultValue()
     {
-        $return     = $this->getMock('Wurfl\CustomDevice', [], [], '', false);
+        $return     = self::createMock('Wurfl\CustomDevice');
         $return->id = 'some_id';
 
         $map = [

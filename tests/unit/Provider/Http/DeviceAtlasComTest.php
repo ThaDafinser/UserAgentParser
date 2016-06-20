@@ -1,9 +1,11 @@
 <?php
-namespace UserAgentParserTest\Unit\Provider;
+namespace UserAgentParserTest\Unit\Provider\Http;
 
 use GuzzleHttp\Psr7\Response;
 use stdClass;
 use UserAgentParser\Provider\Http\DeviceAtlasCom;
+use UserAgentParserTest\Unit\Provider\AbstractProviderTestCase;
+use UserAgentParserTest\Unit\Provider\RequiredProviderTestInterface;
 
 /**
  *

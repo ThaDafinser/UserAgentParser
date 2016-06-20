@@ -20,7 +20,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
      */
     private function getParser()
     {
-        $parser = $this->getMock('DeviceDetector\DeviceDetector');
+        $parser = self::createMock('DeviceDetector\DeviceDetector');
 
         return $parser;
     }

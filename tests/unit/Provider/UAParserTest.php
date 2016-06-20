@@ -37,7 +37,7 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
      */
     private function getParser($returnValue = null)
     {
-        $parser = $this->getMock('UAParser\Parser', [], [], '', false);
+        $parser = self::createMock('UAParser\Parser');
         $parser->expects($this->any())
             ->method('parse')
             ->will($this->returnValue($returnValue));

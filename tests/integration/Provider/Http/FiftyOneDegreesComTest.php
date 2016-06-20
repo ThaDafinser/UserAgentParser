@@ -14,7 +14,7 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
      */
     public function testInvalidCredentials()
     {
-        if (getenv('TRAVIS') === true) {
+        if (getenv('TRAVIS') === 'true') {
             $this->markTestSkipped('On travis we got currently an SSL problem');
         }
 

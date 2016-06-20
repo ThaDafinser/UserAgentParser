@@ -18,9 +18,15 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
      */
     private function getParser($returnValue = null)
     {
-        $parser = $this->getMock('UserAgent', [
+        $parser = $this->getMockBuilder('UserAgent');
+        $parser->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->setMethods([
             'analyze',
-        ], [], '', false);
+        ]);
+        $parser = $parser->getMock();
 
         if ($returnValue === null) {
             $parser->data = [

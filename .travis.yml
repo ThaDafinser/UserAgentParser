@@ -1,4 +1,4 @@
-## Run on container environment
+## Run on Ubuntu 14.04 LTS Server 
 sudo: false
 
 language: php

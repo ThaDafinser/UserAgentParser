@@ -19,7 +19,7 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
      */
     private function getParser()
     {
-        $parser = $this->getMock('WhichBrowser\Parser', [], [], '', false);
+        $parser = self::createMock('WhichBrowser\Parser');
 
         $parser->browser = new \WhichBrowser\Model\Browser();
         $parser->engine  = new \WhichBrowser\Model\Engine();

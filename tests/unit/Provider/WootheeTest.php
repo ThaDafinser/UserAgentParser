@@ -19,7 +19,7 @@ class WootheeTest extends AbstractProviderTestCase implements RequiredProviderTe
      */
     private function getParser(array $returnValue = [])
     {
-        $parser = $this->getMock('Woothee\Classifier', [], [], '', false);
+        $parser = self::createMock('Woothee\Classifier');
         $parser->expects($this->any())
             ->method('parse')
             ->will($this->returnValue($returnValue));

@@ -3,7 +3,6 @@ namespace UserAgentParserTest\Integration\Provider;
 
 use BrowscapPHP\Browscap;
 use BrowscapPHP\BrowscapUpdater;
-use BrowscapPHP\Helper\IniLoader;
 
 /**
  * 
@@ -39,14 +38,10 @@ class AbstractBrowscapTestCase extends AbstractProviderTestCase
             $filename = $type . '_' . $filename;
         }
 
-        $loader = new IniLoader();
-        $loader->setLocalFile('tests/resources/browscap/' . $filename);
-
         $cache = new \WurflCache\Adapter\Memory();
 
         $browscap = new Browscap();
         $browscap->setCache($cache);
-//         $browscap->setLoader($loader);
 
         return $browscap;
     }

@@ -22,7 +22,7 @@ class AbstractBrowscapTest extends AbstractProviderTestCase implements RequiredP
             $date = new \DateTime('2016-03-10 18:00:00');
         }
 
-        $cache = $this->getMock('BrowscapPHP\Cache\BrowscapCache', [], [], '', false);
+        $cache = self::createMock('BrowscapPHP\Cache\BrowscapCache');
         $cache->expects($this->any())
             ->method('getType')
             ->will($this->returnValue(''));
@@ -33,7 +33,7 @@ class AbstractBrowscapTest extends AbstractProviderTestCase implements RequiredP
             ->method('getReleaseDate')
             ->will($this->returnValue($date->format('r')));
 
-        $parser = $this->getMock('BrowscapPHP\Browscap');
+        $parser = self::createMock('BrowscapPHP\Browscap');
         $parser->expects($this->any())
             ->method('getCache')
             ->will($this->returnValue($cache));
@@ -52,9 +52,9 @@ class AbstractBrowscapTest extends AbstractProviderTestCase implements RequiredP
      */
     public function testConstructExceptionNOWarmCache()
     {
-        $cache = $this->getMock('BrowscapPHP\Cache\BrowscapCache', [], [], '', false);
+        $cache = self::createMock('BrowscapPHP\Cache\BrowscapCache');
 
-        $parser = $this->getMock('BrowscapPHP\Browscap');
+        $parser = self::createMock('BrowscapPHP\Browscap');
         $parser->expects($this->any())
             ->method('getCache')
             ->will($this->returnValue($cache));

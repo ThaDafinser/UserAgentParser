@@ -20,12 +20,12 @@ class BrowscapLiteTest extends AbstractProviderTestCase
      */
     private function getParser(\stdClass $result = null)
     {
-        $cache = $this->getMock('BrowscapPHP\Cache\BrowscapCache', [], [], '', false);
+        $cache = self::createMock('BrowscapPHP\Cache\BrowscapCache');
         $cache->expects($this->any())
             ->method('getType')
             ->will($this->returnValue('LITE'));
 
-        $parser = $this->getMock('BrowscapPHP\Browscap');
+        $parser = self::createMock('BrowscapPHP\Browscap');
         $parser->expects($this->any())
             ->method('getCache')
             ->will($this->returnValue($cache));

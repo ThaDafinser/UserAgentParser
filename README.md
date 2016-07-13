@@ -72,7 +72,7 @@ try {
     // nothing found
 }
 
-if($result->getBot()->getIsBot() === true) {
+if($result->isBot() === true) {
   // if one part has no result, it's always set not null
   $result->getBot()->getName();
   $result->getBot()->getType();
@@ -92,6 +92,27 @@ if($result->getBot()->getIsBot() === true) {
   $result->getDevice()->getType();
   $result->getDevice()->getIsMobile();
   $result->getDevice()->getIsTouch();
+}
+```
+
+## Use cases
+
+### Bot or human
+
+```php
+// initialisation see Getting started
+if($result->isBot() === true) {
+    // do something special with the bot
+}
+```
+
+### Mobile detection
+
+```php
+// initialisation see Getting started
+if($result->isMobile() === true) {
+    // redirect to the the mobile optimized page or suggest the other to download your app
+    // NOTE mobile means not "phone". It can be any moveable device, e.g. tablet, media player, watch, ...
 }
 ```
 

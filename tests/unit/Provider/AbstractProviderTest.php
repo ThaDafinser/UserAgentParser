@@ -227,4 +227,48 @@ class AbstractProviderTest extends AbstractProviderTestCase
 
         $this->assertFalse($method->invoke($provider, 'default other', 'bot', 'name'));
     }
+
+    public function testGetRealResult()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+        $method     = $reflection->getMethod('getRealResult');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invoke($provider, ''));
+        $this->assertNull($method->invoke($provider, null));
+
+        $this->assertEquals('some value', $method->invoke($provider, 'some value'));
+    }
+
+    public function testGetRealResultWithDefaultValues()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+
+        $property = $reflection->getProperty('defaultValues');
+        $property->setAccessible(true);
+        $property->setValue($provider, [
+            'general' => [
+                '/^default value$/i',
+            ],
+
+            'bot' => [
+                'name' => [
+                    '/^default other$/i',
+                ],
+            ],
+        ]);
+
+        $method = $reflection->getMethod('getRealResult');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invoke($provider, 'default value'));
+
+        $this->assertEquals('default other', $method->invoke($provider, 'default other'));
+
+        $this->assertNull($method->invoke($provider, 'default other', 'bot', 'name'));
+    }
 }

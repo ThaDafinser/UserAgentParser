@@ -71,6 +71,32 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
         $this->assertSame($mock, $ua->getBot());
     }
 
+    public function testIsBot()
+    {
+        $ua = new UserAgent();
+
+        $this->assertFalse($ua->isBot());
+
+        $ua->getBot()->setIsBot(false);
+        $this->assertFalse($ua->isBot());
+
+        $ua->getBot()->setIsBot(true);
+        $this->assertTrue($ua->isBot());
+    }
+
+    public function testIsMobile()
+    {
+        $ua = new UserAgent();
+
+        $this->assertFalse($ua->isMobile());
+
+        $ua->getDevice()->setIsMobile(false);
+        $this->assertFalse($ua->isMobile());
+
+        $ua->getDevice()->setIsMobile(true);
+        $this->assertTrue($ua->isMobile());
+    }
+
     public function testProviderResultRaw()
     {
         $ua = new UserAgent();

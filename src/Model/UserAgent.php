@@ -129,6 +129,32 @@ class UserAgent
     }
 
     /**
+     * 
+     * @return boolean
+     */
+    public function isBot()
+    {
+        if ($this->getBot()->getIsBot() === true) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function isMobile()
+    {
+        if ($this->getDevice()->getIsMobile() === true) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param mixed $providerResultRaw
      */
     public function setProviderResultRaw($providerResultRaw)

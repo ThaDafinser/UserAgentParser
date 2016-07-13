@@ -90,6 +90,7 @@
     "suggest": {
         "browscap/browscap-php": "Needed to use Provider\\BrowscapPhp",
         "donatj/phpuseragentparser": "Needed to use Provider\\DonatjUAParser",
+        "endorphin-studio/browser-detector": "Needed to use Provider\\Endorphin",
         "handsetdetection/php-apikit": "Needed to use Provider\\HandsetDetection",
         "jenssegers/agent": "Needed to use Provider\\JenssegersAgent",
         "piwik/device-detector": "Needed to use Provider\\PiwikDeviceDetector",
@@ -107,6 +108,7 @@
         
         "browscap/browscap-php": "^3.0",
         "donatj/phpuseragentparser": "^0.5.0",
+        "endorphin-studio/browser-detector": "^3.0",
         "handsetdetection/php-apikit": "^4.1.1",
         "jenssegers/agent": "^2.3",
         "mobiledetect/mobiledetectlib": "^2.7.5",

@@ -28,24 +28,6 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
         return $parser;
     }
 
-    public function testPackageNotLoadedException()
-    {
-        $file     = 'vendor/endorphin-studio/browser-detector/composer.json';
-        $tempFile = 'vendor/endorphin-studio/browser-detector/composer.json.tmp';
-
-        rename($file, $tempFile);
-
-        try {
-            $provider = new Endorphin();
-        } catch (\Exception $ex) {
-            // we need to catch the exception, since we need to rename the file again!
-        }
-
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
-
-        rename($tempFile, $file);
-    }
-
     public function testGetName()
     {
         $provider = new Endorphin();

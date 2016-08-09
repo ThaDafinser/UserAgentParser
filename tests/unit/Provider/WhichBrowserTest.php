@@ -29,24 +29,6 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
         return $parser;
     }
 
-    public function testPackageNotLoadedException()
-    {
-        $file     = 'vendor/whichbrowser/parser/composer.json';
-        $tempFile = 'vendor/whichbrowser/parser/composer.json.tmp';
-
-        rename($file, $tempFile);
-
-        try {
-            $provider = new WhichBrowser();
-        } catch (\Exception $ex) {
-            // we need to catch the exception, since we need to rename the file again!
-        }
-
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
-
-        rename($tempFile, $file);
-    }
-
     public function testGetName()
     {
         $provider = new WhichBrowser();

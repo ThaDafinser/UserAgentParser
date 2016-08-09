@@ -42,24 +42,6 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
         return $parser;
     }
 
-    public function testPackageNotLoadedException()
-    {
-        $file     = 'vendor/zsxsoft/php-useragent/composer.json';
-        $tempFile = 'vendor/zsxsoft/php-useragent/composer.json.tmp';
-
-        rename($file, $tempFile);
-
-        try {
-            $provider = new Zsxsoft();
-        } catch (\Exception $ex) {
-            // we need to catch the exception, since we need to rename the file again!
-        }
-
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
-
-        rename($tempFile, $file);
-    }
-
     public function testGetName()
     {
         $provider = new Zsxsoft();

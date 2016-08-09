@@ -45,24 +45,6 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
         return $parser;
     }
 
-    public function testPackageNotLoadedException()
-    {
-        $file     = 'vendor/ua-parser/uap-php/composer.json';
-        $tempFile = 'vendor/ua-parser/uap-php/composer.json.tmp';
-
-        rename($file, $tempFile);
-
-        try {
-            $provider = new UAParser();
-        } catch (\Exception $ex) {
-            // we need to catch the exception, since we need to rename the file again!
-        }
-
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
-
-        rename($tempFile, $file);
-    }
-
     public function testGetName()
     {
         $provider = new UAParser();

@@ -27,23 +27,6 @@ class WootheeTest extends AbstractProviderTestCase implements RequiredProviderTe
         return $parser;
     }
 
-    public function testPackageNotLoadedException()
-    {
-        $file     = 'vendor/woothee/woothee/composer.json';
-        $tempFile = 'vendor/woothee/woothee/composer.json.tmp';
-
-        rename($file, $tempFile);
-
-        try {
-            $provider = new Woothee();
-        } catch (\Exception $ex) {
-        }
-
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
-
-        rename($tempFile, $file);
-    }
-
     public function testGetName()
     {
         $provider = new Woothee();

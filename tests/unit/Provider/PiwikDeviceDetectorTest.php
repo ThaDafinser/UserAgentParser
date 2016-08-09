@@ -25,24 +25,6 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
         return $parser;
     }
 
-    public function testPackageNotLoadedException()
-    {
-        $file     = 'vendor/piwik/device-detector/composer.json';
-        $tempFile = 'vendor/piwik/device-detector/composer.json.tmp';
-
-        rename($file, $tempFile);
-
-        try {
-            $provider = new PiwikDeviceDetector();
-        } catch (\Exception $ex) {
-            // we need to catch the exception, since we need to rename the file again!
-        }
-
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
-
-        rename($tempFile, $file);
-    }
-
     public function testGetName()
     {
         $provider = new PiwikDeviceDetector();

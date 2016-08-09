@@ -224,7 +224,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
      */
     private function isBot(stdClass $resultRaw)
     {
-        if (isset($resultRaw->user_agent_type) && ($resultRaw->user_agent_type === 'crawler' || $resultRaw->user_agent_type === 'analyser')) {
+        if (isset($resultRaw->software_type) && $resultRaw->software_type === 'bot') {
             return true;
         }
 
@@ -244,8 +244,8 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
             $bot->setName($this->getRealResult($resultRaw->browser_name));
         }
 
-        if (isset($resultRaw->user_agent_type)) {
-            $bot->setType($this->getRealResult($resultRaw->user_agent_type));
+        if (isset($resultRaw->software_sub_type)) {
+            $bot->setType($this->getRealResult($resultRaw->software_sub_type));
         }
     }
 
@@ -312,8 +312,8 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
             $device->setBrand($this->getRealResult($resultRaw->operating_platform_vendor_name));
         }
 
-        if (isset($resultRaw->user_agent_type)) {
-            $device->setType($this->getRealResult($resultRaw->user_agent_type));
+        if (isset($resultRaw->hardware_type)) {
+            $device->setType($this->getRealResult($resultRaw->hardware_type));
         }
     }
 

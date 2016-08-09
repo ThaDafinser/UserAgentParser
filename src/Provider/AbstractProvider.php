@@ -148,26 +148,6 @@ abstract class AbstractProvider
     }
 
     /**
-     *
-     * @return array null
-     */
-    private function getPackages()
-    {
-        if (! file_exists('composer.lock')) {
-            return;
-        }
-
-        $content = file_get_contents('composer.lock');
-        if ($content === false || $content === '') {
-            return;
-        }
-
-        $content = json_decode($content);
-
-        return array_merge($content->packages, $content->{'packages-dev'});
-    }
-
-    /**
      * What kind of capabilities this provider can detect
      *
      * @return array

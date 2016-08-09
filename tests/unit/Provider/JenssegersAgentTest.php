@@ -24,28 +24,6 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
         return $parser;
     }
 
-    /**
-     * @expectedException \UserAgentParser\Exception\PackageNotLoadedException
-     */
-    public function testPackageNotLoadedException()
-    {
-        $file     = 'vendor/jenssegers/agent/composer.json';
-        $tempFile = 'vendor/jenssegers/agent/composer.json.tmp';
-
-        rename($file, $tempFile);
-
-        try {
-            $provider = new JenssegersAgent();
-        } catch (\Exception $ex) {
-            // we need to catch the exception, since we need to rename the file again!
-            rename($tempFile, $file);
-
-            throw $ex;
-        }
-
-        rename($tempFile, $file);
-    }
-
     public function testGetName()
     {
         $provider = new JenssegersAgent();

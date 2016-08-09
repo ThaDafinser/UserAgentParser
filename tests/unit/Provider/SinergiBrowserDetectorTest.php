@@ -46,24 +46,6 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase implements Req
         return $parser;
     }
 
-    public function testPackageNotLoadedException()
-    {
-        $file     = 'vendor/sinergi/browser-detector/composer.json';
-        $tempFile = 'vendor/sinergi/browser-detector/composer.json.tmp';
-
-        rename($file, $tempFile);
-
-        try {
-            $provider = new SinergiBrowserDetector();
-        } catch (\Exception $ex) {
-            // we need to catch the exception, since we need to rename the file again!
-        }
-
-        $this->assertInstanceOf('UserAgentParser\Exception\PackageNotLoadedException', $ex);
-
-        rename($tempFile, $file);
-    }
-
     public function testGetName()
     {
         $provider = new SinergiBrowserDetector();

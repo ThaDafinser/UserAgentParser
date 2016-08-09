@@ -2,8 +2,10 @@
 namespace UserAgentParser\Provider;
 
 use DateTime;
-use DateTimeZone;
+use PackageInfo\Exception\PackageNotInstalledException;
+use PackageInfo\Package;
 use UserAgentParser\Exception;
+use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
 /**
@@ -34,20 +36,6 @@ abstract class AbstractProvider
      * @var string
      */
     protected $packageName;
-
-    /**
-     * Version string for caching
-     *
-     * @var string
-     */
-    private $version;
-
-    /**
-     * Last update date
-     *
-     * @var DateTime
-     */
-    private $updateDate;
 
     /**
      * Per default the provider cannot detect anything
@@ -134,29 +122,13 @@ abstract class AbstractProvider
      */
     public function getVersion()
     {
-        if ($this->version !== null) {
-            return $this->version;
-        }
+        try {
+            $package = new Package($this->getPackageName());
 
-        if ($this->getPackageName() === null) {
+            return $package->getVersion();
+        } catch (PackageNotInstalledException $ex) {
             return;
         }
-
-        $packages = $this->getPackages();
-
-        if ($packages === null) {
-            return;
-        }
-
-        foreach ($packages as $package) {
-            if ($package->name === $this->getPackageName()) {
-                $this->version = $package->version;
-
-                break;
-            }
-        }
-
-        return $this->version;
     }
 
     /**
@@ -166,51 +138,13 @@ abstract class AbstractProvider
      */
     public function getUpdateDate()
     {
-        if ($this->updateDate !== null) {
-            return $this->updateDate;
-        }
+        try {
+            $package = new Package($this->getPackageName());
 
-        if ($this->getPackageName() === null) {
+            return $package->getVersionReleaseDate();
+        } catch (PackageNotInstalledException $ex) {
             return;
         }
-
-        $packages = $this->getPackages();
-
-        if ($packages === null) {
-            return;
-        }
-
-        foreach ($packages as $package) {
-            if ($package->name === $this->getPackageName()) {
-                $updateDate = new DateTime($package->time, new DateTimeZone('UTC'));
-
-                $this->updateDate = $updateDate;
-
-                break;
-            }
-        }
-
-        return $this->updateDate;
-    }
-
-    /**
-     *
-     * @return array null
-     */
-    private function getPackages()
-    {
-        if (! file_exists('composer.lock')) {
-            return;
-        }
-
-        $content = file_get_contents('composer.lock');
-        if ($content === false || $content === '') {
-            return;
-        }
-
-        $content = json_decode($content);
-
-        return array_merge($content->packages, $content->{'packages-dev'});
     }
 
     /**
@@ -221,6 +155,17 @@ abstract class AbstractProvider
     public function getDetectionCapabilities()
     {
         return array_merge($this->allDetectionCapabilities, $this->detectionCapabilities);
+    }
+
+    /**
+     *
+     * @throws PackageNotLoadedException
+     */
+    protected function checkIfInstalled()
+    {
+        if (! Package::isInstalled($this->getPackageName())) {
+            throw new PackageNotLoadedException('You need to install the package ' . $this->getPackageName() . ' to use this provider');
+        }
     }
 
     /**

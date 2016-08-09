@@ -3,11 +3,10 @@ namespace UserAgentParserTest\Unit\Provider;
 
 /**
  *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *
- * @covers UserAgentParser\Provider\AbstractProvider
+ *         
+ *          @covers UserAgentParser\Provider\AbstractProvider
  */
 class AbstractProviderTest extends AbstractProviderTestCase
 {
@@ -60,33 +59,6 @@ class AbstractProviderTest extends AbstractProviderTestCase
         // no package name
         $this->assertNull($provider->getVersion());
 
-        // no composer.lock found
-        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
-
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
-        $property->setAccessible(true);
-        $property->setValue($provider, 'vendor/package');
-
-        $cwdir = getcwd();
-        chdir('tests');
-
-        $this->assertNull($provider->getVersion());
-        chdir($cwdir);
-
-        // locked file
-        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
-
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
-        $property->setAccessible(true);
-        $property->setValue($provider, 'vendor/package');
-
-        $fp = fopen('composer.lock', 'r');
-        flock($fp, LOCK_EX);
-        $this->assertNull($provider->getVersion());
-        flock($fp, LOCK_UN);
-
         // no package match
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
@@ -109,9 +81,6 @@ class AbstractProviderTest extends AbstractProviderTestCase
 
         // match
         $this->assertInternalType('string', $provider->getVersion());
-
-        // cached
-        $this->assertInternalType('string', $provider->getVersion());
     }
 
     public function testUpdateDateNull()
@@ -120,33 +89,6 @@ class AbstractProviderTest extends AbstractProviderTestCase
 
         // no package name
         $this->assertNull($provider->getUpdateDate());
-
-        // no composer.lock found
-        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
-
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
-        $property->setAccessible(true);
-        $property->setValue($provider, 'vendor/package');
-
-        $cwdir = getcwd();
-        chdir('tests');
-
-        $this->assertNull($provider->getUpdateDate());
-        chdir($cwdir);
-
-        // locked file
-        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
-
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
-        $property->setAccessible(true);
-        $property->setValue($provider, 'vendor/package');
-
-        $fp = fopen('composer.lock', 'r');
-        flock($fp, LOCK_EX);
-        $this->assertNull($provider->getUpdateDate());
-        flock($fp, LOCK_UN);
 
         // no package match
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
@@ -170,9 +112,6 @@ class AbstractProviderTest extends AbstractProviderTestCase
 
         // match
         $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
-
-        // cached
-        $this->assertInstanceOf('DateTime', $provider->getUpdateDate());
     }
 
     public function testDetectionCapabilities()
@@ -182,6 +121,42 @@ class AbstractProviderTest extends AbstractProviderTestCase
         $this->assertInternalType('array', $provider->getDetectionCapabilities());
         $this->assertCount(5, $provider->getDetectionCapabilities());
         $this->assertFalse($provider->getDetectionCapabilities()['browser']['name']);
+    }
+
+    public function testCheckIfInstalled()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'thadafinser/user-agent-parser');
+
+        $reflection = new \ReflectionClass($provider);
+        $method     = $reflection->getMethod('checkIfInstalled');
+        $method->setAccessible(true);
+
+        // no return, just no exception expected
+        $method->invoke($provider);
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\PackageNotLoadedException
+     */
+    public function testCheckIfInstalledException()
+    {
+        $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('packageName');
+        $property->setAccessible(true);
+        $property->setValue($provider, 'vendor/package');
+
+        $reflection = new \ReflectionClass($provider);
+        $method     = $reflection->getMethod('checkIfInstalled');
+        $method->setAccessible(true);
+
+        $method->invoke($provider);
     }
 
     public function testIsRealResult()

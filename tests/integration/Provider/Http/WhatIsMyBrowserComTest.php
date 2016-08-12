@@ -42,6 +42,7 @@ class WhatIsMyBrowserComTest extends AbstractHttpProviderTestCase
         $provider = new WhatIsMyBrowserCom($this->getClient(), CREDENTIALS_WHAT_IS_MY_BROWSER_COM_KEY);
 
         $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
+
         $this->assertEquals([
             'browser' => [
                 'name'    => 'Mobile Safari',
@@ -100,7 +101,7 @@ class WhatIsMyBrowserComTest extends AbstractHttpProviderTestCase
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInstanceOf('stdClass', $rawResult);
-        $this->assertCount(32, (array) $rawResult);
+        $this->assertCount(35, (array) $rawResult);
 
         $this->assertObjectHasAttribute('operating_system_name', $rawResult);
         $this->assertObjectHasAttribute('simple_sub_description_string', $rawResult);
@@ -138,7 +139,11 @@ class WhatIsMyBrowserComTest extends AbstractHttpProviderTestCase
         $this->assertObjectHasAttribute('simple_major', $rawResult);
         $this->assertObjectHasAttribute('browser_version_full', $rawResult);
 
-        $this->assertObjectHasAttribute('user_agent_type', $rawResult);
+        $this->assertObjectHasAttribute('software_type', $rawResult);
+        $this->assertObjectHasAttribute('software_sub_type', $rawResult);
+        $this->assertObjectHasAttribute('hardware_type', $rawResult);
+        $this->assertObjectHasAttribute('hardware_sub_type', $rawResult);
+
         $this->assertObjectHasAttribute('browser', $rawResult);
     }
 
@@ -151,6 +156,10 @@ class WhatIsMyBrowserComTest extends AbstractHttpProviderTestCase
         $provider = new WhatIsMyBrowserCom($this->getClient(), CREDENTIALS_WHAT_IS_MY_BROWSER_COM_KEY);
 
         $result = $provider->parse('Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0); 360Spider(compatible; HaosouSpider; http://www.haosou.com/help/help_3_2.html)');
+
+//                 var_dump($result->getProviderResultRaw());
+//                 exit();
+
         $this->assertEquals([
             'browser' => [
                 'name'    => null,

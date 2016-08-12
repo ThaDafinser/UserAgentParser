@@ -373,10 +373,11 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements Require
      */
     public function testParseBot()
     {
-        $parseResult                  = new stdClass();
-        $parseResult->user_agent      = 'A real user agent...';
-        $parseResult->user_agent_type = 'crawler';
-        $parseResult->browser_name    = '360Spider';
+        $parseResult                       = new stdClass();
+        $parseResult->user_agent           = 'A real user agent...';
+        $parseResult->software_type        = 'bot';
+        $parseResult->browser_name         = '360Spider';
+        $parseResult->software_sub_type    = 'crawler';
 
         $rawResult         = new stdClass();
         $rawResult->result = 'success';
@@ -617,7 +618,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements Require
         $parseResult->user_agent                     = 'A real user agent...';
         $parseResult->operating_platform             = 'Galaxy Note';
         $parseResult->operating_platform_vendor_name = 'Dell';
-        $parseResult->user_agent_type                = 'mobile';
+        $parseResult->hardware_type                  = 'mobile';
 
         $rawResult         = new stdClass();
         $rawResult->result = 'success';

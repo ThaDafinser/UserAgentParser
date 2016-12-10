@@ -139,7 +139,6 @@ See detailed documenation here
 | UAParser               | local | x |   | x | x | x |   |   | x | x |   |   |
 | WhichBrowser           | local | x |   | x | x | x | x | x | x | x |   |   |
 | Woothee                | local | x |   |   |   |   | x |   | x | x |   |   |
-| Wurfl                  | local | x |   | x | x | x | x | x | x |   |   |   |
 | Zsxsoft                | local | x |   | x | x | x |   |   |   |   |   |   |
 | DeviceAtlasCom         | http  | x | x | x |   |   | x |   |   |   |   | free available |
 | FiftyOneDegreesCom     | http  | x | x | x | x | x | x | x | x |   |   | free unlimited |
@@ -164,7 +163,6 @@ But you need to update them yourself from time to time, to make sure you detect 
 - UAParser
 - WhichBrowser
 - Woothee
-- Wurfl
 - Zsxsoft
 
 

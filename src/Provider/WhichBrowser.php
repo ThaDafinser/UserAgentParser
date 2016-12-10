@@ -77,7 +77,7 @@ class WhichBrowser extends AbstractProvider
     private $parser;
 
     /**
-     * 
+     *
      * @throws PackageNotLoadedException
      */
     public function __construct()

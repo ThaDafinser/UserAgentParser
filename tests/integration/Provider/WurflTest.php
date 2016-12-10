@@ -11,7 +11,7 @@ use Wurfl\Handlers\Normalizer\UserAgentNormalizer;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *         
+ *
  * @coversNothing
  */
 class WurflTest extends AbstractProviderTestCase

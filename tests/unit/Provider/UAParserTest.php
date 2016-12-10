@@ -8,7 +8,7 @@ use UserAgentParser\Provider\UAParser;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *         
+ *
  *          @covers UserAgentParser\Provider\UAParser
  */
 class UAParserTest extends AbstractProviderTestCase implements RequiredProviderTestInterface

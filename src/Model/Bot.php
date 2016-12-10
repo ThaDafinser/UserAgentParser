@@ -3,32 +3,32 @@ namespace UserAgentParser\Model;
 
 /**
  * Bot model
- * 
+ *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  */
 class Bot
 {
     /**
-     * 
+     *
      * @var boolean
      */
     private $isBot;
 
     /**
-     * 
+     *
      * @var string
      */
     private $name;
 
     /**
-     * 
+     *
      * @var string
      */
     private $type;
 
     /**
-     * 
+     *
      * @param boolean $mode
      */
     public function setIsBot($mode)
@@ -37,7 +37,7 @@ class Bot
     }
 
     /**
-     * 
+     *
      * @return boolean
      */
     public function getIsBot()
@@ -46,7 +46,7 @@ class Bot
     }
 
     /**
-     * 
+     *
      * @param string $name
      */
     public function setName($name)
@@ -55,7 +55,7 @@ class Bot
     }
 
     /**
-     * 
+     *
      * @return string
      */
     public function getName()
@@ -64,7 +64,7 @@ class Bot
     }
 
     /**
-     * 
+     *
      * @param string $type
      */
     public function setType($type)
@@ -81,7 +81,7 @@ class Bot
     }
 
     /**
-     * 
+     *
      * @return array
      */
     public function toArray()

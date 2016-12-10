@@ -5,8 +5,8 @@ use BrowscapPHP\Browscap;
 use BrowscapPHP\BrowscapUpdater;
 
 /**
- * 
- * 
+ *
+ *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  */

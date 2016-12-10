@@ -8,7 +8,7 @@ use UserAgentParser\Provider\PiwikDeviceDetector;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- * 
+ *
  * @coversNothing
  */
 class PiwikDeviceDetectorTest extends AbstractProviderTestCase

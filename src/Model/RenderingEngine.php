@@ -25,7 +25,7 @@ class RenderingEngine
     }
 
     /**
-     * 
+     *
      * @param string $name
      */
     public function setName($name)
@@ -34,7 +34,7 @@ class RenderingEngine
     }
 
     /**
-     * 
+     *
      * @return string
      */
     public function getName()

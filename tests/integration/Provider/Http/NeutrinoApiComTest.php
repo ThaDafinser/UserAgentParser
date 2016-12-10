@@ -94,7 +94,7 @@ class NeutrinoApiComTest extends AbstractHttpProviderTestCase
             ],
             'bot' => [
                 'isBot' => true,
-                'name'  => 'Googlebot/2.1',
+                'name'  => 'Googlebot',
                 'type'  => null,
             ],
         ], $result->toArray());
@@ -135,7 +135,7 @@ class NeutrinoApiComTest extends AbstractHttpProviderTestCase
         $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Mobile Safari',
+                'name'    => 'Safari',
                 'version' => [
                     'major' => 5,
                     'minor' => 1,

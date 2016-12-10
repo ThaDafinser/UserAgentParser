@@ -25,7 +25,7 @@ class Browser
     }
 
     /**
-     * 
+     *
      * @param string $name
      */
     public function setName($name)
@@ -34,7 +34,7 @@ class Browser
     }
 
     /**
-     * 
+     *
      * @return string
      */
     public function getName()

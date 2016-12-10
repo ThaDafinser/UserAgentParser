@@ -8,7 +8,7 @@ use UserAgentParser\Provider\WhichBrowser;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- * 
+ *
  * @coversNothing
  */
 class WhichBrowserTest extends AbstractProviderTestCase

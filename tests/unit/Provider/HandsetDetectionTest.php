@@ -7,7 +7,7 @@ use UserAgentParser\Provider\HandsetDetection;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *         
+ *
  * @covers UserAgentParser\Provider\HandsetDetection
  */
 class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredProviderTestInterface

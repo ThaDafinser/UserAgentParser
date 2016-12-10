@@ -8,7 +8,7 @@ use UserAgentParser\Provider\JenssegersAgent;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- * 
+ *
  * @coversNothing
  */
 class JenssegersAgentTest extends AbstractProviderTestCase

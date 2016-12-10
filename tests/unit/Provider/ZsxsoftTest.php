@@ -7,7 +7,7 @@ use UserAgentParser\Provider\Zsxsoft;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *         
+ *
  *          @covers UserAgentParser\Provider\Zsxsoft
  */
 class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTestInterface

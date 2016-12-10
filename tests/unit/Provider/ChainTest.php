@@ -7,7 +7,7 @@ use UserAgentParser\Provider\Chain;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *         
+ *
  * @covers UserAgentParser\Provider\Chain
  */
 class ChainTest extends AbstractProviderTestCase implements RequiredProviderTestInterface

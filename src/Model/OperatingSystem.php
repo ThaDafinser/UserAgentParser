@@ -25,7 +25,7 @@ class OperatingSystem
     }
 
     /**
-     * 
+     *
      * @param string $name
      */
     public function setName($name)
@@ -34,7 +34,7 @@ class OperatingSystem
     }
 
     /**
-     * 
+     *
      * @return string
      */
     public function getName()

@@ -11,7 +11,7 @@ use UserAgentParserTest\Unit\Provider\RequiredProviderTestInterface;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *         
+ *
  * @covers UserAgentParser\Provider\Http\FiftyOneDegreesCom
  */
 class FiftyOneDegreesComTest extends AbstractProviderTestCase implements RequiredProviderTestInterface

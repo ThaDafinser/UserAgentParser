@@ -8,7 +8,7 @@ use UserAgentParser\Provider\BrowscapPhp;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- * 
+ *
  * @coversNothing
  */
 class BrowscapPhpTest extends AbstractBrowscapTestCase

@@ -129,7 +129,7 @@ class UserAgent
     }
 
     /**
-     * 
+     *
      * @return boolean
      */
     public function isBot()
@@ -142,7 +142,7 @@ class UserAgent
     }
 
     /**
-     * 
+     *
      * @return boolean
      */
     public function isMobile()

@@ -8,7 +8,7 @@ use UserAgentParser\Provider\HandsetDetection;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *         
+ *
  *          @coversNothing
  */
 class HandsetDetectionTest extends AbstractProviderTestCase

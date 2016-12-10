@@ -8,7 +8,7 @@ use UserAgentParser\Provider\SinergiBrowserDetector;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- * 
+ *
  * @coversNothing
  */
 class SinergiBrowserDetectorTest extends AbstractProviderTestCase

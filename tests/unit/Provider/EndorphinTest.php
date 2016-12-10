@@ -7,7 +7,7 @@ use UserAgentParser\Provider\Endorphin;
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
- *         
+ *
  *          @covers UserAgentParser\Provider\Endorphin
  */
 class EndorphinTest extends AbstractProviderTestCase implements RequiredProviderTestInterface

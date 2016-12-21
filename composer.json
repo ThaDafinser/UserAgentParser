@@ -1,7 +1,7 @@
 {
     "name": "thadafinser/user-agent-parser",
     
-    "description": "UserAgentParser abstraction for different parse providers",
+    "description": "UserAgent parsing done right http://useragent.mkf.solutions/",
     "keywords": [
         "UA",
         "UA parser",

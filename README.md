@@ -13,7 +13,7 @@
 
 The target of this package is to make it less painful, by providing an abstract layer for many user agent parsers.
 
-Currently **10 local providers** and **7 HTTP providers** are available! [See the comparison list here](https://github.com/ThaDafinser/UserAgentParser#providers)
+Currently **11 local providers** and **7 HTTP providers** are available! [See the comparison list here](https://github.com/ThaDafinser/UserAgentParser#providers)
 
 So you can
 - use multiple providers at the same time with the `Chain` provider
@@ -23,9 +23,9 @@ So you can
 - get always the same result model, regardless of which parser you use currently
 
 The quality of this package is currently covered by
-- ***unit tests*** (366 tests, 756 assertions)
-- ***integration tests*** (90 tests, 336 assertions)
-- ***regular real result testing*** (the results of ***over 33.000 user agents*** are compared [here](http://thadafinser.github.io/UserAgentParserComparison/))
+- ***unit tests*** (371 tests, 732 assertions)
+- ***integration tests*** (89 tests, 329 assertions)
+- ***regular real result testing*** (the results of ***over 34.000 user agents*** are compared [here](http://thadafinser.github.io/UserAgentParserComparison/))
 
 ## Try it out
 
@@ -122,8 +122,12 @@ UserAgentParser comes with local and http providers
 See detailed documenation here
 
 [local providers](docs/01-local-providers.md)
+Local providers are (most time) faster then HTTP providers and dont require a working internet connection.
+But you need to update them yourself from time to time, to make sure you detect the latest UAs
 
 [http providers](docs/02-http-providers.md)
+HTTP providers are simple to use, since you need only an API key to get started.
+But they require (always) a working internet connection.
 
 
 | Name                   | Type | Browser | Engine | Operating system | Device model | Device brand | Device type | Is mobile | Is bot | Bot name | Bot type | Comment |
@@ -132,6 +136,7 @@ See detailed documenation here
 | BrowscapLite           | local | x |   | x |   |   | x | x |   |   |   |   |
 | BrowscapPhp            | local | x |   | x |   |   | x | x | x | x |   |   |
 | DonatjUAParser         | local | x |   |   |   |   |   |   |   |   |   |   |
+| Endorphin              | local | x |   | x |   |   | x |   | x |   |   |   |
 | JenssegersAgent        | local | x |   | x |   |   |   | x | x | x |   | Based on MobileDetect |
 | PiwikDeviceDetector    | local | x | x | x | x | x | x | x | x | x | x |   |
 | SinergiBrowserDetector | local | x |   | x | x |   |   | x | x |   |   |   |
@@ -146,37 +151,6 @@ See detailed documenation here
 | UserAgentApiCom        | http  | x | x |   |   |   | x |   | x | x |   | 1000/day free |
 | UserAgentStringCom     | http  | x |   | x |   |   |   |   | x | x | x | free unlimited |
 | WhatIsMyBrowserCom     | http  | x |   | x |   |   |   |   |   |   |   | 500/month free |
-
-### Local providers
-
-Local providers are (most time) faster then HTTP providers and dont require a working internet connection.
-But you need to update them yourself from time to time, to make sure you detect the latest UAs
-
-- BrowscapFull
-- BrowscapLite
-- BrowscapPhp
-- DonatjUAParser
-- JenssegersAgent
-- PiwikDeviceDetector
-- SinergiBrowserDetector
-- UAParser
-- WhichBrowser
-- Woothee
-- Zsxsoft
-
-
-### HTTP providers (API)
-
-HTTP providers are simple to use, since you need only an API key to get started.
-But they require (always) a working internet connection.
-
-- Http\DeviceAtlasCom
-- Http\FiftyOneDegreesCom
-- Http\NeutrinoApiCom
-- Http\UdgerCom
-- Http\UserAgentApiCom
-- Http\UserAgentStringCom (no API key required)
-- Http\WhatIsMyBrowserCom
 
 
 ### Comparison matrix

@@ -84,7 +84,6 @@
         "ua-parser/uap-php": "<3.4.3,>=4",
         "whichbrowser/parser": "<2.0.10,>=3",
         "woothee/woothee": "<1.2,>=2",
-        "mimmi20/wurfl": "<1.6.4,>=2",
         "zsxsoft/php-useragent": "<1.2,>=2"
     },
     
@@ -99,7 +98,6 @@
         "ua-parser/uap-php": "Needed to use Provider\\UAParser",
         "whichbrowser/parser": "Needed to use Provider\\WhichBrowser",
         "woothee/woothee": "Needed to use Provider\\Woothee",
-        "mimmi20/wurfl": "Needed to use Provider\\Wurfl",
         "zsxsoft/php-useragent": "Needed to use Provider\\Zsxsoft"
     },
     
@@ -118,7 +116,6 @@
         "ua-parser/uap-php": "^3.4.3",
         "whichbrowser/parser": "^2.0.10",
         "woothee/woothee": "^1.2",
-        "mimmi20/wurfl": "^1.7.1.1",
         "zsxsoft/php-useragent": ">=1.2,<1.4"
     }
 }

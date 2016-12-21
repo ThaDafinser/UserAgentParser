@@ -76,7 +76,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements Require
                 'model'    => true,
                 'brand'    => true,
                 'type'     => true,
-                'isMobile' => false,
+                'isMobile' => true,
                 'isTouch'  => false,
             ],
 
@@ -640,7 +640,7 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements Require
                 'brand' => 'Dell',
                 'type'  => 'mobile',
 
-                'isMobile' => null,
+                'isMobile' => true,
                 'isTouch'  => null,
             ],
         ];

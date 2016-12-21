@@ -52,7 +52,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
             'brand' => true,
 
             'type'     => true,
-            'isMobile' => false,
+            'isMobile' => true,
             'isTouch'  => false,
         ],
 
@@ -297,6 +297,18 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
         }
     }
 
+    private function getDeviceType(stdClass $resultRaw)
+    {
+        if (isset($resultRaw->hardware_sub_type) && $this->isRealResult($resultRaw->hardware_sub_type)) {
+            return $this->getRealResult($resultRaw->hardware_type) . ':' . $this->getRealResult($resultRaw->hardware_sub_type);
+        }
+
+        if (isset($resultRaw->hardware_type) && $this->isRealResult($resultRaw->hardware_type)) {
+            return $this->getRealResult($resultRaw->hardware_type);
+        }
+
+        return;
+    }
     /**
      *
      * @param Model\Device $device
@@ -313,7 +325,11 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
         }
 
         if (isset($resultRaw->hardware_type)) {
-            $device->setType($this->getRealResult($resultRaw->hardware_type));
+            $device->setType($this->getDeviceType($resultRaw));
+        }
+
+        if (isset($resultRaw->hardware_type) && $resultRaw->hardware_type === 'mobile') {
+            $device->setIsMobile(true);
         }
     }
 

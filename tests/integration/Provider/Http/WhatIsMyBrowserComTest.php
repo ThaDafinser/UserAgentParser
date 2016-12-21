@@ -83,9 +83,9 @@ class WhatIsMyBrowserComTest extends AbstractHttpProviderTestCase
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => 'mobile',
+                'type'  => 'mobile:phone',
 
-                'isMobile' => null,
+                'isMobile' => true,
                 'isTouch'  => null,
             ],
             'bot' => [

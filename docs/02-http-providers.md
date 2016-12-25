@@ -78,7 +78,7 @@ use UserAgentParser\Provider;
 
 // @see $client definition in chapter "General"
 
-$deviceAtlas = new Provider\Http\NeutrinoApiCom($client, 'YOUR_USER_ID', 'YOUR_API_KEY');
+$NeutrinoApiCom = new Provider\Http\NeutrinoApiCom($client, 'YOUR_USER_ID', 'YOUR_API_KEY');
 
 $result = $provider->parse($userAgent, $headers);
 ```
@@ -95,7 +95,7 @@ use UserAgentParser\Provider;
 
 // @see $client definition in chapter "General"
 
-$deviceAtlas = new Provider\Http\UdgerCom($client, 'YOUR_API_KEY');
+$UdgerCom = new Provider\Http\UdgerCom($client, 'YOUR_API_KEY');
 
 $result = $provider->parse($userAgent, $headers);
 ```
@@ -113,7 +113,7 @@ use UserAgentParser\Provider;
 
 // @see $client definition in chapter "General"
 
-$deviceAtlas = new Provider\Http\UserAgentApiCom($client, 'YOUR_API_KEY');
+$UserAgentApiCom = new Provider\Http\UserAgentApiCom($client, 'YOUR_API_KEY');
 
 $result = $provider->parse($userAgent, $headers);
 ```
@@ -130,7 +130,7 @@ use UserAgentParser\Provider;
 
 // @see $client definition in chapter "General"
 
-$deviceAtlas = new Provider\Http\UserAgentStringCom($client);
+$UserAgentStringCom = new Provider\Http\UserAgentStringCom($client);
 
 $result = $provider->parse($userAgent, $headers);
 ```
@@ -147,7 +147,7 @@ use UserAgentParser\Provider;
 
 // @see $client definition in chapter "General"
 
-$deviceAtlas = new Provider\Http\WhatIsMyBrowserCom($client, 'YOUR_API_KEY');
+$WhatIsMyBrowserCom = new Provider\Http\WhatIsMyBrowserCom($client, 'YOUR_API_KEY');
 
 $result = $provider->parse($userAgent, $headers);
 ```

@@ -38,7 +38,7 @@ $config->fixers([
 	'ternary_spaces',
 	'unused_use',
 	'whitespacy_lines',
-	
+
 	//contrib
 	'align_double_arrow',
 	'align_equals',

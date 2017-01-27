@@ -261,7 +261,7 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
      */
     public function testProviderNameAndVersionIsInResult()
     {
-        $result                 = $this->getResultMock();
+        $result                         = $this->getResultMock();
         $result->device->family         = 'Spider';
         $result->ua->family             = 'Googlebot';
 

@@ -233,6 +233,37 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase implements Req
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $browserParser = $this->getBrowserParser();
+        $browserParser->expects($this->any())
+            ->method('isRobot')
+            ->will($this->returnValue(true));
+
+        $provider = new SinergiBrowserDetector();
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('browserParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $browserParser);
+
+        $property = $reflection->getProperty('osParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $this->getOsParser());
+
+        $property = $reflection->getProperty('deviceParser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $this->getDeviceParser());
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('SinergiBrowserDetector', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

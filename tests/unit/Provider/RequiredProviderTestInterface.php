@@ -24,4 +24,6 @@ interface RequiredProviderTestInterface
     public function testParseNoResultFoundException();
 
     public function testIsRealResult();
+
+    public function testProviderNameAndVersionIsInResult();
 }

@@ -256,6 +256,32 @@ class UdgerComTest extends AbstractProviderTestCase implements RequiredProviderT
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $info            = new stdClass();
+        $info->type      = 'Robot';
+        $info->ua_family = 'Googlebot';
+
+        $rawResult       = new stdClass();
+        $rawResult->info = $info;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new UdgerCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('UdgerCom', $result->getProviderName());
+        $this->assertNull($result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

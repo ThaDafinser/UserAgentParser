@@ -190,6 +190,29 @@ class UserAgentStringComTest extends AbstractProviderTestCase implements Require
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $rawResult             = new stdClass();
+        $rawResult->agent_type = 'Crawler';
+        $rawResult->agent_name = 'Googlebot';
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new UserAgentStringCom($this->getClient($responseQueue));
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('UserAgentStringCom', $result->getProviderName());
+        $this->assertNull($result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

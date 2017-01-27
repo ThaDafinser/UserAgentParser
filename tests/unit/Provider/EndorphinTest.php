@@ -135,6 +135,32 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $parser = $this->getParser();
+        $parser->Robot->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('Google (Smartphone)'));
+        $parser->Robot->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue('Search Engine'));
+
+        $provider = new Endorphin();
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('Endorphin', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

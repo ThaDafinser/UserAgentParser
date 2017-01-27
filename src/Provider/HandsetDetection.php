@@ -2,6 +2,7 @@
 namespace UserAgentParser\Provider;
 
 use HandsetDetection as Parser;
+use UserAgentParser\Exception\InvalidArgumentException;
 use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Model;
 
@@ -186,11 +187,16 @@ class HandsetDetection extends AbstractProvider
         /*
          * No result found?
          */
-        if ($parser->deviceDetect($headers) !== true) {
+        $result    = $parser->deviceDetect($headers);
+        $resultRaw = $parser->getReply();
+
+        if ($result !== true) {
+            if (isset($resultRaw['status']) && $resultRaw['status'] == '299') {
+                throw new InvalidArgumentException('You need to warm-up the cache first to use this provider');
+            }
+
             throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
-
-        $resultRaw = $parser->getReply();
 
         /*
          * No result found?
@@ -202,7 +208,7 @@ class HandsetDetection extends AbstractProvider
         /*
          * Hydrate the model
          */
-        $result = new Model\UserAgent();
+        $result = new Model\UserAgent($this->getName(), $this->getVersion());
         $result->setProviderResultRaw($resultRaw['hd_specs']);
 
         /*

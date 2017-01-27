@@ -194,6 +194,29 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $result = [
+            'browser' => [
+                'name'    => 'Firefox',
+                'version' => '3.2.1',
+            ],
+            'os'       => [],
+            'device'   => [],
+            'platform' => [],
+        ];
+
+        $provider = new Zsxsoft($this->getParser($result));
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('Zsxsoft', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+    }
+
+    /**
      * Browser only
      */
     public function testParseBrowser()

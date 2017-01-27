@@ -207,6 +207,32 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $properties                 = new stdClass();
+        $properties->browserName    = 'Firefox';
+        $properties->browserVersion = '3.2.1';
+
+        $rawResult             = new stdClass();
+        $rawResult->properties = $properties;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json; charset=UTF-8',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new DeviceAtlasCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('DeviceAtlasCom', $result->getProviderName());
+        $this->assertNull($result->getProviderVersion());
+    }
+
+    /**
      * Browser only
      */
     public function testParseBrowser()

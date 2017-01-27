@@ -139,6 +139,31 @@ namespace UserAgentParserTest\Unit\Provider
         }
 
         /**
+         * Provider name and version in result?
+         */
+        public function testProviderNameAndVersionIsInResult()
+        {
+            self::$browser = 'Firefox';
+            self::$version = '3.0.1';
+
+            $provider = new DonatjUAParser();
+
+            $reflection = new \ReflectionClass($provider);
+            $property   = $reflection->getProperty('functionName');
+            $property->setAccessible(true);
+            $property->setValue($provider, '\UserAgentParser\Provider\parse_user_agent');
+
+            $result = $provider->parse('A real user agent...');
+
+            // reset
+            self::$browser = null;
+            self::$version = null;
+
+            $this->assertEquals('DonatjUAParser', $result->getProviderName());
+            $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+        }
+
+        /**
          * Browser only
          */
         public function testParseBrowser()

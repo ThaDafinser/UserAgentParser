@@ -188,6 +188,29 @@ class WootheeTest extends AbstractProviderTestCase implements RequiredProviderTe
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $parser = $this->getParser([
+            'category' => \Woothee\DataSet::DATASET_CATEGORY_CRAWLER,
+            'name'     => 'Googlebot',
+        ]);
+
+        $provider = new Woothee();
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('Woothee', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

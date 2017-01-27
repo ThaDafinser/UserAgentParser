@@ -232,6 +232,32 @@ class UserAgentApiComTest extends AbstractProviderTestCase implements RequiredPr
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $data                = new stdClass();
+        $data->platform_type = 'Bot';
+        $data->platform_name = 'Googlebot';
+
+        $rawResult       = new stdClass();
+        $rawResult->data = $data;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new UserAgentApiCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('UserAgentApiCom', $result->getProviderName());
+        $this->assertNull($result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

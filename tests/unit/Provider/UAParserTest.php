@@ -257,6 +257,25 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $result                 = $this->getResultMock();
+        $result->device->family         = 'Spider';
+        $result->ua->family             = 'Googlebot';
+
+        $parser = $this->getParser($result);
+
+        $provider = new UAParser($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('UAParser', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

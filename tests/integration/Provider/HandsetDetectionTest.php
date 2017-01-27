@@ -25,13 +25,39 @@ class HandsetDetectionTest extends AbstractProviderTestCase
             'log_unknown' => false,
 
             'cache' => [
-                'file' => [],
+                'none' => true,
             ],
         ];
 
         $parser = new Parser\HD4($config);
 
         return $parser;
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\InvalidArgumentException
+     */
+    public function testNoResourcesAvailable()
+    {
+        $config = [
+            'username' => 'something',
+            'secret'   => 'something',
+
+            'use_local' => true,
+            'filesdir'  => 'tests',
+
+            'log_unknown' => false,
+
+            'cache' => [
+                'none' => true,
+            ],
+        ];
+
+        $parser = new Parser\HD4($config);
+
+        $provider = new HandsetDetection($parser);
+
+        $result = $provider->parse('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36');
     }
 
     /**

@@ -133,6 +133,33 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isRobot')
+            ->will($this->returnValue(true));
+
+        $parser->expects($this->any())
+            ->method('robot')
+            ->will($this->returnValue('Googlebot'));
+
+        $provider = new JenssegersAgent();
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('JenssegersAgent', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

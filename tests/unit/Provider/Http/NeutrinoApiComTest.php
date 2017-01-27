@@ -315,6 +315,29 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $rawResult               = new stdClass();
+        $rawResult->type         = 'robot';
+        $rawResult->browser_name = 'Googlebot';
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json;charset=UTF-8',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new NeutrinoApiCom($this->getClient($responseQueue), 'apiUser', 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('NeutrinoApiCom', $result->getProviderName());
+        $this->assertNull($result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

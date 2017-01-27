@@ -288,6 +288,31 @@ class AbstractBrowscapTest extends AbstractProviderTestCase implements RequiredP
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $result               = new \stdClass();
+        $result->browser      = 'Google Bot';
+        $result->browser_type = 'Crawler';
+        $result->crawler      = true;
+
+        $provider = $this->getMockBuilder('UserAgentParser\Provider\AbstractBrowscap')
+        ->setConstructorArgs([$this->getParser($result)])
+        ->setMethods(['getName'])
+        ->getMockForAbstractClass();
+
+        $provider->expects($this->any())
+        ->method('getName')
+        ->will($this->returnValue('Browscap'));
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('Browscap', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}$/', $result->getProviderVersion());
+    }
+
+    /**
      * Bot - Crawler
      */
     public function testParseBotCrawler()

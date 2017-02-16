@@ -45,7 +45,7 @@ class WhatIsMyBrowserComTest extends AbstractHttpProviderTestCase
 
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Mobile Safari',
+                'name'    => 'Safari',
                 'version' => [
                     'major' => 5,
                     'minor' => 1,

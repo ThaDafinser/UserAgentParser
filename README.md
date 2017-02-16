@@ -13,7 +13,7 @@
 
 The target of this package is to make it less painful, by providing an abstract layer for many user agent parsers.
 
-Currently **10 local providers** and **7 HTTP providers** are available! [See the comparison list here](https://github.com/ThaDafinser/UserAgentParser#providers)
+Currently **11 local providers** and **6 HTTP providers** are available! [See the comparison list here](https://github.com/ThaDafinser/UserAgentParser#providers)
 
 So you can
 - use multiple providers at the same time with the `Chain` provider
@@ -23,8 +23,8 @@ So you can
 - get always the same result model, regardless of which parser you use currently
 
 The quality of this package is currently covered by
-- ***unit tests*** (366 tests, 756 assertions)
-- ***integration tests*** (90 tests, 336 assertions)
+- ***unit tests*** (373 tests, 746 assertions)
+- ***integration tests*** (86 tests, 310 assertions)
 - ***regular real result testing*** (the results of ***over 33.000 user agents*** are compared [here](http://thadafinser.github.io/UserAgentParserComparison/))
 
 ## Try it out
@@ -47,22 +47,14 @@ composer require thadafinser/user-agent-parser
 
 ## Getting started
 
-After you have installed the package, you can use currently only `UserAgentStringCom` out of the box.
-For all other providers, you need to register an API key or install an additional package (listed in the section `suggest` of `composer.json`)
+You need to register an API key or install an additional package (listed in the section `suggest` of `composer.json`)
 
 
 ```php
 use UserAgentParser\Exception\NoResultFoundException;
-use UserAgentParser\Provider\Http\UserAgentStringCom;
-use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Handler\CurlHandler;
+use UserAgentParser\Provider\WhichBrowser;
 
-$client = new Client([
-    'handler' => HandlerStack::create(new CurlHandler()),
-]);
-
-$provider = new UserAgentStringCom($client);
+$provider = new WhichBrowser();
 
 try {
     /* @var $result \UserAgentParser\Model\UserAgent */
@@ -132,6 +124,8 @@ See detailed documenation here
 | BrowscapLite           | local | x |   | x |   |   | x | x |   |   |   |   |
 | BrowscapPhp            | local | x |   | x |   |   | x | x | x | x |   |   |
 | DonatjUAParser         | local | x |   |   |   |   |   |   |   |   |   |   |
+| Endorphin              | local | x |   | x |   |   | x |   | x | x | x |   |
+| HandsetDetection       | local | x |   | x | x | x |   |   |   |   |   |   |
 | JenssegersAgent        | local | x |   | x |   |   |   | x | x | x |   | Based on MobileDetect |
 | PiwikDeviceDetector    | local | x | x | x | x | x | x | x | x | x | x |   |
 | SinergiBrowserDetector | local | x |   | x | x |   |   | x | x |   |   |   |
@@ -144,7 +138,6 @@ See detailed documenation here
 | NeutrinoApiCom         | http  | x |   | x | x | x | x | x | x | x |   | 25/day free |
 | UdgerCom               | http  | x | x | x |   |   | x |   | x |   |   | 500/month free (API key only for one month valid!) |
 | UserAgentApiCom        | http  | x | x |   |   |   | x |   | x | x |   | 1000/day free |
-| UserAgentStringCom     | http  | x |   | x |   |   |   |   | x | x | x | free unlimited |
 | WhatIsMyBrowserCom     | http  | x |   | x |   |   |   |   |   |   |   | 500/month free |
 
 ### Local providers
@@ -156,6 +149,8 @@ But you need to update them yourself from time to time, to make sure you detect 
 - BrowscapLite
 - BrowscapPhp
 - DonatjUAParser
+- Endorphin
+- HandsetDetection
 - JenssegersAgent
 - PiwikDeviceDetector
 - SinergiBrowserDetector
@@ -175,7 +170,6 @@ But they require (always) a working internet connection.
 - Http\NeutrinoApiCom
 - Http\UdgerCom
 - Http\UserAgentApiCom
-- Http\UserAgentStringCom (no API key required)
 - Http\WhatIsMyBrowserCom
 
 

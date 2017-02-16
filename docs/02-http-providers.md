@@ -9,7 +9,6 @@ A detailed description of all HTTP providers
 - [NeutrinoApiCom](#neutrinoapicom)
 - [UdgerCom](#udgercom)
 - [UserAgentApiCom](#iseragentapicom)
-- [UserAgentStringCom](#useragentstringcom)
 - [WhatIsMyBrowserCom](#whatismybrowsercom)
 
 
@@ -118,22 +117,6 @@ $UserAgentApiCom = new Provider\Http\UserAgentApiCom($client, 'YOUR_API_KEY');
 $result = $UserAgentApiCom->parse($userAgent, $headers);
 ```
 
-
-## UserAgentStringCom
-
-Nothing to do, just use it 
-
-### Use it
-
-```php
-use UserAgentParser\Provider;
-
-// @see $client definition in chapter "General"
-
-$UserAgentStringCom = new Provider\Http\UserAgentStringCom($client);
-
-$result = $UserAgentStringCom->parse($userAgent, $headers);
-```
 
 
 ## WhatIsMyBrowserCom

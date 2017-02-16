@@ -110,7 +110,7 @@
         "browscap/browscap-php": "^3.0",
         "donatj/phpuseragentparser": "^0.5.0",
         "endorphin-studio/browser-detector": "^3.0",
-        "handsetdetection/php-apikit": "^4.1.1",
+        "handsetdetection/php-apikit": "^4.1.10",
         "jenssegers/agent": "^2.3",
         "mobiledetect/mobiledetectlib": "^2.7.5",
         "piwik/device-detector": "^3.6",

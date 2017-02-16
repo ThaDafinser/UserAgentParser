@@ -162,6 +162,30 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isBot')
+            ->will($this->returnValue(true));
+        $parser->expects($this->any())
+            ->method('getBot')
+            ->will($this->returnValue([
+            'name'     => 'Hatena RSS',
+            'category' => 'something',
+        ]));
+
+        $provider = new PiwikDeviceDetector($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('PiwikDeviceDetector', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

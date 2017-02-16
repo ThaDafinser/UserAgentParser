@@ -8,7 +8,7 @@ use UserAgentParser\Provider\Chain;
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Provider\Chain
+ *          @covers UserAgentParser\Provider\Chain
  */
 class ChainTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
@@ -133,8 +133,9 @@ class ChainTest extends AbstractProviderTestCase implements RequiredProviderTest
     }
 
     /**
+     *
      * @todo should throw another exception! since no provider was provided!
-     * @expectedException \UserAgentParser\Exception\NoResultFoundException
+     *       @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
     public function testParseNoProviderNoResultFoundException()
     {
@@ -180,5 +181,33 @@ class ChainTest extends AbstractProviderTestCase implements RequiredProviderTest
         $userAgent = 'Googlebot/2.1 (http://www.googlebot.com/bot.html)';
 
         $this->assertSame($resultMock, $chain->parse($userAgent));
+    }
+
+    /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $resultMock = self::createMock('UserAgentParser\Model\UserAgent');
+        $resultMock->expects($this->any())
+            ->method('getProviderName')
+            ->will($this->returnValue('SomeProvider'));
+        $resultMock->expects($this->any())
+            ->method('getProviderVersion')
+            ->will($this->returnValue('1.2'));
+
+        $provider = $this->provider;
+        $provider->expects($this->any())
+            ->method('parse')
+            ->will($this->returnValue($resultMock));
+
+        $chain = new Chain([
+            $provider,
+        ]);
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('SomeProvider', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
     }
 }

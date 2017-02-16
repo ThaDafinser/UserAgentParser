@@ -136,6 +136,36 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('isDetected')
+            ->will($this->returnValue(true));
+
+        $parser->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue('bot'));
+        $parser->browser = new \WhichBrowser\Model\Browser([
+            'name' => 'Googlebot',
+        ]);
+
+        $provider = new WhichBrowser();
+
+        $reflection = new \ReflectionClass($provider);
+        $property   = $reflection->getProperty('parser');
+        $property->setAccessible(true);
+        $property->setValue($provider, $parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('WhichBrowser', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

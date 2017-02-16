@@ -369,6 +369,35 @@ class WhatIsMyBrowserComTest extends AbstractProviderTestCase implements Require
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $parseResult                       = new stdClass();
+        $parseResult->user_agent           = 'A real user agent...';
+        $parseResult->software_type        = 'bot';
+        $parseResult->browser_name         = '360Spider';
+        $parseResult->software_sub_type    = 'crawler';
+
+        $rawResult         = new stdClass();
+        $rawResult->result = 'success';
+        $rawResult->parse  = $parseResult;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new WhatIsMyBrowserCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('WhatIsMyBrowserCom', $result->getProviderName());
+        $this->assertNull($result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

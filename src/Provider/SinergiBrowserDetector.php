@@ -235,7 +235,7 @@ class SinergiBrowserDetector extends AbstractProvider
         /*
          * Hydrate the model
          */
-        $result = new Model\UserAgent();
+        $result = new Model\UserAgent($this->getName(), $this->getVersion());
         $result->setProviderResultRaw([
             'browser'         => $browserRaw,
             'operatingSystem' => $osRaw,

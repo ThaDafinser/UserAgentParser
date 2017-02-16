@@ -170,6 +170,32 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('deviceDetect')
+            ->willReturn(true);
+        $parser->expects($this->any())
+            ->method('getReply')
+            ->willReturn([
+            'hd_specs' => [
+                'general_browser'         => 'Firefox',
+                'general_browser_version' => '3.2.1',
+            ],
+        ]);
+
+        $provider = new HandsetDetection($parser);
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('HandsetDetection', $result->getProviderName());
+        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+    }
+
+    /**
      * Browser only
      */
     public function testParseBrowser()

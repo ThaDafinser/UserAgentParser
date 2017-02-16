@@ -10,6 +10,20 @@ namespace UserAgentParser\Model;
 class UserAgent
 {
     /**
+     * Provider name
+     *
+     * @var string
+     */
+    private $providerName;
+
+    /**
+     * Provider version
+     *
+     * @var string
+     */
+    private $providerVersion;
+
+    /**
      * @var Browser
      */
     private $browser;
@@ -39,13 +53,38 @@ class UserAgent
      */
     private $providerResultRaw;
 
-    public function __construct()
+    /**
+     *
+     * @param string $provider
+     */
+    public function __construct($providerName = null, $providerVersion = null)
     {
+        $this->providerName    = $providerName;
+        $this->providerVersion = $providerVersion;
+
         $this->browser         = new Browser();
         $this->renderingEngine = new RenderingEngine();
         $this->operatingSystem = new OperatingSystem();
         $this->device          = new Device();
         $this->bot             = new Bot();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getProviderName()
+    {
+        return $this->providerName;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getProviderVersion()
+    {
+        return $this->providerVersion;
     }
 
     /**

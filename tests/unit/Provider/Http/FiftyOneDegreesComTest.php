@@ -215,6 +215,34 @@ class FiftyOneDegreesComTest extends AbstractProviderTestCase implements Require
     }
 
     /**
+     * Provider name and version in result?
+     */
+    public function testProviderNameAndVersionIsInResult()
+    {
+        $parseResult            = new stdClass();
+        $parseResult->IsCrawler = [
+            'True',
+        ];
+
+        $rawResult              = new stdClass();
+        $rawResult->MatchMethod = 'Direct';
+        $rawResult->Values      = $parseResult;
+
+        $responseQueue = [
+            new Response(200, [
+                'Content-Type' => 'application/json; charset=utf-8',
+            ], json_encode($rawResult)),
+        ];
+
+        $provider = new FiftyOneDegreesCom($this->getClient($responseQueue), 'apiKey123');
+
+        $result = $provider->parse('A real user agent...');
+
+        $this->assertEquals('FiftyOneDegreesCom', $result->getProviderName());
+        $this->assertNull($result->getProviderVersion());
+    }
+
+    /**
      * Bot
      */
     public function testParseBot()

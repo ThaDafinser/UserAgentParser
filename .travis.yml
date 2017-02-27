@@ -1,6 +1,6 @@
 ## Run on Ubuntu 14.04 LTS Server 
 sudo: false
-
+dist: trusty
 language: php
 
 php:

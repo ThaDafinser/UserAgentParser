@@ -154,8 +154,8 @@ class NeutrinoApiCom extends AbstractHttpProvider
          * no json returned?
          */
         $contentType = $response->getHeader('Content-Type');
-        if (! isset($contentType[0]) || $contentType[0] != 'application/json;charset=UTF-8') {
-            throw new Exception\RequestException('Could not get valid "application/json" response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
+        if (! isset($contentType[0]) || ($contentType[0] != 'application/json;charset=UTF-8' && $contentType[0] != 'application/json;charset=utf-8')) {
+            throw new Exception\RequestException('Could not get valid "application/json;charset=UTF-8" response from "' . $request->getUri() . '". Response is "' . $contentType[0] . '" | ' . $response->getBody()->getContents());
         }
 
         $content = json_decode($response->getBody()->getContents());

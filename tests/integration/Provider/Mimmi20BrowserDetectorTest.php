@@ -1,31 +1,51 @@
 <?php
 namespace UserAgentParserTest\Integration\Provider;
 
-use UserAgentParser\Provider\JenssegersAgent;
+use BrowserDetector\Detector;
+use Psr\Log\NullLogger;
+use Psr6NullCache\Adapter\NullCacheItemPool;
+use UaResult\Result\Result;
+use UserAgentParser\Provider\Mimmi20BrowserDetector;
 
 /**
- *
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @coversNothing
+ *          @coversNothing
  */
-class JenssegersAgentTest extends AbstractProviderTestCase
+class Mimmi20BrowserDetectorTest extends AbstractProviderTestCase
 {
+    /**
+     * Bug: NullCacheItemPool does not work!
+     *
+     * @expectedException \BrowserDetector\Loader\NotFoundException
+     */
+    public function testNoResultFoundNullCache()
+    {
+        $cache  = new NullCacheItemPool();
+        $logger = new NullLogger();
+
+        $parser = new Detector($cache, $logger);
+
+        $provider = new Mimmi20BrowserDetector($parser);
+
+        $result = $provider->parse('...');
+    }
+
     /**
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
     public function testNoResultFound()
     {
-        $provider = new JenssegersAgent();
+        $provider = new Mimmi20BrowserDetector();
 
         $result = $provider->parse('...');
     }
 
     public function testRealResultBot()
     {
-        $provider = new JenssegersAgent();
+        $provider = new Mimmi20BrowserDetector();
 
         $result = $provider->parse('Googlebot/2.1 (+http://www.googlebot.com/bot.html)');
         $this->assertEquals([
@@ -75,7 +95,7 @@ class JenssegersAgentTest extends AbstractProviderTestCase
             ],
             'bot' => [
                 'isBot' => true,
-                'name'  => 'Googlebot',
+                'name'  => 'Google Bot',
                 'type'  => null,
             ],
         ], $result->toArray());
@@ -84,24 +104,17 @@ class JenssegersAgentTest extends AbstractProviderTestCase
          * Test the raw result
          */
         $rawResult = $result->getProviderResultRaw();
-        $this->assertEquals([
-            'browserName'    => false,
-            'browserVersion' => false,
 
-            'osName'    => false,
-            'osVersion' => false,
-
-            'deviceModel' => 'Bot',
-            'isMobile'    => false,
-
-            'isRobot' => true,
-            'botName' => 'Googlebot',
-        ], $rawResult);
+        $this->assertArrayHasKey('request', $rawResult);
+        $this->assertArrayHasKey('device', $rawResult);
+        $this->assertArrayHasKey('browser', $rawResult);
+        $this->assertArrayHasKey('os', $rawResult);
+        $this->assertArrayHasKey('engine', $rawResult);
     }
 
     public function testRealResultDevice()
     {
-        $provider = new JenssegersAgent();
+        $provider = new Mimmi20BrowserDetector();
 
         $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
@@ -110,23 +123,23 @@ class JenssegersAgentTest extends AbstractProviderTestCase
                 'version' => [
                     'major' => 5,
                     'minor' => 1,
-                    'patch' => null,
+                    'patch' => 0,
 
                     'alias' => null,
 
-                    'complete' => '5.1',
+                    'complete' => '5.1.0',
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name'    => 'WebKit',
                 'version' => [
-                    'major' => null,
-                    'minor' => null,
-                    'patch' => null,
+                    'major' => 534,
+                    'minor' => 46,
+                    'patch' => 0,
 
                     'alias' => null,
 
-                    'complete' => null,
+                    'complete' => '534.46.0',
                 ],
             ],
             'operatingSystem' => [
@@ -134,20 +147,20 @@ class JenssegersAgentTest extends AbstractProviderTestCase
                 'version' => [
                     'major' => 5,
                     'minor' => 0,
-                    'patch' => null,
+                    'patch' => 0,
 
                     'alias' => null,
 
-                    'complete' => '5_0',
+                    'complete' => '5.0.0',
                 ],
             ],
             'device' => [
-                'model' => null,
-                'brand' => null,
-                'type'  => null,
+                'model' => 'iPhone',
+                'brand' => 'Apple',
+                'type'  => 'Mobile Phone',
 
-                'isMobile' => true,
-                'isTouch'  => null,
+                'isMobile' => null,
+                'isTouch'  => true,
             ],
             'bot' => [
                 'isBot' => null,

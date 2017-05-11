@@ -8,7 +8,7 @@ use UserAgentParser\Provider\HandsetDetection;
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Provider\HandsetDetection
+ *          @covers UserAgentParser\Provider\HandsetDetection
  */
 class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
@@ -162,6 +162,23 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
             'hd_specs' => [
                 'general_browser' => 'generic',
             ],
+        ]);
+
+        $provider = new HandsetDetection($parser);
+
+        $result = $provider->parse('A real user agent...');
+    }
+
+    /**
+     * @expectedException \UserAgentParser\Exception\InvalidArgumentException
+     */
+    public function testParseInvalidArgumentException()
+    {
+        $parser = $this->getParser();
+        $parser->expects($this->any())
+            ->method('getReply')
+            ->willReturn([
+            'status' => '299',
         ]);
 
         $provider = new HandsetDetection($parser);

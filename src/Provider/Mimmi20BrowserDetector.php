@@ -52,7 +52,7 @@ class Mimmi20BrowserDetector extends AbstractProvider
 
         'renderingEngine' => [
             'name'    => true,
-            'version' => false,
+            'version' => true,
         ],
 
         'operatingSystem' => [
@@ -64,14 +64,14 @@ class Mimmi20BrowserDetector extends AbstractProvider
             'model'    => true,
             'brand'    => true,
             'type'     => true,
-            'isMobile' => false,
+            'isMobile' => true,
             'isTouch'  => true,
         ],
 
         'bot' => [
             'isBot' => true,
             'name'  => true,
-            'type'  => false,
+            'type'  => true,
         ],
     ];
 
@@ -146,6 +146,7 @@ class Mimmi20BrowserDetector extends AbstractProvider
     {
         $bot->setIsBot(true);
         $bot->setName($this->getRealResult($browserRaw->getName()));
+        $bot->setType($this->getRealResult($browserRaw->getType()->getType()));
     }
 
     /**
@@ -193,6 +194,7 @@ class Mimmi20BrowserDetector extends AbstractProvider
         $device->setBrand($this->getRealResult($deviceRaw->getBrand()->getBrandName()));
         $device->setType($this->getRealResult($deviceRaw->getType()->getName()));
 
+        $device->setIsMobile($deviceRaw->getType()->isMobile());
         if ($deviceRaw->getPointingMethod() === 'touchscreen') {
             $device->setIsTouch(true);
         }
@@ -222,7 +224,7 @@ class Mimmi20BrowserDetector extends AbstractProvider
         /*
          * Bot detection
          */
-        if ($parser->getBrowser()->getType()->getType() === 'bot') {
+        if ($parser->getBrowser()->getType()->isBot() === true) {
             $this->hydrateBot($result->getBot(), $parser->getBrowser());
 
             return $result;

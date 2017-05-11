@@ -96,7 +96,76 @@ class Mimmi20BrowserDetectorTest extends AbstractProviderTestCase
             'bot' => [
                 'isBot' => true,
                 'name'  => 'Google Bot',
+                'type'  => 'bot',
+            ],
+        ], $result->toArray());
+
+        /*
+         * Test the raw result
+         */
+        $rawResult = $result->getProviderResultRaw();
+
+        $this->assertArrayHasKey('request', $rawResult);
+        $this->assertArrayHasKey('device', $rawResult);
+        $this->assertArrayHasKey('browser', $rawResult);
+        $this->assertArrayHasKey('os', $rawResult);
+        $this->assertArrayHasKey('engine', $rawResult);
+    }
+
+    public function testRealResultBotReader()
+    {
+        $provider = new Mimmi20BrowserDetector();
+
+        $result = $provider->parse('FeedFetcher-Google; (+http://www.google.com/feedfetcher.html)');
+        $this->assertEquals([
+            'browser' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'renderingEngine' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'operatingSystem' => [
+                'name'    => null,
+                'version' => [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+
+                    'alias' => null,
+
+                    'complete' => null,
+                ],
+            ],
+            'device' => [
+                'model' => null,
+                'brand' => null,
                 'type'  => null,
+
+                'isMobile' => null,
+                'isTouch'  => null,
+            ],
+            'bot' => [
+                'isBot' => true,
+                'name'  => 'Google Feedfetcher',
+                'type'  => 'bot-syndication-reader',
             ],
         ], $result->toArray());
 
@@ -159,7 +228,7 @@ class Mimmi20BrowserDetectorTest extends AbstractProviderTestCase
                 'brand' => 'Apple',
                 'type'  => 'Mobile Phone',
 
-                'isMobile' => null,
+                'isMobile' => true,
                 'isTouch'  => true,
             ],
             'bot' => [

@@ -113,9 +113,12 @@ class Mimmi20BrowserDetectorTest extends AbstractProviderTestCase implements Req
             ->method('getBrandName')
             ->will($this->returnValue(null));
 
-        $type = self::createMock('UaBrowserType\Type');
+        $type = self::createMock('UaDeviceType\Type');
         $type->expects($this->any())
             ->method('getName')
+            ->will($this->returnValue(null));
+        $type->expects($this->any())
+            ->method('isMobile')
             ->will($this->returnValue(null));
 
         $parser = self::createMock('UaResult\Device\Device');
@@ -180,7 +183,7 @@ class Mimmi20BrowserDetectorTest extends AbstractProviderTestCase implements Req
 
             'renderingEngine' => [
                 'name'    => true,
-                'version' => false,
+                'version' => true,
             ],
 
             'operatingSystem' => [
@@ -192,14 +195,14 @@ class Mimmi20BrowserDetectorTest extends AbstractProviderTestCase implements Req
                 'model'    => true,
                 'brand'    => true,
                 'type'     => true,
-                'isMobile' => false,
+                'isMobile' => true,
                 'isTouch'  => true,
             ],
 
             'bot' => [
                 'isBot' => true,
                 'name'  => true,
-                'type'  => false,
+                'type'  => true,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -251,7 +254,10 @@ class Mimmi20BrowserDetectorTest extends AbstractProviderTestCase implements Req
         $type = self::createMock('UaBrowserType\Type');
         $type->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('bot'));
+            ->will($this->returnValue('Bot/Crawler'));
+        $type->expects($this->any())
+            ->method('isBot')
+            ->will($this->returnValue(true));
 
         $browser = self::createMock('UaResult\Browser\Browser');
         $browser->expects($this->any())
@@ -281,7 +287,10 @@ class Mimmi20BrowserDetectorTest extends AbstractProviderTestCase implements Req
         $type = self::createMock('UaBrowserType\Type');
         $type->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('bot'));
+            ->will($this->returnValue('Bot/Crawler'));
+        $type->expects($this->any())
+            ->method('isBot')
+            ->will($this->returnValue(true));
 
         $browser = self::createMock('UaResult\Browser\Browser');
         $browser->expects($this->any())
@@ -306,7 +315,7 @@ class Mimmi20BrowserDetectorTest extends AbstractProviderTestCase implements Req
             'bot' => [
                 'isBot' => true,
                 'name'  => 'Googlebot',
-                'type'  => null,
+                'type'  => 'Bot/Crawler',
             ],
         ];
 

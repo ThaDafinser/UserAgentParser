@@ -180,9 +180,6 @@ class HandsetDetection extends AbstractProvider
         $headers['User-Agent'] = $userAgent;
 
         $parser = $this->getParser();
-        // $config = $parser->config;
-
-        // $parser = new Parser\HD4($config);
 
         /*
          * No result found?

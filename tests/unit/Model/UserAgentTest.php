@@ -8,14 +8,24 @@ use UserAgentParser\Model\UserAgent;
 
 /**
  *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Model\UserAgent
+ *          @covers UserAgentParser\Model\UserAgent
  */
 class UserAgentTest extends PHPUnit_Framework_TestCase
 {
+    public function testProvider()
+    {
+        $ua = new UserAgent();
+        $this->assertNull($ua->getProviderName());
+        $this->assertNull($ua->getProviderVersion());
+
+        $ua = new UserAgent('someone', '3.2.1');
+        $this->assertEquals('someone', $ua->getProviderName());
+        $this->assertEquals('3.2.1', $ua->getProviderVersion());
+    }
+
     public function testBrowser()
     {
         $ua = new UserAgent();
@@ -103,8 +113,12 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($ua->getProviderResultRaw());
 
-        $ua->setProviderResultRaw(['test']);
-        $this->assertEquals(['test'], $ua->getProviderResultRaw());
+        $ua->setProviderResultRaw([
+            'test',
+        ]);
+        $this->assertEquals([
+            'test',
+        ], $ua->getProviderResultRaw());
     }
 
     public function testToArray()
@@ -112,19 +126,29 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
         $ua = new UserAgent();
 
         $this->assertEquals([
-            'browser'          => $ua->getBrowser()->toArray(),
-            'renderingEngine'  => $ua->getRenderingEngine()->toArray(),
-            'operatingSystem'  => $ua->getOperatingSystem()->toArray(),
-            'device'           => $ua->getDevice()->toArray(),
-            'bot'              => $ua->getBot()->toArray(),
+            'browser' => $ua->getBrowser()
+                ->toArray(),
+            'renderingEngine' => $ua->getRenderingEngine()
+                ->toArray(),
+            'operatingSystem' => $ua->getOperatingSystem()
+                ->toArray(),
+            'device' => $ua->getDevice()
+                ->toArray(),
+            'bot' => $ua->getBot()
+                ->toArray(),
         ], $ua->toArray());
 
         $this->assertEquals([
-            'browser'           => $ua->getBrowser()->toArray(),
-            'renderingEngine'   => $ua->getRenderingEngine()->toArray(),
-            'operatingSystem'   => $ua->getOperatingSystem()->toArray(),
-            'device'            => $ua->getDevice()->toArray(),
-            'bot'               => $ua->getBot()->toArray(),
+            'browser' => $ua->getBrowser()
+                ->toArray(),
+            'renderingEngine' => $ua->getRenderingEngine()
+                ->toArray(),
+            'operatingSystem' => $ua->getOperatingSystem()
+                ->toArray(),
+            'device' => $ua->getDevice()
+                ->toArray(),
+            'bot' => $ua->getBot()
+                ->toArray(),
             'providerResultRaw' => null,
         ], $ua->toArray(true));
     }

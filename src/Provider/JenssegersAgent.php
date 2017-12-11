@@ -54,9 +54,9 @@ class JenssegersAgent extends AbstractProvider
         ],
 
         'device' => [
-            'model'    => false,
-            'brand'    => false,
-            'type'     => false,
+            'model'    => true,
+            'brand'    => true,
+            'type'     => true,
             'isMobile' => true,
             'isTouch'  => false,
         ],
@@ -174,6 +174,31 @@ class JenssegersAgent extends AbstractProvider
         if ($resultRaw['isMobile'] === true) {
             $device->setIsMobile(true);
         }
+
+        $device->setModel($resultRaw['deviceModel']);
+        $device->setType($resultRaw['type']);
+    }
+
+    /**
+     * Get the kind of device.
+     *
+     * @param Agent $parser
+     *
+     * @return string
+     */
+    public function getDeviceKind(Agent $parser)
+    {
+        $kind = 'unavailable';
+
+        if ($parser->isTablet()) {
+            $kind = 'Tablet';
+        } elseif ($parser->isMobile() || $parser->isPhone()) {
+            $kind = 'Mobile';
+        } elseif ($parser->isDesktop()) {
+            $kind = 'Desktop';
+        }
+
+        return $kind;
     }
 
     public function parse($userAgent, array $headers = [])
@@ -198,6 +223,9 @@ class JenssegersAgent extends AbstractProvider
 
             'deviceModel' => $parser->device(),
             'isMobile'    => $parser->isMobile(),
+            'isTablet'    => $parser->isTablet(),
+            'isDesktop'   => $parser->isDesktop(),
+            'type'        => $this->getDeviceKind($parser),
 
             'isRobot' => $parser->isRobot(),
             'botName' => $parser->robot(),

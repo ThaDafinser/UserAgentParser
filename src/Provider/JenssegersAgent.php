@@ -219,7 +219,7 @@ class JenssegersAgent extends AbstractProvider
             'browserVersion' => $parser->version($browserName),
 
             'osName'    => $osName,
-            'osVersion' => $parser->version($osName),
+            'osVersion' => str_replace('_', '.', $parser->version($osName)),
 
             'deviceModel' => $parser->device(),
             'isMobile'    => $parser->isMobile(),

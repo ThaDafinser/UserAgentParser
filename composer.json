@@ -71,7 +71,7 @@
     "require": {
         "php": "~5.6|~7.0",
         "guzzlehttp/guzzle": "^6.1",
-        "thadafinser/package-info": "^1.0"
+        "composer-runtime-api": "^2.0"
     },
     
     "conflict": {

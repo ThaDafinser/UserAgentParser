@@ -1,9 +1,8 @@
 <?php
 namespace UserAgentParser\Provider;
 
+use Composer\InstalledVersions;
 use DateTime;
-use PackageInfo\Exception\PackageNotInstalledException;
-use PackageInfo\Package;
 use UserAgentParser\Exception;
 use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
@@ -123,10 +122,8 @@ abstract class AbstractProvider
     public function getVersion()
     {
         try {
-            $package = new Package($this->getPackageName());
-
-            return $package->getVersion();
-        } catch (PackageNotInstalledException $ex) {
+            return InstalledVersions::getVersion($this->getPackageName());
+        } catch (\OutOfBoundsException $ex) {
             return;
         }
     }
@@ -138,13 +135,7 @@ abstract class AbstractProvider
      */
     public function getUpdateDate()
     {
-        try {
-            $package = new Package($this->getPackageName());
-
-            return $package->getVersionReleaseDate();
-        } catch (PackageNotInstalledException $ex) {
-            return;
-        }
+        return;
     }
 
     /**
@@ -163,7 +154,7 @@ abstract class AbstractProvider
      */
     protected function checkIfInstalled()
     {
-        if (! Package::isInstalled($this->getPackageName())) {
+        if (! InstalledVersions::isInstalled($this->getPackageName())) {
             throw new PackageNotLoadedException('You need to install the package ' . $this->getPackageName() . ' to use this provider');
         }
     }

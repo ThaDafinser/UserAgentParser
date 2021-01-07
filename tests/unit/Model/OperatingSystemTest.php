@@ -2,7 +2,7 @@
 
 namespace UserAgentParserTest;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use UserAgentParser\Model\OperatingSystem;
 use UserAgentParser\Model\Version;
 
@@ -14,7 +14,7 @@ use UserAgentParser\Model\Version;
  *
  * @internal
  */
-class OperatingSystemTest extends PHPUnit_Framework_TestCase
+class OperatingSystemTest extends TestCase
 {
     public function testName()
     {

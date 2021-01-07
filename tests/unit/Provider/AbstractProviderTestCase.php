@@ -5,7 +5,7 @@ namespace UserAgentParserTest\Unit\Provider;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use UserAgentParser\Model\UserAgent;
 use UserAgentParser\Provider\AbstractProvider;
@@ -14,7 +14,7 @@ use UserAgentParser\Provider\AbstractProvider;
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  */
-abstract class AbstractProviderTestCase extends PHPUnit_Framework_TestCase
+abstract class AbstractProviderTestCase extends TestCase
 {
     protected function assertProviderResult($result, array $expectedResult)
     {

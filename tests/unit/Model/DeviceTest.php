@@ -2,7 +2,7 @@
 
 namespace UserAgentParserTest;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use UserAgentParser\Model\Device;
 
 /**
@@ -13,7 +13,7 @@ use UserAgentParser\Model\Device;
  *
  * @internal
  */
-class DeviceTest extends PHPUnit_Framework_TestCase
+class DeviceTest extends TestCase
 {
     public function testModel()
     {

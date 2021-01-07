@@ -142,7 +142,7 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
         $result = $provider->parse('A real user agent...');
 
         $this->assertEquals('Endorphin', $result->getProviderName());
-        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+        $this->assertMatchesRegularExpression('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
     }
 
     /**

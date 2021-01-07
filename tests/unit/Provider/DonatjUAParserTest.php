@@ -158,7 +158,7 @@ namespace UserAgentParserTest\Unit\Provider
             self::$version = null;
 
             $this->assertEquals('DonatjUAParser', $result->getProviderName());
-            $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+            $this->assertMatchesRegularExpression('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
         }
 
         /**

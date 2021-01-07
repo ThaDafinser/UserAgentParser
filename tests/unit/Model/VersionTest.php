@@ -2,7 +2,7 @@
 
 namespace UserAgentParserTest;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use UserAgentParser\Model\Version;
 
 /**
@@ -13,7 +13,7 @@ use UserAgentParser\Model\Version;
  *
  * @internal
  */
-class VersionTest extends PHPUnit_Framework_TestCase
+class VersionTest extends TestCase
 {
     public function testMajorMinorPatch()
     {

@@ -2,7 +2,7 @@
 
 namespace UserAgentParserTest;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use UserAgentParser\Model\Bot;
 
 /**
@@ -13,7 +13,7 @@ use UserAgentParser\Model\Bot;
  *
  * @internal
  */
-class BotTest extends PHPUnit_Framework_TestCase
+class BotTest extends TestCase
 {
     public function testIsBot()
     {

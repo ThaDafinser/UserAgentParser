@@ -20,14 +20,14 @@ class ChainTest extends AbstractProviderTestCase implements RequiredProviderTest
      */
     private $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -206,6 +206,6 @@ class ChainTest extends AbstractProviderTestCase implements RequiredProviderTest
         $result = $provider->parse('A real user agent...');
 
         $this->assertEquals('SomeProvider', $result->getProviderName());
-        $this->assertRegExp('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
+        $this->assertMatchesRegularExpression('/\d{1,}\.\d{1,}/', $result->getProviderVersion());
     }
 }

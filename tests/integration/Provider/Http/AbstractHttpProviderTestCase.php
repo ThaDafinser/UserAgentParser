@@ -11,7 +11,7 @@ abstract class AbstractHttpProviderTestCase extends AbstractProviderTestCase
 {
     private $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // move tests/credentials.php.dist to tests/credentials.php
         if (!\defined('CREDENTIALS_FILE_LOADED') && file_exists('tests/credentials.php')) {

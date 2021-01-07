@@ -1,8 +1,9 @@
 <?php
+
 namespace UserAgentParser\Model;
 
 /**
- * Rendering engine model
+ * Rendering engine model.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
@@ -25,7 +26,6 @@ class RenderingEngine
     }
 
     /**
-     *
      * @param string $name
      */
     public function setName($name)
@@ -34,7 +34,6 @@ class RenderingEngine
     }
 
     /**
-     *
      * @return string
      */
     public function getName()
@@ -42,9 +41,6 @@ class RenderingEngine
         return $this->name;
     }
 
-    /**
-     * @param Version $version
-     */
     public function setVersion(Version $version)
     {
         $this->version = $version;
@@ -64,7 +60,7 @@ class RenderingEngine
     public function toArray()
     {
         return [
-            'name'    => $this->getName(),
+            'name' => $this->getName(),
             'version' => $this->getVersion()->toArray(),
         ];
     }

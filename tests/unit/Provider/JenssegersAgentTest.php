@@ -1,29 +1,21 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
+use PHPUnit_Framework_MockObject_MockObject;
+use ReflectionClass;
 use UserAgentParser\Provider\JenssegersAgent;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Provider\JenssegersAgent
+ * @covers \UserAgentParser\Provider\JenssegersAgent
+ *
+ * @internal
  */
 class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    /**
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getParser()
-    {
-        $parser = self::createMock('Jenssegers\Agent\Agent');
-
-        return $parser;
-    }
-
     public function testGetName()
     {
         $provider = new JenssegersAgent();
@@ -64,34 +56,33 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
         $provider = new JenssegersAgent();
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'renderingEngine' => [
-                'name'    => false,
+                'name' => false,
                 'version' => false,
             ],
 
             'operatingSystem' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'device' => [
-                'model'    => false,
-                'brand'    => false,
-                'type'     => false,
+                'model' => false,
+                'brand' => false,
+                'type' => false,
                 'isMobile' => true,
-                'isTouch'  => false,
+                'isTouch' => false,
             ],
 
             'bot' => [
                 'isBot' => true,
-                'name'  => true,
-                'type'  => false,
+                'name' => true,
+                'type' => false,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -100,9 +91,7 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
     {
         $provider = new JenssegersAgent();
 
-        /*
-         * browser name
-         */
+        // browser name
         $this->assertIsRealResult($provider, false, 'GenericBrowser', 'browser', 'name');
         $this->assertIsRealResult($provider, true, 'GenericBrowser something', 'browser', 'name');
         $this->assertIsRealResult($provider, true, 'something GenericBrowser', 'browser', 'name');
@@ -124,8 +113,8 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
 
         $provider = new JenssegersAgent();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -140,16 +129,16 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isRobot')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $parser->expects($this->any())
             ->method('robot')
-            ->will($this->returnValue('Googlebot'));
+            ->willReturn('Googlebot');
 
         $provider = new JenssegersAgent();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -160,23 +149,23 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
     }
 
     /**
-     * Bot
+     * Bot.
      */
     public function testParseBot()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isRobot')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $parser->expects($this->any())
             ->method('robot')
-            ->will($this->returnValue('Googlebot'));
+            ->willReturn('Googlebot');
 
         $provider = new JenssegersAgent();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -185,8 +174,8 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
         $expectedResult = [
             'bot' => [
                 'isBot' => true,
-                'name'  => 'Googlebot',
-                'type'  => null,
+                'name' => 'Googlebot',
+                'type' => null,
             ],
         ];
 
@@ -194,22 +183,22 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
     }
 
     /**
-     * Browser only
+     * Browser only.
      */
     public function testParseBrowser()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('browser')
-            ->will($this->returnValue('Firefox'));
+            ->willReturn('Firefox');
         $parser->expects($this->any())
             ->method('version')
-            ->will($this->returnValue('3.2.1'));
+            ->willReturn('3.2.1');
 
         $provider = new JenssegersAgent();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -217,7 +206,7 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
 
         $expectedResult = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => [
                     'major' => 3,
                     'minor' => 2,
@@ -234,22 +223,22 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
     }
 
     /**
-     * OS only
+     * OS only.
      */
     public function testParseOs()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('platform')
-            ->will($this->returnValue('Windows'));
+            ->willReturn('Windows');
         $parser->expects($this->any())
             ->method('version')
-            ->will($this->returnValue('7.0.1'));
+            ->willReturn('7.0.1');
 
         $provider = new JenssegersAgent();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -257,7 +246,7 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows',
+                'name' => 'Windows',
                 'version' => [
                     'major' => 7,
                     'minor' => 0,
@@ -274,19 +263,19 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
     }
 
     /**
-     * Device only
+     * Device only.
      */
     public function testDeviceOnly()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isMobile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $provider = new JenssegersAgent();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -296,13 +285,23 @@ class JenssegersAgentTest extends AbstractProviderTestCase implements RequiredPr
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => true,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser()
+    {
+        $parser = self::createMock('Jenssegers\Agent\Agent');
+
+        return $parser;
     }
 }

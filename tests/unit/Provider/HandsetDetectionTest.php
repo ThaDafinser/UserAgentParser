@@ -1,28 +1,20 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
+use PHPUnit_Framework_MockObject_MockObject;
 use UserAgentParser\Provider\HandsetDetection;
 
 /**
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Provider\HandsetDetection
+ * @covers \UserAgentParser\Provider\HandsetDetection
+ *
+ * @internal
  */
 class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    /**
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getParser()
-    {
-        $parser = self::createMock('HandsetDetection\HD4');
-
-        return $parser;
-    }
-
     public function testGetName()
     {
         $provider = new HandsetDetection($this->getParser());
@@ -63,34 +55,33 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
         $provider = new HandsetDetection($this->getParser());
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'renderingEngine' => [
-                'name'    => false,
+                'name' => false,
                 'version' => false,
             ],
 
             'operatingSystem' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'device' => [
-                'model'    => true,
-                'brand'    => true,
-                'type'     => false,
+                'model' => true,
+                'brand' => true,
+                'type' => false,
                 'isMobile' => false,
-                'isTouch'  => false,
+                'isTouch' => false,
             ],
 
             'bot' => [
                 'isBot' => false,
-                'name'  => false,
-                'type'  => false,
+                'name' => false,
+                'type' => false,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -99,18 +90,14 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
     {
         $provider = new HandsetDetection($this->getParser());
 
-        /*
-         * general
-         */
+        // general
         $this->assertIsRealResult($provider, true, 'something');
 
         $this->assertIsRealResult($provider, false, 'generic', 'device', 'model');
         $this->assertIsRealResult($provider, true, 'generic something', 'device', 'model');
         $this->assertIsRealResult($provider, true, 'something generic', 'device', 'model');
 
-        /*
-         * device model
-         */
+        // device model
         $this->assertIsRealResult($provider, false, 'analyzer', 'device', 'model');
         $this->assertIsRealResult($provider, false, 'analyzer something', 'device', 'model');
         $this->assertIsRealResult($provider, false, 'something analyzer', 'device', 'model');
@@ -159,10 +146,10 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
         $parser->expects($this->any())
             ->method('getReply')
             ->willReturn([
-            'hd_specs' => [
-                'general_browser' => 'generic',
-            ],
-        ]);
+                'hd_specs' => [
+                    'general_browser' => 'generic',
+                ],
+            ]);
 
         $provider = new HandsetDetection($parser);
 
@@ -181,11 +168,11 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
         $parser->expects($this->any())
             ->method('getReply')
             ->willReturn([
-            'hd_specs' => [
-                'general_browser'         => 'Firefox',
-                'general_browser_version' => '3.2.1',
-            ],
-        ]);
+                'hd_specs' => [
+                    'general_browser' => 'Firefox',
+                    'general_browser_version' => '3.2.1',
+                ],
+            ]);
 
         $provider = new HandsetDetection($parser);
 
@@ -196,7 +183,7 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
     }
 
     /**
-     * Browser only
+     * Browser only.
      */
     public function testParseBrowser()
     {
@@ -207,11 +194,11 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
         $parser->expects($this->any())
             ->method('getReply')
             ->willReturn([
-            'hd_specs' => [
-                'general_browser'         => 'Firefox',
-                'general_browser_version' => '3.2.1',
-            ],
-        ]);
+                'hd_specs' => [
+                    'general_browser' => 'Firefox',
+                    'general_browser_version' => '3.2.1',
+                ],
+            ]);
 
         $provider = new HandsetDetection($parser);
 
@@ -219,7 +206,7 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
 
         $expectedResult = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => [
                     'major' => 3,
                     'minor' => 2,
@@ -236,7 +223,7 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
     }
 
     /**
-     * OS only
+     * OS only.
      */
     public function testParseOperatingSystem()
     {
@@ -247,11 +234,11 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
         $parser->expects($this->any())
             ->method('getReply')
             ->willReturn([
-            'hd_specs' => [
-                'general_platform'         => 'Windows',
-                'general_platform_version' => '7.0.1',
-            ],
-        ]);
+                'hd_specs' => [
+                    'general_platform' => 'Windows',
+                    'general_platform_version' => '7.0.1',
+                ],
+            ]);
 
         $provider = new HandsetDetection($parser);
 
@@ -259,7 +246,7 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows',
+                'name' => 'Windows',
                 'version' => [
                     'major' => 7,
                     'minor' => 0,
@@ -276,7 +263,7 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
     }
 
     /**
-     * Device only
+     * Device only.
      */
     public function testParseDevice()
     {
@@ -287,11 +274,11 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
         $parser->expects($this->any())
             ->method('getReply')
             ->willReturn([
-            'hd_specs' => [
-                'general_model'  => 'iPhone',
-                'general_vendor' => 'Apple',
-            ],
-        ]);
+                'hd_specs' => [
+                    'general_model' => 'iPhone',
+                    'general_vendor' => 'Apple',
+                ],
+            ]);
 
         $provider = new HandsetDetection($parser);
 
@@ -301,13 +288,23 @@ class HandsetDetectionTest extends AbstractProviderTestCase implements RequiredP
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser()
+    {
+        $parser = self::createMock('HandsetDetection\HD4');
+
+        return $parser;
     }
 }

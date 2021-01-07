@@ -1,16 +1,17 @@
 <?php
+
 namespace UserAgentParserTest;
 
 use PHPUnit_Framework_TestCase;
 use UserAgentParser\Model\Device;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Model\Device
+ * @covers \UserAgentParser\Model\Device
+ *
+ * @internal
  */
 class DeviceTest extends PHPUnit_Framework_TestCase
 {
@@ -72,11 +73,11 @@ class DeviceTest extends PHPUnit_Framework_TestCase
         $device = new Device();
 
         $this->assertEquals([
-            'model'    => null,
-            'brand'    => null,
-            'type'     => null,
+            'model' => null,
+            'brand' => null,
+            'type' => null,
             'isMobile' => null,
-            'isTouch'  => null,
+            'isTouch' => null,
         ], $device->toArray());
 
         $device->setModel('iPad');
@@ -86,11 +87,11 @@ class DeviceTest extends PHPUnit_Framework_TestCase
         $device->setIsTouch(true);
 
         $this->assertEquals([
-            'model'    => 'iPad',
-            'brand'    => 'Apple',
-            'type'     => 'tablet',
+            'model' => 'iPad',
+            'brand' => 'Apple',
+            'type' => 'tablet',
             'isMobile' => false,
-            'isTouch'  => true,
+            'isTouch' => true,
         ], $device->toArray());
     }
 }

@@ -1,8 +1,9 @@
 <?php
+
 namespace UserAgentParser\Model;
 
 /**
- * Browser model
+ * Browser model.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
@@ -25,7 +26,6 @@ class Browser
     }
 
     /**
-     *
      * @param string $name
      */
     public function setName($name)
@@ -34,7 +34,6 @@ class Browser
     }
 
     /**
-     *
      * @return string
      */
     public function getName()
@@ -42,9 +41,6 @@ class Browser
         return $this->name;
     }
 
-    /**
-     * @param Version $version
-     */
     public function setVersion(Version $version)
     {
         $this->version = $version;
@@ -64,7 +60,7 @@ class Browser
     public function toArray()
     {
         return [
-            'name'    => $this->getName(),
+            'name' => $this->getName(),
             'version' => $this->getVersion()->toArray(),
         ];
     }

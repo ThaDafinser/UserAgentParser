@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider\Http;
 
 use GuzzleHttp\Psr7\Response;
@@ -8,12 +9,12 @@ use UserAgentParserTest\Unit\Provider\AbstractProviderTestCase;
 use UserAgentParserTest\Unit\Provider\RequiredProviderTestInterface;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Provider\Http\DeviceAtlasCom
+ * @covers \UserAgentParser\Provider\Http\DeviceAtlasCom
+ *
+ * @internal
  */
 class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
@@ -57,34 +58,33 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
         $provider = new DeviceAtlasCom($this->getClient(), 'apiKey123');
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'renderingEngine' => [
-                'name'    => true,
+                'name' => true,
                 'version' => false,
             ],
 
             'operatingSystem' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'device' => [
-                'model'    => false,
-                'brand'    => false,
-                'type'     => true,
+                'model' => false,
+                'brand' => false,
+                'type' => true,
                 'isMobile' => false,
-                'isTouch'  => false,
+                'isTouch' => false,
             ],
 
             'bot' => [
                 'isBot' => false,
-                'name'  => false,
-                'type'  => false,
+                'name' => false,
+                'type' => false,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -93,14 +93,12 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     {
         $provider = new DeviceAtlasCom($this->getClient(), 'apiKey123');
 
-        /*
-         * general
-         */
+        // general
         $this->assertIsRealResult($provider, true, 'something UNKNOWN');
     }
 
     /**
-     * Empty user agent
+     * Empty user agent.
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
@@ -116,7 +114,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * 403
+     * 403.
      *
      * @expectedException \UserAgentParser\Exception\InvalidCredentialsException
      */
@@ -134,7 +132,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * 500
+     * 500.
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
@@ -150,7 +148,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * No JSON returned
+     * No JSON returned.
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
@@ -168,7 +166,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Missing data
+     * Missing data.
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
@@ -186,13 +184,13 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * no result found
+     * no result found.
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
     public function testParseNoResultFoundException()
     {
-        $rawResult             = new stdClass();
+        $rawResult = new stdClass();
         $rawResult->properties = new stdClass();
 
         $responseQueue = [
@@ -211,11 +209,11 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
      */
     public function testProviderNameAndVersionIsInResult()
     {
-        $properties                 = new stdClass();
-        $properties->browserName    = 'Firefox';
+        $properties = new stdClass();
+        $properties->browserName = 'Firefox';
         $properties->browserVersion = '3.2.1';
 
-        $rawResult             = new stdClass();
+        $rawResult = new stdClass();
         $rawResult->properties = $properties;
 
         $responseQueue = [
@@ -233,15 +231,15 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Browser only
+     * Browser only.
      */
     public function testParseBrowser()
     {
-        $properties                 = new stdClass();
-        $properties->browserName    = 'Firefox';
+        $properties = new stdClass();
+        $properties->browserName = 'Firefox';
         $properties->browserVersion = '3.2.1';
 
-        $rawResult             = new stdClass();
+        $rawResult = new stdClass();
         $rawResult->properties = $properties;
 
         $responseQueue = [
@@ -256,7 +254,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
 
         $expectedResult = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => [
                     'major' => 3,
                     'minor' => 2,
@@ -273,14 +271,14 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Engine only
+     * Engine only.
      */
     public function testParseEngine()
     {
-        $properties                         = new stdClass();
+        $properties = new stdClass();
         $properties->browserRenderingEngine = 'WebKit';
 
-        $rawResult             = new stdClass();
+        $rawResult = new stdClass();
         $rawResult->properties = $properties;
 
         $responseQueue = [
@@ -295,7 +293,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
 
         $expectedResult = [
             'renderingEngine' => [
-                'name'    => 'WebKit',
+                'name' => 'WebKit',
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -312,15 +310,15 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * OS only
+     * OS only.
      */
     public function testParseOperatingSystem()
     {
-        $properties            = new stdClass();
-        $properties->osName    = 'Windows';
+        $properties = new stdClass();
+        $properties->osName = 'Windows';
         $properties->osVersion = '7';
 
-        $rawResult             = new stdClass();
+        $rawResult = new stdClass();
         $rawResult->properties = $properties;
 
         $responseQueue = [
@@ -335,7 +333,7 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows',
+                'name' => 'Windows',
                 'version' => [
                     'major' => 7,
                     'minor' => null,
@@ -352,14 +350,14 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Device only
+     * Device only.
      */
     public function testParseDevice()
     {
-        $properties                      = new stdClass();
+        $properties = new stdClass();
         $properties->primaryHardwareType = 'mobile';
 
-        $rawResult             = new stdClass();
+        $rawResult = new stdClass();
         $rawResult->properties = $properties;
 
         $responseQueue = [
@@ -376,10 +374,10 @@ class DeviceAtlasComTest extends AbstractProviderTestCase implements RequiredPro
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => 'mobile',
+                'type' => 'mobile',
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 

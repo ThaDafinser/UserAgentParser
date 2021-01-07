@@ -1,15 +1,16 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider;
 
 use UserAgentParser\Provider\BrowscapLite;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
  * @coversNothing
+ *
+ * @internal
  */
 class BrowscapLiteTest extends AbstractBrowscapTestCase
 {
@@ -42,7 +43,7 @@ class BrowscapLiteTest extends AbstractBrowscapTestCase
 
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Chromium',
+                'name' => 'Chromium',
                 'version' => [
                     'major' => 48,
                     'minor' => null,
@@ -54,7 +55,7 @@ class BrowscapLiteTest extends AbstractBrowscapTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -66,7 +67,7 @@ class BrowscapLiteTest extends AbstractBrowscapTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'Linux',
+                'name' => 'Linux',
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -80,15 +81,15 @@ class BrowscapLiteTest extends AbstractBrowscapTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => 'TV Device',
+                'type' => 'TV Device',
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => null,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
     }

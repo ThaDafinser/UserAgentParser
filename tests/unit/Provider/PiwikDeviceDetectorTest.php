@@ -1,30 +1,21 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
 use DeviceDetector\DeviceDetector;
+use PHPUnit_Framework_MockObject_MockObject;
 use UserAgentParser\Provider\PiwikDeviceDetector;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Provider\PiwikDeviceDetector
+ * @covers \UserAgentParser\Provider\PiwikDeviceDetector
+ *
+ * @internal
  */
 class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    /**
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getParser()
-    {
-        $parser = self::createMock('DeviceDetector\DeviceDetector');
-
-        return $parser;
-    }
-
     public function testGetName()
     {
         $provider = new PiwikDeviceDetector();
@@ -65,34 +56,33 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
         $provider = new PiwikDeviceDetector();
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'renderingEngine' => [
-                'name'    => true,
+                'name' => true,
                 'version' => false,
             ],
 
             'operatingSystem' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'device' => [
-                'model'    => true,
-                'brand'    => true,
-                'type'     => true,
+                'model' => true,
+                'brand' => true,
+                'type' => true,
                 'isMobile' => true,
-                'isTouch'  => true,
+                'isTouch' => true,
             ],
 
             'bot' => [
                 'isBot' => true,
-                'name'  => true,
-                'type'  => true,
+                'name' => true,
+                'type' => true,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -101,16 +91,12 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
     {
         $provider = new PiwikDeviceDetector();
 
-        /*
-         * general
-         */
+        // general
         $this->assertIsRealResult($provider, false, 'UNK');
         $this->assertIsRealResult($provider, true, 'UNK something');
         $this->assertIsRealResult($provider, true, 'something UNK');
 
-        /*
-         * bot name
-         */
+        // bot name
         $this->assertIsRealResult($provider, false, 'Bot', 'bot', 'name');
         $this->assertIsRealResult($provider, true, 'Bot something', 'bot', 'name');
         $this->assertIsRealResult($provider, true, 'something Bot', 'bot', 'name');
@@ -152,9 +138,9 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('getClient')
-            ->will($this->returnValue([
-            'name' => 'UNK',
-        ]));
+            ->willReturn([
+                'name' => 'UNK',
+            ]);
 
         $provider = new PiwikDeviceDetector($parser);
 
@@ -169,13 +155,13 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isBot')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $parser->expects($this->any())
             ->method('getBot')
-            ->will($this->returnValue([
-            'name'     => 'Hatena RSS',
-            'category' => 'something',
-        ]));
+            ->willReturn([
+                'name' => 'Hatena RSS',
+                'category' => 'something',
+            ]);
 
         $provider = new PiwikDeviceDetector($parser);
 
@@ -186,20 +172,20 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
     }
 
     /**
-     * Bot
+     * Bot.
      */
     public function testParseBot()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isBot')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $parser->expects($this->any())
             ->method('getBot')
-            ->will($this->returnValue([
-            'name'     => 'Hatena RSS',
-            'category' => 'something',
-        ]));
+            ->willReturn([
+                'name' => 'Hatena RSS',
+                'category' => 'something',
+            ]);
 
         $provider = new PiwikDeviceDetector($parser);
 
@@ -208,8 +194,8 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
         $expectedResult = [
             'bot' => [
                 'isBot' => true,
-                'name'  => 'Hatena RSS',
-                'type'  => 'something',
+                'name' => 'Hatena RSS',
+                'type' => 'something',
             ],
         ];
 
@@ -217,19 +203,19 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
     }
 
     /**
-     * Bot - name default
+     * Bot - name default.
      */
     public function testParseBotNameDefault()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isBot')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $parser->expects($this->any())
             ->method('getBot')
-            ->will($this->returnValue([
-            'name' => 'Bot',
-        ]));
+            ->willReturn([
+                'name' => 'Bot',
+            ]);
 
         $provider = new PiwikDeviceDetector($parser);
 
@@ -238,8 +224,8 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
         $expectedResult = [
             'bot' => [
                 'isBot' => true,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ];
 
@@ -247,19 +233,19 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
     }
 
     /**
-     * Bot - name default
+     * Bot - name default.
      */
     public function testParseBotNameDefault2()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isBot')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $parser->expects($this->any())
             ->method('getBot')
-            ->will($this->returnValue([
-            'name' => 'Generic Bot',
-        ]));
+            ->willReturn([
+                'name' => 'Generic Bot',
+            ]);
 
         $provider = new PiwikDeviceDetector($parser);
 
@@ -268,8 +254,8 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
         $expectedResult = [
             'bot' => [
                 'isBot' => true,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ];
 
@@ -277,21 +263,21 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
     }
 
     /**
-     * Browser only
+     * Browser only.
      */
     public function testParseBrowser()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('getClient')
-            ->will($this->returnValue([
-            'name'    => 'Firefox',
-            'version' => '3.0',
-            'engine'  => 'WebKit',
-        ]));
+            ->willReturn([
+                'name' => 'Firefox',
+                'version' => '3.0',
+                'engine' => 'WebKit',
+            ]);
         $parser->expects($this->any())
             ->method('getOs')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $provider = new PiwikDeviceDetector($parser);
 
@@ -299,7 +285,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
 
         $expectedResult = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => [
                     'major' => 3,
                     'minor' => 0,
@@ -312,7 +298,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
             ],
 
             'renderingEngine' => [
-                'name'    => 'WebKit',
+                'name' => 'WebKit',
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -329,22 +315,22 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
     }
 
     /**
-     * OS only
+     * OS only.
      */
     public function testParseOperatingSystem()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('getClient')
-            ->will($this->returnValue([
-            'engine' => DeviceDetector::UNKNOWN,
-        ]));
+            ->willReturn([
+                'engine' => DeviceDetector::UNKNOWN,
+            ]);
         $parser->expects($this->any())
             ->method('getOs')
-            ->will($this->returnValue([
-            'name'    => 'Windows',
-            'version' => '7.0',
-        ]));
+            ->willReturn([
+                'name' => 'Windows',
+                'version' => '7.0',
+            ]);
 
         $provider = new PiwikDeviceDetector($parser);
 
@@ -352,7 +338,7 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows',
+                'name' => 'Windows',
                 'version' => [
                     'major' => 7,
                     'minor' => 0,
@@ -369,39 +355,39 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
     }
 
     /**
-     * Device only
+     * Device only.
      */
     public function testParseDevice()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('getClient')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $parser->expects($this->any())
             ->method('getOs')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $parser->expects($this->any())
             ->method('getDevice')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $parser->expects($this->any())
             ->method('getModel')
-            ->will($this->returnValue('iPhone'));
+            ->willReturn('iPhone');
         $parser->expects($this->any())
             ->method('getBrandName')
-            ->will($this->returnValue('Apple'));
+            ->willReturn('Apple');
         $parser->expects($this->any())
             ->method('getDeviceName')
-            ->will($this->returnValue('smartphone'));
+            ->willReturn('smartphone');
 
         $parser->expects($this->any())
             ->method('isMobile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $parser->expects($this->any())
             ->method('isTouchEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $provider = new PiwikDeviceDetector($parser);
 
@@ -411,13 +397,23 @@ class PiwikDeviceDetectorTest extends AbstractProviderTestCase implements Requir
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => 'smartphone',
+                'type' => 'smartphone',
 
                 'isMobile' => true,
-                'isTouch'  => true,
+                'isTouch' => true,
             ],
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser()
+    {
+        $parser = self::createMock('DeviceDetector\DeviceDetector');
+
+        return $parser;
     }
 }

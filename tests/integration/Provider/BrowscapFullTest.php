@@ -1,42 +1,40 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider;
 
+use ReflectionClass;
 use UserAgentParser\Provider\BrowscapFull;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
  * @coversNothing
+ *
+ * @internal
  */
 class BrowscapFullTest extends AbstractBrowscapTestCase
 {
     public function testMethodParse()
     {
         $provider = new BrowscapFull($this->getParserWithWarmCache('full'));
-        $parser   = $provider->getParser();
+        $parser = $provider->getParser();
 
-        /*
-         * test method exists
-         */
-        $class = new \ReflectionClass($parser);
+        // test method exists
+        $class = new ReflectionClass($parser);
         $this->assertTrue($class->hasMethod('getBrowser'), 'method getBrowser() does not exist anymore');
-        /*
-         * test paramters
-         */
-        $method     = $class->getMethod('getBrowser');
+        // test paramters
+        $method = $class->getMethod('getBrowser');
         $parameters = $method->getParameters();
-        $this->assertEquals(1, count($parameters));
+        $this->assertEquals(1, \count($parameters));
     }
 
     public function testMethodsResult()
     {
         $provider = new BrowscapFull($this->getParserWithWarmCache('full'));
-        $parser   = $provider->getParser();
+        $parser = $provider->getParser();
 
-        /* @var $result \stdClass */
+        // @var $result \stdClass
         $result = $parser->getBrowser('A real user agent...');
 
         $this->assertInstanceOf('stdClass', $result);
@@ -77,7 +75,7 @@ class BrowscapFullTest extends AbstractBrowscapTestCase
         $result = $provider->parse('Mozilla/2.0 (compatible; Ask Jeeves)');
         $this->assertEquals([
             'browser' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -89,7 +87,7 @@ class BrowscapFullTest extends AbstractBrowscapTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -101,7 +99,7 @@ class BrowscapFullTest extends AbstractBrowscapTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -115,21 +113,19 @@ class BrowscapFullTest extends AbstractBrowscapTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => true,
-                'name'  => 'AskJeeves',
-                'type'  => 'Bot/Crawler',
+                'name' => 'AskJeeves',
+                'type' => 'Bot/Crawler',
             ],
         ], $result->toArray());
 
-        /*
-         * Test the raw result
-         */
+        // Test the raw result
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInstanceOf('stdClass', $rawResult);
@@ -148,7 +144,7 @@ class BrowscapFullTest extends AbstractBrowscapTestCase
         $result = $provider->parse('Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/48.0.1349.2 Chrome/25.0.1349.2 Safari/537.42');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Chromium',
+                'name' => 'Chromium',
                 'version' => [
                     'major' => 48,
                     'minor' => null,
@@ -160,7 +156,7 @@ class BrowscapFullTest extends AbstractBrowscapTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => 'Blink',
+                'name' => 'Blink',
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -172,7 +168,7 @@ class BrowscapFullTest extends AbstractBrowscapTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'Linux',
+                'name' => 'Linux',
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -186,21 +182,19 @@ class BrowscapFullTest extends AbstractBrowscapTestCase
             'device' => [
                 'model' => 'Smart TV',
                 'brand' => 'Samsung',
-                'type'  => 'TV Device',
+                'type' => 'TV Device',
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => null,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
 
-        /*
-         * Test the raw result
-         */
+        // Test the raw result
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInstanceOf('stdClass', $rawResult);

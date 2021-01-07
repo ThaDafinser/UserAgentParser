@@ -1,47 +1,20 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
+use PHPUnit_Framework_MockObject_MockObject;
 use UserAgentParser\Provider\Zsxsoft;
 
 /**
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- *          @covers UserAgentParser\Provider\Zsxsoft
+ *          @covers \UserAgentParser\Provider\Zsxsoft
+ *
+ * @internal
  */
 class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    /**
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getParser($returnValue = null)
-    {
-        $parser = $this->getMockBuilder('UserAgent');
-        $parser->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->setMethods([
-            'analyze',
-        ]);
-        $parser = $parser->getMock();
-
-        if ($returnValue === null) {
-            $parser->data = [
-                'browser'  => [],
-                'os'       => [],
-                'device'   => [],
-                'platform' => [],
-            ];
-        } else {
-            $parser->data = $returnValue;
-        }
-
-        return $parser;
-    }
-
     public function testGetName()
     {
         $provider = new Zsxsoft();
@@ -82,34 +55,33 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
         $provider = new Zsxsoft();
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'renderingEngine' => [
-                'name'    => false,
+                'name' => false,
                 'version' => false,
             ],
 
             'operatingSystem' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'device' => [
-                'model'    => true,
-                'brand'    => true,
-                'type'     => false,
+                'model' => true,
+                'brand' => true,
+                'type' => false,
                 'isMobile' => false,
-                'isTouch'  => false,
+                'isTouch' => false,
             ],
 
             'bot' => [
                 'isBot' => false,
-                'name'  => false,
-                'type'  => false,
+                'name' => false,
+                'type' => false,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -161,11 +133,11 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
     {
         $result = [
             'browser' => [
-                'name'    => 'Mozilla Compatible',
+                'name' => 'Mozilla Compatible',
                 'version' => '3.2.1',
             ],
-            'os'       => [],
-            'device'   => [],
+            'os' => [],
+            'device' => [],
             'platform' => [],
         ];
 
@@ -181,8 +153,8 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
     {
         $result = [
             'browser' => [],
-            'os'      => [],
-            'device'  => [
+            'os' => [],
+            'device' => [
                 'model' => 'Android',
             ],
             'platform' => [],
@@ -200,11 +172,11 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
     {
         $result = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => '3.2.1',
             ],
-            'os'       => [],
-            'device'   => [],
+            'os' => [],
+            'device' => [],
             'platform' => [],
         ];
 
@@ -217,17 +189,17 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
     }
 
     /**
-     * Browser only
+     * Browser only.
      */
     public function testParseBrowser()
     {
         $result = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => '3.2.1',
             ],
-            'os'       => [],
-            'device'   => [],
+            'os' => [],
+            'device' => [],
             'platform' => [],
         ];
 
@@ -237,7 +209,7 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
 
         $expectedResult = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => [
                     'major' => 3,
                     'minor' => 2,
@@ -254,17 +226,17 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
     }
 
     /**
-     * OS only
+     * OS only.
      */
     public function testParseOperatingSystem()
     {
         $result = [
             'browser' => [],
-            'os'      => [
-                'name'    => 'Windows',
+            'os' => [
+                'name' => 'Windows',
                 'version' => '7.0.1',
             ],
-            'device'   => [],
+            'device' => [],
             'platform' => [],
         ];
 
@@ -274,7 +246,7 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows',
+                'name' => 'Windows',
                 'version' => [
                     'major' => 7,
                     'minor' => 0,
@@ -291,14 +263,14 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
     }
 
     /**
-     * Device only
+     * Device only.
      */
     public function testParseDevice()
     {
         $result = [
             'browser' => [],
-            'os'      => [],
-            'device'  => [
+            'os' => [],
+            'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
             ],
@@ -313,10 +285,10 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
@@ -324,14 +296,14 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
     }
 
     /**
-     * Device model only
+     * Device model only.
      */
     public function testParseDeviceModelOnly()
     {
         $result = [
             'browser' => [],
-            'os'      => [],
-            'device'  => [
+            'os' => [],
+            'device' => [
                 'model' => 'One+',
             ],
             'platform' => [],
@@ -345,13 +317,44 @@ class ZsxsoftTest extends AbstractProviderTestCase implements RequiredProviderTe
             'device' => [
                 'model' => 'One+',
                 'brand' => null,
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @param null|mixed $returnValue
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser($returnValue = null)
+    {
+        $parser = $this->getMockBuilder('UserAgent');
+        $parser->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->setMethods([
+                'analyze',
+            ]);
+        $parser = $parser->getMock();
+
+        if ($returnValue === null) {
+            $parser->data = [
+                'browser' => [],
+                'os' => [],
+                'device' => [],
+                'platform' => [],
+            ];
+        } else {
+            $parser->data = $returnValue;
+        }
+
+        return $parser;
     }
 }

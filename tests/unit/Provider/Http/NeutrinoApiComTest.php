@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider\Http;
 
 use GuzzleHttp\Psr7\Response;
@@ -8,12 +9,12 @@ use UserAgentParserTest\Unit\Provider\AbstractProviderTestCase;
 use UserAgentParserTest\Unit\Provider\RequiredProviderTestInterface;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Provider\Http\NeutrinoApiCom
+ * @covers \UserAgentParser\Provider\Http\NeutrinoApiCom
+ *
+ * @internal
  */
 class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
@@ -57,34 +58,33 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
         $provider = new NeutrinoApiCom($this->getClient(), 'apiUser', 'apiKey123');
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'renderingEngine' => [
-                'name'    => false,
+                'name' => false,
                 'version' => false,
             ],
 
             'operatingSystem' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'device' => [
-                'model'    => true,
-                'brand'    => true,
-                'type'     => true,
+                'model' => true,
+                'brand' => true,
+                'type' => true,
                 'isMobile' => true,
-                'isTouch'  => false,
+                'isTouch' => false,
             ],
 
             'bot' => [
                 'isBot' => true,
-                'name'  => true,
-                'type'  => false,
+                'name' => true,
+                'type' => false,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -93,16 +93,12 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     {
         $provider = new NeutrinoApiCom($this->getClient(), 'apiUser', 'apiKey123');
 
-        /*
-         * general
-         */
+        // general
         $this->assertIsRealResult($provider, false, 'unknown');
         $this->assertIsRealResult($provider, true, 'unknown something');
         $this->assertIsRealResult($provider, true, 'something unknown');
 
-        /*
-         * device brand
-         */
+        // device brand
         $this->assertIsRealResult($provider, false, 'Generic', 'device', 'brand');
         $this->assertIsRealResult($provider, true, 'Generic something', 'device', 'brand');
         $this->assertIsRealResult($provider, true, 'something Generic', 'device', 'brand');
@@ -111,9 +107,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
         $this->assertIsRealResult($provider, true, 'generic web browser something', 'device', 'brand');
         $this->assertIsRealResult($provider, true, 'something generic web browser', 'device', 'brand');
 
-        /*
-         * device model
-         */
+        // device model
         $this->assertIsRealResult($provider, false, 'Android', 'device', 'model');
         $this->assertIsRealResult($provider, false, 'Android something', 'device', 'model');
         $this->assertIsRealResult($provider, true, 'something Android', 'device', 'model');
@@ -144,7 +138,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Empty user agent
+     * Empty user agent.
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
@@ -160,7 +154,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * 403
+     * 403.
      *
      * @expectedException \UserAgentParser\Exception\InvalidCredentialsException
      */
@@ -176,7 +170,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * 500
+     * 500.
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
@@ -192,7 +186,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * No JSON returned
+     * No JSON returned.
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
@@ -210,14 +204,14 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Error code 1
+     * Error code 1.
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
     public function testParseRequestExceptionCode1()
     {
-        $rawResult                = new stdClass();
-        $rawResult->api_error     = 1;
+        $rawResult = new stdClass();
+        $rawResult->api_error = 1;
         $rawResult->api_error_msg = 'something';
 
         $responseQueue = [
@@ -232,14 +226,14 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Error code 2
+     * Error code 2.
      *
      * @expectedException \UserAgentParser\Exception\LimitationExceededException
      */
     public function testParseLimitationExceededExceptionCode2()
     {
-        $rawResult                = new stdClass();
-        $rawResult->api_error     = 2;
+        $rawResult = new stdClass();
+        $rawResult->api_error = 2;
         $rawResult->api_error_msg = 'something';
 
         $responseQueue = [
@@ -254,14 +248,14 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Error code something
+     * Error code something.
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
     public function testParseRequestExceptionCodeSomething()
     {
-        $rawResult                = new stdClass();
-        $rawResult->api_error     = 1337;
+        $rawResult = new stdClass();
+        $rawResult->api_error = 1337;
         $rawResult->api_error_msg = 'something';
 
         $responseQueue = [
@@ -276,7 +270,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Missing data
+     * Missing data.
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
@@ -294,13 +288,13 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * no result found
+     * no result found.
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
     public function testParseNoResultFoundException()
     {
-        $rawResult       = new stdClass();
+        $rawResult = new stdClass();
         $rawResult->type = 'unknown';
 
         $responseQueue = [
@@ -319,8 +313,8 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
      */
     public function testProviderNameAndVersionIsInResult()
     {
-        $rawResult               = new stdClass();
-        $rawResult->type         = 'robot';
+        $rawResult = new stdClass();
+        $rawResult->type = 'robot';
         $rawResult->browser_name = 'Googlebot';
 
         $responseQueue = [
@@ -338,12 +332,12 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Bot
+     * Bot.
      */
     public function testParseBot()
     {
-        $rawResult               = new stdClass();
-        $rawResult->type         = 'robot';
+        $rawResult = new stdClass();
+        $rawResult->type = 'robot';
         $rawResult->browser_name = 'Googlebot';
 
         $responseQueue = [
@@ -359,8 +353,8 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
         $expectedResult = [
             'bot' => [
                 'isBot' => true,
-                'name'  => 'Googlebot',
-                'type'  => null,
+                'name' => 'Googlebot',
+                'type' => null,
             ],
         ];
 
@@ -368,14 +362,14 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Browser only
+     * Browser only.
      */
     public function testParseBrowser()
     {
-        $rawResult               = new stdClass();
-        $rawResult->type         = 'desktop-browser';
+        $rawResult = new stdClass();
+        $rawResult->type = 'desktop-browser';
         $rawResult->browser_name = 'Firefox';
-        $rawResult->version      = '3.2.1';
+        $rawResult->version = '3.2.1';
 
         $responseQueue = [
             new Response(200, [
@@ -389,7 +383,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
 
         $expectedResult = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => [
                     'major' => 3,
                     'minor' => 2,
@@ -404,10 +398,10 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => 'desktop-browser',
+                'type' => 'desktop-browser',
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
@@ -415,13 +409,13 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * OS only
+     * OS only.
      */
     public function testParseOperatingSystem()
     {
-        $rawResult                           = new stdClass();
-        $rawResult->type                     = 'desktop-browser';
-        $rawResult->operating_system_family  = 'Windows';
+        $rawResult = new stdClass();
+        $rawResult->type = 'desktop-browser';
+        $rawResult->operating_system_family = 'Windows';
         $rawResult->operating_system_version = '7';
 
         $responseQueue = [
@@ -436,7 +430,7 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows',
+                'name' => 'Windows',
                 'version' => [
                     'major' => 7,
                     'minor' => null,
@@ -451,10 +445,10 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => 'desktop-browser',
+                'type' => 'desktop-browser',
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
@@ -462,15 +456,15 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Device only
+     * Device only.
      */
     public function testParseDevice()
     {
-        $rawResult               = new stdClass();
-        $rawResult->type         = 'mobile-browser';
+        $rawResult = new stdClass();
+        $rawResult->type = 'mobile-browser';
         $rawResult->mobile_model = 'iPhone';
         $rawResult->mobile_brand = 'Apple';
-        $rawResult->is_mobile    = true;
+        $rawResult->is_mobile = true;
 
         $responseQueue = [
             new Response(200, [
@@ -486,10 +480,10 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => 'mobile-browser',
+                'type' => 'mobile-browser',
 
                 'isMobile' => true,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
@@ -497,12 +491,12 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
     }
 
     /**
-     * Device - default value
+     * Device - default value.
      */
     public function testParseDeviceDefaultValue()
     {
-        $rawResult               = new stdClass();
-        $rawResult->type         = 'mobile-browser';
+        $rawResult = new stdClass();
+        $rawResult->type = 'mobile-browser';
         $rawResult->mobile_model = 'Android';
         $rawResult->mobile_brand = 'Generic';
 
@@ -520,10 +514,10 @@ class NeutrinoApiComTest extends AbstractProviderTestCase implements RequiredPro
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => 'mobile-browser',
+                'type' => 'mobile-browser',
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 

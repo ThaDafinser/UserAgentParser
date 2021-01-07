@@ -1,14 +1,16 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider;
 
 use BrowscapPHP\Browscap;
 use BrowscapPHP\BrowscapUpdater;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
+ *
+ * @internal
+ * @coversNothing
  */
 class AbstractBrowscapTestCase extends AbstractProviderTestCase
 {

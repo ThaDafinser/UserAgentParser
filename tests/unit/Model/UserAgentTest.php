@@ -1,18 +1,17 @@
 <?php
+
 namespace UserAgentParserTest;
 
 use PHPUnit_Framework_TestCase;
-use UserAgentParser\Model\Browser;
-use UserAgentParser\Model\OperatingSystem;
 use UserAgentParser\Model\UserAgent;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Model\UserAgent
+ * @covers \UserAgentParser\Model\UserAgent
+ *
+ * @internal
  */
 class UserAgentTest extends PHPUnit_Framework_TestCase
 {
@@ -112,19 +111,19 @@ class UserAgentTest extends PHPUnit_Framework_TestCase
         $ua = new UserAgent();
 
         $this->assertEquals([
-            'browser'          => $ua->getBrowser()->toArray(),
-            'renderingEngine'  => $ua->getRenderingEngine()->toArray(),
-            'operatingSystem'  => $ua->getOperatingSystem()->toArray(),
-            'device'           => $ua->getDevice()->toArray(),
-            'bot'              => $ua->getBot()->toArray(),
+            'browser' => $ua->getBrowser()->toArray(),
+            'renderingEngine' => $ua->getRenderingEngine()->toArray(),
+            'operatingSystem' => $ua->getOperatingSystem()->toArray(),
+            'device' => $ua->getDevice()->toArray(),
+            'bot' => $ua->getBot()->toArray(),
         ], $ua->toArray());
 
         $this->assertEquals([
-            'browser'           => $ua->getBrowser()->toArray(),
-            'renderingEngine'   => $ua->getRenderingEngine()->toArray(),
-            'operatingSystem'   => $ua->getOperatingSystem()->toArray(),
-            'device'            => $ua->getDevice()->toArray(),
-            'bot'               => $ua->getBot()->toArray(),
+            'browser' => $ua->getBrowser()->toArray(),
+            'renderingEngine' => $ua->getRenderingEngine()->toArray(),
+            'operatingSystem' => $ua->getOperatingSystem()->toArray(),
+            'device' => $ua->getDevice()->toArray(),
+            'bot' => $ua->getBot()->toArray(),
             'providerResultRaw' => null,
         ], $ua->toArray(true));
     }

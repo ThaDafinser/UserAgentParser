@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParserTest;
 
 use PHPUnit_Framework_TestCase;
@@ -6,12 +7,12 @@ use UserAgentParser\Model\OperatingSystem;
 use UserAgentParser\Model\Version;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Model\OperatingSystem
+ * @covers \UserAgentParser\Model\OperatingSystem
+ *
+ * @internal
  */
 class OperatingSystemTest extends PHPUnit_Framework_TestCase
 {
@@ -42,14 +43,14 @@ class OperatingSystemTest extends PHPUnit_Framework_TestCase
         $os = new OperatingSystem();
 
         $this->assertEquals([
-            'name'    => null,
+            'name' => null,
             'version' => $os->getVersion()
                 ->toArray(),
         ], $os->toArray());
 
         $os->setName('Linux');
         $this->assertEquals([
-            'name'    => 'Linux',
+            'name' => 'Linux',
             'version' => $os->getVersion()
                 ->toArray(),
         ], $os->toArray());

@@ -1,33 +1,21 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
+use PHPUnit_Framework_MockObject_MockObject;
+use ReflectionClass;
 use UserAgentParser\Provider\Endorphin;
 
 /**
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- *          @covers UserAgentParser\Provider\Endorphin
+ *          @covers \UserAgentParser\Provider\Endorphin
+ *
+ * @internal
  */
 class EndorphinTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    /**
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getParser()
-    {
-        $parser = self::createMock('EndorphinStudio\Detector\DetectorResult');
-
-        $parser->Browser = self::createMock('EndorphinStudio\Detector\Browser');
-        $parser->OS      = self::createMock('EndorphinStudio\Detector\OS');
-        $parser->Device  = self::createMock('EndorphinStudio\Detector\Device');
-        $parser->Robot   = self::createMock('EndorphinStudio\Detector\Robot');
-
-        return $parser;
-    }
-
     public function testGetName()
     {
         $provider = new Endorphin();
@@ -68,34 +56,33 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
         $provider = new Endorphin();
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'renderingEngine' => [
-                'name'    => false,
+                'name' => false,
                 'version' => false,
             ],
 
             'operatingSystem' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'device' => [
-                'model'    => false,
-                'brand'    => false,
-                'type'     => true,
+                'model' => false,
+                'brand' => false,
+                'type' => true,
                 'isMobile' => false,
-                'isTouch'  => false,
+                'isTouch' => false,
             ],
 
             'bot' => [
                 'isBot' => true,
-                'name'  => true,
-                'type'  => true,
+                'name' => true,
+                'type' => true,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -104,9 +91,7 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
     {
         $provider = new Endorphin();
 
-        /*
-         * general
-         */
+        // general
         $this->assertIsRealResult($provider, true, 'something');
     }
 
@@ -126,8 +111,8 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
 
         $provider = new Endorphin();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -142,15 +127,15 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
         $parser = $this->getParser();
         $parser->Robot->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('Google (Smartphone)'));
+            ->willReturn('Google (Smartphone)');
         $parser->Robot->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('Search Engine'));
+            ->willReturn('Search Engine');
 
         $provider = new Endorphin();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -161,22 +146,22 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
     }
 
     /**
-     * Bot
+     * Bot.
      */
     public function testParseBot()
     {
         $parser = $this->getParser();
         $parser->Robot->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('Google (Smartphone)'));
+            ->willReturn('Google (Smartphone)');
         $parser->Robot->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('Search Engine'));
+            ->willReturn('Search Engine');
 
         $provider = new Endorphin();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -185,8 +170,8 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
         $expectedResult = [
             'bot' => [
                 'isBot' => true,
-                'name'  => 'Google (Smartphone)',
-                'type'  => 'Search Engine',
+                'name' => 'Google (Smartphone)',
+                'type' => 'Search Engine',
             ],
         ];
 
@@ -194,22 +179,22 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
     }
 
     /**
-     * Browser only
+     * Browser only.
      */
     public function testParseBrowser()
     {
         $parser = $this->getParser();
         $parser->Browser->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('Firefox'));
+            ->willReturn('Firefox');
         $parser->Browser->expects($this->any())
             ->method('getVersion')
-            ->will($this->returnValue('3.2.1'));
+            ->willReturn('3.2.1');
 
         $provider = new Endorphin();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -217,7 +202,7 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
 
         $expectedResult = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => [
                     'major' => 3,
                     'minor' => 2,
@@ -234,22 +219,22 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
     }
 
     /**
-     * OS only
+     * OS only.
      */
     public function testParseOperatingSystem()
     {
         $parser = $this->getParser();
         $parser->OS->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('Windows'));
+            ->willReturn('Windows');
         $parser->OS->expects($this->any())
             ->method('getVersion')
-            ->will($this->returnValue('7.0.1'));
+            ->willReturn('7.0.1');
 
         $provider = new Endorphin();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -257,7 +242,7 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows',
+                'name' => 'Windows',
                 'version' => [
                     'major' => 7,
                     'minor' => 0,
@@ -274,22 +259,22 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
     }
 
     /**
-     * Device only
+     * Device only.
      */
     public function testParseDevice()
     {
         $parser = $this->getParser();
         $parser->Device->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('iPhone'));
+            ->willReturn('iPhone');
         $parser->Device->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('mobile'));
+            ->willReturn('mobile');
 
         $provider = new Endorphin();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -299,13 +284,28 @@ class EndorphinTest extends AbstractProviderTestCase implements RequiredProvider
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => 'mobile',
+                'type' => 'mobile',
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser()
+    {
+        $parser = self::createMock('EndorphinStudio\Detector\DetectorResult');
+
+        $parser->Browser = self::createMock('EndorphinStudio\Detector\Browser');
+        $parser->OS = self::createMock('EndorphinStudio\Detector\OS');
+        $parser->Device = self::createMock('EndorphinStudio\Detector\Device');
+        $parser->Robot = self::createMock('EndorphinStudio\Detector\Robot');
+
+        return $parser;
     }
 }

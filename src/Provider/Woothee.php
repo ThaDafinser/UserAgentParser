@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParser\Provider;
 
 use UserAgentParser\Exception\NoResultFoundException;
@@ -8,69 +9,68 @@ use Woothee\Classifier;
 use Woothee\DataSet;
 
 /**
- * Abstraction for woothee/woothee
+ * Abstraction for woothee/woothee.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
+ *
  * @see https://github.com/woothee/woothee-php
  */
 class Woothee extends AbstractProvider
 {
     /**
-     * Name of the provider
+     * Name of the provider.
      *
      * @var string
      */
     protected $name = 'Woothee';
 
     /**
-     * Homepage of the provider
+     * Homepage of the provider.
      *
      * @var string
      */
     protected $homepage = 'https://github.com/woothee/woothee-php';
 
     /**
-     * Composer package name
+     * Composer package name.
      *
      * @var string
      */
     protected $packageName = 'woothee/woothee';
 
     protected $detectionCapabilities = [
-
         'browser' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'renderingEngine' => [
-            'name'    => false,
+            'name' => false,
             'version' => false,
         ],
 
         'operatingSystem' => [
-            'name'    => false,
+            'name' => false,
             'version' => false,
         ],
 
         'device' => [
-            'model'    => false,
-            'brand'    => false,
-            'type'     => true,
+            'model' => false,
+            'brand' => false,
+            'type' => true,
             'isMobile' => false,
-            'isTouch'  => false,
+            'isTouch' => false,
         ],
 
         'bot' => [
             'isBot' => true,
-            'name'  => true,
-            'type'  => false,
+            'name' => true,
+            'type' => false,
         ],
     ];
 
     protected $defaultValues = [
-
         'general' => [
             '/^UNKNOWN$/i',
         ],
@@ -91,7 +91,6 @@ class Woothee extends AbstractProvider
     private $parser;
 
     /**
-     *
      * @throws PackageNotLoadedException
      */
     public function __construct()
@@ -100,7 +99,6 @@ class Woothee extends AbstractProvider
     }
 
     /**
-     *
      * @return Classifier
      */
     public function getParser()
@@ -114,10 +112,38 @@ class Woothee extends AbstractProvider
         return $this->parser;
     }
 
+    public function parse($userAgent, array $headers = [])
+    {
+        $parser = $this->getParser();
+
+        $resultRaw = $parser->parse($userAgent);
+
+        // No result found?
+        if ($this->hasResult($resultRaw) !== true) {
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
+        }
+
+        // Hydrate the model
+        $result = new Model\UserAgent($this->getName(), $this->getVersion());
+        $result->setProviderResultRaw($resultRaw);
+
+        // Bot detection
+        if ($this->isBot($resultRaw) === true) {
+            $this->hydrateBot($result->getBot(), $resultRaw);
+
+            return $result;
+        }
+
+        // hydrate the result
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        // renderingEngine not available
+        // operatingSystem filled OS is mixed! Examples: iPod, iPhone, Android...
+        $this->hydrateDevice($result->getDevice(), $resultRaw);
+
+        return $result;
+    }
+
     /**
-     *
-     * @param array $resultRaw
-     *
      * @return bool
      */
     private function hasResult(array $resultRaw)
@@ -134,9 +160,7 @@ class Woothee extends AbstractProvider
     }
 
     /**
-     *
-     * @param  array   $resultRaw
-     * @return boolean
+     * @return bool
      */
     private function isBot(array $resultRaw)
     {
@@ -147,11 +171,6 @@ class Woothee extends AbstractProvider
         return false;
     }
 
-    /**
-     *
-     * @param Model\Bot $bot
-     * @param array     $resultRaw
-     */
     private function hydrateBot(Model\Bot $bot, array $resultRaw)
     {
         $bot->setIsBot(true);
@@ -161,11 +180,6 @@ class Woothee extends AbstractProvider
         }
     }
 
-    /**
-     *
-     * @param Model\Browser $browser
-     * @param array         $resultRaw
-     */
     private function hydrateBrowser(Model\Browser $browser, array $resultRaw)
     {
         if (isset($resultRaw['name'])) {
@@ -177,54 +191,10 @@ class Woothee extends AbstractProvider
         }
     }
 
-    /**
-     *
-     * @param Model\Device $device
-     * @param array        $resultRaw
-     */
     private function hydrateDevice(Model\Device $device, array $resultRaw)
     {
         if (isset($resultRaw['category'])) {
             $device->setType($this->getRealResult($resultRaw['category'], 'device', 'type'));
         }
-    }
-
-    public function parse($userAgent, array $headers = [])
-    {
-        $parser = $this->getParser();
-
-        $resultRaw = $parser->parse($userAgent);
-
-        /*
-         * No result found?
-         */
-        if ($this->hasResult($resultRaw) !== true) {
-            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
-        }
-
-        /*
-         * Hydrate the model
-         */
-        $result = new Model\UserAgent($this->getName(), $this->getVersion());
-        $result->setProviderResultRaw($resultRaw);
-
-        /*
-         * Bot detection
-         */
-        if ($this->isBot($resultRaw) === true) {
-            $this->hydrateBot($result->getBot(), $resultRaw);
-
-            return $result;
-        }
-
-        /*
-         * hydrate the result
-         */
-        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
-        // renderingEngine not available
-        // operatingSystem filled OS is mixed! Examples: iPod, iPhone, Android...
-        $this->hydrateDevice($result->getDevice(), $resultRaw);
-
-        return $result;
     }
 }

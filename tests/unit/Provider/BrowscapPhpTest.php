@@ -1,40 +1,21 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
+use PHPUnit_Framework_MockObject_MockObject;
+use stdClass;
 use UserAgentParser\Provider\BrowscapPhp;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Provider\BrowscapPhp
+ * @covers \UserAgentParser\Provider\BrowscapPhp
+ *
+ * @internal
  */
 class BrowscapPhpTest extends AbstractProviderTestCase
 {
-    /**
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getParser(\stdClass $result = null)
-    {
-        $cache = self::createMock('BrowscapPHP\Cache\BrowscapCache');
-        $cache->expects($this->any())
-            ->method('getType')
-            ->will($this->returnValue(''));
-
-        $parser = self::createMock('BrowscapPHP\Browscap');
-        $parser->expects($this->any())
-            ->method('getCache')
-            ->will($this->returnValue($cache));
-        $parser->expects($this->any())
-            ->method('getBrowser')
-            ->will($this->returnValue($result));
-
-        return $parser;
-    }
-
     public function testGetName()
     {
         $provider = new BrowscapPhp($this->getParser());
@@ -47,35 +28,55 @@ class BrowscapPhpTest extends AbstractProviderTestCase
         $provider = new BrowscapPhp($this->getParser());
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'renderingEngine' => [
-                'name'    => false,
+                'name' => false,
                 'version' => false,
             ],
 
             'operatingSystem' => [
-                'name'    => true,
+                'name' => true,
                 'version' => false,
             ],
 
             'device' => [
-                'model'    => false,
-                'brand'    => false,
-                'type'     => true,
+                'model' => false,
+                'brand' => false,
+                'type' => true,
                 'isMobile' => true,
-                'isTouch'  => true,
+                'isTouch' => true,
             ],
 
             'bot' => [
                 'isBot' => true,
-                'name'  => true,
-                'type'  => false,
+                'name' => true,
+                'type' => false,
             ],
         ], $provider->getDetectionCapabilities());
+    }
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser(stdClass $result = null)
+    {
+        $cache = self::createMock('BrowscapPHP\Cache\BrowscapCache');
+        $cache->expects($this->any())
+            ->method('getType')
+            ->willReturn('');
+
+        $parser = self::createMock('BrowscapPHP\Browscap');
+        $parser->expects($this->any())
+            ->method('getCache')
+            ->willReturn($cache);
+        $parser->expects($this->any())
+            ->method('getBrowser')
+            ->willReturn($result);
+
+        return $parser;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParser\Provider\Http;
 
 use GuzzleHttp\Client;
@@ -8,57 +9,57 @@ use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
 /**
- * Abstraction of useragentapi.com
+ * Abstraction of useragentapi.com.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
+ *
  * @see https://useragentapi.com/docs
  */
 class UserAgentApiCom extends AbstractHttpProvider
 {
     /**
-     * Name of the provider
+     * Name of the provider.
      *
      * @var string
      */
     protected $name = 'UserAgentApiCom';
 
     /**
-     * Homepage of the provider
+     * Homepage of the provider.
      *
      * @var string
      */
     protected $homepage = 'http://useragentapi.com/';
 
     protected $detectionCapabilities = [
-
         'browser' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'renderingEngine' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'operatingSystem' => [
-            'name'    => false,
+            'name' => false,
             'version' => false,
         ],
 
         'device' => [
-            'model'    => false,
-            'brand'    => false,
-            'type'     => true,
+            'model' => false,
+            'brand' => false,
+            'type' => true,
             'isMobile' => false,
-            'isTouch'  => false,
+            'isTouch' => false,
         ],
 
         'bot' => [
             'isBot' => true,
-            'name'  => true,
-            'type'  => false,
+            'name' => true,
+            'type' => false,
         ],
     ];
 
@@ -75,21 +76,41 @@ class UserAgentApiCom extends AbstractHttpProvider
 
     public function getVersion()
     {
-        return;
+    }
+
+    public function parse($userAgent, array $headers = [])
+    {
+        $resultRaw = $this->getResult($userAgent, $headers);
+
+        // Hydrate the model
+        $result = new Model\UserAgent($this->getName(), $this->getVersion());
+        $result->setProviderResultRaw($resultRaw);
+
+        // Bot detection
+        if ($this->isBot($resultRaw) === true) {
+            $this->hydrateBot($result->getBot(), $resultRaw);
+
+            return $result;
+        }
+
+        // hydrate the result
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        $this->hydrateRenderingEngine($result->getRenderingEngine(), $resultRaw);
+        $this->hydrateDevice($result->getDevice(), $resultRaw);
+
+        return $result;
     }
 
     /**
+     * @param string $userAgent
      *
-     * @param  string                     $userAgent
-     * @param  array                      $headers
-     * @return stdClass
      * @throws Exception\RequestException
+     *
+     * @return stdClass
      */
     protected function getResult($userAgent, array $headers)
     {
-        /*
-         * an empty UserAgent makes no sense
-         */
+        // an empty UserAgent makes no sense
         if ($userAgent == '') {
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
@@ -104,7 +125,7 @@ class UserAgentApiCom extends AbstractHttpProvider
         try {
             $response = $this->getResponse($request);
         } catch (Exception\RequestException $ex) {
-            /* @var $prevEx \GuzzleHttp\Exception\ClientException */
+            // @var $prevEx \GuzzleHttp\Exception\ClientException
             $prevEx = $ex->getPrevious();
 
             if ($prevEx->hasResponse() === true && $prevEx->getResponse()->getStatusCode() === 400) {
@@ -113,9 +134,7 @@ class UserAgentApiCom extends AbstractHttpProvider
                     ->getContents();
                 $content = json_decode($content);
 
-                /*
-                 * Error
-                 */
+                // Error
                 if (isset($content->error->code) && $content->error->code == 'key_invalid') {
                     throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName(), null, $ex);
                 }
@@ -128,27 +147,21 @@ class UserAgentApiCom extends AbstractHttpProvider
             throw $ex;
         }
 
-        /*
-         * no json returned?
-         */
+        // no json returned?
         $contentType = $response->getHeader('Content-Type');
-        if (! isset($contentType[0]) || $contentType[0] != 'application/json') {
+        if (!isset($contentType[0]) || $contentType[0] != 'application/json') {
             throw new Exception\RequestException('Could not get valid "application/json" response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
         }
 
         $content = json_decode($response->getBody()->getContents());
 
-        /*
-         * No result
-         */
+        // No result
         if (isset($content->error->code) && $content->error->code == 'useragent_not_found') {
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
-        /*
-         * Missing data?
-         */
-        if (! $content instanceof stdClass || ! isset($content->data)) {
+        // Missing data?
+        if (!$content instanceof stdClass || !isset($content->data)) {
             throw new Exception\RequestException('Could not get valid response from "' . $request->getUri() . '". Data is missing "' . $response->getBody()->getContents() . '"');
         }
 
@@ -156,9 +169,7 @@ class UserAgentApiCom extends AbstractHttpProvider
     }
 
     /**
-     *
-     * @param  stdClass $resultRaw
-     * @return boolean
+     * @return bool
      */
     private function isBot(stdClass $resultRaw)
     {
@@ -169,11 +180,6 @@ class UserAgentApiCom extends AbstractHttpProvider
         return false;
     }
 
-    /**
-     *
-     * @param Model\Bot $bot
-     * @param stdClass  $resultRaw
-     */
     private function hydrateBot(Model\Bot $bot, stdClass $resultRaw)
     {
         $bot->setIsBot(true);
@@ -183,11 +189,6 @@ class UserAgentApiCom extends AbstractHttpProvider
         }
     }
 
-    /**
-     *
-     * @param Model\Browser $browser
-     * @param stdClass      $resultRaw
-     */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
         if (isset($resultRaw->browser_name)) {
@@ -199,11 +200,6 @@ class UserAgentApiCom extends AbstractHttpProvider
         }
     }
 
-    /**
-     *
-     * @param Model\RenderingEngine $engine
-     * @param stdClass              $resultRaw
-     */
     private function hydrateRenderingEngine(Model\RenderingEngine $engine, stdClass $resultRaw)
     {
         if (isset($resultRaw->engine_name)) {
@@ -215,44 +211,10 @@ class UserAgentApiCom extends AbstractHttpProvider
         }
     }
 
-    /**
-     *
-     * @param Model\Device $device
-     * @param stdClass     $resultRaw
-     */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
         if (isset($resultRaw->platform_type)) {
             $device->setType($this->getRealResult($resultRaw->platform_type));
         }
-    }
-
-    public function parse($userAgent, array $headers = [])
-    {
-        $resultRaw = $this->getResult($userAgent, $headers);
-
-        /*
-         * Hydrate the model
-         */
-        $result = new Model\UserAgent($this->getName(), $this->getVersion());
-        $result->setProviderResultRaw($resultRaw);
-
-        /*
-         * Bot detection
-         */
-        if ($this->isBot($resultRaw) === true) {
-            $this->hydrateBot($result->getBot(), $resultRaw);
-
-            return $result;
-        }
-
-        /*
-         * hydrate the result
-         */
-        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
-        $this->hydrateRenderingEngine($result->getRenderingEngine(), $resultRaw);
-        $this->hydrateDevice($result->getDevice(), $resultRaw);
-
-        return $result;
     }
 }

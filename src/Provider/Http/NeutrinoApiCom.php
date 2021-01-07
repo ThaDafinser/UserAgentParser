@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParser\Provider\Http;
 
 use GuzzleHttp\Client;
@@ -8,68 +9,66 @@ use UserAgentParser\Exception;
 use UserAgentParser\Model;
 
 /**
- * Abstraction of neutrinoapi.com
+ * Abstraction of neutrinoapi.com.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
+ *
  * @see https://www.neutrinoapi.com/api/user-agent-info/
  */
 class NeutrinoApiCom extends AbstractHttpProvider
 {
     /**
-     * Name of the provider
+     * Name of the provider.
      *
      * @var string
      */
     protected $name = 'NeutrinoApiCom';
 
     /**
-     * Homepage of the provider
+     * Homepage of the provider.
      *
      * @var string
      */
     protected $homepage = 'https://www.neutrinoapi.com/';
 
     protected $detectionCapabilities = [
-
         'browser' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'renderingEngine' => [
-            'name'    => false,
+            'name' => false,
             'version' => false,
         ],
 
         'operatingSystem' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => true,
+            'model' => true,
+            'brand' => true,
+            'type' => true,
             'isMobile' => true,
-            'isTouch'  => false,
+            'isTouch' => false,
         ],
 
         'bot' => [
             'isBot' => true,
-            'name'  => true,
-            'type'  => false,
+            'name' => true,
+            'type' => false,
         ],
     ];
 
     protected $defaultValues = [
-
         'general' => [
             '/^unknown$/i',
         ],
 
         'device' => [
-
             'brand' => [
                 '/^Generic$/i',
                 '/^generic web browser$/i',
@@ -98,35 +97,60 @@ class NeutrinoApiCom extends AbstractHttpProvider
         parent::__construct($client);
 
         $this->apiUserId = $apiUserId;
-        $this->apiKey    = $apiKey;
+        $this->apiKey = $apiKey;
     }
 
     public function getVersion()
     {
-        return;
+    }
+
+    public function parse($userAgent, array $headers = [])
+    {
+        $resultRaw = $this->getResult($userAgent, $headers);
+
+        // No result found?
+        if ($this->hasResult($resultRaw) !== true) {
+            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
+        }
+
+        // Hydrate the model
+        $result = new Model\UserAgent($this->getName(), $this->getVersion());
+        $result->setProviderResultRaw($resultRaw);
+
+        // Bot detection
+        if ($this->isBot($resultRaw) === true) {
+            $this->hydrateBot($result->getBot(), $resultRaw);
+
+            return $result;
+        }
+
+        // hydrate the result
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
+        $this->hydrateDevice($result->getDevice(), $resultRaw);
+
+        return $result;
     }
 
     /**
+     * @param string $userAgent
      *
-     * @param  string                     $userAgent
-     * @param  array                      $headers
-     * @return stdClass
      * @throws Exception\RequestException
+     *
+     * @return stdClass
      */
     protected function getResult($userAgent, array $headers)
     {
-        /*
-         * an empty UserAgent makes no sense
-         */
+        // an empty UserAgent makes no sense
         if ($userAgent == '') {
             throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
         }
 
         $params = [
-            'user-id'       => $this->apiUserId,
-            'api-key'       => $this->apiKey,
+            'user-id' => $this->apiUserId,
+            'api-key' => $this->apiKey,
             'output-format' => 'json',
-            'output-case'   => 'snake',
+            'output-case' => 'snake',
 
             'user-agent' => $userAgent,
         ];
@@ -140,7 +164,7 @@ class NeutrinoApiCom extends AbstractHttpProvider
         try {
             $response = $this->getResponse($request);
         } catch (Exception\RequestException $ex) {
-            /* @var $prevEx \GuzzleHttp\Exception\ClientException */
+            // @var $prevEx \GuzzleHttp\Exception\ClientException
             $prevEx = $ex->getPrevious();
 
             if ($prevEx->hasResponse() === true && $prevEx->getResponse()->getStatusCode() === 403) {
@@ -150,40 +174,36 @@ class NeutrinoApiCom extends AbstractHttpProvider
             throw $ex;
         }
 
-        /*
-         * no json returned?
-         */
+        // no json returned?
         $contentType = $response->getHeader('Content-Type');
-        if (! isset($contentType[0]) || $contentType[0] != 'application/json;charset=UTF-8') {
+        if (!isset($contentType[0]) || $contentType[0] != 'application/json;charset=UTF-8') {
             throw new Exception\RequestException('Could not get valid "application/json" response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
         }
 
         $content = json_decode($response->getBody()->getContents());
 
-        /*
-         * errors
-         */
+        // errors
         if (isset($content->api_error)) {
             switch ($content->api_error) {
-
                 case 1:
                     throw new Exception\RequestException('"' . $content->api_error_msg . '" response from "' . $request->getUri() . '". Response is "' . print_r($content, true) . '"');
+
                     break;
 
                 case 2:
                     throw new Exception\LimitationExceededException('Exceeded the maximum number of request with API userId "' . $this->apiUserId . '" and key "' . $this->apiKey . '" for ' . $this->getName());
+
                     break;
 
                 default:
                     throw new Exception\RequestException('"' . $content->api_error_msg . '" response from "' . $request->getUri() . '". Response is "' . print_r($content, true) . '"');
+
                     break;
             }
         }
 
-        /*
-         * Missing data?
-         */
-        if (! $content instanceof stdClass) {
+        // Missing data?
+        if (!$content instanceof stdClass) {
             throw new Exception\RequestException('Could not get valid response from "' . $request->getUri() . '". Response is "' . $response->getBody()->getContents() . '"');
         }
 
@@ -191,9 +211,6 @@ class NeutrinoApiCom extends AbstractHttpProvider
     }
 
     /**
-     *
-     * @param stdClass $resultRaw
-     *
      * @return bool
      */
     private function hasResult(stdClass $resultRaw)
@@ -206,9 +223,7 @@ class NeutrinoApiCom extends AbstractHttpProvider
     }
 
     /**
-     *
-     * @param  stdClass $resultRaw
-     * @return boolean
+     * @return bool
      */
     private function isBot(stdClass $resultRaw)
     {
@@ -219,11 +234,6 @@ class NeutrinoApiCom extends AbstractHttpProvider
         return false;
     }
 
-    /**
-     *
-     * @param Model\Bot $bot
-     * @param stdClass  $resultRaw
-     */
     private function hydrateBot(Model\Bot $bot, stdClass $resultRaw)
     {
         $bot->setIsBot(true);
@@ -233,11 +243,6 @@ class NeutrinoApiCom extends AbstractHttpProvider
         }
     }
 
-    /**
-     *
-     * @param Model\Browser $browser
-     * @param stdClass      $resultRaw
-     */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
         if (isset($resultRaw->browser_name)) {
@@ -249,11 +254,6 @@ class NeutrinoApiCom extends AbstractHttpProvider
         }
     }
 
-    /**
-     *
-     * @param Model\OperatingSystem $os
-     * @param stdClass              $resultRaw
-     */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
         if (isset($resultRaw->operating_system_family)) {
@@ -265,11 +265,6 @@ class NeutrinoApiCom extends AbstractHttpProvider
         }
     }
 
-    /**
-     *
-     * @param Model\Device $device
-     * @param stdClass     $resultRaw
-     */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
         if (isset($resultRaw->mobile_model)) {
@@ -287,41 +282,5 @@ class NeutrinoApiCom extends AbstractHttpProvider
         if (isset($resultRaw->is_mobile) && $resultRaw->is_mobile === true) {
             $device->setIsMobile(true);
         }
-    }
-
-    public function parse($userAgent, array $headers = [])
-    {
-        $resultRaw = $this->getResult($userAgent, $headers);
-
-        /*
-         * No result found?
-         */
-        if ($this->hasResult($resultRaw) !== true) {
-            throw new Exception\NoResultFoundException('No result found for user agent: ' . $userAgent);
-        }
-
-        /*
-         * Hydrate the model
-         */
-        $result = new Model\UserAgent($this->getName(), $this->getVersion());
-        $result->setProviderResultRaw($resultRaw);
-
-        /*
-         * Bot detection
-         */
-        if ($this->isBot($resultRaw) === true) {
-            $this->hydrateBot($result->getBot(), $resultRaw);
-
-            return $result;
-        }
-
-        /*
-         * hydrate the result
-         */
-        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
-        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
-        $this->hydrateDevice($result->getDevice(), $resultRaw);
-
-        return $result;
     }
 }

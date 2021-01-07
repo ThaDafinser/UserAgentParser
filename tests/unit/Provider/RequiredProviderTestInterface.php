@@ -1,8 +1,9 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
 /**
- * A interface with required test methods for each provider
+ * A interface with required test methods for each provider.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT

@@ -1,8 +1,9 @@
 <?php
+
 namespace UserAgentParser\Model;
 
 /**
- * User agent model
+ * User agent model.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
@@ -10,14 +11,14 @@ namespace UserAgentParser\Model;
 class UserAgent
 {
     /**
-     * Provider name
+     * Provider name.
      *
      * @var string
      */
     private $providerName;
 
     /**
-     * Provider version
+     * Provider version.
      *
      * @var string
      */
@@ -54,23 +55,23 @@ class UserAgent
     private $providerResultRaw;
 
     /**
-     *
-     * @param string $provider
+     * @param string     $provider
+     * @param null|mixed $providerName
+     * @param null|mixed $providerVersion
      */
     public function __construct($providerName = null, $providerVersion = null)
     {
-        $this->providerName    = $providerName;
+        $this->providerName = $providerName;
         $this->providerVersion = $providerVersion;
 
-        $this->browser         = new Browser();
+        $this->browser = new Browser();
         $this->renderingEngine = new RenderingEngine();
         $this->operatingSystem = new OperatingSystem();
-        $this->device          = new Device();
-        $this->bot             = new Bot();
+        $this->device = new Device();
+        $this->bot = new Bot();
     }
 
     /**
-     *
      * @return string
      */
     public function getProviderName()
@@ -79,7 +80,6 @@ class UserAgent
     }
 
     /**
-     *
      * @return string
      */
     public function getProviderVersion()
@@ -87,9 +87,6 @@ class UserAgent
         return $this->providerVersion;
     }
 
-    /**
-     * @param Browser $browser
-     */
     public function setBrowser(Browser $browser)
     {
         $this->browser = $browser;
@@ -103,9 +100,6 @@ class UserAgent
         return $this->browser;
     }
 
-    /**
-     * @param RenderingEngine $renderingEngine
-     */
     public function setRenderingEngine(RenderingEngine $renderingEngine)
     {
         $this->renderingEngine = $renderingEngine;
@@ -119,9 +113,6 @@ class UserAgent
         return $this->renderingEngine;
     }
 
-    /**
-     * @param OperatingSystem $operatingSystem
-     */
     public function setOperatingSystem(OperatingSystem $operatingSystem)
     {
         $this->operatingSystem = $operatingSystem;
@@ -135,9 +126,6 @@ class UserAgent
         return $this->operatingSystem;
     }
 
-    /**
-     * @param Device $device
-     */
     public function setDevice(Device $device)
     {
         $this->device = $device;
@@ -151,9 +139,6 @@ class UserAgent
         return $this->device;
     }
 
-    /**
-     * @param Bot $bot
-     */
     public function setBot(Bot $bot)
     {
         $this->bot = $bot;
@@ -168,8 +153,7 @@ class UserAgent
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function isBot()
     {
@@ -181,8 +165,7 @@ class UserAgent
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function isMobile()
     {
@@ -210,16 +193,18 @@ class UserAgent
     }
 
     /**
+     * @param mixed $includeResultRaw
+     *
      * @return array
      */
     public function toArray($includeResultRaw = false)
     {
         $data = [
-            'browser'          => $this->getBrowser()->toArray(),
-            'renderingEngine'  => $this->getRenderingEngine()->toArray(),
-            'operatingSystem'  => $this->getOperatingSystem()->toArray(),
-            'device'           => $this->getDevice()->toArray(),
-            'bot'              => $this->getBot()->toArray(),
+            'browser' => $this->getBrowser()->toArray(),
+            'renderingEngine' => $this->getRenderingEngine()->toArray(),
+            'operatingSystem' => $this->getOperatingSystem()->toArray(),
+            'device' => $this->getDevice()->toArray(),
+            'bot' => $this->getBot()->toArray(),
         ];
 
         // should be only used for debug

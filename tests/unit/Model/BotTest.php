@@ -1,16 +1,17 @@
 <?php
+
 namespace UserAgentParserTest;
 
 use PHPUnit_Framework_TestCase;
 use UserAgentParser\Model\Bot;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Model\Bot
+ * @covers \UserAgentParser\Model\Bot
+ *
+ * @internal
  */
 class BotTest extends PHPUnit_Framework_TestCase
 {
@@ -55,8 +56,8 @@ class BotTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals([
             'isBot' => null,
-            'name'  => null,
-            'type'  => null,
+            'name' => null,
+            'type' => null,
         ], $bot->toArray());
 
         $bot->setIsBot(true);
@@ -65,8 +66,8 @@ class BotTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals([
             'isBot' => true,
-            'name'  => 'my bot name2',
-            'type'  => 'backlink',
+            'name' => 'my bot name2',
+            'type' => 'backlink',
         ], $bot->toArray());
     }
 }

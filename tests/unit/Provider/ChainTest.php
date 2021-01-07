@@ -1,31 +1,33 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
+use PHPUnit_Framework_MockObject_MockObject;
 use UserAgentParser\Provider\Chain;
 
 /**
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- *          @covers UserAgentParser\Provider\Chain
+ *          @covers \UserAgentParser\Provider\Chain
+ *
+ * @internal
  */
 class ChainTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
     /**
-     *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     private $provider;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
         $this->provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         parent::tearDown();
 
@@ -90,34 +92,33 @@ class ChainTest extends AbstractProviderTestCase implements RequiredProviderTest
         $provider = new Chain();
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => false,
+                'name' => false,
                 'version' => false,
             ],
 
             'renderingEngine' => [
-                'name'    => false,
+                'name' => false,
                 'version' => false,
             ],
 
             'operatingSystem' => [
-                'name'    => false,
+                'name' => false,
                 'version' => false,
             ],
 
             'device' => [
-                'model'    => false,
-                'brand'    => false,
-                'type'     => false,
+                'model' => false,
+                'brand' => false,
+                'type' => false,
                 'isMobile' => false,
-                'isTouch'  => false,
+                'isTouch' => false,
             ],
 
             'bot' => [
                 'isBot' => false,
-                'name'  => false,
-                'type'  => false,
+                'name' => false,
+                'type' => false,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -126,14 +127,11 @@ class ChainTest extends AbstractProviderTestCase implements RequiredProviderTest
     {
         $provider = new Chain();
 
-        /*
-         * general
-         */
+        // general
         $this->assertIsRealResult($provider, true, 'something UNKNOWN');
     }
 
     /**
-     *
      * @todo should throw another exception! since no provider was provided!
      *       @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
@@ -172,7 +170,7 @@ class ChainTest extends AbstractProviderTestCase implements RequiredProviderTest
         $provider = $this->provider;
         $provider->expects($this->any())
             ->method('parse')
-            ->will($this->returnValue($resultMock));
+            ->willReturn($resultMock);
 
         $chain = new Chain([
             $provider,
@@ -191,15 +189,15 @@ class ChainTest extends AbstractProviderTestCase implements RequiredProviderTest
         $resultMock = self::createMock('UserAgentParser\Model\UserAgent');
         $resultMock->expects($this->any())
             ->method('getProviderName')
-            ->will($this->returnValue('SomeProvider'));
+            ->willReturn('SomeProvider');
         $resultMock->expects($this->any())
             ->method('getProviderVersion')
-            ->will($this->returnValue('1.2'));
+            ->willReturn('1.2');
 
         $provider = $this->provider;
         $provider->expects($this->any())
             ->method('parse')
-            ->will($this->returnValue($resultMock));
+            ->willReturn($resultMock);
 
         $chain = new Chain([
             $provider,

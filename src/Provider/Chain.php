@@ -1,10 +1,11 @@
 <?php
+
 namespace UserAgentParser\Provider;
 
 use UserAgentParser\Exception;
 
 /**
- * A chain provider, to use multiple providers at the same time
+ * A chain provider, to use multiple providers at the same time.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
@@ -12,20 +13,18 @@ use UserAgentParser\Exception;
 class Chain extends AbstractProvider
 {
     /**
-     * Name of the provider
+     * Name of the provider.
      *
      * @var string
      */
     protected $name = 'Chain';
 
     /**
-     *
      * @var AbstractProvider[]
      */
     private $providers = [];
 
     /**
-     *
      * @param AbstractProvider[] $providers
      */
     public function __construct(array $providers = [])
@@ -34,7 +33,6 @@ class Chain extends AbstractProvider
     }
 
     /**
-     *
      * @return AbstractProvider[]
      */
     public function getProviders()
@@ -45,7 +43,7 @@ class Chain extends AbstractProvider
     public function parse($userAgent, array $headers = [])
     {
         foreach ($this->getProviders() as $provider) {
-            /* @var $provider \UserAgentParser\Provider\AbstractProvider */
+            // @var $provider \UserAgentParser\Provider\AbstractProvider
 
             try {
                 return $provider->parse($userAgent, $headers);

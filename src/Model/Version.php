@@ -1,8 +1,9 @@
 <?php
+
 namespace UserAgentParser\Model;
 
 /**
- * Version model
+ * Version model.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
@@ -10,31 +11,26 @@ namespace UserAgentParser\Model;
 class Version
 {
     /**
-     *
-     * @var integer
+     * @var int
      */
     private $major;
 
     /**
-     *
-     * @var integer
+     * @var int
      */
     private $minor;
 
     /**
-     *
-     * @var integer
+     * @var int
      */
     private $patch;
 
     /**
-     *
      * @var string
      */
     private $alias;
 
     /**
-     *
      * @var string
      */
     private $complete;
@@ -52,8 +48,7 @@ class Version
     ];
 
     /**
-     *
-     * @param integer $major
+     * @param int $major
      */
     public function setMajor($major)
     {
@@ -67,8 +62,7 @@ class Version
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getMajor()
     {
@@ -76,8 +70,7 @@ class Version
     }
 
     /**
-     *
-     * @param integer $minor
+     * @param int $minor
      */
     public function setMinor($minor)
     {
@@ -91,8 +84,7 @@ class Version
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getMinor()
     {
@@ -100,8 +92,7 @@ class Version
     }
 
     /**
-     *
-     * @param integer $patch
+     * @param int $patch
      */
     public function setPatch($patch)
     {
@@ -115,8 +106,7 @@ class Version
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getPatch()
     {
@@ -124,7 +114,6 @@ class Version
     }
 
     /**
-     *
      * @param string $alias
      */
     public function setAlias($alias)
@@ -135,7 +124,6 @@ class Version
     }
 
     /**
-     *
      * @return string
      */
     public function getAlias()
@@ -163,7 +151,6 @@ class Version
     }
 
     /**
-     *
      * @return string
      */
     public function getComplete()
@@ -172,7 +159,6 @@ class Version
     }
 
     /**
-     *
      * @return array
      */
     public function toArray()
@@ -189,7 +175,6 @@ class Version
     }
 
     /**
-     *
      * @return string
      */
     private function hydrateComplete()
@@ -226,6 +211,7 @@ class Version
     }
 
     /**
+     * @param mixed $complete
      *
      * @return array
      */
@@ -240,9 +226,9 @@ class Version
         ];
 
         // only digits
-        preg_match("/\d+(?:[._]*\d*)*/", $complete, $result);
-        if (count($result) > 0) {
-            $parts = preg_split("/[._]/", $result[0]);
+        preg_match('/\\d+(?:[._]*\\d*)*/', $complete, $result);
+        if (\count($result) > 0) {
+            $parts = preg_split('/[._]/', $result[0]);
 
             if (isset($parts[0]) && $parts[0] != '') {
                 $versionParts['major'] = (int) $parts[0];
@@ -256,7 +242,7 @@ class Version
         }
 
         // grab alias
-        $result = preg_split("/\d+(?:[._]*\d*)*/", $complete);
+        $result = preg_split('/\\d+(?:[._]*\\d*)*/', $complete);
         foreach ($result as $row) {
             $row = trim($row);
 
@@ -265,7 +251,7 @@ class Version
             }
 
             // do not use beta and other things
-            if (in_array($row, self::$notAllowedAlias)) {
+            if (\in_array($row, self::$notAllowedAlias)) {
                 continue;
             }
 

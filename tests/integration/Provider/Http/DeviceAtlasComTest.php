@@ -1,10 +1,13 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider\Http;
 
 use UserAgentParser\Provider\Http\DeviceAtlasCom;
 
 /**
  * @coversNothing
+ *
+ * @internal
  */
 class DeviceAtlasComTest extends AbstractHttpProviderTestCase
 {
@@ -24,7 +27,7 @@ class DeviceAtlasComTest extends AbstractHttpProviderTestCase
      */
     public function testNoResultFound()
     {
-        if (! defined('CREDENTIALS_DEVICE_ATLAS_COM_KEY')) {
+        if (!\defined('CREDENTIALS_DEVICE_ATLAS_COM_KEY')) {
             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
         }
 
@@ -35,7 +38,7 @@ class DeviceAtlasComTest extends AbstractHttpProviderTestCase
 
     public function testRealResultDevice()
     {
-        if (! defined('CREDENTIALS_DEVICE_ATLAS_COM_KEY')) {
+        if (!\defined('CREDENTIALS_DEVICE_ATLAS_COM_KEY')) {
             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
         }
 
@@ -44,7 +47,7 @@ class DeviceAtlasComTest extends AbstractHttpProviderTestCase
         $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Safari',
+                'name' => 'Safari',
                 'version' => [
                     'major' => 5,
                     'minor' => 1,
@@ -56,7 +59,7 @@ class DeviceAtlasComTest extends AbstractHttpProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => 'WebKit',
+                'name' => 'WebKit',
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -68,7 +71,7 @@ class DeviceAtlasComTest extends AbstractHttpProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'iOS',
+                'name' => 'iOS',
                 'version' => [
                     'major' => 5,
                     'minor' => 0,
@@ -82,21 +85,19 @@ class DeviceAtlasComTest extends AbstractHttpProviderTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => 'Mobile Phone',
+                'type' => 'Mobile Phone',
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => null,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
 
-        /*
-         * Test the raw result
-         */
+        // Test the raw result
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInstanceOf('stdClass', $rawResult);
@@ -112,14 +113,14 @@ class DeviceAtlasComTest extends AbstractHttpProviderTestCase
 
     public function testEncodeIsCorrect()
     {
-        if (! defined('CREDENTIALS_DEVICE_ATLAS_COM_KEY')) {
+        if (!\defined('CREDENTIALS_DEVICE_ATLAS_COM_KEY')) {
             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
         }
 
         $provider = new DeviceAtlasCom($this->getClient(), CREDENTIALS_DEVICE_ATLAS_COM_KEY);
 
         $userAgent = 'Mozilla/5.0 (Linux; U; Android 3.0.1; en-us; HTC T9299+ For AT&T Build/GRJ22) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1';
-        $result    = $provider->parse($userAgent);
+        $result = $provider->parse($userAgent);
 
         $this->assertEquals('WebKit', $result->getRenderingEngine()
             ->getName());

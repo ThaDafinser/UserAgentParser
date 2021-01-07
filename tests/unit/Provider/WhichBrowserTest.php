@@ -1,34 +1,21 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
+use PHPUnit_Framework_MockObject_MockObject;
+use ReflectionClass;
 use UserAgentParser\Provider\WhichBrowser;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Provider\WhichBrowser
+ * @covers \UserAgentParser\Provider\WhichBrowser
+ *
+ * @internal
  */
 class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    /**
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getParser()
-    {
-        $parser = self::createMock('WhichBrowser\Parser');
-
-        $parser->browser = new \WhichBrowser\Model\Browser();
-        $parser->engine  = new \WhichBrowser\Model\Engine();
-        $parser->os      = new \WhichBrowser\Model\Os();
-        $parser->device  = new \WhichBrowser\Model\Device();
-
-        return $parser;
-    }
-
     public function testGetName()
     {
         $provider = new WhichBrowser();
@@ -69,34 +56,33 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
         $provider = new WhichBrowser();
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'renderingEngine' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'operatingSystem' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'device' => [
-                'model'    => true,
-                'brand'    => true,
-                'type'     => true,
+                'model' => true,
+                'brand' => true,
+                'type' => true,
                 'isMobile' => true,
-                'isTouch'  => false,
+                'isTouch' => false,
             ],
 
             'bot' => [
                 'isBot' => true,
-                'name'  => true,
-                'type'  => false,
+                'name' => true,
+                'type' => false,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -105,9 +91,7 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
     {
         $provider = new WhichBrowser();
 
-        /*
-         * general
-         */
+        // general
         $this->assertIsRealResult($provider, true, 'something');
     }
 
@@ -127,8 +111,8 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
 
         $provider = new WhichBrowser();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -143,19 +127,19 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isDetected')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $parser->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('bot'));
+            ->willReturn('bot');
         $parser->browser = new \WhichBrowser\Model\Browser([
             'name' => 'Googlebot',
         ]);
 
         $provider = new WhichBrowser();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -166,26 +150,26 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
     }
 
     /**
-     * Bot
+     * Bot.
      */
     public function testParseBot()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isDetected')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $parser->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('bot'));
+            ->willReturn('bot');
         $parser->browser = new \WhichBrowser\Model\Browser([
             'name' => 'Googlebot',
         ]);
 
         $provider = new WhichBrowser();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -194,8 +178,8 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
         $expectedResult = [
             'bot' => [
                 'isBot' => true,
-                'name'  => 'Googlebot',
-                'type'  => null,
+                'name' => 'Googlebot',
+                'type' => null,
             ],
         ];
 
@@ -203,17 +187,17 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
     }
 
     /**
-     * Browser only
+     * Browser only.
      */
     public function testParseBrowser()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isDetected')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $parser->browser = new \WhichBrowser\Model\Browser([
-            'name'    => 'Firefox',
+            'name' => 'Firefox',
             'version' => new \WhichBrowser\Model\Version([
                 'value' => '3.2.1',
             ]),
@@ -221,8 +205,8 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
 
         $provider = new WhichBrowser();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -230,7 +214,7 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
 
         $expectedResult = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => [
                     'major' => 3,
                     'minor' => 2,
@@ -247,17 +231,17 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
     }
 
     /**
-     * Browser only "using"
+     * Browser only "using".
      */
     public function testParseBrowserUsing()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isDetected')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $using = new \WhichBrowser\Model\Using([
-            'name'    => 'Another',
+            'name' => 'Another',
             'version' => new \WhichBrowser\Model\Version([
                 'value' => '4.7.3',
             ]),
@@ -269,8 +253,8 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
 
         $provider = new WhichBrowser();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -278,7 +262,7 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
 
         $expectedResult = [
             'browser' => [
-                'name'    => 'Another',
+                'name' => 'Another',
                 'version' => [
                     'major' => 4,
                     'minor' => 7,
@@ -295,17 +279,17 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
     }
 
     /**
-     * Rendering engine only
+     * Rendering engine only.
      */
     public function testParseRenderingEngine()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isDetected')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $parser->engine = new \WhichBrowser\Model\Engine([
-            'name'    => 'Webkit',
+            'name' => 'Webkit',
             'version' => new \WhichBrowser\Model\Version([
                 'value' => '3.2.1',
             ]),
@@ -313,8 +297,8 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
 
         $provider = new WhichBrowser();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -322,7 +306,7 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
 
         $expectedResult = [
             'renderingEngine' => [
-                'name'    => 'Webkit',
+                'name' => 'Webkit',
                 'version' => [
                     'major' => 3,
                     'minor' => 2,
@@ -339,17 +323,17 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
     }
 
     /**
-     * OS only
+     * OS only.
      */
     public function testParseOperatingSystem()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isDetected')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $parser->os = new \WhichBrowser\Model\Os([
-            'name'    => 'Windows',
+            'name' => 'Windows',
             'version' => new \WhichBrowser\Model\Version([
                 'value' => '7.0.1',
             ]),
@@ -357,8 +341,8 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
 
         $provider = new WhichBrowser();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -366,7 +350,7 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows',
+                'name' => 'Windows',
                 'version' => [
                     'major' => 7,
                     'minor' => 0,
@@ -383,36 +367,36 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
     }
 
     /**
-     * Device only
+     * Device only.
      */
     public function testParseDevice()
     {
         $parser = $this->getParser();
         $parser->expects($this->any())
             ->method('isDetected')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $parser->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('watch'));
+            ->willReturn('watch');
         $parser->expects($this->any())
             ->method('isMobile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $parser->device = new \WhichBrowser\Model\Device([
-            'identified'   => true,
-            'model'        => 'iPhone',
+            'identified' => true,
+            'model' => 'iPhone',
             'manufacturer' => 'Apple',
-            'type'         => 'watch',
+            'type' => 'watch',
         ]);
 
         $parser->expects($this->any())
             ->method('isType')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $provider = new WhichBrowser();
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('parser');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('parser');
         $property->setAccessible(true);
         $property->setValue($provider, $parser);
 
@@ -422,13 +406,28 @@ class WhichBrowserTest extends AbstractProviderTestCase implements RequiredProvi
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => 'watch',
+                'type' => 'watch',
 
                 'isMobile' => true,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser()
+    {
+        $parser = self::createMock('WhichBrowser\Parser');
+
+        $parser->browser = new \WhichBrowser\Model\Browser();
+        $parser->engine = new \WhichBrowser\Model\Engine();
+        $parser->os = new \WhichBrowser\Model\Os();
+        $parser->device = new \WhichBrowser\Model\Device();
+
+        return $parser;
     }
 }

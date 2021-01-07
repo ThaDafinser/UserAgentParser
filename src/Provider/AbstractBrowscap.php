@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParser\Provider;
 
 use BrowscapPHP\Browscap;
@@ -9,30 +10,30 @@ use UserAgentParser\Exception\NoResultFoundException;
 use UserAgentParser\Model;
 
 /**
- * Abstraction for all browscap types
+ * Abstraction for all browscap types.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
+ *
  * @see https://github.com/browscap/browscap-php
  */
 abstract class AbstractBrowscap extends AbstractProvider
 {
     /**
-     * Homepage of the provider
+     * Homepage of the provider.
      *
      * @var string
      */
     protected $homepage = 'https://github.com/browscap/browscap-php';
 
     /**
-     * Composer package name
+     * Composer package name.
      *
      * @var string
      */
     protected $packageName = 'browscap/browscap-php';
 
     protected $defaultValues = [
-
         'general' => [
             '/^unknown$/i',
         ],
@@ -59,7 +60,6 @@ abstract class AbstractBrowscap extends AbstractProvider
     ];
 
     /**
-     *
      * @var Browscap
      */
     private $parser;
@@ -94,7 +94,6 @@ abstract class AbstractBrowscap extends AbstractProvider
     }
 
     /**
-     *
      * @return Browscap
      */
     public function getParser()
@@ -102,10 +101,39 @@ abstract class AbstractBrowscap extends AbstractProvider
         return $this->parser;
     }
 
+    public function parse($userAgent, array $headers = [])
+    {
+        $parser = $this->getParser();
+
+        // @var $resultRaw \stdClass
+        $resultRaw = $parser->getBrowser($userAgent);
+
+        // No result found?
+        if ($this->hasResult($resultRaw) !== true) {
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
+        }
+
+        // Hydrate the model
+        $result = new Model\UserAgent($this->getName(), $this->getVersion());
+        $result->setProviderResultRaw($resultRaw);
+
+        // Bot detection (does only work with full_php_browscap.ini)
+        if ($this->isBot($resultRaw) === true) {
+            $this->hydrateBot($result->getBot(), $resultRaw);
+
+            return $result;
+        }
+
+        // hydrate the result
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
+        $this->hydrateRenderingEngine($result->getRenderingEngine(), $resultRaw);
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
+        $this->hydrateDevice($result->getDevice(), $resultRaw);
+
+        return $result;
+    }
+
     /**
-     *
-     * @param stdClass $resultRaw
-     *
      * @return bool
      */
     private function hasResult(stdClass $resultRaw)
@@ -118,9 +146,7 @@ abstract class AbstractBrowscap extends AbstractProvider
     }
 
     /**
-     *
-     * @param  stdClass $resultRaw
-     * @return boolean
+     * @return bool
      */
     private function isBot(stdClass $resultRaw)
     {
@@ -131,11 +157,6 @@ abstract class AbstractBrowscap extends AbstractProvider
         return false;
     }
 
-    /**
-     *
-     * @param Model\Bot $bot
-     * @param stdClass  $resultRaw
-     */
     private function hydrateBot(Model\Bot $bot, stdClass $resultRaw)
     {
         $bot->setIsBot(true);
@@ -151,11 +172,6 @@ abstract class AbstractBrowscap extends AbstractProvider
         }
     }
 
-    /**
-     *
-     * @param Model\Browser $browser
-     * @param stdClass      $resultRaw
-     */
     private function hydrateBrowser(Model\Browser $browser, stdClass $resultRaw)
     {
         if (isset($resultRaw->browser)) {
@@ -167,11 +183,6 @@ abstract class AbstractBrowscap extends AbstractProvider
         }
     }
 
-    /**
-     *
-     * @param Model\RenderingEngine $engine
-     * @param stdClass              $resultRaw
-     */
     private function hydrateRenderingEngine(Model\RenderingEngine $engine, stdClass $resultRaw)
     {
         if (isset($resultRaw->renderingengine_name)) {
@@ -183,11 +194,6 @@ abstract class AbstractBrowscap extends AbstractProvider
         }
     }
 
-    /**
-     *
-     * @param Model\OperatingSystem $os
-     * @param stdClass              $resultRaw
-     */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, stdClass $resultRaw)
     {
         if (isset($resultRaw->platform)) {
@@ -200,9 +206,7 @@ abstract class AbstractBrowscap extends AbstractProvider
     }
 
     /**
-     *
      * @param Model\UserAgent $device
-     * @param stdClass        $resultRaw
      */
     private function hydrateDevice(Model\Device $device, stdClass $resultRaw)
     {
@@ -225,45 +229,5 @@ abstract class AbstractBrowscap extends AbstractProvider
         if (isset($resultRaw->device_pointing_method) && $resultRaw->device_pointing_method == 'touchscreen') {
             $device->setIsTouch(true);
         }
-    }
-
-    public function parse($userAgent, array $headers = [])
-    {
-        $parser = $this->getParser();
-
-        /* @var $resultRaw \stdClass */
-        $resultRaw = $parser->getBrowser($userAgent);
-
-        /*
-         * No result found?
-         */
-        if ($this->hasResult($resultRaw) !== true) {
-            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
-        }
-
-        /*
-         * Hydrate the model
-         */
-        $result = new Model\UserAgent($this->getName(), $this->getVersion());
-        $result->setProviderResultRaw($resultRaw);
-
-        /*
-         * Bot detection (does only work with full_php_browscap.ini)
-         */
-        if ($this->isBot($resultRaw) === true) {
-            $this->hydrateBot($result->getBot(), $resultRaw);
-
-            return $result;
-        }
-
-        /*
-         * hydrate the result
-         */
-        $this->hydrateBrowser($result->getBrowser(), $resultRaw);
-        $this->hydrateRenderingEngine($result->getRenderingEngine(), $resultRaw);
-        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw);
-        $this->hydrateDevice($result->getDevice(), $resultRaw);
-
-        return $result;
     }
 }

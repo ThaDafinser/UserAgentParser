@@ -1,8 +1,9 @@
 <?php
+
 namespace UserAgentParser\Model;
 
 /**
- * Bot model
+ * Bot model.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
@@ -10,26 +11,22 @@ namespace UserAgentParser\Model;
 class Bot
 {
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $isBot;
 
     /**
-     *
      * @var string
      */
     private $name;
 
     /**
-     *
      * @var string
      */
     private $type;
 
     /**
-     *
-     * @param boolean $mode
+     * @param bool $mode
      */
     public function setIsBot($mode)
     {
@@ -37,8 +34,7 @@ class Bot
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function getIsBot()
     {
@@ -46,7 +42,6 @@ class Bot
     }
 
     /**
-     *
      * @param string $name
      */
     public function setName($name)
@@ -55,7 +50,6 @@ class Bot
     }
 
     /**
-     *
      * @return string
      */
     public function getName()
@@ -64,7 +58,6 @@ class Bot
     }
 
     /**
-     *
      * @param string $type
      */
     public function setType($type)
@@ -81,15 +74,14 @@ class Bot
     }
 
     /**
-     *
      * @return array
      */
     public function toArray()
     {
         return [
             'isBot' => $this->getIsBot(),
-            'name'  => $this->getName(),
-            'type'  => $this->getType(),
+            'name' => $this->getName(),
+            'type' => $this->getType(),
         ];
     }
 }

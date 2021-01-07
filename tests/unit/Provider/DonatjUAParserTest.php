@@ -1,19 +1,18 @@
 <?php
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  */
+
 namespace UserAgentParser\Provider
 {
-
     use UserAgentParserTest\Unit\Provider\DonatjUAParserTest;
 
     /**
      * This is need to mock the testing!
      *
-     * @param  string $userAgent
+     * @param string $userAgent
+     *
      * @return array
      */
     function parse_user_agent($userAgent)
@@ -24,13 +23,15 @@ namespace UserAgentParser\Provider
         ];
     }
 }
+
 namespace UserAgentParserTest\Unit\Provider
 {
-
     use UserAgentParser\Provider\DonatjUAParser;
 
     /**
-     * @covers UserAgentParser\Provider\DonatjUAParser
+     * @covers \UserAgentParser\Provider\DonatjUAParser
+     *
+     * @internal
      */
     class DonatjUAParserTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
     {
@@ -78,34 +79,33 @@ namespace UserAgentParserTest\Unit\Provider
             $provider = new DonatjUAParser();
 
             $this->assertEquals([
-
                 'browser' => [
-                    'name'    => true,
+                    'name' => true,
                     'version' => true,
                 ],
 
                 'renderingEngine' => [
-                    'name'    => false,
+                    'name' => false,
                     'version' => false,
                 ],
 
                 'operatingSystem' => [
-                    'name'    => false,
+                    'name' => false,
                     'version' => false,
                 ],
 
                 'device' => [
-                    'model'    => false,
-                    'brand'    => false,
-                    'type'     => false,
+                    'model' => false,
+                    'brand' => false,
+                    'type' => false,
                     'isMobile' => false,
-                    'isTouch'  => false,
+                    'isTouch' => false,
                 ],
 
                 'bot' => [
                     'isBot' => false,
-                    'name'  => false,
-                    'type'  => false,
+                    'name' => false,
+                    'type' => false,
                 ],
             ], $provider->getDetectionCapabilities());
         }
@@ -114,9 +114,7 @@ namespace UserAgentParserTest\Unit\Provider
         {
             $provider = new DonatjUAParser();
 
-            /*
-             * general
-             */
+            // general
             $this->assertIsRealResult($provider, true, 'UNKNOWN something');
         }
 
@@ -131,7 +129,7 @@ namespace UserAgentParserTest\Unit\Provider
             $provider = new DonatjUAParser();
 
             $reflection = new \ReflectionClass($provider);
-            $property   = $reflection->getProperty('functionName');
+            $property = $reflection->getProperty('functionName');
             $property->setAccessible(true);
             $property->setValue($provider, '\UserAgentParser\Provider\parse_user_agent');
 
@@ -149,7 +147,7 @@ namespace UserAgentParserTest\Unit\Provider
             $provider = new DonatjUAParser();
 
             $reflection = new \ReflectionClass($provider);
-            $property   = $reflection->getProperty('functionName');
+            $property = $reflection->getProperty('functionName');
             $property->setAccessible(true);
             $property->setValue($provider, '\UserAgentParser\Provider\parse_user_agent');
 
@@ -164,7 +162,7 @@ namespace UserAgentParserTest\Unit\Provider
         }
 
         /**
-         * Browser only
+         * Browser only.
          */
         public function testParseBrowser()
         {
@@ -174,7 +172,7 @@ namespace UserAgentParserTest\Unit\Provider
             $provider = new DonatjUAParser();
 
             $reflection = new \ReflectionClass($provider);
-            $property   = $reflection->getProperty('functionName');
+            $property = $reflection->getProperty('functionName');
             $property->setAccessible(true);
             $property->setValue($provider, '\UserAgentParser\Provider\parse_user_agent');
 
@@ -186,7 +184,7 @@ namespace UserAgentParserTest\Unit\Provider
 
             $expectedResult = [
                 'browser' => [
-                    'name'    => 'Firefox',
+                    'name' => 'Firefox',
                     'version' => [
                         'major' => 3,
                         'minor' => 0,

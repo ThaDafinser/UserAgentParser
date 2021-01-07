@@ -1,50 +1,21 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
+use PHPUnit_Framework_MockObject_MockObject;
 use UAParser\Result;
 use UserAgentParser\Provider\UAParser;
 
 /**
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- *          @covers UserAgentParser\Provider\UAParser
+ *          @covers \UserAgentParser\Provider\UAParser
+ *
+ * @internal
  */
 class UAParserTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
 {
-    /**
-     *
-     * @return \UAParser\Result\Client
-     */
-    private function getResultMock()
-    {
-        $ua     = new Result\UserAgent();
-        $os     = new Result\OperatingSystem();
-        $device = new Result\Device();
-
-        $client         = new Result\Client('');
-        $client->ua     = $ua;
-        $client->os     = $os;
-        $client->device = $device;
-
-        return $client;
-    }
-
-    /**
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getParser($returnValue = null)
-    {
-        $parser = self::createMock('UAParser\Parser');
-        $parser->expects($this->any())
-            ->method('parse')
-            ->will($this->returnValue($returnValue));
-
-        return $parser;
-    }
-
     public function testGetName()
     {
         $provider = new UAParser();
@@ -85,34 +56,33 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
         $provider = new UAParser();
 
         $this->assertEquals([
-
             'browser' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'renderingEngine' => [
-                'name'    => false,
+                'name' => false,
                 'version' => false,
             ],
 
             'operatingSystem' => [
-                'name'    => true,
+                'name' => true,
                 'version' => true,
             ],
 
             'device' => [
-                'model'    => true,
-                'brand'    => true,
-                'type'     => false,
+                'model' => true,
+                'brand' => true,
+                'type' => false,
                 'isMobile' => false,
-                'isTouch'  => false,
+                'isTouch' => false,
             ],
 
             'bot' => [
                 'isBot' => true,
-                'name'  => true,
-                'type'  => false,
+                'name' => true,
+                'type' => false,
             ],
         ], $provider->getDetectionCapabilities());
     }
@@ -121,16 +91,12 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
     {
         $provider = new UAParser();
 
-        /*
-         * general
-         */
+        // general
         $this->assertIsRealResult($provider, false, 'Other');
         $this->assertIsRealResult($provider, true, 'Other something');
         $this->assertIsRealResult($provider, true, 'something Other');
 
-        /*
-         * device brand
-         */
+        // device brand
         $this->assertIsRealResult($provider, false, 'Generic', 'device', 'brand');
         $this->assertIsRealResult($provider, false, 'Generic something', 'device', 'brand');
         $this->assertIsRealResult($provider, true, 'something Generic', 'device', 'brand');
@@ -139,9 +105,7 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
         $this->assertIsRealResult($provider, true, 'unknown something', 'device', 'brand');
         $this->assertIsRealResult($provider, true, 'something unknown', 'device', 'brand');
 
-        /*
-         * device model
-         */
+        // device model
         $this->assertIsRealResult($provider, false, 'generic', 'device', 'model');
         $this->assertIsRealResult($provider, true, 'generic something', 'device', 'model');
         $this->assertIsRealResult($provider, true, 'something generic', 'device', 'model');
@@ -178,9 +142,7 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
         $this->assertIsRealResult($provider, true, 'Android something', 'device', 'model');
         $this->assertIsRealResult($provider, true, 'something Android', 'device', 'model');
 
-        /*
-         * bot name
-         */
+        // bot name
         $this->assertIsRealResult($provider, false, 'Other', 'bot', 'name');
         $this->assertIsRealResult($provider, true, 'Other something', 'bot', 'name');
         $this->assertIsRealResult($provider, true, 'something Other', 'bot', 'name');
@@ -231,7 +193,7 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
      */
     public function testParseNoResultFoundExceptionDefaultValue()
     {
-        $result             = $this->getResultMock();
+        $result = $this->getResultMock();
         $result->ua->family = 'Other';
 
         $parser = $this->getParser($result);
@@ -246,7 +208,7 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
      */
     public function testParseNoResultFoundExceptionDefaultValueDeviceModel()
     {
-        $result                = $this->getResultMock();
+        $result = $this->getResultMock();
         $result->device->model = 'Smartphone';
 
         $parser = $this->getParser($result);
@@ -261,9 +223,9 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
      */
     public function testProviderNameAndVersionIsInResult()
     {
-        $result                         = $this->getResultMock();
-        $result->device->family         = 'Spider';
-        $result->ua->family             = 'Googlebot';
+        $result = $this->getResultMock();
+        $result->device->family = 'Spider';
+        $result->ua->family = 'Googlebot';
 
         $parser = $this->getParser($result);
 
@@ -276,13 +238,13 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
     }
 
     /**
-     * Bot
+     * Bot.
      */
     public function testParseBot()
     {
-        $result                 = $this->getResultMock();
+        $result = $this->getResultMock();
         $result->device->family = 'Spider';
-        $result->ua->family     = 'Googlebot';
+        $result->ua->family = 'Googlebot';
 
         $parser = $this->getParser($result);
 
@@ -293,8 +255,8 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
         $expectedResult = [
             'bot' => [
                 'isBot' => true,
-                'name'  => 'Googlebot',
-                'type'  => null,
+                'name' => 'Googlebot',
+                'type' => null,
             ],
         ];
 
@@ -302,13 +264,13 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
     }
 
     /**
-     * Bot - default value
+     * Bot - default value.
      */
     public function testParseBotDefaultValue()
     {
-        $result                 = $this->getResultMock();
+        $result = $this->getResultMock();
         $result->device->family = 'Spider';
-        $result->ua->family     = 'Other';
+        $result->ua->family = 'Other';
 
         $parser = $this->getParser($result);
 
@@ -319,8 +281,8 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
         $expectedResult = [
             'bot' => [
                 'isBot' => true,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ];
 
@@ -328,15 +290,15 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
     }
 
     /**
-     * Browser only
+     * Browser only.
      */
     public function testParseBrowser()
     {
-        $result             = $this->getResultMock();
+        $result = $this->getResultMock();
         $result->ua->family = 'Firefox';
-        $result->ua->major  = 3;
-        $result->ua->minor  = 2;
-        $result->ua->patch  = 1;
+        $result->ua->major = 3;
+        $result->ua->minor = 2;
+        $result->ua->patch = 1;
 
         $parser = $this->getParser($result);
 
@@ -346,7 +308,7 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
 
         $expectedResult = [
             'browser' => [
-                'name'    => 'Firefox',
+                'name' => 'Firefox',
                 'version' => [
                     'major' => 3,
                     'minor' => 2,
@@ -363,15 +325,15 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
     }
 
     /**
-     * OS only
+     * OS only.
      */
     public function testParseOperatingSystem()
     {
-        $result             = $this->getResultMock();
+        $result = $this->getResultMock();
         $result->os->family = 'Windows';
-        $result->os->major  = 7;
-        $result->os->minor  = 0;
-        $result->os->patch  = 1;
+        $result->os->major = 7;
+        $result->os->minor = 0;
+        $result->os->patch = 1;
 
         $parser = $this->getParser($result);
 
@@ -381,7 +343,7 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows',
+                'name' => 'Windows',
                 'version' => [
                     'major' => 7,
                     'minor' => 0,
@@ -398,11 +360,11 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
     }
 
     /**
-     * Device only
+     * Device only.
      */
     public function testParseDevice()
     {
-        $result                = $this->getResultMock();
+        $result = $this->getResultMock();
         $result->device->model = 'iPhone';
         $result->device->brand = 'Apple';
 
@@ -416,10 +378,10 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
@@ -427,13 +389,13 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
     }
 
     /**
-     * Device - default value
+     * Device - default value.
      */
     public function testParseDeviceDefaultValue()
     {
-        $result             = $this->getResultMock();
+        $result = $this->getResultMock();
         $result->os->family = 'Windows';
-        $result->os->major  = 7;
+        $result->os->major = 7;
 
         $result->device->model = 'Feature Phone';
         $result->device->brand = 'Generic';
@@ -446,7 +408,7 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
 
         $expectedResult = [
             'operatingSystem' => [
-                'name'    => 'Windows',
+                'name' => 'Windows',
                 'version' => [
                     'major' => 7,
                     'minor' => null,
@@ -461,13 +423,45 @@ class UAParserTest extends AbstractProviderTestCase implements RequiredProviderT
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
         ];
 
         $this->assertProviderResult($result, $expectedResult);
+    }
+
+    /**
+     * @return \UAParser\Result\Client
+     */
+    private function getResultMock()
+    {
+        $ua = new Result\UserAgent();
+        $os = new Result\OperatingSystem();
+        $device = new Result\Device();
+
+        $client = new Result\Client('');
+        $client->ua = $ua;
+        $client->os = $os;
+        $client->device = $device;
+
+        return $client;
+    }
+
+    /**
+     * @param null|mixed $returnValue
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getParser($returnValue = null)
+    {
+        $parser = self::createMock('UAParser\Parser');
+        $parser->expects($this->any())
+            ->method('parse')
+            ->willReturn($returnValue);
+
+        return $parser;
     }
 }

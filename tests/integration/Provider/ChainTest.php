@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider;
 
 use UserAgentParser\Provider\Chain;
@@ -7,10 +8,11 @@ use UserAgentParser\Provider\WhichBrowser;
 use UserAgentParser\Provider\Zsxsoft;
 
 /**
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  * @coversNothing
+ *
+ * @internal
  */
 class ChainTest extends AbstractProviderTestCase
 {
@@ -27,7 +29,7 @@ class ChainTest extends AbstractProviderTestCase
     }
 
     /**
-     * Also with multiple providers the excepction must be thrown
+     * Also with multiple providers the excepction must be thrown.
      *
      * @expectedException \UserAgentParser\Exception\NoResultFoundException
      */
@@ -55,7 +57,7 @@ class ChainTest extends AbstractProviderTestCase
     }
 
     /**
-     * This test makes sure, that the chain provider go to the next provider when no result is found
+     * This test makes sure, that the chain provider go to the next provider when no result is found.
      */
     public function testRealResultTwoProviderSecondUsed()
     {
@@ -72,7 +74,7 @@ class ChainTest extends AbstractProviderTestCase
     }
 
     /**
-     * This test makes sure, that the chain provider stops when a result is found
+     * This test makes sure, that the chain provider stops when a result is found.
      */
     public function testRealResultThreeProviderSecondUsed()
     {

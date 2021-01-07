@@ -1,10 +1,13 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider\Http;
 
 use UserAgentParser\Provider\Http\UserAgentApiCom;
 
 /**
  * @coversNothing
+ *
+ * @internal
  */
 class UserAgentApiComTest extends AbstractHttpProviderTestCase
 {
@@ -37,7 +40,7 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
      */
     public function testNoResultFound()
     {
-        if (! defined('CREDENTIALS_USER_AGENT_API_COM_KEY')) {
+        if (!\defined('CREDENTIALS_USER_AGENT_API_COM_KEY')) {
             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
         }
 
@@ -48,7 +51,7 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
 
     public function testRealResultBot()
     {
-        if (! defined('CREDENTIALS_USER_AGENT_API_COM_KEY')) {
+        if (!\defined('CREDENTIALS_USER_AGENT_API_COM_KEY')) {
             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
         }
 
@@ -57,7 +60,7 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
         $result = $provider->parse('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)');
         $this->assertEquals([
             'browser' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -69,7 +72,7 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -81,7 +84,7 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -95,21 +98,19 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => true,
-                'name'  => 'Googlebot',
-                'type'  => null,
+                'name' => 'Googlebot',
+                'type' => null,
             ],
         ], $result->toArray());
 
-        /*
-         * Test the raw result
-         */
+        // Test the raw result
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInstanceOf('stdClass', $rawResult);
@@ -122,7 +123,7 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
 
     public function testRealResultDevice()
     {
-        if (! defined('CREDENTIALS_USER_AGENT_API_COM_KEY')) {
+        if (!\defined('CREDENTIALS_USER_AGENT_API_COM_KEY')) {
             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
         }
 
@@ -131,7 +132,7 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
         $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Safari',
+                'name' => 'Safari',
                 'version' => [
                     'major' => 7534,
                     'minor' => 48,
@@ -143,7 +144,7 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => 'WebKit',
+                'name' => 'WebKit',
                 'version' => [
                     'major' => 534,
                     'minor' => 46,
@@ -155,7 +156,7 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -169,21 +170,19 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => 'Mobile',
+                'type' => 'Mobile',
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => null,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
 
-        /*
-         * Test the raw result
-         */
+        // Test the raw result
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInstanceOf('stdClass', $rawResult);
@@ -201,14 +200,14 @@ class UserAgentApiComTest extends AbstractHttpProviderTestCase
 
     public function testEncodeIsCorrect()
     {
-        if (! defined('CREDENTIALS_USER_AGENT_API_COM_KEY')) {
+        if (!\defined('CREDENTIALS_USER_AGENT_API_COM_KEY')) {
             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
         }
 
         $provider = new UserAgentApiCom($this->getClient(), CREDENTIALS_USER_AGENT_API_COM_KEY);
 
         $userAgent = 'Mozilla/5.0 (Linux; U; Android 3.0.1; en-us; HTC T9299+ For AT&T Build/GRJ22) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1';
-        $result    = $provider->parse($userAgent);
+        $result = $provider->parse($userAgent);
 
         $this->assertEquals('WebKit', $result->getRenderingEngine()
             ->getName());

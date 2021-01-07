@@ -1,10 +1,13 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider\Http;
 
 use UserAgentParser\Provider\Http\FiftyOneDegreesCom;
 
 /**
  * @coversNothing
+ *
+ * @internal
  */
 class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
 {
@@ -28,7 +31,7 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
      */
     public function testNoResultFound()
     {
-        if (! defined('CREDENTIALS_FIFTYONE_DEGREES_COM_KEY')) {
+        if (!\defined('CREDENTIALS_FIFTYONE_DEGREES_COM_KEY')) {
             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
         }
 
@@ -39,7 +42,7 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
 
     public function testRealResultBot()
     {
-        if (! defined('CREDENTIALS_FIFTYONE_DEGREES_COM_KEY')) {
+        if (!\defined('CREDENTIALS_FIFTYONE_DEGREES_COM_KEY')) {
             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
         }
 
@@ -48,7 +51,7 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
         $result = $provider->parse('Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0); 360Spider(compatible; HaosouSpider; http://www.haosou.com/help/help_3_2.html)');
         $this->assertEquals([
             'browser' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -60,7 +63,7 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -72,7 +75,7 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -86,22 +89,22 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => true,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
     }
 
     public function testRealResultDevice()
     {
-        if (! defined('CREDENTIALS_FIFTYONE_DEGREES_COM_KEY')) {
+        if (!\defined('CREDENTIALS_FIFTYONE_DEGREES_COM_KEY')) {
             $this->markTestSkipped('no credentials available. Please provide tests/credentials.php');
         }
 
@@ -110,7 +113,7 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
         $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Mobile Safari',
+                'name' => 'Mobile Safari',
                 'version' => [
                     'major' => 5,
                     'minor' => 1,
@@ -122,7 +125,7 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => 'Webkit',
+                'name' => 'Webkit',
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -134,7 +137,7 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'iOS',
+                'name' => 'iOS',
                 'version' => [
                     'major' => 5,
                     'minor' => 0,
@@ -148,21 +151,19 @@ class FiftyOneDegreesComTest extends AbstractHttpProviderTestCase
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => 'SmartPhone',
+                'type' => 'SmartPhone',
 
                 'isMobile' => true,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => null,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
 
-        /*
-         * Test the raw result
-         */
+        // Test the raw result
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInstanceOf('stdClass', $rawResult);

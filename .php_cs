@@ -1,51 +1,49 @@
 <?php
 
-$finder = Symfony\CS\Finder\DefaultFinder::create();
+$finder = PhpCsFixer\Finder::create();
 $finder->in([
     __DIR__ . '/src',
     __DIR__ . '/tests/integration',
     __DIR__ . '/tests/unit'
 ]);
 
-$config = Symfony\CS\Config\Config::create();
-$config->setUsingCache(true);
-$config->setUsingLinter(false);
-$config->finder($finder);
-$config->level(Symfony\CS\FixerInterface::PSR2_LEVEL);
-$config->fixers([
-	//symfony
-	'double_arrow_multiline_whitespaces',
-	'duplicate_semicolon',
-	'empty_return',
-	'extra_empty_lines',
-	'include',
-	'join_function',
-	'multiline_array_trailing_comma',
-	'namespace_no_leading_whitespace',
-	'new_with_braces',
-	'no_blank_lines_after_class_opening',
-	'object_operator',
-	'operators_spaces',
-	'phpdoc_indent',
-	'phpdoc_params',
-	'remove_leading_slash_use',
-	'remove_lines_between_uses',
-	'return',
-	'single_array_no_trailing_comma',
-	'spaces_before_semicolon',
-	'spaces_cast',
-	'standardize_not_equal',
-	'ternary_spaces',
-	'unused_use',
-	'whitespacy_lines',
-	
-	//contrib
-	'align_double_arrow',
-	'align_equals',
-	'concat_with_spaces',
-	'multiline_spaces_before_semicolon',
-	'ordered_use',
-	'short_array_syntax',
-]);
+$config = PhpCsFixer\Config::create()
+->setUsingCache(true)
+->setRiskyAllowed(true)
+->setFinder($finder)
+->setRules([
+    '@PSR1' => true,
+    '@PSR2' => true,
+    '@Symfony' => true,
+    '@Symfony:risky' => true,
+    '@PhpCsFixer' => true,
+    'align_multiline_comment' => true,
+    'array_syntax' => ['syntax' => 'short'],
+    'declare_strict_types' => false,
+    'return_assignment' => false,
+    'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
+    'dir_constant' => true,
+    'elseif' => false,
+    'ereg_to_preg' => true,
+    'is_null' => true,
+    'list_syntax' => ['syntax' => 'short'],
+    'mb_str_functions' => true,
+    'phpdoc_order' => true,
+    'concat_space' => ['spacing' => 'one'],
+    'yoda_style' => [
+        'equal' => false,
+        'identical' => false,
+        'less_and_greater' => false,
+    ],
+    'fully_qualified_strict_types' => true,
+    'global_namespace_import' => [
+        'import_classes' => true,
+    ],
+    'phpdoc_to_comment' => false,
+    'method_argument_space' => ['on_multiline' => 'ignore'],
+    'php_unit_ordered_covers' => false,
+    'no_superfluous_elseif' => false,
+]
+);
 
 return $config;

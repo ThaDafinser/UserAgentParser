@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParser\Provider;
 
 use UserAgent;
@@ -7,69 +8,68 @@ use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
 /**
- * Abstraction for zsxsoft/php-useragent
+ * Abstraction for zsxsoft/php-useragent.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
+ *
  * @see https://github.com/zsxsoft/php-useragent
  */
 class Zsxsoft extends AbstractProvider
 {
     /**
-     * Name of the provider
+     * Name of the provider.
      *
      * @var string
      */
     protected $name = 'Zsxsoft';
 
     /**
-     * Homepage of the provider
+     * Homepage of the provider.
      *
      * @var string
      */
     protected $homepage = 'https://github.com/zsxsoft/php-useragent';
 
     /**
-     * Composer package name
+     * Composer package name.
      *
      * @var string
      */
     protected $packageName = 'zsxsoft/php-useragent';
 
     protected $detectionCapabilities = [
-
         'browser' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'renderingEngine' => [
-            'name'    => false,
+            'name' => false,
             'version' => false,
         ],
 
         'operatingSystem' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => false,
+            'model' => true,
+            'brand' => true,
+            'type' => false,
             'isMobile' => false,
-            'isTouch'  => false,
+            'isTouch' => false,
         ],
 
         'bot' => [
             'isBot' => false,
-            'name'  => false,
-            'type'  => false,
+            'name' => false,
+            'type' => false,
         ],
     ];
 
     protected $defaultValues = [
-
         'general' => [
             '/^Unknown$/i',
         ],
@@ -91,8 +91,8 @@ class Zsxsoft extends AbstractProvider
     private $parser;
 
     /**
+     * @param UserAgent $parser
      *
-     * @param  UserAgent                 $parser
      * @throws PackageNotLoadedException
      */
     public function __construct(UserAgent $parser = null)
@@ -105,7 +105,6 @@ class Zsxsoft extends AbstractProvider
     }
 
     /**
-     *
      * @return UserAgent
      */
     public function getParser()
@@ -119,12 +118,39 @@ class Zsxsoft extends AbstractProvider
         return $this->parser;
     }
 
+    public function parse($userAgent, array $headers = [])
+    {
+        $parser = $this->getParser();
+        $parser->analyze($userAgent);
+
+        $browser = $parser->browser;
+        $os = $parser->os;
+        $device = $parser->device;
+        $platform = $parser->platform;
+
+        // No result found?
+        if ($this->hasResult($browser, $os, $device) !== true) {
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
+        }
+
+        // Hydrate the model
+        $result = new Model\UserAgent($this->getName(), $this->getVersion());
+        $result->setProviderResultRaw([
+            'browser' => $browser,
+            'os' => $os,
+            'device' => $device,
+            'platform' => $platform,
+        ]);
+
+        // hydrate the result
+        $this->hydrateBrowser($result->getBrowser(), $browser);
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $os);
+        $this->hydrateDevice($result->getDevice(), $device);
+
+        return $result;
+    }
+
     /**
-     *
-     * @param array $browser
-     * @param array $os
-     * @param array $device
-     *
      * @return bool
      */
     private function hasResult(array $browser, array $os, array $device)
@@ -148,11 +174,6 @@ class Zsxsoft extends AbstractProvider
         return false;
     }
 
-    /**
-     *
-     * @param Model\Browser $browser
-     * @param array         $browserRaw
-     */
     private function hydrateBrowser(Model\Browser $browser, array $browserRaw)
     {
         if (isset($browserRaw['name'])) {
@@ -164,11 +185,6 @@ class Zsxsoft extends AbstractProvider
         }
     }
 
-    /**
-     *
-     * @param Model\OperatingSystem $os
-     * @param array                 $osRaw
-     */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, array $osRaw)
     {
         if (isset($osRaw['name'])) {
@@ -180,11 +196,6 @@ class Zsxsoft extends AbstractProvider
         }
     }
 
-    /**
-     *
-     * @param Model\Device $device
-     * @param array        $deviceRaw
-     */
     private function hydrateDevice(Model\Device $device, array $deviceRaw)
     {
         if (isset($deviceRaw['model'])) {
@@ -194,43 +205,5 @@ class Zsxsoft extends AbstractProvider
         if (isset($deviceRaw['brand'])) {
             $device->setBrand($this->getRealResult($deviceRaw['brand']));
         }
-    }
-
-    public function parse($userAgent, array $headers = [])
-    {
-        $parser = $this->getParser();
-        $parser->analyze($userAgent);
-
-        $browser  = $parser->browser;
-        $os       = $parser->os;
-        $device   = $parser->device;
-        $platform = $parser->platform;
-
-        /*
-         * No result found?
-         */
-        if ($this->hasResult($browser, $os, $device) !== true) {
-            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
-        }
-
-        /*
-         * Hydrate the model
-         */
-        $result = new Model\UserAgent($this->getName(), $this->getVersion());
-        $result->setProviderResultRaw([
-            'browser'  => $browser,
-            'os'       => $os,
-            'device'   => $device,
-            'platform' => $platform,
-        ]);
-
-        /*
-         * hydrate the result
-         */
-        $this->hydrateBrowser($result->getBrowser(), $browser);
-        $this->hydrateOperatingSystem($result->getOperatingSystem(), $os);
-        $this->hydrateDevice($result->getDevice(), $device);
-
-        return $result;
     }
 }

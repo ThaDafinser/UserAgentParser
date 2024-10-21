@@ -1,15 +1,16 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider;
 
 use UserAgentParser\Provider\DonatjUAParser;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
  * @coversNothing
+ *
+ * @internal
  */
 class DonatjUAParserTest extends AbstractProviderTestCase
 {
@@ -30,7 +31,7 @@ class DonatjUAParserTest extends AbstractProviderTestCase
         $result = $provider->parse('Mozilla/5.0 (X11; U; CrOS i686 0.9.128; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/8.0.552.339');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Chrome',
+                'name' => 'Chrome',
                 'version' => [
                     'major' => 8,
                     'minor' => 0,
@@ -42,7 +43,7 @@ class DonatjUAParserTest extends AbstractProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -54,7 +55,7 @@ class DonatjUAParserTest extends AbstractProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -68,27 +69,25 @@ class DonatjUAParserTest extends AbstractProviderTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => null,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
 
-        /*
-         * Test the raw result
-         */
+        // Test the raw result
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertEquals([
             'platform' => 'Chrome OS',
-            'browser'  => 'Chrome',
-            'version'  => '8.0.552.339',
+            'browser' => 'Chrome',
+            'version' => '8.0.552.339',
         ], $rawResult);
     }
 }

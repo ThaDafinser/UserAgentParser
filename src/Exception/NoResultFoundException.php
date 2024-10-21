@@ -1,5 +1,8 @@
 <?php
+
 namespace UserAgentParser\Exception;
+
+use Exception;
 
 /**
  * This is thrown by the Provider if not result is found.
@@ -7,6 +10,6 @@ namespace UserAgentParser\Exception;
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  */
-class NoResultFoundException extends \Exception implements ExceptionInterface
+class NoResultFoundException extends Exception implements ExceptionInterface
 {
 }

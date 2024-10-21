@@ -1,18 +1,19 @@
 <?php
+
 namespace UserAgentParserTest;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use UserAgentParser\Model\Version;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Model\Version
+ * @covers \UserAgentParser\Model\Version
+ *
+ * @internal
  */
-class VersionTest extends PHPUnit_Framework_TestCase
+class VersionTest extends TestCase
 {
     public function testMajorMinorPatch()
     {
@@ -56,7 +57,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('2.0', $version->getComplete());
         $this->assertEquals(2, $version->getMajor());
         $this->assertEquals(0, $version->getMinor());
-        $this->assertEquals(null, $version->getPatch());
+        $this->assertNull($version->getPatch());
 
         $version->setMajor(3);
         $this->assertEquals('3.0', $version->getComplete());

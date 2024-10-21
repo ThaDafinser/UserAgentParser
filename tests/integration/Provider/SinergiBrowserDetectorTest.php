@@ -1,15 +1,17 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider;
 
+use ReflectionClass;
 use UserAgentParser\Provider\SinergiBrowserDetector;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
  * @coversNothing
+ *
+ * @internal
  */
 class SinergiBrowserDetectorTest extends AbstractProviderTestCase
 {
@@ -19,10 +21,8 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
 
         $parser = $provider->getBrowserParser('something');
 
-        /*
-         * test method exists
-         */
-        $class = new \ReflectionClass($parser);
+        // test method exists
+        $class = new ReflectionClass($parser);
 
         $this->assertTrue($class->hasMethod('getName'), 'method getName() does not exist anymore');
         $this->assertTrue($class->hasMethod('getVersion'), 'method getVersion() does not exist anymore');
@@ -35,10 +35,8 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
 
         $parser = $provider->getOperatingSystemParser('something');
 
-        /*
-         * test method exists
-         */
-        $class = new \ReflectionClass($parser);
+        // test method exists
+        $class = new ReflectionClass($parser);
 
         $this->assertTrue($class->hasMethod('getName'), 'method getName() does not exist anymore');
         $this->assertTrue($class->hasMethod('getVersion'), 'method getVersion() does not exist anymore');
@@ -51,10 +49,8 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
 
         $parser = $provider->getDeviceParser('something');
 
-        /*
-         * test method exists
-         */
-        $class = new \ReflectionClass($parser);
+        // test method exists
+        $class = new ReflectionClass($parser);
 
         $this->assertTrue($class->hasMethod('getName'), 'method getName() does not exist anymore');
     }
@@ -76,7 +72,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         $result = $provider->parse('Googlebot/2.1 (+http://www.googlebot.com/bot.html)');
         $this->assertEquals([
             'browser' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -88,7 +84,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -100,7 +96,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -114,21 +110,19 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => true,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
 
-        /*
-         * Test the raw result
-         */
+        // Test the raw result
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInternalType('array', $rawResult);
@@ -159,7 +153,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
         $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Safari',
+                'name' => 'Safari',
                 'version' => [
                     'major' => 5,
                     'minor' => 1,
@@ -171,7 +165,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -183,7 +177,7 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'iOS',
+                'name' => 'iOS',
                 'version' => [
                     'major' => 5,
                     'minor' => 0,
@@ -197,15 +191,15 @@ class SinergiBrowserDetectorTest extends AbstractProviderTestCase
             'device' => [
                 'model' => 'iPhone',
                 'brand' => null,
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => true,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => null,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
     }

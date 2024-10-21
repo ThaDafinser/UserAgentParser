@@ -1,19 +1,20 @@
 <?php
+
 namespace UserAgentParserTest;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use UserAgentParser\Model\Browser;
 use UserAgentParser\Model\Version;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Model\Browser
+ * @covers \UserAgentParser\Model\Browser
+ *
+ * @internal
  */
-class BrowserTest extends PHPUnit_Framework_TestCase
+class BrowserTest extends TestCase
 {
     public function testName()
     {
@@ -42,14 +43,14 @@ class BrowserTest extends PHPUnit_Framework_TestCase
         $browser = new Browser();
 
         $this->assertEquals([
-            'name'    => null,
+            'name' => null,
             'version' => $browser->getVersion()
                 ->toArray(),
         ], $browser->toArray());
 
         $browser->setName('Chrome');
         $this->assertEquals([
-            'name'    => 'Chrome',
+            'name' => 'Chrome',
             'version' => $browser->getVersion()
                 ->toArray(),
         ], $browser->toArray());

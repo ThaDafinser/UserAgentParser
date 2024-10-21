@@ -1,23 +1,25 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider\Http;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use ReflectionClass;
 use UserAgentParserTest\Unit\Provider\AbstractProviderTestCase;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Provider\Http\AbstractHttpProvider
+ * @covers \UserAgentParser\Provider\Http\AbstractHttpProvider
+ *
+ * @internal
  */
 class AbstractHttpProviderTest extends AbstractProviderTestCase
 {
     /**
-     * A general RequestException
+     * A general RequestException.
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
@@ -31,8 +33,8 @@ class AbstractHttpProviderTest extends AbstractProviderTestCase
             $this->getClient($responseQueue),
         ]);
 
-        $reflection = new \ReflectionClass($provider);
-        $method     = $reflection->getMethod('getResponse');
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('getResponse');
         $method->setAccessible(true);
 
         $request = new Request('GET', 'http://example.com');
@@ -41,7 +43,7 @@ class AbstractHttpProviderTest extends AbstractProviderTestCase
     }
 
     /**
-     * Got a response, but not 200
+     * Got a response, but not 200.
      *
      * @expectedException \UserAgentParser\Exception\RequestException
      */
@@ -55,8 +57,8 @@ class AbstractHttpProviderTest extends AbstractProviderTestCase
             $this->getClient($responseQueue),
         ]);
 
-        $reflection = new \ReflectionClass($provider);
-        $method     = $reflection->getMethod('getResponse');
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('getResponse');
         $method->setAccessible(true);
 
         $request = new Request('GET', 'http://example.com');
@@ -65,7 +67,7 @@ class AbstractHttpProviderTest extends AbstractProviderTestCase
     }
 
     /**
-     * Valid response
+     * Valid response.
      */
     public function testGetResultValid()
     {
@@ -77,8 +79,8 @@ class AbstractHttpProviderTest extends AbstractProviderTestCase
             $this->getClient($responseQueue),
         ]);
 
-        $reflection = new \ReflectionClass($provider);
-        $method     = $reflection->getMethod('getResponse');
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('getResponse');
         $method->setAccessible(true);
 
         $request = new Request('GET', 'http://example.com');

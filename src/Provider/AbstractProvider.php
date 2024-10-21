@@ -1,15 +1,16 @@
 <?php
+
 namespace UserAgentParser\Provider;
 
+use Composer\InstalledVersions;
 use DateTime;
-use PackageInfo\Exception\PackageNotInstalledException;
-use PackageInfo\Package;
+use OutOfBoundsException;
 use UserAgentParser\Exception;
 use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
 /**
- * Abstraction for all providers
+ * Abstraction for all providers.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
@@ -17,21 +18,21 @@ use UserAgentParser\Model;
 abstract class AbstractProvider
 {
     /**
-     * Name of the provider
+     * Name of the provider.
      *
      * @var string
      */
     protected $name;
 
     /**
-     * Homepage of the provider
+     * Homepage of the provider.
      *
      * @var string
      */
     protected $homepage;
 
     /**
-     * Composer package name
+     * Composer package name.
      *
      * @var string
      */
@@ -39,43 +40,43 @@ abstract class AbstractProvider
 
     /**
      * Per default the provider cannot detect anything
-     * Activate them in $detectionCapabilities
+     * Activate them in $detectionCapabilities.
      *
      * @var array
      */
     protected $allDetectionCapabilities = [
         'browser' => [
-            'name'    => false,
+            'name' => false,
             'version' => false,
         ],
 
         'renderingEngine' => [
-            'name'    => false,
+            'name' => false,
             'version' => false,
         ],
 
         'operatingSystem' => [
-            'name'    => false,
+            'name' => false,
             'version' => false,
         ],
 
         'device' => [
-            'model'    => false,
-            'brand'    => false,
-            'type'     => false,
+            'model' => false,
+            'brand' => false,
+            'type' => false,
             'isMobile' => false,
-            'isTouch'  => false,
+            'isTouch' => false,
         ],
 
         'bot' => [
             'isBot' => false,
-            'name'  => false,
-            'type'  => false,
+            'name' => false,
+            'type' => false,
         ],
     ];
 
     /**
-     * Set this in each Provider implementation
+     * Set this in each Provider implementation.
      *
      * @var array
      */
@@ -86,7 +87,7 @@ abstract class AbstractProvider
     ];
 
     /**
-     * Return the name of the provider
+     * Return the name of the provider.
      *
      * @return string
      */
@@ -96,7 +97,7 @@ abstract class AbstractProvider
     }
 
     /**
-     * Get the homepage
+     * Get the homepage.
      *
      * @return string
      */
@@ -106,7 +107,7 @@ abstract class AbstractProvider
     }
 
     /**
-     * Get the package name
+     * Get the package name.
      *
      * @return string null
      */
@@ -116,39 +117,30 @@ abstract class AbstractProvider
     }
 
     /**
-     * Return the version of the provider
+     * Return the version of the provider.
      *
      * @return string null
      */
     public function getVersion()
     {
         try {
-            $package = new Package($this->getPackageName());
-
-            return $package->getVersion();
-        } catch (PackageNotInstalledException $ex) {
+            return InstalledVersions::getVersion($this->getPackageName());
+        } catch (OutOfBoundsException $ex) {
             return;
         }
     }
 
     /**
-     * Get the last change date of the provider
+     * Get the last change date of the provider.
      *
      * @return DateTime null
      */
     public function getUpdateDate()
     {
-        try {
-            $package = new Package($this->getPackageName());
-
-            return $package->getVersionReleaseDate();
-        } catch (PackageNotInstalledException $ex) {
-            return;
-        }
     }
 
     /**
-     * What kind of capabilities this provider can detect
+     * What kind of capabilities this provider can detect.
      *
      * @return array
      */
@@ -158,22 +150,32 @@ abstract class AbstractProvider
     }
 
     /**
+     * Parse the given user agent and return a result if possible.
      *
+     * @param string $userAgent
+     *
+     * @throws Exception\NoResultFoundException
+     *
+     * @return Model\UserAgent
+     */
+    abstract public function parse($userAgent, array $headers = []);
+
+    /**
      * @throws PackageNotLoadedException
      */
     protected function checkIfInstalled()
     {
-        if (! Package::isInstalled($this->getPackageName())) {
+        if (!InstalledVersions::isInstalled($this->getPackageName())) {
             throw new PackageNotLoadedException('You need to install the package ' . $this->getPackageName() . ' to use this provider');
         }
     }
 
     /**
+     * @param mixed  $value
+     * @param string $group
+     * @param string $part
      *
-     * @param  mixed   $value
-     * @param  string  $group
-     * @param  string  $part
-     * @return boolean
+     * @return bool
      */
     protected function isRealResult($value, $group = null, $part = null)
     {
@@ -204,19 +206,5 @@ abstract class AbstractProvider
         if ($this->isRealResult($value, $group, $part) === true) {
             return $value;
         }
-
-        return;
     }
-
-    /**
-     * Parse the given user agent and return a result if possible
-     *
-     * @param string $userAgent
-     * @param array  $headers
-     *
-     * @throws Exception\NoResultFoundException
-     *
-     * @return Model\UserAgent
-     */
-    abstract public function parse($userAgent, array $headers = []);
 }

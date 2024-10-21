@@ -1,12 +1,16 @@
 <?php
+
 namespace UserAgentParserTest\Unit\Provider;
 
+use ReflectionClass;
+
 /**
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- *          @covers UserAgentParser\Provider\AbstractProvider
+ *          @covers \UserAgentParser\Provider\AbstractProvider
+ *
+ * @internal
  */
 class AbstractProviderTest extends AbstractProviderTestCase
 {
@@ -16,8 +20,8 @@ class AbstractProviderTest extends AbstractProviderTestCase
 
         $this->assertNull($provider->getName());
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('name');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('name');
         $property->setAccessible(true);
         $property->setValue($provider, 'MyName');
 
@@ -30,8 +34,8 @@ class AbstractProviderTest extends AbstractProviderTestCase
 
         $this->assertNull($provider->getHomepage());
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('homepage');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('homepage');
         $property->setAccessible(true);
         $property->setValue($provider, 'https://github.com/vendor/package');
 
@@ -44,8 +48,8 @@ class AbstractProviderTest extends AbstractProviderTestCase
 
         $this->assertNull($provider->getPackageName());
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('packageName');
         $property->setAccessible(true);
         $property->setValue($provider, 'vendor/package');
 
@@ -62,8 +66,8 @@ class AbstractProviderTest extends AbstractProviderTestCase
         // no package match
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('packageName');
         $property->setAccessible(true);
         $property->setValue($provider, 'vendor/package');
 
@@ -74,8 +78,8 @@ class AbstractProviderTest extends AbstractProviderTestCase
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('packageName');
         $property->setAccessible(true);
         $property->setValue($provider, 'piwik/device-detector');
 
@@ -93,8 +97,8 @@ class AbstractProviderTest extends AbstractProviderTestCase
         // no package match
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('packageName');
         $property->setAccessible(true);
         $property->setValue($provider, 'vendor/package');
 
@@ -105,8 +109,8 @@ class AbstractProviderTest extends AbstractProviderTestCase
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('packageName');
         $property->setAccessible(true);
         $property->setValue($provider, 'piwik/device-detector');
 
@@ -127,13 +131,13 @@ class AbstractProviderTest extends AbstractProviderTestCase
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('packageName');
         $property->setAccessible(true);
         $property->setValue($provider, 'thadafinser/user-agent-parser');
 
-        $reflection = new \ReflectionClass($provider);
-        $method     = $reflection->getMethod('checkIfInstalled');
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('checkIfInstalled');
         $method->setAccessible(true);
 
         // no return, just no exception expected
@@ -147,13 +151,13 @@ class AbstractProviderTest extends AbstractProviderTestCase
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
-        $reflection = new \ReflectionClass($provider);
-        $property   = $reflection->getProperty('packageName');
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('packageName');
         $property->setAccessible(true);
         $property->setValue($provider, 'vendor/package');
 
-        $reflection = new \ReflectionClass($provider);
-        $method     = $reflection->getMethod('checkIfInstalled');
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('checkIfInstalled');
         $method->setAccessible(true);
 
         $method->invoke($provider);
@@ -163,8 +167,8 @@ class AbstractProviderTest extends AbstractProviderTestCase
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
-        $reflection = new \ReflectionClass($provider);
-        $method     = $reflection->getMethod('isRealResult');
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('isRealResult');
         $method->setAccessible(true);
 
         $this->assertFalse($method->invoke($provider, ''));
@@ -177,7 +181,7 @@ class AbstractProviderTest extends AbstractProviderTestCase
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
-        $reflection = new \ReflectionClass($provider);
+        $reflection = new ReflectionClass($provider);
 
         $property = $reflection->getProperty('defaultValues');
         $property->setAccessible(true);
@@ -207,8 +211,8 @@ class AbstractProviderTest extends AbstractProviderTestCase
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
-        $reflection = new \ReflectionClass($provider);
-        $method     = $reflection->getMethod('getRealResult');
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('getRealResult');
         $method->setAccessible(true);
 
         $this->assertNull($method->invoke($provider, ''));
@@ -221,7 +225,7 @@ class AbstractProviderTest extends AbstractProviderTestCase
     {
         $provider = $this->getMockForAbstractClass('UserAgentParser\Provider\AbstractProvider');
 
-        $reflection = new \ReflectionClass($provider);
+        $reflection = new ReflectionClass($provider);
 
         $property = $reflection->getProperty('defaultValues');
         $property->setAccessible(true);

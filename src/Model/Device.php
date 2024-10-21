@@ -1,8 +1,9 @@
 <?php
+
 namespace UserAgentParser\Model;
 
 /**
- * Device model
+ * Device model.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
@@ -10,37 +11,31 @@ namespace UserAgentParser\Model;
 class Device
 {
     /**
-     *
      * @var string
      */
     private $model;
 
     /**
-     *
      * @var string
      */
     private $brand;
 
     /**
-     *
      * @var string
      */
     private $type;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $isMobile;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $isTouch;
 
     /**
-     *
      * @param string $model
      */
     public function setModel($model)
@@ -49,7 +44,6 @@ class Device
     }
 
     /**
-     *
      * @return string
      */
     public function getModel()
@@ -58,7 +52,6 @@ class Device
     }
 
     /**
-     *
      * @param string $brand
      */
     public function setBrand($brand)
@@ -67,7 +60,6 @@ class Device
     }
 
     /**
-     *
      * @return string
      */
     public function getBrand()
@@ -76,7 +68,6 @@ class Device
     }
 
     /**
-     *
      * @param string $type
      */
     public function setType($type)
@@ -85,7 +76,6 @@ class Device
     }
 
     /**
-     *
      * @return string
      */
     public function getType()
@@ -94,8 +84,7 @@ class Device
     }
 
     /**
-     *
-     * @param boolean $isMobile
+     * @param bool $isMobile
      */
     public function setIsMobile($isMobile)
     {
@@ -103,8 +92,7 @@ class Device
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function getIsMobile()
     {
@@ -112,8 +100,7 @@ class Device
     }
 
     /**
-     *
-     * @param boolean $isTouch
+     * @param bool $isTouch
      */
     public function setIsTouch($isTouch)
     {
@@ -121,8 +108,7 @@ class Device
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function getIsTouch()
     {
@@ -130,17 +116,16 @@ class Device
     }
 
     /**
-     *
      * @return array
      */
     public function toArray()
     {
         return [
-            'model'    => $this->getModel(),
-            'brand'    => $this->getBrand(),
-            'type'     => $this->getType(),
+            'model' => $this->getModel(),
+            'brand' => $this->getBrand(),
+            'type' => $this->getType(),
             'isMobile' => $this->getIsMobile(),
-            'isTouch'  => $this->getIsTouch(),
+            'isTouch' => $this->getIsTouch(),
         ];
     }
 }

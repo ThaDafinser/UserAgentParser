@@ -1,39 +1,20 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider;
 
 use HandsetDetection as Parser;
 use UserAgentParser\Provider\HandsetDetection;
 
 /**
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
  *          @coversNothing
+ *
+ * @internal
  */
 class HandsetDetectionTest extends AbstractProviderTestCase
 {
-    private function getParser()
-    {
-        $config = [
-            'username' => 'something',
-            'secret'   => 'something',
-
-            'use_local' => true,
-            'filesdir'  => 'tests/resources/handset-detection',
-
-            'log_unknown' => false,
-
-            'cache' => [
-                'none' => true,
-            ],
-        ];
-
-        $parser = new Parser\HD4($config);
-
-        return $parser;
-    }
-
     /**
      * @expectedException \UserAgentParser\Exception\InvalidArgumentException
      */
@@ -41,10 +22,10 @@ class HandsetDetectionTest extends AbstractProviderTestCase
     {
         $config = [
             'username' => 'something',
-            'secret'   => 'something',
+            'secret' => 'something',
 
             'use_local' => true,
-            'filesdir'  => 'tests',
+            'filesdir' => 'tests',
 
             'log_unknown' => false,
 
@@ -77,7 +58,7 @@ class HandsetDetectionTest extends AbstractProviderTestCase
         $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Mobile Safari',
+                'name' => 'Mobile Safari',
                 'version' => [
                     'major' => 5,
                     'minor' => 1,
@@ -89,7 +70,7 @@ class HandsetDetectionTest extends AbstractProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -101,7 +82,7 @@ class HandsetDetectionTest extends AbstractProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'iOS',
+                'name' => 'iOS',
                 'version' => [
                     'major' => 5,
                     'minor' => 0,
@@ -115,21 +96,19 @@ class HandsetDetectionTest extends AbstractProviderTestCase
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => null,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
 
-        /*
-         * Test the raw result
-         */
+        // Test the raw result
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInternalType('array', $rawResult);
@@ -143,5 +122,26 @@ class HandsetDetectionTest extends AbstractProviderTestCase
 
         $this->assertArrayHasKey('general_browser', $rawResult);
         $this->assertArrayHasKey('general_browser_version', $rawResult);
+    }
+
+    private function getParser()
+    {
+        $config = [
+            'username' => 'something',
+            'secret' => 'something',
+
+            'use_local' => true,
+            'filesdir' => 'tests/resources/handset-detection',
+
+            'log_unknown' => false,
+
+            'cache' => [
+                'none' => true,
+            ],
+        ];
+
+        $parser = new Parser\HD4($config);
+
+        return $parser;
     }
 }

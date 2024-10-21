@@ -1,44 +1,37 @@
 <?php
+
 namespace UserAgentParserTest\Integration\Provider;
 
+use ReflectionClass;
 use UserAgentParser\Provider\UAParser;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
  * @coversNothing
+ *
+ * @internal
  */
 class UAParserTest extends AbstractProviderTestCase
 {
-    private function getParser()
-    {
-        return new \UAParser\Parser(include 'tests/resources/uaparser/regexes.php');
-    }
-
     public function testMethodParse()
     {
         $provider = new UAParser($this->getParser());
-        $parser   = $provider->getParser();
+        $parser = $provider->getParser();
 
-        /*
-         * test method exists
-         */
-        $class = new \ReflectionClass($parser);
+        // test method exists
+        $class = new ReflectionClass($parser);
 
         $this->assertTrue($class->hasMethod('parse'), 'method parse() does not exist anymore');
 
-        /*
-         * test paramters
-         */
-        $method     = $class->getMethod('parse');
+        // test paramters
+        $method = $class->getMethod('parse');
         $parameters = $method->getParameters();
 
-        $this->assertEquals(2, count($parameters));
+        $this->assertEquals(2, \count($parameters));
 
-        /* @var $optionalPara \ReflectionParameter */
+        // @var $optionalPara \ReflectionParameter
         $optionalPara = $parameters[1];
 
         $this->assertTrue($optionalPara->isOptional(), '2nd parameter of parse() is not optional anymore');
@@ -47,14 +40,14 @@ class UAParserTest extends AbstractProviderTestCase
     public function testParseResult()
     {
         $provider = new UAParser($this->getParser());
-        $parser   = $provider->getParser();
+        $parser = $provider->getParser();
 
-        /* @var $result \UAParser\Result\Client */
+        // @var $result \UAParser\Result\Client
         $result = $parser->parse('A real user agent...');
 
         $this->assertInstanceOf('UAParser\Result\Client', $result);
 
-        $class = new \ReflectionClass($result);
+        $class = new ReflectionClass($result);
 
         $this->assertTrue($class->hasProperty('ua'), 'property ua does not exist anymore');
         $this->assertInstanceOf('UAParser\Result\UserAgent', $result->ua);
@@ -68,7 +61,7 @@ class UAParserTest extends AbstractProviderTestCase
 
     public function testClassBrowserResult()
     {
-        $class = new \ReflectionClass('UAParser\Result\OperatingSystem');
+        $class = new ReflectionClass('UAParser\Result\OperatingSystem');
 
         $this->assertTrue($class->hasProperty('family'), 'property family does not exist anymore');
         $this->assertTrue($class->hasProperty('major'), 'property major does not exist anymore');
@@ -78,7 +71,7 @@ class UAParserTest extends AbstractProviderTestCase
 
     public function testClassOsResult()
     {
-        $class = new \ReflectionClass('UAParser\Result\UserAgent');
+        $class = new ReflectionClass('UAParser\Result\UserAgent');
 
         $this->assertTrue($class->hasProperty('family'), 'property family does not exist anymore');
         $this->assertTrue($class->hasProperty('major'), 'property major does not exist anymore');
@@ -88,7 +81,7 @@ class UAParserTest extends AbstractProviderTestCase
 
     public function testClassDeviceResult()
     {
-        $class = new \ReflectionClass('UAParser\Result\Device');
+        $class = new ReflectionClass('UAParser\Result\Device');
 
         $this->assertTrue($class->hasProperty('model'), 'property family does not exist anymore');
         $this->assertTrue($class->hasProperty('brand'), 'property major does not exist anymore');
@@ -112,7 +105,7 @@ class UAParserTest extends AbstractProviderTestCase
         $result = $provider->parse('Googlebot/2.1 (+http://www.googlebot.com/bot.html)');
         $this->assertEquals([
             'browser' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -124,7 +117,7 @@ class UAParserTest extends AbstractProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -136,7 +129,7 @@ class UAParserTest extends AbstractProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -150,21 +143,19 @@ class UAParserTest extends AbstractProviderTestCase
             'device' => [
                 'model' => null,
                 'brand' => null,
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => true,
-                'name'  => 'Googlebot',
-                'type'  => null,
+                'name' => 'Googlebot',
+                'type' => null,
             ],
         ], $result->toArray());
 
-        /*
-         * Test the raw result
-         */
+        // Test the raw result
         $rawResult = $result->getProviderResultRaw();
 
         $this->assertInstanceOf('UAParser\Result\Client', $rawResult);
@@ -205,7 +196,7 @@ class UAParserTest extends AbstractProviderTestCase
         $result = $provider->parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3');
         $this->assertEquals([
             'browser' => [
-                'name'    => 'Mobile Safari',
+                'name' => 'Mobile Safari',
                 'version' => [
                     'major' => 5,
                     'minor' => 1,
@@ -217,7 +208,7 @@ class UAParserTest extends AbstractProviderTestCase
                 ],
             ],
             'renderingEngine' => [
-                'name'    => null,
+                'name' => null,
                 'version' => [
                     'major' => null,
                     'minor' => null,
@@ -229,7 +220,7 @@ class UAParserTest extends AbstractProviderTestCase
                 ],
             ],
             'operatingSystem' => [
-                'name'    => 'iOS',
+                'name' => 'iOS',
                 'version' => [
                     'major' => 5,
                     'minor' => 0,
@@ -243,16 +234,21 @@ class UAParserTest extends AbstractProviderTestCase
             'device' => [
                 'model' => 'iPhone',
                 'brand' => 'Apple',
-                'type'  => null,
+                'type' => null,
 
                 'isMobile' => null,
-                'isTouch'  => null,
+                'isTouch' => null,
             ],
             'bot' => [
                 'isBot' => null,
-                'name'  => null,
-                'type'  => null,
+                'name' => null,
+                'type' => null,
             ],
         ], $result->toArray());
+    }
+
+    private function getParser()
+    {
+        return new \UAParser\Parser(include 'tests/resources/uaparser/regexes.php');
     }
 }

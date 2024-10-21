@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParser\Provider;
 
 use DeviceDetector\DeviceDetector;
@@ -7,69 +8,68 @@ use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
 /**
- * Abstraction for piwik/device-detector
+ * Abstraction for piwik/device-detector.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
+ *
  * @see https://github.com/piwik/device-detector
  */
 class PiwikDeviceDetector extends AbstractProvider
 {
     /**
-     * Name of the provider
+     * Name of the provider.
      *
      * @var string
      */
     protected $name = 'PiwikDeviceDetector';
 
     /**
-     * Homepage of the provider
+     * Homepage of the provider.
      *
      * @var string
      */
     protected $homepage = 'https://github.com/piwik/device-detector';
 
     /**
-     * Composer package name
+     * Composer package name.
      *
      * @var string
      */
     protected $packageName = 'piwik/device-detector';
 
     protected $detectionCapabilities = [
-
         'browser' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'renderingEngine' => [
-            'name'    => true,
+            'name' => true,
             'version' => false,
         ],
 
         'operatingSystem' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => true,
+            'model' => true,
+            'brand' => true,
+            'type' => true,
             'isMobile' => true,
-            'isTouch'  => true,
+            'isTouch' => true,
         ],
 
         'bot' => [
             'isBot' => true,
-            'name'  => true,
-            'type'  => true,
+            'name' => true,
+            'type' => true,
         ],
     ];
 
     protected $defaultValues = [
-
         'general' => [
             '/^UNK$/i',
         ],
@@ -83,14 +83,13 @@ class PiwikDeviceDetector extends AbstractProvider
     ];
 
     /**
-     *
      * @var DeviceDetector
      */
     private $parser;
 
     /**
+     * @param DeviceDetector $parser
      *
-     * @param  DeviceDetector            $parser
      * @throws PackageNotLoadedException
      */
     public function __construct(DeviceDetector $parser = null)
@@ -103,7 +102,6 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
-     *
      * @return DeviceDetector
      */
     public function getParser()
@@ -117,25 +115,54 @@ class PiwikDeviceDetector extends AbstractProvider
         return $this->parser;
     }
 
+    public function parse($userAgent, array $headers = [])
+    {
+        $dd = $this->getParser();
+
+        $dd->setUserAgent($userAgent);
+        $dd->parse();
+
+        // No result found?
+        if ($this->hasResult($dd) !== true) {
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
+        }
+
+        // Hydrate the model
+        $result = new Model\UserAgent($this->getName(), $this->getVersion());
+        $result->setProviderResultRaw($this->getResultRaw($dd));
+
+        // Bot detection
+        if ($dd->isBot() === true) {
+            $this->hydrateBot($result->getBot(), $dd->getBot());
+
+            return $result;
+        }
+
+        // hydrate the result
+        $this->hydrateBrowser($result->getBrowser(), $dd->getClient());
+        $this->hydrateRenderingEngine($result->getRenderingEngine(), $dd->getClient());
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $dd->getOs());
+        $this->hydrateDevice($result->getDevice(), $dd);
+
+        return $result;
+    }
+
     /**
-     *
-     * @param DeviceDetector $dd
-     *
      * @return array
      */
     private function getResultRaw(DeviceDetector $dd)
     {
         $raw = [
-            'client'          => $dd->getClient(),
+            'client' => $dd->getClient(),
             'operatingSystem' => $dd->getOs(),
 
             'device' => [
-                'brand'     => $dd->getBrand(),
+                'brand' => $dd->getBrand(),
                 'brandName' => $dd->getBrandName(),
 
                 'model' => $dd->getModel(),
 
-                'device'     => $dd->getDevice(),
+                'device' => $dd->getDevice(),
                 'deviceName' => $dd->getDeviceName(),
             ],
 
@@ -145,28 +172,28 @@ class PiwikDeviceDetector extends AbstractProvider
                 'isBot' => $dd->isBot(),
 
                 // client
-                'isBrowser'     => $dd->isBrowser(),
-                'isFeedReader'  => $dd->isFeedReader(),
-                'isMobileApp'   => $dd->isMobileApp(),
-                'isPIM'         => $dd->isPIM(),
-                'isLibrary'     => $dd->isLibrary(),
+                'isBrowser' => $dd->isBrowser(),
+                'isFeedReader' => $dd->isFeedReader(),
+                'isMobileApp' => $dd->isMobileApp(),
+                'isPIM' => $dd->isPIM(),
+                'isLibrary' => $dd->isLibrary(),
                 'isMediaPlayer' => $dd->isMediaPlayer(),
 
                 // deviceType
-                'isCamera'              => $dd->isCamera(),
-                'isCarBrowser'          => $dd->isCarBrowser(),
-                'isConsole'             => $dd->isConsole(),
-                'isFeaturePhone'        => $dd->isFeaturePhone(),
-                'isPhablet'             => $dd->isPhablet(),
+                'isCamera' => $dd->isCamera(),
+                'isCarBrowser' => $dd->isCarBrowser(),
+                'isConsole' => $dd->isConsole(),
+                'isFeaturePhone' => $dd->isFeaturePhone(),
+                'isPhablet' => $dd->isPhablet(),
                 'isPortableMediaPlayer' => $dd->isPortableMediaPlayer(),
-                'isSmartDisplay'        => $dd->isSmartDisplay(),
-                'isSmartphone'          => $dd->isSmartphone(),
-                'isTablet'              => $dd->isTablet(),
-                'isTV'                  => $dd->isTV(),
+                'isSmartDisplay' => $dd->isSmartDisplay(),
+                'isSmartphone' => $dd->isSmartphone(),
+                'isTablet' => $dd->isTablet(),
+                'isTV' => $dd->isTV(),
 
                 // other special
-                'isDesktop'      => $dd->isDesktop(),
-                'isMobile'       => $dd->isMobile(),
+                'isDesktop' => $dd->isDesktop(),
+                'isMobile' => $dd->isMobile(),
                 'isTouchEnabled' => $dd->isTouchEnabled(),
             ],
         ];
@@ -175,9 +202,6 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
-     *
-     * @param DeviceDetector $dd
-     *
      * @return bool
      */
     private function hasResult(DeviceDetector $dd)
@@ -204,9 +228,7 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
-     *
-     * @param Model\Bot     $bot
-     * @param array|boolean $botRaw
+     * @param array|bool $botRaw
      */
     private function hydrateBot(Model\Bot $bot, $botRaw)
     {
@@ -221,9 +243,7 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
-     *
-     * @param Model\Browser $browser
-     * @param array|string  $clientRaw
+     * @param array|string $clientRaw
      */
     private function hydrateBrowser(Model\Browser $browser, $clientRaw)
     {
@@ -237,9 +257,7 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
-     *
-     * @param Model\RenderingEngine $engine
-     * @param array|string          $clientRaw
+     * @param array|string $clientRaw
      */
     private function hydrateRenderingEngine(Model\RenderingEngine $engine, $clientRaw)
     {
@@ -249,9 +267,7 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
-     *
-     * @param Model\OperatingSystem $os
-     * @param array|string          $osRaw
+     * @param array|string $osRaw
      */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, $osRaw)
     {
@@ -265,9 +281,7 @@ class PiwikDeviceDetector extends AbstractProvider
     }
 
     /**
-     *
      * @param Model\UserAgent $device
-     * @param DeviceDetector  $dd
      */
     private function hydrateDevice(Model\Device $device, DeviceDetector $dd)
     {
@@ -282,45 +296,5 @@ class PiwikDeviceDetector extends AbstractProvider
         if ($dd->isTouchEnabled() === true) {
             $device->setIsTouch(true);
         }
-    }
-
-    public function parse($userAgent, array $headers = [])
-    {
-        $dd = $this->getParser();
-
-        $dd->setUserAgent($userAgent);
-        $dd->parse();
-
-        /*
-         * No result found?
-         */
-        if ($this->hasResult($dd) !== true) {
-            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
-        }
-
-        /*
-         * Hydrate the model
-         */
-        $result = new Model\UserAgent($this->getName(), $this->getVersion());
-        $result->setProviderResultRaw($this->getResultRaw($dd));
-
-        /*
-         * Bot detection
-         */
-        if ($dd->isBot() === true) {
-            $this->hydrateBot($result->getBot(), $dd->getBot());
-
-            return $result;
-        }
-
-        /*
-         * hydrate the result
-         */
-        $this->hydrateBrowser($result->getBrowser(), $dd->getClient());
-        $this->hydrateRenderingEngine($result->getRenderingEngine(), $dd->getClient());
-        $this->hydrateOperatingSystem($result->getOperatingSystem(), $dd->getOs());
-        $this->hydrateDevice($result->getDevice(), $dd);
-
-        return $result;
     }
 }

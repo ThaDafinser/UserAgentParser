@@ -1,4 +1,5 @@
 <?php
+
 namespace UserAgentParser\Provider;
 
 use UAParser\Parser;
@@ -7,76 +8,73 @@ use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
 
 /**
- * Abstraction for ua-parser/uap-php
+ * Abstraction for ua-parser/uap-php.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
+ *
  * @see https://github.com/ua-parser/uap-php
  */
 class UAParser extends AbstractProvider
 {
     /**
-     * Name of the provider
+     * Name of the provider.
      *
      * @var string
      */
     protected $name = 'UAParser';
 
     /**
-     * Homepage of the provider
+     * Homepage of the provider.
      *
      * @var string
      */
     protected $homepage = 'https://github.com/ua-parser/uap-php';
 
     /**
-     * Composer package name
+     * Composer package name.
      *
      * @var string
      */
     protected $packageName = 'ua-parser/uap-php';
 
     protected $detectionCapabilities = [
-
         'browser' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'renderingEngine' => [
-            'name'    => false,
+            'name' => false,
             'version' => false,
         ],
 
         'operatingSystem' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => false,
+            'model' => true,
+            'brand' => true,
+            'type' => false,
             'isMobile' => false,
-            'isTouch'  => false,
+            'isTouch' => false,
         ],
 
         'bot' => [
             'isBot' => true,
-            'name'  => true,
-            'type'  => false,
+            'name' => true,
+            'type' => false,
         ],
     ];
 
     protected $defaultValues = [
-
         'general' => [
             '/^Other$/i',
-
         ],
 
         'device' => [
-
             'brand' => [
                 '/^Generic/i',
                 '/^unknown$/i',
@@ -109,8 +107,8 @@ class UAParser extends AbstractProvider
     private $parser;
 
     /**
+     * @param Parser $parser
      *
-     * @param  Parser                    $parser
      * @throws PackageNotLoadedException
      */
     public function __construct(Parser $parser = null)
@@ -123,7 +121,6 @@ class UAParser extends AbstractProvider
     }
 
     /**
-     *
      * @return Parser
      */
     public function getParser()
@@ -137,10 +134,39 @@ class UAParser extends AbstractProvider
         return $this->parser;
     }
 
+    public function parse($userAgent, array $headers = [])
+    {
+        $parser = $this->getParser();
+
+        // @var $resultRaw \UAParser\Result\Client
+        $resultRaw = $parser->parse($userAgent);
+
+        // No result found?
+        if ($this->hasResult($resultRaw) !== true) {
+            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
+        }
+
+        // Hydrate the model
+        $result = new Model\UserAgent($this->getName(), $this->getVersion());
+        $result->setProviderResultRaw($resultRaw);
+
+        // Bot detection
+        if ($this->isBot($resultRaw) === true) {
+            $this->hydrateBot($result->getBot(), $resultRaw);
+
+            return $result;
+        }
+
+        // hydrate the result
+        $this->hydrateBrowser($result->getBrowser(), $resultRaw->ua);
+        // renderingEngine not available
+        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw->os);
+        $this->hydrateDevice($result->getDevice(), $resultRaw->device);
+
+        return $result;
+    }
+
     /**
-     *
-     * @param \UAParser\Result\Client $resultRaw
-     *
      * @return bool
      */
     private function hasResult(\UAParser\Result\Client $resultRaw)
@@ -165,9 +191,6 @@ class UAParser extends AbstractProvider
     }
 
     /**
-     *
-     * @param \UAParser\Result\Client $resultRaw
-     *
      * @return bool
      */
     private function isBot(\UAParser\Result\Client $resultRaw)
@@ -179,22 +202,12 @@ class UAParser extends AbstractProvider
         return false;
     }
 
-    /**
-     *
-     * @param Model\Bot               $bot
-     * @param \UAParser\Result\Client $resultRaw
-     */
     private function hydrateBot(Model\Bot $bot, \UAParser\Result\Client $resultRaw)
     {
         $bot->setIsBot(true);
         $bot->setName($this->getRealResult($resultRaw->ua->family, 'bot', 'name'));
     }
 
-    /**
-     *
-     * @param Model\Browser              $browser
-     * @param \UAParser\Result\UserAgent $uaRaw
-     */
     private function hydrateBrowser(Model\Browser $browser, \UAParser\Result\UserAgent $uaRaw)
     {
         $browser->setName($this->getRealResult($uaRaw->family));
@@ -204,11 +217,6 @@ class UAParser extends AbstractProvider
         $browser->getVersion()->setPatch($this->getRealResult($uaRaw->patch));
     }
 
-    /**
-     *
-     * @param Model\OperatingSystem            $os
-     * @param \UAParser\Result\OperatingSystem $osRaw
-     */
     private function hydrateOperatingSystem(Model\OperatingSystem $os, \UAParser\Result\OperatingSystem $osRaw)
     {
         $os->setName($this->getRealResult($osRaw->family));
@@ -219,53 +227,11 @@ class UAParser extends AbstractProvider
     }
 
     /**
-     *
-     * @param Model\UserAgent         $device
-     * @param \UAParser\Result\Device $deviceRaw
+     * @param Model\UserAgent $device
      */
     private function hydrateDevice(Model\Device $device, \UAParser\Result\Device $deviceRaw)
     {
         $device->setModel($this->getRealResult($deviceRaw->model, 'device', 'model'));
         $device->setBrand($this->getRealResult($deviceRaw->brand, 'device', 'brand'));
-    }
-
-    public function parse($userAgent, array $headers = [])
-    {
-        $parser = $this->getParser();
-
-        /* @var $resultRaw \UAParser\Result\Client */
-        $resultRaw = $parser->parse($userAgent);
-
-        /*
-         * No result found?
-         */
-        if ($this->hasResult($resultRaw) !== true) {
-            throw new NoResultFoundException('No result found for user agent: ' . $userAgent);
-        }
-
-        /*
-         * Hydrate the model
-         */
-        $result = new Model\UserAgent($this->getName(), $this->getVersion());
-        $result->setProviderResultRaw($resultRaw);
-
-        /*
-         * Bot detection
-         */
-        if ($this->isBot($resultRaw) === true) {
-            $this->hydrateBot($result->getBot(), $resultRaw);
-
-            return $result;
-        }
-
-        /*
-         * hydrate the result
-         */
-        $this->hydrateBrowser($result->getBrowser(), $resultRaw->ua);
-        // renderingEngine not available
-        $this->hydrateOperatingSystem($result->getOperatingSystem(), $resultRaw->os);
-        $this->hydrateDevice($result->getDevice(), $resultRaw->device);
-
-        return $result;
     }
 }

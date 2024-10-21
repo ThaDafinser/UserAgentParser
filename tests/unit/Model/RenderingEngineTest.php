@@ -1,19 +1,20 @@
 <?php
+
 namespace UserAgentParserTest;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use UserAgentParser\Model\RenderingEngine;
 use UserAgentParser\Model\Version;
 
 /**
- *
- *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
  *
- * @covers UserAgentParser\Model\RenderingEngine
+ * @covers \UserAgentParser\Model\RenderingEngine
+ *
+ * @internal
  */
-class RenderingEngineTest extends PHPUnit_Framework_TestCase
+class RenderingEngineTest extends TestCase
 {
     public function testName()
     {
@@ -42,14 +43,14 @@ class RenderingEngineTest extends PHPUnit_Framework_TestCase
         $engine = new RenderingEngine();
 
         $this->assertEquals([
-            'name'    => null,
+            'name' => null,
             'version' => $engine->getVersion()
                 ->toArray(),
         ], $engine->toArray());
 
         $engine->setName('Trident');
         $this->assertEquals([
-            'name'    => 'Trident',
+            'name' => 'Trident',
             'version' => $engine->getVersion()
                 ->toArray(),
         ], $engine->toArray());

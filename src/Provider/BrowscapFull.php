@@ -1,53 +1,54 @@
 <?php
+
 namespace UserAgentParser\Provider;
 
 use BrowscapPHP\Browscap;
 
 /**
- * Abstraction for Browscap full type
+ * Abstraction for Browscap full type.
  *
  * @author Martin Keckeis <martin.keckeis1@gmail.com>
  * @license MIT
+ *
  * @see https://github.com/browscap/browscap-php
  */
 class BrowscapFull extends AbstractBrowscap
 {
     /**
-     * Name of the provider
+     * Name of the provider.
      *
      * @var string
      */
     protected $name = 'BrowscapFull';
 
     protected $detectionCapabilities = [
-
         'browser' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'renderingEngine' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'operatingSystem' => [
-            'name'    => true,
+            'name' => true,
             'version' => true,
         ],
 
         'device' => [
-            'model'    => true,
-            'brand'    => true,
-            'type'     => true,
+            'model' => true,
+            'brand' => true,
+            'type' => true,
             'isMobile' => true,
-            'isTouch'  => true,
+            'isTouch' => true,
         ],
 
         'bot' => [
             'isBot' => true,
-            'name'  => true,
-            'type'  => true,
+            'name' => true,
+            'type' => true,
         ],
     ];
 

@@ -76,7 +76,7 @@ class JenssegersAgentTest extends AbstractProviderTestCase
             ],
             'bot' => [
                 'isBot' => true,
-                'name' => 'Google',
+                'name' => 'Googlebot',
                 'type' => null,
             ],
         ], $result->toArray());

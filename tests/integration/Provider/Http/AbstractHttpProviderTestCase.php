@@ -42,8 +42,8 @@ abstract class AbstractHttpProviderTestCase extends AbstractProviderTestCase
                 'timeout' => 5,
 
                 'curl' => [
-                    CURLOPT_SSL_VERIFYHOST => false,
-                    CURLOPT_SSL_VERIFYPEER => false,
+                    \CURLOPT_SSL_VERIFYHOST => false,
+                    \CURLOPT_SSL_VERIFYPEER => false,
                 ],
             ]);
         }

@@ -35,9 +35,9 @@ namespace UserAgentParserTest\Unit\Provider
      */
     class DonatjUAParserTest extends AbstractProviderTestCase implements RequiredProviderTestInterface
     {
-        public static $browser = null;
+        public static $browser;
 
-        public static $version = null;
+        public static $version;
 
         public function testGetName()
         {

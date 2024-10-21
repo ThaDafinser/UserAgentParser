@@ -127,7 +127,7 @@ class UdgerCom extends AbstractHttpProvider
             'uastrig' => $userAgent,
         ];
 
-        $body = http_build_query($params, null, '&');
+        $body = http_build_query($params, '', '&');
 
         $request = new Request('POST', self::$uri, [
             'Content-Type' => 'application/x-www-form-urlencoded',

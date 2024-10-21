@@ -46,7 +46,7 @@ abstract class AbstractHttpProvider extends AbstractProvider
             // @var $response \GuzzleHttp\Psr7\Response
             $response = $this->getClient()->send($request);
         } catch (GuzzleHttpException $ex) {
-            throw new Exception\RequestException('Could not get valid response from "' . $request->getUri() . '"', null, $ex);
+            throw new Exception\RequestException('Could not get valid response from "' . $request->getUri() . '"', 0, $ex);
         }
 
         if ($response->getStatusCode() !== 200) {
